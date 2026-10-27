@@ -5,7 +5,7 @@ export const site = {
   name: "Leiluna Studio",
   short: "Leiluna",
   url: "https://leilunastudio.com",
-  email: "hello@leilunastudio.com", // [PLACEHOLDER] confirm this inbox exists
+  email: "leilunastudio@gmail.com",
   location: "Working worldwide",
   available: true,
   headline: ["Your story.", "Our creative", "orbit."],

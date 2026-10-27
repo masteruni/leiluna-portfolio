@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
@@ -124,17 +125,40 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             </Reveal>
           </div>
 
-          {/* gallery — swap these for real stills/frames */}
-          <Reveal>
-            <div className="mt-24 grid grid-cols-2 gap-4 md:grid-cols-3">
-              <div className="group"><ProjectCover project={project} format="reel" variant={1} /></div>
-              <div className="group flex flex-col gap-4">
-                <ProjectCover project={project} format="square" variant={2} />
-                <ProjectCover project={project} format="portrait" variant={3} />
-              </div>
-              <div className="group hidden md:block"><ProjectCover project={project} format="reel" variant={4} /></div>
+          {/* gallery: real media from `project.gallery`, or generated placeholders until a cover is added */}
+          {project.gallery?.length ? (
+            <div className="mt-24 columns-1 gap-4 sm:columns-2 lg:columns-3">
+              {project.gallery.map((src, i) => (
+                <Reveal key={src} delay={(i % 3) * 0.08} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-ink-2">
+                  {/\.(mp4|webm|mov)$/i.test(src) ? (
+                    <video src={src} autoPlay muted loop playsInline preload="metadata" className="block h-auto w-full" />
+                  ) : (
+                    <Image
+                      src={src}
+                      alt={`${project.title}, image ${i + 1}`}
+                      width={1200}
+                      height={1500}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="block h-auto w-full"
+                    />
+                  )}
+                </Reveal>
+              ))}
             </div>
-          </Reveal>
+          ) : (
+            !project.cover && (
+              <Reveal>
+                <div className="mt-24 grid grid-cols-2 gap-4 md:grid-cols-3">
+                  <div className="group"><ProjectCover project={project} format="reel" variant={1} /></div>
+                  <div className="group flex flex-col gap-4">
+                    <ProjectCover project={project} format="square" variant={2} />
+                    <ProjectCover project={project} format="portrait" variant={3} />
+                  </div>
+                  <div className="group hidden md:block"><ProjectCover project={project} format="reel" variant={4} /></div>
+                </div>
+              </Reveal>
+            )
+          )}
 
           <Link
             href={`/work/${next.slug}`}

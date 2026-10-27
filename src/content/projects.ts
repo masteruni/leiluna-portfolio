@@ -1,6 +1,11 @@
 // Your portfolio projects. Each one gets a card on the homepage and its own case-study page at /work/<slug>.
-// To use real visuals, put images in /public/work/ and set `cover: "/work/your-image.jpg"`.
-// Until then a generated gradient cover is shown using `palette`.
+//
+// Adding real visuals:
+//   1. Put files in /public/work/<slug>/  (e.g. /public/work/glow-up-skincare/cover.jpg)
+//   2. cover:   "/work/glow-up-skincare/cover.jpg"   → the card + case-study hero image
+//      video:   "/work/glow-up-skincare/reel.mp4"    → plays silently when hovering the card
+//      gallery: ["/work/glow-up-skincare/1.jpg", "/work/glow-up-skincare/2.mp4"]  → case-study gallery
+// Images: .jpg/.png/.webp. Videos: .mp4, ideally under ~10MB. Until you add a cover, a generated planet cover is shown.
 
 export type Category = "Social" | "Video" | "Design" | "Strategy" | "AI";
 
@@ -16,7 +21,8 @@ export type Project = {
   format: Format;
   summary: string;
   cover?: string;
-  video?: string; // optional .mp4 in /public/work, plays muted on hover
+  video?: string; // optional .mp4, plays muted on hover
+  gallery?: string[]; // images (.jpg/.png/.webp) and videos (.mp4) for the case-study page
   palette: [string, string];
   metrics: { value: string; label: string }[];
   challenge: string;
