@@ -4,7 +4,7 @@
 export const site = {
   name: "Leiluna",
   fullName: "Leiluna", // [PLACEHOLDER] full name if you want it shown
-  url: "https://leiluna.vercel.app", // [PLACEHOLDER] update once you have your Vercel / custom domain
+  url: "https://leilunastudio.com",
   email: "hello@leiluna.com", // [PLACEHOLDER]
   location: "Available worldwide · Remote", // [PLACEHOLDER]
   available: true,
