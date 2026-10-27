@@ -1,74 +1,100 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowDownRight } from "lucide-react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useRef } from "react";
 import { site } from "@/content/site";
-import { PhoneReel } from "./PhoneReel";
-import { Reveal } from "./Reveal";
-import { RoleTicker } from "./RoleTicker";
+import { useReady } from "@/lib/ready";
+import { LineReveal } from "./LineReveal";
+import { Magnetic } from "./Magnetic";
+import { Planet } from "./Planet";
 
 export function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const ready = useReady();
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-35%"]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const fade = (delay: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 16 },
+    animate: ready ? { opacity: 1, y: 0 } : undefined,
+    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const, delay },
+  });
+
   return (
-    <section className="relative overflow-hidden px-5 pb-16 pt-32 sm:px-8 md:pt-40">
-      {/* ambient glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full opacity-30 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, var(--brand-3), transparent)" }}
-      />
+    <section ref={ref} className="relative h-[100svh] min-h-[640px] overflow-hidden">
+      <div className="absolute inset-0">
+        <Planet progress={scrollYProgress} />
+      </div>
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-16 lg:grid-cols-[1.35fr_1fr]">
-        <div>
-          <Reveal>
-            {site.available && (
-              <p className="mb-8 inline-flex items-center gap-2 rounded-full border border-line bg-ink-2/60 px-3 py-1.5 text-xs text-paper/80">
-                <span className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-2 opacity-75" />
-                  <span className="relative inline-flex size-2 rounded-full bg-brand-2" />
+      <motion.div
+        style={{ y: textY, opacity: textOpacity }}
+        className="relative z-10 flex h-full flex-col justify-end px-5 pb-28 sm:px-10 md:justify-center md:pb-0"
+      >
+        <motion.p {...fade(0.2)} className="mb-6 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+          <span className="h-px w-10 bg-brand" />
+          Social &amp; content studio
+        </motion.p>
+
+        <h1 className="font-display text-[clamp(3.4rem,10.5vw,10.5rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+          <LineReveal
+            play={ready}
+            delay={0.1}
+            lines={[
+              site.headline[0],
+              site.headline[1],
+              <span key="o" className="relative inline-block">
+                <span className="serif pr-[0.06em] text-[1.12em] font-normal leading-[0.8] tracking-[-0.02em] text-brand">
+                  {site.headline[2]}
                 </span>
-                Open for new projects · {site.location}
-              </p>
-            )}
-          </Reveal>
+              </span>,
+            ]}
+          />
+        </h1>
 
-          <Reveal delay={0.05}>
-            <h1 className="font-display text-[clamp(3.5rem,13vw,10rem)] font-bold leading-[0.82] tracking-[-0.04em]">
-              {site.name}
-              <span className="text-brand">.</span>
-            </h1>
-          </Reveal>
+        <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-center md:gap-14">
+          <motion.ul {...fade(0.7)} className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-paper/70">
+            {site.pillars.map((p, i) => (
+              <li key={p} className="flex items-center gap-5">
+                {i > 0 && <span className="size-1 rounded-full bg-brand" />}
+                {p}
+              </li>
+            ))}
+          </motion.ul>
 
-          <Reveal delay={0.15}>
-            <p className="mt-6 font-display text-2xl font-medium leading-tight sm:text-3xl">
-              <RoleTicker roles={site.roles} />
-            </p>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-              <span className="text-paper">{site.tagline}</span> Strategy, short-form video and design under one roof,
-              built for the feed and backed by the numbers.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.25}>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <Link
-                href="/#work"
-                className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3.5 font-medium text-ink transition hover:bg-brand-2"
-              >
-                See the work
-                <ArrowDownRight size={18} className="transition-transform group-hover:rotate-[-45deg]" />
-              </Link>
+          <motion.div {...fade(0.85)}>
+            <Magnetic className="inline-block">
               <Link
                 href="/#contact"
-                className="rounded-full border border-line px-6 py-3.5 font-medium transition hover:border-paper/40 hover:bg-paper/5"
+                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-brand px-7 py-4 font-medium text-ink"
               >
-                Start a project
+                <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-y-0" />
+                <span className="relative">{site.tagline}</span>
+                <span className="relative transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
-            </div>
-          </Reveal>
+            </Magnetic>
+          </motion.div>
         </div>
+      </motion.div>
 
-        <Reveal delay={0.2} y={40}>
-          <PhoneReel />
-        </Reveal>
-      </div>
+      <motion.div
+        {...fade(1.1)}
+        className="absolute inset-x-5 bottom-6 z-10 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10"
+      >
+        <span className="flex items-center gap-3">
+          <span className="relative h-8 w-px overflow-hidden bg-line">
+            <motion.span
+              className="absolute inset-x-0 top-0 h-1/2 bg-brand"
+              animate={reduce ? undefined : { y: ["-100%", "200%"] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </span>
+          Scroll to explore
+        </span>
+        <span className="hidden sm:block">{site.location}</span>
+      </motion.div>
     </section>
   );
 }

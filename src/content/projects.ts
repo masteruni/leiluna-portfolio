@@ -2,7 +2,7 @@
 // To use real visuals, put images in /public/work/ and set `cover: "/work/your-image.jpg"`.
 // Until then a generated gradient cover is shown using `palette`.
 
-export type Category = "Social" | "Video" | "Design" | "Strategy";
+export type Category = "Social" | "Video" | "Design" | "Strategy" | "AI";
 
 // The card shape mirrors the content format: 9:16 reels, 1:1 posts, 16:9 video, 4:5 feed.
 export type Format = "reel" | "square" | "wide" | "portrait";
@@ -36,7 +36,7 @@ export const projects: Project[] = [
     categories: ["Social", "Video", "Strategy"],
     format: "reel",
     summary: "A UGC-style reel series that turned a quiet skincare brand into a TikTok regular.",
-    palette: ["#ff3d7f", "#ffb36b"],
+    palette: ["#ea6a8e", "#ffb199"],
     metrics: [
       { value: "12.4M", label: "Views" },
       { value: "+410%", label: "Engagement" },
@@ -62,7 +62,7 @@ export const projects: Project[] = [
     categories: ["Design", "Social"],
     format: "square",
     summary: "A bold visual system for a local roaster: carousels, templates and a feed that pops.",
-    palette: ["#7b5cff", "#3dd6ff"],
+    palette: ["#b06ab3", "#ea6a8e"],
     metrics: [
       { value: "3.2x", label: "Saves" },
       { value: "+65%", label: "Store visits" },
@@ -87,7 +87,7 @@ export const projects: Project[] = [
     categories: ["Video"],
     format: "wide",
     summary: "A documentary-style YouTube series that made a SaaS founder feel human.",
-    palette: ["#c6ff3d", "#00b37e"],
+    palette: ["#f5c6d3", "#6a4c93"],
     metrics: [
       { value: "1.8M", label: "Watch minutes" },
       { value: "62%", label: "Avg. retention" },
@@ -111,7 +111,7 @@ export const projects: Project[] = [
     categories: ["Social", "Design", "Video"],
     format: "portrait",
     summary: "Full-funnel festival campaign: teaser, lineup drop, live coverage and recap.",
-    palette: ["#ff7a3d", "#ff3d7f"],
+    palette: ["#ff8a6b", "#ea6a8e"],
     metrics: [
       { value: "Sold out", label: "In 9 days" },
       { value: "5.6M", label: "Reach" },
@@ -131,24 +131,24 @@ export const projects: Project[] = [
     slug: "content-system",
     title: "The Content Engine",
     client: "Bloom Wellness",
-    year: "2023",
-    categories: ["Strategy", "Social"],
+    year: "2025",
+    categories: ["AI", "Strategy", "Social"],
     format: "portrait",
-    summary: "Pillars, workflows and a 90-day calendar that took a team from posting randomly to posting with purpose.",
-    palette: ["#3dd6ff", "#7b5cff"],
+    summary: "An AI-powered content workflow that took a team from posting at random to posting with purpose, on autopilot.",
+    palette: ["#8e7cc3", "#f5c6d3"],
     metrics: [
       { value: "5x", label: "Output" },
-      { value: "-60%", label: "Prod. time" },
+      { value: "-10h", label: "Admin / week" },
       { value: "+180%", label: "Reach" },
     ],
-    challenge: "Bloom's team of 4 was burning out posting daily with no plan, and results were flat.",
+    challenge: "Bloom's team of four was burning out posting daily with no plan, and copying data into reports by hand every Friday.",
     approach: [
-      "Defined 4 content pillars from audience and competitor research.",
-      "Built a Notion production pipeline with briefs, approvals and a batching schedule.",
-      "Trained the team on hooks and repurposing.",
+      "Defined four content pillars from audience and competitor research.",
+      "Built an n8n workflow: AI drafts captions from briefs, approvals run in Notion, and approved posts schedule themselves.",
+      "Automated weekly reporting straight from platform analytics into a client dashboard.",
     ],
-    results: "Output went up 5x while production time fell 60%, and reach grew 180% in a quarter.",
-    deliverables: ["Strategy deck", "Notion system", "90-day calendar", "Team workshop"],
+    results: "Output went up 5x, the team got ten hours a week back, and reach grew 180% in a quarter.",
+    deliverables: ["Strategy deck", "n8n automations", "AI caption system", "Auto-reporting"],
     platforms: ["Instagram", "LinkedIn", "TikTok"],
   },
   {
@@ -159,7 +159,7 @@ export const projects: Project[] = [
     categories: ["Design", "Video"],
     format: "square",
     summary: "A creator rebrand: new identity, thumbnail style and a signature editing style.",
-    palette: ["#ffd23d", "#ff7a3d"],
+    palette: ["#ffd1dc", "#c2185b"],
     metrics: [
       { value: "+14%", label: "CTR" },
       { value: "2x", label: "Avg. views" },
@@ -176,7 +176,7 @@ export const projects: Project[] = [
   },
 ];
 
-export const categories: ("All" | Category)[] = ["All", "Social", "Video", "Design", "Strategy"];
+export const categories: ("All" | Category)[] = ["All", "Social", "Video", "Design", "Strategy", "AI"];
 
 export function getProject(slug: string) {
   return projects.find((p) => p.slug === slug);

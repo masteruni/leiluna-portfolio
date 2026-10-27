@@ -1,0 +1,42 @@
+"use client";
+
+import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { useRef } from "react";
+import { manifesto } from "@/content/site";
+
+const accent = new Set(["orbiting.", "stop"]);
+
+function Word({ word, i, total, progress }: { word: string; i: number; total: number; progress: MotionValue<number> }) {
+  const start = i / total;
+  const opacity = useTransform(progress, [start, start + 1 / total], [0.12, 1]);
+  const isAccent = accent.has(word);
+  return (
+    <motion.span style={{ opacity }} className={`inline-block pr-[0.25em] ${isAccent ? "serif text-brand" : ""}`}>
+      {word}
+    </motion.span>
+  );
+}
+
+// The studio statement lights up word by word as you scroll through it.
+export function Manifesto() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.45"] });
+  const words = manifesto.split(" ");
+
+  return (
+    <section id="studio" className="relative px-5 py-32 sm:px-10 md:py-48">
+      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[180px_1fr]">
+        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+          <span className="text-brand">(01)</span> The studio
+        </p>
+        <div ref={ref}>
+          <p className="font-display text-[clamp(1.9rem,4.4vw,4.4rem)] font-medium leading-[1.08] tracking-[-0.03em]">
+            {words.map((w, i) => (
+              <Word key={i} word={w} i={i} total={words.length} progress={scrollYProgress} />
+            ))}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

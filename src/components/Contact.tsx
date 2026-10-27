@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowUpRight, Check, Copy } from "lucide-react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useRef, useState } from "react";
 import { site } from "@/content/site";
-import { Reveal } from "./Reveal";
+import { LineReveal } from "./LineReveal";
+import { Magnetic } from "./Magnetic";
 
+// The finale: a planet rises over the horizon while the call to action lands.
 export function Contact() {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+  const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["35%", "0%"]);
+  const glow = useTransform(scrollYProgress, [0.3, 1], [0.2, 1]);
 
   const copy = async () => {
     try {
@@ -19,61 +26,61 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden px-5 py-32 sm:px-8">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/2 h-[500px] w-[1000px] -translate-x-1/2 translate-y-1/2 rounded-full opacity-40 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, var(--brand), transparent)" }}
-      />
-      <div className="relative mx-auto max-w-6xl text-center">
-        <Reveal>
-          <p className="mb-6 font-mono text-xs uppercase tracking-[0.2em] text-muted">
-            <span className="text-brand">(07)</span> Contact
-          </p>
-          <h2 className="font-display text-[clamp(3rem,10vw,8.5rem)] font-bold leading-[0.85] tracking-[-0.04em]">
-            Let&apos;s make your
-            <br />
-            feed <span className="italic text-brand-2">unskippable.</span>
-          </h2>
-        </Reveal>
+    <section ref={ref} id="contact" className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-40 pt-32 sm:px-10">
+      {/* rising planet */}
+      <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[62%] w-[170vw] -translate-x-1/2 md:w-[130vw]">
+        <motion.div
+          style={{ opacity: glow }}
+          className="aspect-square w-full rounded-full"
+          // pink limb + atmosphere, like the header artwork
+        >
+          <div
+            className="size-full rounded-full bg-ink"
+            style={{
+              boxShadow:
+                "0 -1px 0 0 var(--brand-2), 0 -10px 40px -4px var(--brand), 0 -60px 160px -20px rgb(234 106 142 / 0.45), inset 0 30px 80px -40px rgb(234 106 142 / 0.6)",
+            }}
+          />
+        </motion.div>
+      </motion.div>
 
-        <Reveal delay={0.15}>
-          <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <div className="relative mx-auto w-full max-w-7xl text-center">
+        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+          <span className="text-brand">(08)</span> Contact
+        </p>
+        <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
+          <LineReveal
+            inView
+            lines={["Let's build", <span key="b">your <span className="serif font-normal text-brand">brand.</span></span>]}
+          />
+        </h2>
+        <p className="mx-auto mt-8 max-w-md text-lg text-paper/60">
+          Tell us about your story. We&apos;ll reply within one business day with ideas, not a sales script.
+        </p>
+
+        <div className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row">
+          <Magnetic strength={0.5}>
             <a
-              href={`mailto:${site.email}?subject=Project%20inquiry`}
-              className="group inline-flex items-center gap-2 rounded-full bg-paper px-7 py-4 text-lg font-medium text-ink transition hover:bg-brand-2"
+              href={`mailto:${site.email}?subject=New%20project%20with%20Leiluna%20Studio`}
+              className="group relative grid size-44 place-items-center overflow-hidden rounded-full bg-brand text-center font-medium text-ink sm:size-52"
             >
-              {site.email}
-              <ArrowUpRight size={20} className="transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span className="absolute inset-0 scale-0 rounded-full bg-paper transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-100" />
+              <span className="relative text-lg leading-tight">
+                Start a
+                <br />
+                project →
+              </span>
             </a>
-            <button
-              type="button"
-              onClick={copy}
-              className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-4 text-sm transition hover:border-paper/40"
-            >
-              {copied ? <Check size={16} className="text-brand-2" /> : <Copy size={16} />}
-              {copied ? "Copied!" : "Copy email"}
+          </Magnetic>
+          <div className="flex flex-col items-center gap-2 sm:items-start">
+            <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-brand sm:text-3xl">
+              {site.email}
+            </a>
+            <button type="button" onClick={copy} className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper">
+              {copied ? "Copied ✦" : "Copy email"}
             </button>
           </div>
-        </Reveal>
-
-        <Reveal delay={0.25}>
-          <ul className="mt-14 flex flex-wrap justify-center gap-x-8 gap-y-3">
-            {site.socials.map((s) => (
-              <li key={s.label}>
-                <a
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group inline-flex items-center gap-1 text-paper/70 transition hover:text-paper"
-                >
-                  {s.label}
-                  <ArrowUpRight size={14} className="opacity-0 transition group-hover:opacity-100" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

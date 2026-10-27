@@ -5,19 +5,24 @@ export default function NotFound() {
   return (
     <>
       <Nav />
-      <main className="grid min-h-dvh place-items-center px-5 text-center">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-brand">Error 404</p>
-          <h1 className="mt-4 font-display text-[clamp(3rem,12vw,9rem)] font-bold leading-[0.85] tracking-[-0.04em]">
-            This post
+      <main className="relative grid min-h-dvh place-items-center overflow-hidden px-5 text-center">
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-1/2 size-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ boxShadow: "inset 2.5vmin -1.5vmin 0 0 var(--brand), 0 0 120px -30px var(--brand)" }}
+        />
+        <div className="relative">
+          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-brand">404 · Lost in space</p>
+          <h1 className="mt-6 font-display text-[clamp(3rem,11vw,9rem)] font-bold leading-[0.85] tracking-[-0.05em]">
+            This page
             <br />
-            <span className="text-outline">was deleted.</span>
+            <span className="serif font-normal text-brand">left orbit.</span>
           </h1>
           <Link
             href="/"
-            className="mt-10 inline-block rounded-full bg-paper px-6 py-3.5 font-medium text-ink transition hover:bg-brand-2"
+            className="mt-12 inline-block rounded-full bg-paper px-7 py-4 font-medium text-ink transition-colors hover:bg-brand"
           >
-            Back to the feed
+            Back to the studio
           </Link>
         </div>
       </main>

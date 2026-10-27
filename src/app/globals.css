@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
 /* ───────────────────────────────────────────────────────────
-   BRAND PALETTE — swap these values for your logo colors.
-   Everything on the site reads from these tokens.
+   LEILUNA STUDIO — brand palette (sampled from the logo)
    ─────────────────────────────────────────────────────────── */
 :root {
-  --ink: #0c0b10; /* page background */
-  --ink-2: #16151c; /* cards / raised surfaces */
-  --ink-3: #221f2b; /* borders on hover, chips */
-  --paper: #f4efe6; /* main text */
-  --muted: #9a95a6; /* secondary text */
-  --line: rgb(244 239 230 / 0.1);
+  --ink: #050506; /* deep space */
+  --ink-2: #0e0d11; /* raised surface */
+  --ink-3: #1a181e; /* borders, chips */
+  --paper: #f6f2ef; /* moonlight white */
+  --muted: #8e8893; /* secondary text */
+  --line: rgb(246 242 239 / 0.1);
 
-  --brand: #ff3d7f; /* primary accent */
-  --brand-2: #c6ff3d; /* highlight / stickers */
-  --brand-3: #7b5cff; /* secondary accent */
+  --brand: #ea6a8e; /* Leiluna pink */
+  --brand-2: #f6a6bd; /* soft pink glow */
+  --brand-3: #a8436a; /* deep rose */
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
@@ -28,15 +29,15 @@
   --color-brand-2: var(--brand-2);
   --color-brand-3: var(--brand-3);
 
-  --font-display: var(--font-bricolage);
-  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-outfit);
+  --font-sans: var(--font-outfit);
+  --font-serif: var(--font-instrument);
   --font-mono: var(--font-jetbrains);
 }
 
 html {
   overflow-x: clip;
-  scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  background: var(--ink);
 }
 
 body {
@@ -46,18 +47,28 @@ body {
 }
 
 ::selection {
-  background: var(--brand-2);
+  background: var(--brand);
   color: var(--ink);
 }
 
-/* Film-grain overlay for a tactile, editorial texture */
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+
+/* Custom cursor hides the native one only on fine pointers */
+html.has-cursor,
+html.has-cursor * { cursor: none !important; }
+
+/* Film grain */
 .grain::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 90;
   pointer-events: none;
-  opacity: 0.06;
+  opacity: 0.07;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain 8s steps(10) infinite;
 }
@@ -75,38 +86,22 @@ body {
   to { transform: translateX(-50%); }
 }
 
-@keyframes reel-scroll {
-  0%, 22% { transform: translateY(0); }
-  33%, 55% { transform: translateY(-100%); }
-  66%, 88% { transform: translateY(-200%); }
-  100% { transform: translateY(-300%); }
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
-  50% { transform: translateY(-10px) rotate(var(--r, 0deg)); }
-}
-
-@keyframes heart {
-  0% { transform: translateY(0) scale(0.6); opacity: 0; }
-  15% { opacity: 1; }
-  100% { transform: translateY(-140px) scale(1.1); opacity: 0; }
-}
-
-.animate-marquee { animation: marquee 40s linear infinite; }
-.animate-reel { animation: reel-scroll 9s cubic-bezier(0.7, 0, 0.2, 1) infinite; }
-.animate-float { animation: float 5s ease-in-out infinite; }
+.animate-marquee { animation: marquee 45s linear infinite; }
+.animate-spin-slow { animation: spin-slow 40s linear infinite; }
 
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--paper);
+  -webkit-text-stroke: 1px rgb(246 242 239 / 0.55);
 }
 
+.serif { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; }
+
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   .grain::after,
   .animate-marquee,
-  .animate-reel,
-  .animate-float,
-  .animate-heart { animation: none !important; }
+  .animate-spin-slow { animation: none !important; }
 }

@@ -34,11 +34,10 @@ export function ProjectCover({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [a, b] = project.palette;
-  const angle = 135 + variant * 70;
 
   return (
     <div
-      className={`relative overflow-hidden rounded-3xl bg-ink-2 ${formatAspect[format]} ${className}`}
+      className={`relative overflow-hidden rounded-2xl bg-ink-2 ${formatAspect[format]} ${className}`}
       onMouseEnter={() => videoRef.current?.play().catch(() => {})}
       onMouseLeave={() => videoRef.current?.pause()}
     >
@@ -52,19 +51,26 @@ export function ProjectCover({
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
       ) : (
-        <div
-          aria-hidden
-          className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
-          style={{
-            background: `radial-gradient(circle at ${20 + variant * 30}% 20%, ${a} 0%, transparent 55%),
-              radial-gradient(circle at 85% ${80 - variant * 20}%, ${b} 0%, transparent 50%),
-              linear-gradient(${angle}deg, color-mix(in oklab, ${a} 35%, var(--ink)) 0%, var(--ink-2) 100%)`,
-          }}
-        >
-          <span className="absolute -bottom-[0.18em] -right-[0.05em] font-display text-[11rem] font-bold leading-none text-ink/25 mix-blend-overlay sm:text-[14rem]">
-            {project.client.replace(/^@/, "").charAt(0)}
+        <div aria-hidden className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.06]">
+          <div
+            className="absolute inset-0"
+            style={{ background: `radial-gradient(120% 80% at ${30 + variant * 20}% 0%, color-mix(in oklab, ${a} 22%, transparent), transparent 60%), var(--ink-2)` }}
+          />
+          {/* planet */}
+          <div
+            className="absolute aspect-square rounded-full"
+            style={{
+              width: "115%",
+              left: `${[-35, 20, -10, 30, -25][variant % 5]}%`,
+              top: `${[45, 55, 62, 40, 50][variant % 5]}%`,
+              background: `radial-gradient(circle at 50% 0%, color-mix(in oklab, ${b} 55%, var(--ink)) 0%, var(--ink) 38%)`,
+              boxShadow: `0 -2px 0 0 color-mix(in oklab, ${a} 90%, white), 0 -18px 60px -6px ${a}, inset 0 18px 40px -20px ${b}`,
+            }}
+          />
+          <span className="absolute left-5 top-5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/60">
+            {project.client}
           </span>
-          <span className="absolute left-5 top-5 max-w-[70%] font-display text-2xl font-semibold leading-tight text-ink/80">
+          <span className="serif absolute bottom-12 left-5 right-5 text-[clamp(1.8rem,3vw,2.6rem)] leading-none text-paper">
             {project.title}
           </span>
         </div>
@@ -82,7 +88,7 @@ export function ProjectCover({
         />
       )}
 
-      <span className="absolute bottom-4 left-4 rounded-full bg-ink/70 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-paper backdrop-blur">
+      <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-widest text-paper/60">
         {formatLabel[format]}
       </span>
     </div>

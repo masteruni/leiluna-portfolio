@@ -1,152 +1,167 @@
-// Everything personal on the site lives here. Edit freely — the design reads from this file.
-// Text marked [PLACEHOLDER] is dummy content to replace with your own.
+// Everything written on the site lives here. Edit freely — the design reads from this file.
+// Text marked [PLACEHOLDER] is sample content to replace with your own.
 
 export const site = {
-  name: "Leiluna",
-  fullName: "Leiluna", // [PLACEHOLDER] full name if you want it shown
+  name: "Leiluna Studio",
+  short: "Leiluna",
   url: "https://leilunastudio.com",
-  email: "hello@leiluna.com", // [PLACEHOLDER]
-  location: "Available worldwide · Remote", // [PLACEHOLDER]
+  email: "hello@leilunastudio.com", // [PLACEHOLDER] confirm this inbox exists
+  location: "Working worldwide",
   available: true,
-  tagline: "I make brands impossible to scroll past.",
+  headline: ["Your story.", "Our creative", "orbit."],
+  tagline: "Let's build your brand.",
   description:
-    "Social media manager, content strategist, video editor and graphic designer. I turn brands into feeds people actually stop for.",
-  roles: [
-    "Social Media Manager",
-    "Content Strategist",
-    "Video Editor",
-    "Graphic Designer",
-  ],
-  resumeUrl: "/resume.pdf", // drop your CV into /public/resume.pdf
+    "Leiluna Studio is a social media and content studio. Strategy, content creation, and AI-powered workflows that keep your brand in everyone's orbit.",
+  pillars: ["Social Media Management", "Content Creation", "AI Workflows"],
   socials: [
-    { label: "Instagram", href: "https://instagram.com/" },
+    { label: "Instagram", href: "https://instagram.com/" }, // [PLACEHOLDER] links
     { label: "TikTok", href: "https://tiktok.com/" },
     { label: "LinkedIn", href: "https://linkedin.com/" },
-    { label: "Behance", href: "https://behance.net/" },
-    { label: "YouTube", href: "https://youtube.com/" },
+    { label: "Facebook", href: "https://facebook.com/" },
   ],
 };
 
-// [PLACEHOLDER] numbers — replace with your real results.
-export const stats = [
-  { value: 48, suffix: "M+", label: "Organic views generated" },
-  { value: 340, suffix: "%", label: "Avg. engagement lift" },
-  { value: 60, suffix: "+", label: "Brands & creators served" },
-  { value: 1200, suffix: "+", label: "Assets designed & edited" },
-];
+export const manifesto =
+  "Every brand has a story worth orbiting. We plan it, shoot it, cut it, design it and automate the busywork around it, so you show up every day with something people actually stop for.";
 
+// From the Leiluna Studio service sheet.
 export const services = [
   {
     id: "social",
     title: "Social Media Management",
-    blurb:
-      "Always-on channels that grow while you sleep. Calendars, community, publishing and reporting, all handled.",
-    deliverables: ["Content calendars", "Community management", "Monthly analytics", "Paid boost strategy"],
+    short: "Social",
+    blurb: "Always-on channels with a plan behind every post, run end to end from calendar to community.",
+    items: [
+      "Social media strategy",
+      "Account management",
+      "Content calendar planning",
+      "Scheduling & publishing",
+      "Caption writing & copywriting",
+      "Hashtag research",
+      "Profile optimization",
+      "Community management",
+      "Monthly performance reports",
+    ],
+  },
+  {
+    id: "content",
+    title: "Content Creation & Production",
+    short: "Content",
+    blurb: "Scroll-stopping video and design, with hooks in the first second and your brand in every frame.",
+    items: [
+      "Short-form editing (Reels, TikTok, Shorts)",
+      "Long-form video editing",
+      "Podcast repurposing",
+      "Social graphics & carousels",
+      "Thumbnails & covers",
+      "Hook & headline development",
+      "Creative concept development",
+      "Branded content",
+      "Subtitles & captioning",
+    ],
+  },
+  {
+    id: "ai",
+    title: "AI-Powered Content Generation",
+    short: "AI Content",
+    blurb: "More ideas, faster drafts, and fresh visuals, with human taste on every final cut.",
+    items: [
+      "AI-assisted writing & captions",
+      "AI content ideation",
+      "AI graphics & visual generation",
+      "AI video generation",
+      "AI voiceovers & narration",
+      "AI scriptwriting",
+      "AI-assisted research & trends",
+      "Content personalization",
+    ],
+  },
+  {
+    id: "automation",
+    title: "AI Automation & Workflows",
+    short: "Automation",
+    blurb: "We wire up the busywork, from onboarding to reporting, so your team spends time on the work that matters.",
+    items: [
+      "Social media workflow automation",
+      "Automated content scheduling",
+      "Client onboarding automation",
+      "Email & follow-up sequences",
+      "AI chatbots & support",
+      "Lead capture & qualification",
+      "Automated reporting",
+      "CRM workflows",
+      "Make, Zapier & n8n integrations",
+    ],
   },
   {
     id: "strategy",
-    title: "Content Strategy",
-    blurb:
-      "Content pillars, hooks and formats built from your audience data, so every post has a job to do.",
-    deliverables: ["Audience research", "Content pillars", "Hook libraries", "Platform playbooks"],
-  },
-  {
-    id: "video",
-    title: "Video Editing",
-    blurb:
-      "Short-form edits that hold attention from the first frame: pacing, captions, sound design and motion.",
-    deliverables: ["Reels / TikTok / Shorts", "YouTube long-form", "Motion captions", "Sound design"],
-  },
-  {
-    id: "design",
-    title: "Graphic Design",
-    blurb:
-      "Scroll-stopping visuals with a system behind them: carousels, templates and brand kits your team can reuse.",
-    deliverables: ["Carousels & posts", "Brand kits", "Templates", "Thumbnails & covers"],
+    title: "Content Strategy & Growth",
+    short: "Strategy",
+    blurb: "Pillars, research and a monthly plan, so every post has a job and every month beats the last.",
+    items: [
+      "Content pillar development",
+      "Audience research",
+      "Competitor analysis",
+      "Platform-specific strategy",
+      "Monthly content planning",
+      "Trend research",
+      "Organic growth strategy",
+      "Campaign planning",
+      "Performance analysis",
+    ],
   },
 ];
 
+// [PLACEHOLDER] numbers — replace with real results.
+export const stats = [
+  { value: 48, suffix: "M", label: "organic views delivered" },
+  { value: 340, suffix: "%", label: "average engagement lift" },
+  { value: 60, suffix: "+", label: "brands in our orbit" },
+];
+
+// The five phases of a project, drawn as phases of the moon.
 export const process = [
-  { step: "01", title: "Listen", text: "Audit your channels, audience and competitors. Find the gap nobody's filling." },
-  { step: "02", title: "Plan", text: "Pillars, formats and a calendar. Every post gets a purpose before it gets made." },
-  { step: "03", title: "Create", text: "Shoot, edit, design. Hooks in the first second, brand in every frame." },
-  { step: "04", title: "Ship", text: "Publish at the right time, on the right platform, in the right format." },
-  { step: "05", title: "Learn", text: "Read the numbers, double down on what works, cut what doesn't. Repeat." },
+  { title: "Discover", text: "A discovery call, an audit of your channels and a look at what competitors miss." },
+  { title: "Plan", text: "Content pillars, formats and a calendar. Every post gets a purpose before it gets made." },
+  { title: "Create", text: "We shoot, edit, design and write, with AI speeding up the drafts and humans making the calls." },
+  { title: "Launch", text: "Scheduled, published and managed, plus a community that hears back from you." },
+  { title: "Grow", text: "Monthly reports, honest insights, and we double down on what works." },
 ];
 
-export const about = {
-  // [PLACEHOLDER] write this in your own voice
-  intro:
-    "Hey, I'm Leiluna. I live at the intersection of strategy and craft. I'll plan the content calendar in the morning, cut a reel by lunch and design the carousel before dinner.",
-  body: [
-    "I started editing videos for friends and fell in love with that moment when a viewer decides to keep watching. Since then I've helped brands, founders and creators build audiences that care, not just numbers that look good.",
-    "My approach is simple: understand the audience, respect their attention, and make every frame earn its spot.",
-  ],
-  tools: [
-    "Premiere Pro",
-    "After Effects",
-    "CapCut",
-    "DaVinci Resolve",
-    "Photoshop",
-    "Illustrator",
-    "Figma",
-    "Canva",
-    "Meta Business Suite",
-    "Later",
-    "Notion",
-    "ChatGPT / Claude",
-  ],
-};
-
-// [PLACEHOLDER] your work history
-export const experience = [
+export const founders = [
   {
-    period: "2024 — Now",
-    role: "Freelance Social Media Manager & Editor",
-    company: "Independent",
-    text: "Running social and short-form video for lifestyle, beauty and tech brands.",
+    name: "Juri",
+    fullName: "Marian Jurielle D. Raymundo",
+    role: "Co-founder · Client & Business Lead",
+    bio: "Juri is your first hello and your steady point of contact. She leads discovery calls, proposals, onboarding and client communication, so you always know what's happening and why.",
+    leads: ["Discovery & sales", "Proposals & contracts", "Client onboarding", "Communication", "Finance"],
+    photo: null as string | null, // e.g. "/team/juri.jpg"
   },
   {
-    period: "2022 — 2024",
-    role: "Content Strategist",
-    company: "Studio Name",
-    text: "Built content systems for 20+ clients and led a team of 3 editors.",
-  },
-  {
-    period: "2021 — 2022",
-    role: "Video Editor & Designer",
-    company: "Agency Name",
-    text: "Edited 400+ short-form videos and designed campaign assets across platforms.",
-  },
-  {
-    period: "2020 — 2021",
-    role: "Social Media Assistant",
-    company: "Brand Name",
-    text: "Managed daily posting and community, growing followers from 2K to 38K.",
+    name: "Sven",
+    fullName: "Sven M. Laureno",
+    role: "Co-founder · Creative & Operations Lead",
+    bio: "Sven runs the engine room: project setup, production, quality control and the systems that keep the studio delivering on time, every time.",
+    leads: ["Project setup", "Content production", "Quality control", "SOPs & workflows", "Deadlines"],
+    photo: null as string | null, // e.g. "/team/sven.jpg"
   },
 ];
 
-// Shown like social media comments. [PLACEHOLDER] quotes.
+// [PLACEHOLDER] quotes.
 export const testimonials = [
   {
+    quote: "Our reels went from 300 views to 300K. They just get what makes people stop scrolling.",
     name: "Maya R.",
-    handle: "@mayabakes",
     title: "Founder, Bakery Brand",
-    quote: "Our reels went from 300 views to 300K. Leiluna gets what makes people stop scrolling.",
-    likes: "2.4K",
   },
   {
+    quote: "Strategy, editing, design and automations from one team, and it all feels like one brand.",
     name: "Jordan K.",
-    handle: "@jordank",
     title: "Marketing Lead, Tech Startup",
-    quote: "Strategy, editing and design from one person, and it all feels like one brand. Unreal.",
-    likes: "1.1K",
   },
   {
+    quote: "They automated our onboarding and reporting. We got back ten hours a week and the content got better.",
     name: "Sofia L.",
-    handle: "@sofiastyle",
     title: "Content Creator",
-    quote: "My editing turnaround went from a week to two days, and the quality went UP. 10/10.",
-    likes: "3.8K",
   },
 ];

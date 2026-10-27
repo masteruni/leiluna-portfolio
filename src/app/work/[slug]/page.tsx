@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Contact } from "@/components/Contact";
+import { LineReveal } from "@/components/LineReveal";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ProjectCover } from "@/components/ProjectCover";
@@ -33,8 +34,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   return (
     <>
       <Nav />
-      <main className="px-5 pt-32 sm:px-8 md:pt-40">
-        <article className="mx-auto max-w-6xl">
+      <main className="px-5 pt-32 sm:px-10 md:pt-40">
+        <article className="mx-auto max-w-7xl">
           <Reveal>
             <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper">
               <ArrowLeft size={16} /> All work
@@ -47,18 +48,18 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
                   <span className="text-brand">{project.client}</span> · {project.year} · {project.categories.join(" / ")}
                 </p>
-                <h1 className="mt-5 font-display text-[clamp(3rem,9vw,7rem)] font-bold leading-[0.88] tracking-[-0.04em]">
-                  {project.title}
+                <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+                  <LineReveal inView lines={project.title.split(" ").reduce<string[]>((acc, w, i, all) => (i % Math.ceil(all.length / 2) ? (acc[acc.length - 1] += ` ${w}`) : acc.push(w), acc), [])} />
                 </h1>
                 <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted">{project.summary}</p>
               </Reveal>
 
               <Reveal delay={0.1}>
-                <dl className="mt-10 grid grid-cols-3 gap-px overflow-hidden rounded-3xl border border-line bg-line">
+                <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-line pt-6">
                   {project.metrics.map((m) => (
-                    <div key={m.label} className="bg-ink p-5 sm:p-6">
-                      <dt className="text-xs text-muted sm:text-sm">{m.label}</dt>
-                      <dd className="mt-2 font-display text-2xl font-bold text-brand-2 sm:text-4xl">{m.value}</dd>
+                    <div key={m.label} className="flex flex-col-reverse">
+                      <dt className="mt-2 text-xs text-muted sm:text-sm">{m.label}</dt>
+                      <dd className="font-display text-3xl font-semibold tracking-tight text-brand sm:text-5xl">{m.value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -77,7 +78,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               <Reveal>
                 <section>
                   <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-brand">The challenge</h2>
-                  <p className="mt-4 font-display text-2xl leading-snug sm:text-3xl">{project.challenge}</p>
+                  <p className="serif mt-4 text-3xl leading-tight sm:text-5xl">{project.challenge}</p>
                 </section>
               </Reveal>
               <Reveal>
@@ -96,7 +97,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               <Reveal>
                 <section>
                   <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-brand">The results</h2>
-                  <p className="mt-4 font-display text-2xl leading-snug sm:text-3xl">{project.results}</p>
+                  <p className="serif mt-4 text-3xl leading-tight text-brand-2 sm:text-5xl">{project.results}</p>
                 </section>
               </Reveal>
             </div>
@@ -137,11 +138,12 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
 
           <Link
             href={`/work/${next.slug}`}
-            className="group mt-24 flex items-end justify-between gap-6 border-y border-line py-10"
+            data-cursor="Next"
+            className="group mt-32 flex items-end justify-between gap-6 border-y border-line py-12"
           >
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Next project</p>
-              <p className="mt-3 font-display text-4xl font-bold tracking-tight transition group-hover:text-brand sm:text-6xl">
+              <p className="mt-3 font-display text-5xl font-bold tracking-[-0.04em] transition group-hover:text-brand sm:text-8xl">
                 {next.title}
               </p>
             </div>
