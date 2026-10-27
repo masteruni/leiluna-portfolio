@@ -143,7 +143,7 @@ export const founders = [
     role: "Co-founder · Creative & Operations Lead",
     bio: "Sven runs the engine room: project setup, production, quality control and the systems that keep the studio delivering on time, every time.",
     leads: ["Project setup", "Content production", "Quality control", "SOPs & workflows", "Deadlines"],
-    photo: null as string | null, // e.g. "/team/sven.jpg"
+    photo: "/team/sven.webp" as string | null,
   },
 ];
 
