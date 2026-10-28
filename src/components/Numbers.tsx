@@ -52,7 +52,7 @@ export function Numbers() {
       />
       <div className="relative mx-auto max-w-7xl">
         <p className="mb-16 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(04)</span> In numbers
+          <span className="text-brand">(05)</span> In numbers
         </p>
         <ul className="space-y-6">
           {stats.map((s, i) => (

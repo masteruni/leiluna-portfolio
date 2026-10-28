@@ -26,7 +26,7 @@ export function Voices() {
     >
       <div className="mx-auto max-w-6xl">
         <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(07)</span> Kind words
+          <span className="text-brand">(08)</span> Kind words
         </p>
 
         <div className="relative mt-14 min-h-[22rem] md:min-h-[26rem]">

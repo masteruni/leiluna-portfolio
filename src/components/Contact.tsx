@@ -46,7 +46,7 @@ export function Contact() {
 
       <div className="relative mx-auto w-full max-w-7xl text-center">
         <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(08)</span> Contact
+          <span className="text-brand">(09)</span> Contact
         </p>
         <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal

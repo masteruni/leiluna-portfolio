@@ -46,7 +46,7 @@ export function Phases() {
     <section className="px-5 py-32 sm:px-10 md:py-44">
       <div className="mx-auto max-w-7xl">
         <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(05)</span> How we work
+          <span className="text-brand">(06)</span> How we work
         </p>
         <h2 className="mt-6 max-w-4xl font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
           From new moon to <span className="serif font-normal text-brand">full orbit.</span>

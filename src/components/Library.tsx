@@ -1,0 +1,395 @@
+"use client";
+
+import Image from "next/image";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useLenis } from "lenis/react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { industries, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
+
+const aspect: Record<PieceFormat, string> = {
+  reel: "aspect-[9/16]",
+  square: "aspect-square",
+  portrait: "aspect-[4/5]",
+  wide: "aspect-video",
+};
+
+// Each industry gets its own tint in the Leiluna family, so the placeholders read as different worlds.
+const tint: Record<Industry, [string, string]> = {
+  "Food & Beverage": ["#ff8a6b", "#ea6a8e"],
+  "Beauty & Wellness": ["#f6a6bd", "#b06ab3"],
+  "Real Estate": ["#c9b8a6", "#6a4c93"],
+  Fitness: ["#ea6a8e", "#ff3d5a"],
+  Fashion: ["#ffd1dc", "#a8436a"],
+  "Tech & SaaS": ["#8e7cc3", "#3d6bff"],
+  Education: ["#ffd27a", "#ea6a8e"],
+  Hospitality: ["#ffb199", "#8e7cc3"],
+};
+
+const kinds: { id: "all" | Kind; label: string }[] = [
+  { id: "all", label: "Everything" },
+  { id: "video", label: "Reels & video" },
+  { id: "graphic", label: "Graphics" },
+];
+
+// Placeholder artwork until a real file is added, or the real image/video.
+function PieceArt({ p, playing, large }: { p: Piece; playing: boolean; large?: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (playing) v.play().catch(() => {});
+    else v.pause();
+  }, [playing]);
+
+  if (p.src && p.kind === "video") {
+    return (
+      <video
+        ref={ref}
+        src={p.src}
+        poster={p.poster}
+        muted={!large}
+        controls={large}
+        loop
+        playsInline
+        preload={large ? "auto" : "metadata"}
+        className="absolute inset-0 size-full object-cover"
+      />
+    );
+  }
+  if (p.src) {
+    return (
+      <Image
+        src={p.src}
+        alt={`${p.style}: ${p.title}`}
+        fill
+        sizes={large ? "90vw" : "(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"}
+        className={large ? "object-contain" : "object-cover"}
+      />
+    );
+  }
+
+  const [a, b] = tint[p.industry];
+  return (
+    <div aria-hidden className="absolute inset-0 overflow-hidden">
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(90% 60% at 20% 10%, color-mix(in oklab, ${a} 45%, transparent), transparent 65%),
+            radial-gradient(70% 50% at 90% 95%, color-mix(in oklab, ${b} 40%, transparent), transparent 70%), var(--ink-2)`,
+        }}
+      />
+      {p.kind === "graphic" ? (
+        <>
+          {/* dot grid + crop marks: a designer's canvas */}
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{ backgroundImage: "radial-gradient(rgb(246 242 239 / 0.35) 1px, transparent 1px)", backgroundSize: "14px 14px" }}
+          />
+          {["left-3 top-3 border-l border-t", "right-3 top-3 border-r border-t", "bottom-3 left-3 border-b border-l", "bottom-3 right-3 border-b border-r"].map((c) => (
+            <span key={c} className={`absolute size-4 border-paper/50 ${c}`} />
+          ))}
+        </>
+      ) : (
+        <>
+          {(p.format === "reel" || p.format === "portrait") && (
+          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-paper/30 bg-ink/30 backdrop-blur transition-transform duration-500 group-hover:scale-110">
+            <span className="ml-1 border-y-[7px] border-l-[11px] border-y-transparent border-l-paper" />
+          </span>
+          )}
+          {/* scrubbing progress bar */}
+          <span className="absolute inset-x-4 bottom-4 h-0.5 overflow-hidden rounded-full bg-paper/20">
+            <span
+              className="block h-full origin-left bg-brand"
+              style={{ animation: playing ? "scrub 6s linear infinite" : "none", transform: playing ? undefined : "scaleX(0.35)" }}
+            />
+          </span>
+        </>
+      )}
+      <span
+        className={`serif absolute inset-x-4 text-paper ${large ? "bottom-16 text-5xl md:text-6xl" : "bottom-9 text-[clamp(1.4rem,2.2vw,2rem)]"} leading-[0.95]`}
+      >
+        {p.style}
+      </span>
+    </div>
+  );
+}
+
+function Tile({ p, onOpen, index }: { p: Piece; onOpen: () => void; index: number }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [visible, setVisible] = useState(false);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.45 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <motion.div
+      initial={reduce ? false : { opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.94 }}
+      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: Math.min(index, 8) * 0.04 }}
+      className="mb-4 break-inside-avoid"
+    >
+      <button
+        ref={ref}
+        type="button"
+        onClick={onOpen}
+        data-cursor={p.kind === "video" ? "Play" : "View"}
+        aria-label={`${p.kind === "video" ? "Play" : "View"} ${p.style}, ${p.industry}`}
+        className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
+      >
+        <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
+          <PieceArt p={p} playing={visible && !reduce} />
+        </div>
+        <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
+          <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{p.industry}</span>
+          <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
+            {p.kind === "video" ? (
+              `▶ ${p.duration ?? "Reel"}`
+            ) : (
+              <>
+                <span className="sm:hidden" aria-hidden>◼</span>
+                <span className="max-sm:sr-only">Graphic</span>
+              </>
+            )}
+          </span>
+        </div>
+        {p.src && (
+          <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-4 pt-10 font-display text-lg font-medium">
+            {p.style}
+          </span>
+        )}
+      </button>
+    </motion.div>
+  );
+}
+
+function Lightbox({
+  list,
+  index,
+  onClose,
+  onStep,
+  onContact,
+}: {
+  list: Piece[];
+  index: number;
+  onClose: () => void;
+  onStep: (d: number) => void;
+  onContact: () => void;
+}) {
+  const p = list[index];
+  const closeRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") onStep(1);
+      if (e.key === "ArrowLeft") onStep(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose, onStep]);
+
+  const media = {
+    reel: "aspect-[9/16] h-[min(58vh,760px)] lg:h-[min(78vh,760px)]",
+    square: "aspect-square w-[min(88vw,680px)] lg:w-auto lg:h-[min(70vh,680px)]",
+    portrait: "aspect-[4/5] h-[min(58vh,720px)] lg:h-[min(74vh,720px)]",
+    wide: "aspect-video w-[min(92vw,1000px)]",
+  }[p.format];
+
+  return (
+    <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${p.style}, ${p.industry}`}
+      className="fixed inset-0 z-[85] flex items-center justify-center bg-ink px-4 sm:bg-ink/95 pb-4 pt-20 backdrop-blur-xl sm:p-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        key={p.id}
+        className="flex max-h-full w-full max-w-6xl flex-col items-center gap-6 overflow-y-auto lg:flex-row lg:items-end lg:justify-center lg:gap-12"
+        initial={{ opacity: 0, y: 30, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media}`}>
+          <PieceArt p={p} playing large />
+        </div>
+        <div className="w-full max-w-sm">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand">
+            {p.kind === "video" ? `Reel · ${p.duration ?? ""}` : "Graphic"}
+          </p>
+          <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{p.style}</h3>
+          <p className="serif mt-2 text-2xl text-paper/70">{p.title}</p>
+          <dl className="mt-8 space-y-3 text-sm">
+            <div className="flex justify-between border-t border-line pt-3">
+              <dt className="text-muted">Industry</dt>
+              <dd>{p.industry}</dd>
+            </div>
+            {p.tools && (
+              <div className="flex justify-between gap-6 border-t border-line pt-3">
+                <dt className="text-muted">Made with</dt>
+                <dd className="text-right">{p.tools.join(", ")}</dd>
+              </div>
+            )}
+          </dl>
+          <button
+            type="button"
+            onClick={onContact}
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-ink transition-colors hover:bg-paper"
+          >
+            I want this style →
+          </button>
+          <div className="mt-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+            <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 hover:text-paper" aria-label="Previous piece">
+              ←
+            </button>
+            <span className="tabular-nums">
+              {String(index + 1).padStart(2, "0")} / {String(list.length).padStart(2, "0")}
+            </span>
+            <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 hover:text-paper" aria-label="Next piece">
+              →
+            </button>
+          </div>
+        </div>
+      </motion.div>
+      <button
+        ref={closeRef}
+        type="button"
+        onClick={onClose}
+        className="absolute right-5 top-5 rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
+      >
+        Close ✕
+      </button>
+    </motion.div>
+  );
+}
+
+export function Library() {
+  const [kind, setKind] = useState<"all" | Kind>("all");
+  const [industry, setIndustry] = useState<"All" | Industry>("All");
+  const [open, setOpen] = useState<number | null>(null);
+  const lenis = useLenis();
+
+  const list = useMemo(
+    () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || p.industry === industry)),
+    [kind, industry],
+  );
+  // Only offer industries that have pieces in the current format.
+  const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).map((p) => p.industry)), [kind]);
+
+  useEffect(() => {
+    if (open !== null) lenis?.stop();
+    else lenis?.start();
+  }, [open, lenis]);
+
+  const count = (k: "all" | Kind) => pieces.filter((p) => k === "all" || p.kind === k).length;
+
+  return (
+    <section id="library" className="relative px-5 py-32 sm:px-10 md:py-44">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+              <span className="text-brand">(04)</span> The library
+            </p>
+            <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+              Every format.
+              <br />
+              <span className="serif font-normal text-brand">Every industry.</span>
+            </h2>
+          </div>
+          <p className="max-w-sm text-lg text-paper/60">
+            Not case studies, just the craft. Single reels, edits and graphics across industries, so you can find your style
+            before we ever talk.
+          </p>
+        </div>
+
+        {/* filters */}
+        <div className="sticky top-0 z-20 -mx-5 mt-14 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div role="group" aria-label="Filter by format" className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
+              {kinds.map((k) => (
+                <button
+                  key={k.id}
+                  type="button"
+                  aria-pressed={kind === k.id}
+                  onClick={() => {
+                    setKind(k.id);
+                    setIndustry("All");
+                  }}
+                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors ${
+                    kind === k.id ? "bg-paper text-ink" : "border border-line text-paper/70 hover:text-paper"
+                  }`}
+                >
+                  {k.label}
+                  <sup className="ml-1 font-mono text-[9px] opacity-60">{count(k.id)}</sup>
+                </button>
+              ))}
+            </div>
+            <div
+              role="group"
+              aria-label="Filter by industry"
+              className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0"
+            >
+              {(["All", ...industries] as const).map((ind) => {
+                const disabled = ind !== "All" && !available.has(ind);
+                return (
+                  <button
+                    key={ind}
+                    type="button"
+                    disabled={disabled}
+                    aria-pressed={industry === ind}
+                    onClick={() => setIndustry(ind)}
+                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs transition-colors disabled:opacity-25 ${
+                      industry === ind ? "bg-brand text-ink" : "text-paper/60 hover:text-paper"
+                    }`}
+                  >
+                    {ind}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.25em] text-muted" aria-live="polite">
+          Showing {list.length} {list.length === 1 ? "piece" : "pieces"}
+        </p>
+
+        <div className="mt-6 columns-2 gap-4 md:columns-3 xl:columns-4">
+          <AnimatePresence mode="popLayout">
+            {list.map((p, i) => (
+              <Tile key={p.id} p={p} index={i} onOpen={() => setOpen(i)} />
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {open !== null && list[open] && (
+          <Lightbox
+            list={list}
+            index={open}
+            onClose={() => setOpen(null)}
+            onStep={(d) => setOpen((o) => (o === null ? o : (o + d + list.length) % list.length))}
+            onContact={() => {
+              setOpen(null);
+              lenis?.start();
+              lenis?.scrollTo("#contact", { duration: 1.6 });
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}

@@ -10,6 +10,7 @@ import { Magnetic } from "./Magnetic";
 
 const links = [
   { href: "/#work", label: "Work" },
+  { href: "/#library", label: "Library" },
   { href: "/#services", label: "Services" },
   { href: "/#studio", label: "Studio" },
   { href: "/#contact", label: "Contact" },

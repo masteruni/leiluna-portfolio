@@ -2,6 +2,7 @@ import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { Founders } from "@/components/Founders";
 import { Hero } from "@/components/Hero";
+import { Library } from "@/components/Library";
 import { Manifesto } from "@/components/Manifesto";
 import { Nav } from "@/components/Nav";
 import { Numbers } from "@/components/Numbers";
@@ -21,6 +22,7 @@ export default function Home() {
         <Manifesto />
         <Orbits />
         <WorkReel />
+        <Library />
         <Numbers />
         <Phases />
         <Founders />

@@ -86,6 +86,11 @@ html.has-cursor * { cursor: none !important; }
   to { transform: translateX(-50%); }
 }
 
+@keyframes scrub {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
 }
