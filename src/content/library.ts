@@ -143,6 +143,18 @@ export const pieces: Piece[] = [
     duration: "0:08",
   },
   {
+    id: "muse-beauty-edit",
+    kind: "video",
+    format: "reel",
+    style: "Beauty & fashion edit",
+    industry: ["Beauty & Wellness", "Fashion"],
+    title: "MUSE: a beauty edit",
+    src: "/library/muse-beauty-edit.mp4",
+    preview: "/library/muse-beauty-edit-preview.mp4",
+    poster: "/library/muse-beauty-edit-poster.webp",
+    duration: "0:30",
+  },
+  {
     id: "learning-carousel",
     kind: "graphic",
     format: "tall",
