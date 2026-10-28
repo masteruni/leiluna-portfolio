@@ -12,6 +12,7 @@ const aspect: Record<PieceFormat, string> = {
   portrait: "aspect-[4/5]",
   tall: "aspect-[3/4]",
   wide: "aspect-video",
+  long: "aspect-[9/16]",
 };
 
 // Each industry gets its own tint in the Leiluna family, so the placeholders read as different worlds.
@@ -80,6 +81,14 @@ function PieceArt({ p, playing, large, slide = 0 }: { p: Piece; playing: boolean
   }
   if (p.src) {
     const src = (large && p.slides?.[slide]) || p.src;
+    // Long infographics open at full width and scroll inside the viewer.
+    if (large && p.format === "long") {
+      return (
+        <div data-lenis-prevent className="absolute inset-0 overflow-y-auto overscroll-contain">
+          <Image src={src} alt={`${p.style}: ${p.title}`} width={0} height={0} sizes="(min-width: 1024px) 480px, 92vw" className="h-auto w-full" />
+        </div>
+      );
+    }
     return (
       <Image
         key={src}
@@ -87,7 +96,7 @@ function PieceArt({ p, playing, large, slide = 0 }: { p: Piece; playing: boolean
         alt={`${p.style}: ${p.title}${p.slides ? `, slide ${slide + 1} of ${p.slides.length}` : ""}`}
         fill
         sizes={large ? "90vw" : "(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"}
-        className={large ? "object-contain" : "object-cover"}
+        className={large ? "object-contain" : `object-cover ${p.format === "long" ? "object-top" : ""}`}
       />
     );
   }
@@ -239,6 +248,7 @@ function Lightbox({
     portrait: "aspect-[4/5] h-[min(58vh,720px)] lg:h-[min(74vh,720px)]",
     tall: "aspect-[3/4] h-[min(58vh,760px)] lg:h-[min(76vh,760px)]",
     wide: "aspect-video w-[min(92vw,1000px)] lg:w-[min(60vw,900px)]",
+    long: "w-[min(92vw,480px)] h-[min(62vh,820px)] lg:h-[min(82vh,820px)]",
   }[p.format];
 
   return (
@@ -301,7 +311,9 @@ function Lightbox({
               ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}`
               : slides
                 ? `Carousel · Slide ${slide + 1} of ${slides}`
-                : "Graphic"}
+                : p.format === "long"
+                  ? "Graphic · Scroll to read"
+                  : "Graphic"}
           </p>
           <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{p.style}</h3>
           <p className="serif mt-2 text-2xl text-paper/70">{p.title}</p>

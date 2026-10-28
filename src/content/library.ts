@@ -10,8 +10,9 @@
 // Until `src` is set, a designed placeholder card is shown.
 
 export type Kind = "video" | "graphic";
-// Shape of the piece: 9:16 reels/stories, 1:1 posts, 4:5 feed/carousels, 3:4 tall carousels, 16:9 YouTube.
-export type PieceFormat = "reel" | "square" | "portrait" | "tall" | "wide";
+// Shape of the piece: 9:16 reels/stories, 1:1 posts, 4:5 feed/carousels, 3:4 tall carousels, 16:9 YouTube,
+// and "long" for scrolling infographics (the tile shows the top, the viewer scrolls the whole thing).
+export type PieceFormat = "reel" | "square" | "portrait" | "tall" | "wide" | "long";
 
 export const industries = [
   "Food & Beverage",
@@ -151,6 +152,15 @@ export const pieces: Piece[] = [
     src: "/library/learning-carousel-1b.webp",
     slides: ["1b", 2, 3, 4, 5].map((n) => `/library/learning-carousel-${n}.webp`),
   },
+  {
+    id: "wellness-infographic",
+    kind: "graphic",
+    format: "long",
+    style: "Infographic",
+    industry: "Beauty & Wellness",
+    title: "Small habits, whole you",
+    src: "/library/wellness-infographic.webp",
+  },
   { id: "cafe-ugc", kind: "video", format: "reel", style: "UGC talking head", industry: "Food & Beverage", title: "Café opening-day story", duration: "0:28", tools: ["CapCut", "Premiere Pro"] },
   { id: "skin-carousel", kind: "graphic", format: "portrait", style: "Educational carousel", industry: "Beauty & Wellness", title: "5 skincare myths", tools: ["Figma", "Canva"] },
   { id: "condo-tour", kind: "video", format: "reel", style: "Cinematic property tour", industry: "Real Estate", title: "Sunset condo walkthrough", duration: "0:45", tools: ["DaVinci Resolve"] },
@@ -162,7 +172,6 @@ export const pieces: Piece[] = [
   { id: "hotel-story", kind: "graphic", format: "reel", style: "Story template", industry: "Hospitality", title: "Staycation story pack", tools: ["Canva"] },
   { id: "realty-quote", kind: "graphic", format: "square", style: "Quote & stat card", industry: "Real Estate", title: "Market update cards", tools: ["Figma"] },
   { id: "podcast-clip", kind: "video", format: "reel", style: "Podcast clip with captions", industry: "Education", title: "Founder podcast highlight", duration: "0:38", tools: ["Premiere Pro", "AI captions"] },
-  { id: "fit-infographic", kind: "graphic", format: "portrait", style: "Infographic", industry: "Fitness", title: "Protein guide infographic", tools: ["Illustrator"] },
   { id: "resto-broll", kind: "video", format: "wide", style: "Cinematic B-roll", industry: "Hospitality", title: "Chef's table B-roll", duration: "0:30", tools: ["DaVinci Resolve"] },
 ];
 
