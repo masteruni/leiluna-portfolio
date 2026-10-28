@@ -135,7 +135,7 @@ export const founders = [
     role: "Co-founder · Client & Business Lead",
     bio: "Juri is your first hello and your steady point of contact, leading discovery calls, proposals, onboarding and client communication, so you always know what's happening and why.",
     leads: ["Discovery & sales", "Proposals & contracts", "Client onboarding", "Communication", "Finance"],
-    photo: "/team/juri-portrait.webp" as string | null,
+    photo: "/team/juri-hq.webp" as string | null,
   },
   {
     name: "Sven",
