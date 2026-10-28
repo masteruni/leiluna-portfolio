@@ -2,7 +2,8 @@
 //
 // Adding a real piece:
 //   1. Put the file in /public/library/  (e.g. /public/library/cafe-ugc.mp4 or /public/library/menu-carousel.jpg)
-//   2. Set `src` to that path. For videos you can also add a `poster` image (the frame shown before it plays).
+//   2. Set `src` to that path. For videos you can also add a `poster` image (the frame shown before it plays)
+//      and a short silent `preview` clip that loops on the tile (the full `src` plays with sound when opened).
 //   3. Pick its `kind`, `format`, `style` and `industry` so it shows up under the right filters.
 // Videos: .mp4 under ~15MB (720p is plenty). Graphics: .jpg/.png/.webp.
 // Until `src` is set, a designed placeholder card is shown.
@@ -20,6 +21,8 @@ export const industries = [
   "Tech & SaaS",
   "Education",
   "Hospitality",
+  "Automotive",
+  "Home & Living",
 ] as const;
 export type Industry = (typeof industries)[number];
 
@@ -28,16 +31,29 @@ export type Piece = {
   kind: Kind;
   format: PieceFormat;
   style: string; // e.g. "UGC talking head", "Carousel"
-  industry: Industry;
+  industry: Industry | Industry[]; // a list when one piece spans several industries
   title: string;
   src?: string;
   poster?: string;
+  preview?: string;
   duration?: string; // videos, e.g. "0:24"
   tools?: string[];
 };
 
-// [PLACEHOLDER] sample pieces showing the range. Swap in real files as you add them.
+// Real pieces first; the rest are [PLACEHOLDER] samples showing the range. Swap in real files as you add them.
 export const pieces: Piece[] = [
+  {
+    id: "client-interviews",
+    kind: "video",
+    format: "wide",
+    style: "Client interview edit",
+    industry: ["Beauty & Wellness", "Automotive", "Home & Living", "Food & Beverage"],
+    title: "Real people. Real stories.",
+    src: "/library/client-interviews.mp4",
+    preview: "/library/client-interviews-preview.mp4",
+    poster: "/library/client-interviews-poster.webp",
+    duration: "1:05",
+  },
   { id: "cafe-ugc", kind: "video", format: "reel", style: "UGC talking head", industry: "Food & Beverage", title: "Café opening-day story", duration: "0:28", tools: ["CapCut", "Premiere Pro"] },
   { id: "skin-carousel", kind: "graphic", format: "portrait", style: "Educational carousel", industry: "Beauty & Wellness", title: "5 skincare myths", tools: ["Figma", "Canva"] },
   { id: "condo-tour", kind: "video", format: "reel", style: "Cinematic property tour", industry: "Real Estate", title: "Sunset condo walkthrough", duration: "0:45", tools: ["DaVinci Resolve"] },
@@ -53,3 +69,5 @@ export const pieces: Piece[] = [
   { id: "fit-infographic", kind: "graphic", format: "portrait", style: "Infographic", industry: "Fitness", title: "Protein guide infographic", tools: ["Illustrator"] },
   { id: "resto-broll", kind: "video", format: "wide", style: "Cinematic B-roll", industry: "Hospitality", title: "Chef's table B-roll", duration: "0:30", tools: ["DaVinci Resolve"] },
 ];
+
+export const industriesOf = (p: Piece): Industry[] => (Array.isArray(p.industry) ? p.industry : [p.industry]);

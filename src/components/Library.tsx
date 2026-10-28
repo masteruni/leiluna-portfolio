@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { industries, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
+import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 
 const aspect: Record<PieceFormat, string> = {
   reel: "aspect-[9/16]",
@@ -23,6 +23,13 @@ const tint: Record<Industry, [string, string]> = {
   "Tech & SaaS": ["#8e7cc3", "#3d6bff"],
   Education: ["#ffd27a", "#ea6a8e"],
   Hospitality: ["#ffb199", "#8e7cc3"],
+  Automotive: ["#b8c4d6", "#ea6a8e"],
+  "Home & Living": ["#d9c2a7", "#a8436a"],
+};
+
+const industryLabel = (p: Piece) => {
+  const list = industriesOf(p);
+  return list.length > 1 ? "Multi-industry" : list[0];
 };
 
 const kinds: { id: "all" | Kind; label: string }[] = [
@@ -45,7 +52,7 @@ function PieceArt({ p, playing, large }: { p: Piece; playing: boolean; large?: b
     return (
       <video
         ref={ref}
-        src={p.src}
+        src={large ? p.src : (p.preview ?? p.src)}
         poster={p.poster}
         muted={!large}
         controls={large}
@@ -68,7 +75,7 @@ function PieceArt({ p, playing, large }: { p: Piece; playing: boolean; large?: b
     );
   }
 
-  const [a, b] = tint[p.industry];
+  const [a, b] = tint[industriesOf(p)[0]];
   return (
     <div aria-hidden className="absolute inset-0 overflow-hidden">
       <div
@@ -140,14 +147,14 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: () => void; index: numbe
         type="button"
         onClick={onOpen}
         data-cursor={p.kind === "video" ? "Play" : "View"}
-        aria-label={`${p.kind === "video" ? "Play" : "View"} ${p.style}, ${p.industry}`}
+        aria-label={`${p.kind === "video" ? "Play" : "View"} ${p.style}, ${industriesOf(p).join(", ")}`}
         className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
       >
         <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
           <PieceArt p={p} playing={visible && !reduce} />
         </div>
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
-          <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{p.industry}</span>
+          <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
           <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
             {p.kind === "video" ? (
               `▶ ${p.duration ?? "Reel"}`
@@ -199,14 +206,14 @@ function Lightbox({
     reel: "aspect-[9/16] h-[min(58vh,760px)] lg:h-[min(78vh,760px)]",
     square: "aspect-square w-[min(88vw,680px)] lg:w-auto lg:h-[min(70vh,680px)]",
     portrait: "aspect-[4/5] h-[min(58vh,720px)] lg:h-[min(74vh,720px)]",
-    wide: "aspect-video w-[min(92vw,1000px)]",
+    wide: "aspect-video w-[min(92vw,1000px)] lg:w-[min(60vw,900px)]",
   }[p.format];
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={`${p.style}, ${p.industry}`}
+      aria-label={`${p.style}, ${industriesOf(p).join(", ")}`}
       className="fixed inset-0 z-[85] flex items-center justify-center bg-ink px-4 sm:bg-ink/95 pb-4 pt-20 backdrop-blur-xl sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -215,7 +222,7 @@ function Lightbox({
     >
       <motion.div
         key={p.id}
-        className="flex max-h-full w-full max-w-6xl flex-col items-center gap-6 overflow-y-auto lg:flex-row lg:items-end lg:justify-center lg:gap-12"
+        className="flex max-h-full w-full max-w-[1320px] flex-col items-center gap-6 overflow-y-auto lg:flex-row lg:items-end lg:justify-center lg:gap-12"
         initial={{ opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -224,16 +231,16 @@ function Lightbox({
         <div className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media}`}>
           <PieceArt p={p} playing large />
         </div>
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm shrink-0 lg:w-80">
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand">
-            {p.kind === "video" ? `Reel · ${p.duration ?? ""}` : "Graphic"}
+            {p.kind === "video" ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}` : "Graphic"}
           </p>
           <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{p.style}</h3>
           <p className="serif mt-2 text-2xl text-paper/70">{p.title}</p>
           <dl className="mt-8 space-y-3 text-sm">
             <div className="flex justify-between border-t border-line pt-3">
-              <dt className="text-muted">Industry</dt>
-              <dd>{p.industry}</dd>
+              <dt className="text-muted">{industriesOf(p).length > 1 ? "Industries" : "Industry"}</dt>
+              <dd className="max-w-[14rem] text-right">{industriesOf(p).join(", ")}</dd>
             </div>
             {p.tools && (
               <div className="flex justify-between gap-6 border-t border-line pt-3">
@@ -281,11 +288,11 @@ export function Library() {
   const lenis = useLenis();
 
   const list = useMemo(
-    () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || p.industry === industry)),
+    () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || industriesOf(p).includes(industry))),
     [kind, industry],
   );
   // Only offer industries that have pieces in the current format.
-  const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).map((p) => p.industry)), [kind]);
+  const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).flatMap(industriesOf)), [kind]);
 
   useEffect(() => {
     if (open !== null) lenis?.stop();
@@ -317,7 +324,7 @@ export function Library() {
         {/* filters */}
         <div className="sticky top-0 z-20 -mx-5 mt-14 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div role="group" aria-label="Filter by format" className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
+            <div role="group" aria-label="Filter by format" className="-mx-5 flex shrink-0 gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
               {kinds.map((k) => (
                 <button
                   key={k.id}
@@ -339,7 +346,7 @@ export function Library() {
             <div
               role="group"
               aria-label="Filter by industry"
-              className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0"
+              className="-mx-5 flex min-w-0 gap-1 overflow-x-auto px-5 [mask-image:linear-gradient(to_right,black_92%,transparent)] [scrollbar-width:none] sm:mx-0 sm:px-0 lg:pr-10"
             >
               {(["All", ...industries] as const).map((ind) => {
                 const disabled = ind !== "All" && !available.has(ind);
