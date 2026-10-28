@@ -118,6 +118,18 @@ export const pieces: Piece[] = [
     duration: "0:10",
   },
   {
+    id: "lip-veil-launch",
+    kind: "video",
+    format: "wide",
+    style: "Beauty product launch",
+    industry: "Beauty & Wellness",
+    title: "Maison Nova Lip Veil: six shades",
+    src: "/library/lip-veil-launch.mp4",
+    preview: "/library/lip-veil-launch-preview.mp4",
+    poster: "/library/lip-veil-launch-poster.webp",
+    duration: "0:27",
+  },
+  {
     id: "learning-carousel",
     kind: "graphic",
     format: "tall",
