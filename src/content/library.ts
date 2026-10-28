@@ -5,13 +5,13 @@
 //   2. Set `src` to that path. For videos you can also add a `poster` image (the frame shown before it plays)
 //      and a short silent `preview` clip that loops on the tile (the full `src` plays with sound when opened).
 //   3. Pick its `kind`, `format`, `style` and `industry` so it shows up under the right filters.
-// Videos: .mp4 under ~15MB (720p is plenty). Graphics: .jpg/.png/.webp.
+// Videos: .mp4 under ~15MB (720p is plenty). Graphics: .jpg/.png/.webp. Carousels also list every slide in `slides`.
 // Website copies of our videos carry a small "leiluna studio" watermark (originals stay clean in Drive).
 // Until `src` is set, a designed placeholder card is shown.
 
 export type Kind = "video" | "graphic";
-// Shape of the piece: 9:16 reels/stories, 1:1 posts, 4:5 feed/carousels, 16:9 YouTube.
-export type PieceFormat = "reel" | "square" | "portrait" | "wide";
+// Shape of the piece: 9:16 reels/stories, 1:1 posts, 4:5 feed/carousels, 3:4 tall carousels, 16:9 YouTube.
+export type PieceFormat = "reel" | "square" | "portrait" | "tall" | "wide";
 
 export const industries = [
   "Food & Beverage",
@@ -36,6 +36,7 @@ export type Piece = {
   industry: Industry | Industry[]; // a list when one piece spans several industries
   title: string;
   src?: string;
+  slides?: string[]; // carousels: every slide in order (the first doubles as `src`, the cover)
   poster?: string;
   preview?: string;
   duration?: string; // videos, e.g. "0:24"
@@ -115,6 +116,16 @@ export const pieces: Piece[] = [
     preview: "/library/logo-animation-preview.mp4",
     poster: "/library/logo-animation-poster.webp",
     duration: "0:10",
+  },
+  {
+    id: "learning-carousel",
+    kind: "graphic",
+    format: "tall",
+    style: "Educational carousel",
+    industry: "Education",
+    title: "Why 90% of people stop learning by 25",
+    src: "/library/learning-carousel-1b.webp",
+    slides: ["1b", 2, 3, 4, 5].map((n) => `/library/learning-carousel-${n}.webp`),
   },
   { id: "cafe-ugc", kind: "video", format: "reel", style: "UGC talking head", industry: "Food & Beverage", title: "Café opening-day story", duration: "0:28", tools: ["CapCut", "Premiere Pro"] },
   { id: "skin-carousel", kind: "graphic", format: "portrait", style: "Educational carousel", industry: "Beauty & Wellness", title: "5 skincare myths", tools: ["Figma", "Canva"] },

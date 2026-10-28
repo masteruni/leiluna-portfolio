@@ -3,13 +3,14 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 
 const aspect: Record<PieceFormat, string> = {
   reel: "aspect-[9/16]",
   square: "aspect-square",
   portrait: "aspect-[4/5]",
+  tall: "aspect-[3/4]",
   wide: "aspect-video",
 };
 
@@ -53,7 +54,7 @@ const kinds: { id: "all" | Kind; label: string }[] = [
 ];
 
 // Placeholder artwork until a real file is added, or the real image/video.
-function PieceArt({ p, playing, large }: { p: Piece; playing: boolean; large?: boolean }) {
+function PieceArt({ p, playing, large, slide = 0 }: { p: Piece; playing: boolean; large?: boolean; slide?: number }) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const v = ref.current;
@@ -78,10 +79,12 @@ function PieceArt({ p, playing, large }: { p: Piece; playing: boolean; large?: b
     );
   }
   if (p.src) {
+    const src = (large && p.slides?.[slide]) || p.src;
     return (
       <Image
-        src={p.src}
-        alt={`${p.style}: ${p.title}`}
+        key={src}
+        src={src}
+        alt={`${p.style}: ${p.title}${p.slides ? `, slide ${slide + 1} of ${p.slides.length}` : ""}`}
         fill
         sizes={large ? "90vw" : "(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"}
         className={large ? "object-contain" : "object-cover"}
@@ -174,8 +177,8 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: () => void; index: numbe
               `▶ ${p.duration ?? "Reel"}`
             ) : (
               <>
-                <span className="sm:hidden" aria-hidden>◼</span>
-                <span className="max-sm:sr-only">Graphic</span>
+                <span className="sm:hidden" aria-hidden>{p.slides ? `◼ ${p.slides.length}` : "◼"}</span>
+                <span className="max-sm:sr-only">{p.slides ? `Carousel · ${p.slides.length}` : "Graphic"}</span>
               </>
             )}
           </span>
@@ -205,21 +208,36 @@ function Lightbox({
 }) {
   const p = list[index];
   const closeRef = useRef<HTMLButtonElement>(null);
+  // Carousels flip through their slides first, then on to the next piece.
+  const [at, setAt] = useState({ id: p.id, slide: 0 });
+  const slide = at.id === p.id ? at.slide : 0;
+  const slides = p.slides?.length ?? 0;
+  const go = useCallback(
+    (d: number) => {
+      const next = slide + d;
+      if (next >= 0 && next < slides) setAt({ id: p.id, slide: next });
+      else onStep(d);
+    },
+    [slide, slides, p.id, onStep],
+  );
   useEffect(() => {
     closeRef.current?.focus();
+  }, []);
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") onStep(1);
-      if (e.key === "ArrowLeft") onStep(-1);
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft") go(-1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, onStep]);
+  }, [onClose, go]);
 
   const media = {
     reel: "aspect-[9/16] h-[min(58vh,760px)] lg:h-[min(78vh,760px)]",
     square: "aspect-square w-[min(88vw,680px)] lg:w-auto lg:h-[min(70vh,680px)]",
     portrait: "aspect-[4/5] h-[min(58vh,720px)] lg:h-[min(74vh,720px)]",
+    tall: "aspect-[3/4] h-[min(58vh,760px)] lg:h-[min(76vh,760px)]",
     wide: "aspect-video w-[min(92vw,1000px)] lg:w-[min(60vw,900px)]",
   }[p.format];
 
@@ -242,12 +260,48 @@ function Lightbox({
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media}`}>
-          <PieceArt p={p} playing large />
-        </div>
+        <motion.div
+          className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media} ${slides ? "touch-pan-y" : ""}`}
+          onPanEnd={slides ? (_, info) => Math.abs(info.offset.x) > 40 && go(info.offset.x < 0 ? 1 : -1) : undefined}
+        >
+          <PieceArt p={p} playing large slide={slide} />
+          {slides > 1 && (
+            <>
+              {[-1, 1].map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => go(d)}
+                  aria-label={d < 0 ? "Previous slide" : "Next slide"}
+                  className={`absolute top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-ink/60 text-paper backdrop-blur transition-opacity hover:bg-ink/80 ${
+                    d < 0 ? "left-3" : "right-3"
+                  } ${(d < 0 ? slide === 0 : slide === slides - 1) ? "pointer-events-none opacity-0" : ""}`}
+                >
+                  {d < 0 ? "←" : "→"}
+                </button>
+              ))}
+              <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
+                {p.slides!.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setAt({ id: p.id, slide: i })}
+                    aria-label={`Slide ${i + 1}`}
+                    aria-current={i === slide}
+                    className={`h-1.5 rounded-full transition-all ${i === slide ? "w-5 bg-brand" : "w-1.5 bg-paper/50 hover:bg-paper"}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </motion.div>
         <div className="w-full max-w-sm shrink-0 lg:w-80">
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand">
-            {p.kind === "video" ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}` : "Graphic"}
+            {p.kind === "video"
+              ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}`
+              : slides
+                ? `Carousel · Slide ${slide + 1} of ${slides}`
+                : "Graphic"}
           </p>
           <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{p.style}</h3>
           <p className="serif mt-2 text-2xl text-paper/70">{p.title}</p>
