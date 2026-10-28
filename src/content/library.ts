@@ -6,6 +6,7 @@
 //      and a short silent `preview` clip that loops on the tile (the full `src` plays with sound when opened).
 //   3. Pick its `kind`, `format`, `style` and `industry` so it shows up under the right filters.
 // Videos: .mp4 under ~15MB (720p is plenty). Graphics: .jpg/.png/.webp.
+// Website copies of our videos carry a small "leiluna studio" watermark (originals stay clean in Drive).
 // Until `src` is set, a designed placeholder card is shown.
 
 export type Kind = "video" | "graphic";
@@ -50,9 +51,9 @@ export const pieces: Piece[] = [
     style: "Client interview edit",
     industry: ["Beauty & Wellness", "Automotive", "Home & Living", "Food & Beverage"],
     title: "Real people. Real stories.",
-    src: "/library/client-interviews.mp4",
-    preview: "/library/client-interviews-preview.mp4",
-    poster: "/library/client-interviews-poster.webp",
+    src: "/library/client-interviews-v2.mp4",
+    preview: "/library/client-interviews-preview-v2.mp4",
+    poster: "/library/client-interviews-poster-v2.webp",
     duration: "1:05",
   },
   {
@@ -62,9 +63,9 @@ export const pieces: Piece[] = [
     style: "Talking head + motion graphics",
     industry: "Education",
     title: "How to get promoted in 6 months",
-    src: "/library/promotion-reel.mp4",
-    preview: "/library/promotion-reel-preview.mp4",
-    poster: "/library/promotion-reel-poster.webp",
+    src: "/library/promotion-reel-v2.mp4",
+    preview: "/library/promotion-reel-preview-v2.mp4",
+    poster: "/library/promotion-reel-poster-v2.webp",
     duration: "0:35",
   },
   {
@@ -74,9 +75,9 @@ export const pieces: Piece[] = [
     style: "Talking head + data visuals",
     industry: "Finance & Trading",
     title: "The trading mindset shift",
-    src: "/library/trading-reel.mp4",
-    preview: "/library/trading-reel-preview.mp4",
-    poster: "/library/trading-reel-poster.webp",
+    src: "/library/trading-reel-v2.mp4",
+    preview: "/library/trading-reel-preview-v2.mp4",
+    poster: "/library/trading-reel-poster-v2.webp",
     duration: "0:42",
   },
   {
@@ -86,10 +87,23 @@ export const pieces: Piece[] = [
     style: "Editorial masterclass promo",
     industry: "Education",
     title: "The coaching masterclass",
-    src: "/library/masterclass-reel.mp4",
-    preview: "/library/masterclass-reel-preview.mp4",
-    poster: "/library/masterclass-reel-poster.webp",
+    src: "/library/masterclass-reel-v2.mp4",
+    preview: "/library/masterclass-reel-preview-v2.mp4",
+    poster: "/library/masterclass-reel-poster-v2.webp",
     duration: "0:36",
+  },
+  {
+    id: "logo-animation",
+    kind: "video",
+    format: "wide",
+    style: "AI logo animation",
+    industry: [...industries], // a logo reveal works for any brand
+    title: "Leiluna Studio logo reveal",
+    src: "/library/logo-animation.mp4",
+    preview: "/library/logo-animation-preview.mp4",
+    poster: "/library/logo-animation-poster.webp",
+    duration: "0:10",
+    tools: ["Gemini (AI video)"],
   },
   { id: "cafe-ugc", kind: "video", format: "reel", style: "UGC talking head", industry: "Food & Beverage", title: "Café opening-day story", duration: "0:28", tools: ["CapCut", "Premiere Pro"] },
   { id: "skin-carousel", kind: "graphic", format: "portrait", style: "Educational carousel", industry: "Beauty & Wellness", title: "5 skincare myths", tools: ["Figma", "Canva"] },

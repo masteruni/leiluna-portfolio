@@ -30,6 +30,7 @@ const tint: Record<Industry, [string, string]> = {
 
 const industryLabel = (p: Piece) => {
   const list = industriesOf(p);
+  if (list.length === industries.length) return "Any industry";
   return list.length > 1 ? "Multi-industry" : list[0];
 };
 
@@ -252,8 +253,10 @@ function Lightbox({
           <p className="serif mt-2 text-2xl text-paper/70">{p.title}</p>
           <dl className="mt-8 space-y-3 text-sm">
             <div className="flex justify-between border-t border-line pt-3">
-              <dt className="text-muted">{industriesOf(p).length > 1 ? "Industries" : "Industry"}</dt>
-              <dd className="max-w-[14rem] text-right">{industriesOf(p).join(", ")}</dd>
+              <dt className="text-muted">{industriesOf(p).length > 1 && industriesOf(p).length < industries.length ? "Industries" : "Industry"}</dt>
+              <dd className="max-w-[14rem] text-right">
+                {industriesOf(p).length === industries.length ? "Any industry" : industriesOf(p).join(", ")}
+              </dd>
             </div>
             {p.tools && (
               <div className="flex justify-between gap-6 border-t border-line pt-3">
