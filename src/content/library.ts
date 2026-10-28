@@ -10,9 +10,9 @@
 // Until `src` is set, a designed placeholder card is shown.
 
 export type Kind = "video" | "graphic";
-// Shape of the piece: 9:16 reels/stories, 1:1 posts, 4:5 feed/carousels, 3:4 tall carousels, 16:9 YouTube,
+// Shape of the piece: 9:16 reels/stories, 1:1 posts, 4:5 feed/carousels, 3:4 tall carousels, 16:9 YouTube, 4:3 covers,
 // and "long" for scrolling infographics (the tile shows the top, the viewer scrolls the whole thing).
-export type PieceFormat = "reel" | "square" | "portrait" | "tall" | "wide" | "long";
+export type PieceFormat = "reel" | "square" | "portrait" | "tall" | "wide" | "landscape" | "long";
 
 export const industries = [
   "Food & Beverage",
@@ -155,6 +155,18 @@ export const pieces: Piece[] = [
     duration: "0:30",
   },
   {
+    id: "ramen-ad",
+    kind: "video",
+    format: "reel",
+    style: "Animated restaurant ad",
+    industry: "Food & Beverage",
+    title: "Ramen, slurp by slurp",
+    src: "/library/ramen-ad.mp4",
+    preview: "/library/ramen-ad-preview.mp4",
+    poster: "/library/ramen-ad-poster.webp",
+    duration: "0:10",
+  },
+  {
     id: "learning-carousel",
     kind: "graphic",
     format: "tall",
@@ -200,12 +212,38 @@ export const pieces: Piece[] = [
     title: "Indonesian street-food menu",
     src: "/library/street-food-menu.webp",
   },
+  {
+    id: "podcast-cover-unfiltered",
+    kind: "graphic",
+    format: "landscape",
+    style: "Podcast cover art",
+    industry: "Education",
+    title: "Unfiltered Dialogue",
+    src: "/library/podcast-cover-unfiltered.webp",
+  },
+  {
+    id: "thumbnail-no-shortcuts",
+    kind: "graphic",
+    format: "landscape",
+    style: "YouTube thumbnail",
+    industry: ["Finance & Trading", "Tech & SaaS"],
+    title: "Innovate, no shortcuts",
+    src: "/library/thumbnail-no-shortcuts.webp",
+  },
+  {
+    id: "thumbnail-the-matrix",
+    kind: "graphic",
+    format: "landscape",
+    style: "YouTube thumbnail",
+    industry: "Finance & Trading",
+    title: "Escape the matrix",
+    src: "/library/thumbnail-the-matrix.webp",
+  },
   { id: "cafe-ugc", kind: "video", format: "reel", style: "UGC talking head", industry: "Food & Beverage", title: "Café opening-day story", duration: "0:28", tools: ["CapCut", "Premiere Pro"] },
   { id: "skin-carousel", kind: "graphic", format: "portrait", style: "Educational carousel", industry: "Beauty & Wellness", title: "5 skincare myths", tools: ["Figma", "Canva"] },
   { id: "condo-tour", kind: "video", format: "reel", style: "Cinematic property tour", industry: "Real Estate", title: "Sunset condo walkthrough", duration: "0:45", tools: ["DaVinci Resolve"] },
   { id: "saas-explainer", kind: "video", format: "wide", style: "Motion graphics explainer", industry: "Tech & SaaS", title: "Feature launch in 60 seconds", duration: "1:00", tools: ["After Effects", "Figma"] },
   { id: "fashion-transition", kind: "video", format: "reel", style: "Outfit transition", industry: "Fashion", title: "One jacket, five looks", duration: "0:19", tools: ["CapCut"] },
-  { id: "course-thumb", kind: "graphic", format: "wide", style: "YouTube thumbnail", industry: "Education", title: "Study-with-me thumbnail set", tools: ["Photoshop"] },
   { id: "spa-ai", kind: "video", format: "reel", style: "AI-generated visuals", industry: "Beauty & Wellness", title: "Dreamscape spa teaser", duration: "0:12", tools: ["AI video", "Premiere Pro"] },
   { id: "hotel-story", kind: "graphic", format: "reel", style: "Story template", industry: "Hospitality", title: "Staycation story pack", tools: ["Canva"] },
   { id: "realty-quote", kind: "graphic", format: "square", style: "Quote & stat card", industry: "Real Estate", title: "Market update cards", tools: ["Figma"] },

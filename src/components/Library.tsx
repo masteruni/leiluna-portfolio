@@ -12,6 +12,7 @@ const aspect: Record<PieceFormat, string> = {
   portrait: "aspect-[4/5]",
   tall: "aspect-[3/4]",
   wide: "aspect-video",
+  landscape: "aspect-[4/3]",
   long: "aspect-[9/16]",
 };
 
@@ -248,6 +249,7 @@ function Lightbox({
     portrait: "aspect-[4/5] h-[min(58vh,720px)] lg:h-[min(74vh,720px)]",
     tall: "aspect-[3/4] h-[min(58vh,760px)] lg:h-[min(76vh,760px)]",
     wide: "aspect-video w-[min(92vw,1000px)] lg:w-[min(60vw,900px)]",
+    landscape: "aspect-[4/3] w-[min(92vw,900px)] lg:w-auto lg:h-[min(74vh,680px)]",
     long: "w-[min(92vw,480px)] h-[min(62vh,820px)] lg:h-[min(82vh,820px)]",
   }[p.format];
 
