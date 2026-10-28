@@ -23,6 +23,7 @@ export const industries = [
   "Hospitality",
   "Automotive",
   "Home & Living",
+  "Finance & Trading",
 ] as const;
 export type Industry = (typeof industries)[number];
 
@@ -65,6 +66,18 @@ export const pieces: Piece[] = [
     preview: "/library/promotion-reel-preview.mp4",
     poster: "/library/promotion-reel-poster.webp",
     duration: "0:35",
+  },
+  {
+    id: "trading-reel",
+    kind: "video",
+    format: "reel",
+    style: "Talking head + data visuals",
+    industry: "Finance & Trading",
+    title: "The trading mindset shift",
+    src: "/library/trading-reel.mp4",
+    preview: "/library/trading-reel-preview.mp4",
+    poster: "/library/trading-reel-poster.webp",
+    duration: "0:42",
   },
   { id: "cafe-ugc", kind: "video", format: "reel", style: "UGC talking head", industry: "Food & Beverage", title: "Café opening-day story", duration: "0:28", tools: ["CapCut", "Premiere Pro"] },
   { id: "skin-carousel", kind: "graphic", format: "portrait", style: "Educational carousel", industry: "Beauty & Wellness", title: "5 skincare myths", tools: ["Figma", "Canva"] },

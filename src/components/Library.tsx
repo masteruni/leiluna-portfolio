@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 
 const aspect: Record<PieceFormat, string> = {
@@ -25,12 +25,25 @@ const tint: Record<Industry, [string, string]> = {
   Hospitality: ["#ffb199", "#8e7cc3"],
   Automotive: ["#b8c4d6", "#ea6a8e"],
   "Home & Living": ["#d9c2a7", "#a8436a"],
+  "Finance & Trading": ["#6bd6a0", "#3d6bff"],
 };
 
 const industryLabel = (p: Piece) => {
   const list = industriesOf(p);
   return list.length > 1 ? "Multi-industry" : list[0];
 };
+
+// Column count follows the same breakpoints as the layout (2 / md:3 / xl:4).
+const columnQueries = ["(min-width: 1280px)", "(min-width: 768px)"];
+function subscribeColumns(cb: () => void) {
+  const mqs = columnQueries.map((q) => window.matchMedia(q));
+  mqs.forEach((m) => m.addEventListener("change", cb));
+  return () => mqs.forEach((m) => m.removeEventListener("change", cb));
+}
+const getColumns = () => (window.matchMedia(columnQueries[0]).matches ? 4 : window.matchMedia(columnQueries[1]).matches ? 3 : 2);
+function useColumns() {
+  return useSyncExternalStore(subscribeColumns, getColumns, () => 4);
+}
 
 const kinds: { id: "all" | Kind; label: string }[] = [
   { id: "all", label: "Everything" },
@@ -140,7 +153,7 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: () => void; index: numbe
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.94 }}
       transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: Math.min(index, 8) * 0.04 }}
-      className="mb-4 break-inside-avoid"
+      className="w-full"
     >
       <button
         ref={ref}
@@ -286,6 +299,7 @@ export function Library() {
   const [industry, setIndustry] = useState<"All" | Industry>("All");
   const [open, setOpen] = useState<number | null>(null);
   const lenis = useLenis();
+  const cols = useColumns();
 
   const list = useMemo(
     () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || industriesOf(p).includes(industry))),
@@ -373,12 +387,17 @@ export function Library() {
           Showing {list.length} {list.length === 1 ? "piece" : "pieces"}
         </p>
 
-        <div className="mt-6 columns-2 gap-4 md:columns-3 xl:columns-4">
-          <AnimatePresence mode="popLayout">
-            {list.map((p, i) => (
-              <Tile key={p.id} p={p} index={i} onOpen={() => setOpen(i)} />
-            ))}
-          </AnimatePresence>
+        {/* Masonry dealt left-to-right, so the first pieces sit side by side across the top row */}
+        <div className="mt-6 grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+          {Array.from({ length: cols }, (_, c) => (
+            <div key={c} className="flex flex-col gap-4">
+              <AnimatePresence mode="popLayout">
+                {list.map((p, i) =>
+                  i % cols === c ? <Tile key={p.id} p={p} index={i} onOpen={() => setOpen(i)} /> : null,
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
       </div>
 
