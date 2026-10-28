@@ -93,6 +93,18 @@ export const pieces: Piece[] = [
     duration: "0:36",
   },
   {
+    id: "realestate-reel",
+    kind: "video",
+    format: "reel",
+    style: "Illustrated explainer",
+    industry: "Real Estate",
+    title: "3 projects that build real estate wealth",
+    src: "/library/realestate-reel.mp4",
+    preview: "/library/realestate-reel-preview.mp4",
+    poster: "/library/realestate-reel-poster.webp",
+    duration: "0:38",
+  },
+  {
     id: "logo-animation",
     kind: "video",
     format: "wide",
