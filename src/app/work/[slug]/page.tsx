@@ -11,6 +11,15 @@ import { ProjectCover } from "@/components/ProjectCover";
 import { Reveal } from "@/components/Reveal";
 import { getProject, projects } from "@/content/projects";
 
+// Break a title into two lines: at a comma if it has one, otherwise in the middle.
+function titleLines(title: string) {
+  const comma = title.indexOf(", ");
+  if (comma > 0) return [title.slice(0, comma + 1), title.slice(comma + 2)];
+  const words = title.split(" ");
+  const half = Math.ceil(words.length / 2);
+  return [words.slice(0, half).join(" "), words.slice(half).join(" ")].filter(Boolean);
+}
+
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
@@ -50,7 +59,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   <span className="text-brand">{project.client}</span> · {project.year} · {project.categories.join(" / ")}
                 </p>
                 <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-                  <LineReveal inView lines={project.title.split(" ").reduce<string[]>((acc, w, i, all) => (i % Math.ceil(all.length / 2) ? (acc[acc.length - 1] += ` ${w}`) : acc.push(w), acc), [])} />
+                  <LineReveal inView lines={titleLines(project.title)} />
                 </h1>
                 <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted">{project.summary}</p>
               </Reveal>
@@ -58,7 +67,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               <Reveal delay={0.1}>
                 <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-line pt-6">
                   {project.metrics.map((m) => (
-                    <div key={m.label} className="flex flex-col-reverse">
+                    <div key={m.label} className="flex flex-col-reverse justify-end">
                       <dt className="mt-2 text-xs text-muted sm:text-sm">{m.label}</dt>
                       <dd className="font-display text-3xl font-semibold tracking-tight text-brand sm:text-5xl">{m.value}</dd>
                     </div>

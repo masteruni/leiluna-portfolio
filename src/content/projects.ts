@@ -35,30 +35,39 @@ export type Project = {
 // [PLACEHOLDER] every project below is sample content
 export const projects: Project[] = [
   {
-    slug: "glow-up-skincare",
-    title: "The 30-Day Glow Up",
-    client: "Lumen Skincare",
-    year: "2025",
-    categories: ["Social", "Video", "Strategy"],
+    slug: "business-resilience-mindset",
+    title: "Resilience, at scale",
+    client: "Business Resilience Mindset",
+    year: "2025–26",
+    categories: ["Social", "Video", "Strategy", "Design"],
     format: "reel",
-    summary: "A UGC-style reel series that turned a quiet skincare brand into a TikTok regular.",
-    palette: ["#ea6a8e", "#ffb199"],
+    summary:
+      "Quote-led reels, a recognizable identity and a steady posting engine for @resilientsuccessmindset, now 306K followers strong, with reels reaching up to 9M views.",
+    cover: "/work/business-resilience-mindset/profile.webp",
+    gallery: [
+      "/work/business-resilience-mindset/profile.webp",
+      "/work/business-resilience-mindset/top-reels.webp",
+      "/work/business-resilience-mindset/brand.webp",
+    ],
+    palette: ["#5ab8e8", "#1b3a5c"],
     metrics: [
-      { value: "12.4M", label: "Views" },
-      { value: "+410%", label: "Engagement" },
-      { value: "+28K", label: "Followers" },
+      { value: "306K", label: "Followers" },
+      { value: "9M", label: "Top reel views" },
+      { value: "11", label: "Reels over 3M views" },
     ],
     challenge:
-      "Lumen had great products and zero personality online. Posts were product shots on white, and engagement sat under 1%.",
+      "Mindset and motivation is one of the most crowded corners of Instagram, with countless quote pages posting look-alike content. The page needed an identity people would recognize at a glance and reels worth stopping for, saving and sending.",
     approach: [
-      "Interviewed 12 customers to find the real language they use about their skin.",
-      "Built a 30-day challenge format with daily check-in reels and a recurring hook.",
-      "Edited in a lo-fi UGC style with punchy captions and trending audio.",
+      "Content strategy: chose the emotional angles and hooks (resilience, relationships, self-worth) that people save and send.",
+      "Video editing: cut quote reels from powerful moments, with clean captions, pacing and music.",
+      "Account management: consistent daily posting, scheduling and community engagement.",
+      "Graphics & branding: the glowing blue phoenix identity, profile and visual style.",
+      "SEO captions: written so reels get found in Instagram search, not just the feed.",
     ],
     results:
-      "The series hit 12.4M organic views, the brand gained 28K followers in a month, and the hero product sold out twice.",
-    deliverables: ["30 short-form videos", "Content calendar", "Caption & hook library"],
-    platforms: ["TikTok", "Instagram Reels"],
+      "The page now has 306K followers across 672 posts. Eleven reels have passed 3 million views each, led by 9M, 8.3M and 6.2M, and the top reel alone drew 1.1M likes and 147K reposts.",
+    deliverables: ["Content strategy", "Short-form video editing", "Account management", "Branding & profile graphics", "SEO captions"],
+    platforms: ["Instagram"],
   },
   {
     slug: "brew-brand-refresh",
