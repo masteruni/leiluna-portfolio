@@ -3,6 +3,7 @@ import { Instrument_Serif, JetBrains_Mono, Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Cursor } from "@/components/Cursor";
 import { Loader } from "@/components/Loader";
+import { Protect } from "@/components/Protect";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { site } from "@/content/site";
 import "./globals.css";
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll>
           <Loader />
           <Cursor />
+          <Protect />
           {children}
         </SmoothScroll>
         <Analytics />

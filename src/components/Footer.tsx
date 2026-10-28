@@ -44,8 +44,8 @@ export function Footer() {
           className="h-auto w-full select-none opacity-90"
         />
       </div>
-      <div className="mx-auto flex max-w-7xl justify-between py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted">
-        <span>© {site.name}</span>
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted sm:flex-row sm:justify-between sm:gap-10">
+        <span>© {site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>
         <span>Your story. Our creative orbit.</span>
       </div>
     </footer>

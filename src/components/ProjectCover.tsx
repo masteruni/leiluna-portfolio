@@ -77,7 +77,7 @@ export function ProjectCover({
       )}
 
       {project.video && (
-        <video
+        <video controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback
           ref={videoRef}
           src={project.video}
           muted

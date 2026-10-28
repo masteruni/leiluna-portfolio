@@ -131,7 +131,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               {project.gallery.map((src, i) => (
                 <Reveal key={src} delay={(i % 3) * 0.08} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-ink-2">
                   {/\.(mp4|webm|mov)$/i.test(src) ? (
-                    <video src={src} autoPlay muted loop playsInline preload="metadata" className="block h-auto w-full" />
+                    <video controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback src={src} autoPlay muted loop playsInline preload="metadata" className="block h-auto w-full" />
                   ) : (
                     <Image
                       src={src}

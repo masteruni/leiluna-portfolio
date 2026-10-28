@@ -63,7 +63,7 @@ function PieceArt({ p, playing, large }: { p: Piece; playing: boolean; large?: b
 
   if (p.src && p.kind === "video") {
     return (
-      <video
+      <video controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback
         ref={ref}
         src={large ? p.src : (p.preview ?? p.src)}
         poster={p.poster}

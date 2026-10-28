@@ -51,6 +51,15 @@ body {
   color: var(--ink);
 }
 
+/* Protect our work: no drag-to-save and no long-press "Save image" on media */
+img,
+video,
+canvas {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 /* Lenis smooth scroll */
 html.lenis,
 html.lenis body { height: auto; }
