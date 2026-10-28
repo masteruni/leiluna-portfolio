@@ -60,6 +60,15 @@ canvas {
   -webkit-touch-callout: none;
 }
 
+/* Fullscreen videos always show the whole frame (never cropped), on a black background */
+video:fullscreen,
+video:-webkit-full-screen {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  background: #000;
+}
+
 /* Lenis smooth scroll */
 html.lenis,
 html.lenis body { height: auto; }

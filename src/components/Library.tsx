@@ -73,7 +73,7 @@ function PieceArt({ p, playing, large }: { p: Piece; playing: boolean; large?: b
         loop
         playsInline
         preload={large ? "auto" : "metadata"}
-        className="absolute inset-0 size-full object-cover"
+        className={`absolute inset-0 size-full ${large ? "object-contain" : "object-cover"}`}
       />
     );
   }
