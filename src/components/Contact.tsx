@@ -1,16 +1,140 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef, useState } from "react";
-import { site } from "@/content/site";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useId, useMemo, useRef, useState } from "react";
+import { services, site } from "@/content/site";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
+
+const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+const field =
+  "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand";
+
+// A short project brief that turns into a ready-to-send email (no backend needed).
+function Brief({ onDone }: { onDone: () => void }) {
+  const id = useId();
+  const [name, setName] = useState("");
+  const [brand, setBrand] = useState("");
+  const [needs, setNeeds] = useState<string[]>([]);
+  const [message, setMessage] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const body = useMemo(
+    () =>
+      [
+        `Hi Leiluna,`,
+        ``,
+        `I'm ${name || "…"}${brand ? ` from ${brand}` : ""}.`,
+        needs.length ? `We're looking for: ${needs.join(", ")}.` : ``,
+        ``,
+        message,
+        ``,
+        `Thanks!`,
+      ]
+        .filter((l, i, all) => !(l === "" && all[i - 1] === ""))
+        .join("\n"),
+    [name, brand, needs, message],
+  );
+  const mailto = `mailto:${site.email}?subject=${encodeURIComponent(`New project${brand ? `: ${brand}` : ""}`)}&body=${encodeURIComponent(body)}`;
+
+  const toggle = (n: string) => setNeeds((cur) => (cur.includes(n) ? cur.filter((x) => x !== n) : [...cur, n]));
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(`To: ${site.email}\n\n${body}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
+
+  return (
+    <motion.form
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 24 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        window.location.href = mailto;
+      }}
+      className="mx-auto mt-14 w-full max-w-3xl rounded-[2rem] border border-line bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
+      aria-label="Project brief"
+    >
+      <div className="grid gap-8 sm:grid-cols-2">
+        <div>
+          <label htmlFor={`${id}-name`} className={label}>
+            Your name
+          </label>
+          <input id={`${id}-name`} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required className={field} placeholder="Alex" />
+        </div>
+        <div>
+          <label htmlFor={`${id}-brand`} className={label}>
+            Brand or company
+          </label>
+          <input id={`${id}-brand`} value={brand} onChange={(e) => setBrand(e.target.value)} autoComplete="organization" className={field} placeholder="Your brand" />
+        </div>
+      </div>
+
+      <fieldset className="mt-8">
+        <legend className={label}>What do you need?</legend>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {services.map((s) => {
+            const on = needs.includes(s.title);
+            return (
+              <button
+                key={s.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => toggle(s.title)}
+                className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
+                  on ? "border-brand bg-brand text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
+                }`}
+              >
+                {s.short}
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <div className="mt-8">
+        <label htmlFor={`${id}-msg`} className={label}>
+          Tell us about your story
+        </label>
+        <textarea
+          id={`${id}-msg`}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          rows={4}
+          className={`${field} resize-y`}
+          placeholder="Where you are now, where you want to be, and anything we should know."
+        />
+      </div>
+
+      <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-3">
+          <button type="submit" className="rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:bg-paper">
+            Send by email →
+          </button>
+          <button type="button" onClick={copy} className="rounded-full border border-line px-6 py-3.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper">
+            {copied ? "Copied ✦" : "Copy the brief"}
+          </button>
+        </div>
+        <button type="button" onClick={onDone} className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper">
+          Close
+        </button>
+      </div>
+      <p className="mt-6 text-xs text-muted">Opens in your mail app, or copy the text and send it from anywhere. We reply within one business day.</p>
+    </motion.form>
+  );
+}
 
 // The finale: a planet rises over the horizon while the call to action lands.
 export function Contact() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
+  const [brief, setBrief] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
   const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["35%", "0%"]);
   const glow = useTransform(scrollYProgress, [0.3, 1], [0.2, 1]);
@@ -60,17 +184,30 @@ export function Contact() {
 
         <div className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row">
           <Magnetic strength={0.5}>
-            <a
-              href={`mailto:${site.email}?subject=New%20project%20with%20Leiluna%20Studio`}
+            <button
+              type="button"
+              onClick={() => setBrief((b) => !b)}
+              aria-expanded={brief}
+              aria-controls="project-brief"
               className="group relative grid size-44 place-items-center overflow-hidden rounded-full bg-brand text-center font-medium text-ink sm:size-52"
             >
               <span className="absolute inset-0 scale-0 rounded-full bg-paper transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-100" />
               <span className="relative text-lg leading-tight">
-                Start a
-                <br />
-                project →
+                {brief ? (
+                  <>
+                    Close
+                    <br />
+                    the brief ✕
+                  </>
+                ) : (
+                  <>
+                    Start a
+                    <br />
+                    project →
+                  </>
+                )}
               </span>
-            </a>
+            </button>
           </Magnetic>
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-brand sm:text-3xl">
@@ -80,6 +217,10 @@ export function Contact() {
               {copied ? "Copied ✦" : "Copy email"}
             </button>
           </div>
+        </div>
+
+        <div id="project-brief">
+          <AnimatePresence>{brief && <Brief onDone={() => setBrief(false)} />}</AnimatePresence>
         </div>
       </div>
     </section>

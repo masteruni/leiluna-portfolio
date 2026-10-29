@@ -1,7 +1,7 @@
 "use client";
 
 import type { MotionValue } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const VERT = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
 
@@ -69,11 +69,17 @@ void main(){
 export function Planet({ progress, className = "" }: { progress?: MotionValue<number>; className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const [fallback, setFallback] = useState(false);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    // No WebGL (old devices, strict privacy settings, software renderers that got blocked)? Show the CSS planet instead.
     const gl = canvas.getContext("webgl", { antialias: false, alpha: false, powerPreference: "high-performance" });
-    if (!gl) return;
+    if (!gl) {
+      setFallback(true);
+      return;
+    }
 
     const compile = (type: number, src: string) => {
       const s = gl.createShader(type)!;
@@ -85,7 +91,10 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
     gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
     gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
     gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      setFallback(true);
+      return;
+    }
     gl.useProgram(prog);
 
     const buf = gl.createBuffer();
@@ -167,6 +176,21 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [progress]);
+
+  if (fallback) {
+    // A still version of the same scene: dark planet, pink rim light, soft atmosphere.
+    return (
+      <div aria-hidden className={`relative size-full overflow-hidden bg-ink ${className}`}>
+        <div
+          className="absolute left-1/2 top-[-18%] aspect-square w-[150vmin] -translate-x-1/2 rounded-full bg-ink md:left-auto md:right-[-30vmin] md:top-[-30vmin] md:w-[130vmin] md:translate-x-0"
+          style={{
+            boxShadow:
+              "0 0 0 1px var(--brand-2), 0 0 60px 4px var(--brand), 0 0 220px 40px rgb(234 106 142 / 0.35), inset 0 40px 120px -40px rgb(234 106 142 / 0.5)",
+          }}
+        />
+      </div>
+    );
+  }
 
   return <canvas ref={canvasRef} aria-hidden className={`block size-full ${className}`} />;
 }

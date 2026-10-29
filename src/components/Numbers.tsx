@@ -30,13 +30,20 @@ function Roller({ value, suffix }: { value: number; suffix: string }) {
   const reduce = useReducedMotion();
   const digits = String(value).split("").map(Number);
   return (
-    <span ref={ref} className="inline-flex items-start" aria-label={`${value}${suffix}`}>
-      {reduce ? (
-        <span>{value}</span>
-      ) : (
-        digits.map((d, i) => <Digit key={i} d={d} play={inView} delay={i * 0.12} />)
-      )}
-      <span className="serif ml-1 text-[0.55em] leading-none text-brand">{suffix}</span>
+    <span ref={ref} className="inline-flex items-start">
+      {/* Assistive tech reads the final value; the rolling digit strips are decoration. */}
+      <span className="sr-only">
+        {value}
+        {suffix}
+      </span>
+      <span aria-hidden className="inline-flex items-start">
+        {reduce ? (
+          <span>{value}</span>
+        ) : (
+          digits.map((d, i) => <Digit key={i} d={d} play={inView} delay={i * 0.12} />)
+        )}
+        <span className="serif ml-1 text-[0.55em] leading-none text-brand">{suffix}</span>
+      </span>
     </span>
   );
 }

@@ -7,6 +7,7 @@ import { site } from "@/content/site";
 import { useReady } from "@/lib/ready";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
+import { OrbitBadge } from "./OrbitBadge";
 import { Planet } from "./Planet";
 
 export function Hero() {
@@ -33,9 +34,17 @@ export function Hero() {
         style={{ y: textY, opacity: textOpacity }}
         className="relative z-10 flex h-full flex-col justify-end px-5 pb-28 sm:px-10 md:justify-center md:pb-0"
       >
-        <motion.p {...fade(0.2)} className="mb-6 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="h-px w-10 bg-brand" />
-          Social &amp; content studio
+        <motion.p {...fade(0.2)} className="mb-6 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+          <span className="flex items-center gap-3">
+            <span className="h-px w-10 bg-brand" />
+            Social &amp; content studio
+          </span>
+          {site.available && (
+            <span className="flex items-center gap-2.5 text-paper/80 md:hidden">
+              <span className="pulse relative size-1.5 rounded-full bg-brand" />
+              Open for new projects
+            </span>
+          )}
         </motion.p>
 
         <h1 className="font-display text-[clamp(3.4rem,10.5vw,10.5rem)] font-bold leading-[0.88] tracking-[-0.045em]">
@@ -78,6 +87,12 @@ export function Hero() {
           </motion.div>
         </div>
       </motion.div>
+
+      {site.available && (
+        <motion.div {...fade(1.2)} className="absolute bottom-24 right-6 z-10 hidden md:block lg:right-14">
+          <OrbitBadge text="Available for new projects" second={site.location} />
+        </motion.div>
+      )}
 
       <motion.div
         {...fade(1.1)}
