@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Short screens (landscape tablets, small laptops): pinned sections and the menu tighten up so nothing falls below the fold. */
+@custom-variant short (@media (max-height: 760px));
+
 /* ───────────────────────────────────────────────────────────
    LEILUNA STUDIO — brand palette (sampled from the logo)
    ─────────────────────────────────────────────────────────── */

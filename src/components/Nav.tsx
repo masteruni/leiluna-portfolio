@@ -87,7 +87,7 @@ export function Nav() {
           <motion.nav
             id="menu"
             aria-label="Main"
-            className="fixed inset-0 z-[70] flex flex-col justify-between overflow-hidden bg-ink px-5 pb-8 pt-28 sm:px-10"
+            className="fixed inset-0 z-[70] flex flex-col justify-between gap-6 overflow-y-auto overflow-x-hidden bg-ink px-5 pb-8 pt-28 sm:px-10 short:pb-5 short:pt-20"
             initial={{ clipPath: "circle(0% at 100% 0%)" }}
             animate={{ clipPath: "circle(150% at 100% 0%)" }}
             exit={{ clipPath: "circle(0% at 100% 0%)" }}
@@ -113,7 +113,7 @@ export function Nav() {
                     <Link
                       href={l.href}
                       onClick={() => setOpen(false)}
-                      className="group flex items-baseline gap-4 py-1 font-display text-[clamp(3.2rem,11vw,9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
+                      className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
                     >
                       <span className="font-mono text-xs font-normal tracking-normal text-muted">0{i + 1}</span>
                       <span className="transition-all duration-500 group-hover:translate-x-4 group-hover:text-brand">
