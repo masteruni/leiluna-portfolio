@@ -28,7 +28,20 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
-  return { title: `${project.title} · ${project.client}`, description: project.summary };
+  const title = `${project.title} · ${project.client}`;
+  return {
+    title,
+    description: project.summary,
+    alternates: { canonical: `/work/${project.slug}` },
+    openGraph: {
+      title,
+      description: project.summary,
+      type: "article",
+      url: `/work/${project.slug}`,
+      ...(project.cover ? { images: [{ url: project.cover, alt: `${project.title} for ${project.client}` }] } : {}),
+    },
+    twitter: { card: "summary_large_image", title, description: project.summary },
+  };
 }
 
 export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
@@ -44,7 +57,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   return (
     <>
       <Nav />
-      <main className="px-5 pt-32 sm:px-10 md:pt-40">
+      <main id="main" className="px-5 pt-32 sm:px-10 md:pt-40">
         <article className="mx-auto max-w-7xl">
           <Reveal>
             <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper">

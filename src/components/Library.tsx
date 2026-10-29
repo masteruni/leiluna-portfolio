@@ -148,7 +148,7 @@ function PieceArt({ p, playing, large, slide = 0 }: { p: Piece; playing: boolean
   );
 }
 
-function Tile({ p, onOpen, index }: { p: Piece; onOpen: () => void; index: number }) {
+function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonElement) => void; index: number }) {
   const ref = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
   const reduce = useReducedMotion();
@@ -172,7 +172,7 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: () => void; index: numbe
       <button
         ref={ref}
         type="button"
-        onClick={onOpen}
+        onClick={(e) => onOpen(e.currentTarget)}
         data-cursor={p.kind === "video" ? "Play" : "View"}
         aria-label={`${p.kind === "video" ? "Play" : "View"} ${p.style}, ${industriesOf(p).join(", ")}`}
         className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
@@ -369,6 +369,8 @@ export function Library() {
   const [kind, setKind] = useState<"all" | Kind>("all");
   const [industry, setIndustry] = useState<"All" | Industry>("All");
   const [open, setOpen] = useState<number | null>(null);
+  // The tile that opened the viewer, so focus goes back there when it closes.
+  const opener = useRef<HTMLButtonElement | null>(null);
   const lenis = useLenis();
   const cols = useColumns();
 
@@ -383,6 +385,11 @@ export function Library() {
     if (open !== null) lenis?.stop();
     else lenis?.start();
   }, [open, lenis]);
+
+  const close = useCallback(() => {
+    setOpen(null);
+    opener.current?.focus();
+  }, []);
 
   const count = (k: "all" | Kind) => pieces.filter((p) => k === "all" || p.kind === k).length;
 
@@ -418,6 +425,7 @@ export function Library() {
                   onClick={() => {
                     setKind(k.id);
                     setIndustry("All");
+                    setOpen(null);
                   }}
                   className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors ${
                     kind === k.id ? "bg-paper text-ink" : "border border-line text-paper/70 hover:text-paper"
@@ -458,13 +466,56 @@ export function Library() {
           Showing {list.length} {list.length === 1 ? "piece" : "pieces"}
         </p>
 
+        {list.length === 0 && (
+          <div className="mt-10 flex flex-col items-center gap-6 rounded-[2rem] border border-dashed border-line px-6 py-20 text-center">
+            {/* an empty orbit */}
+            <svg viewBox="0 0 120 120" className="size-24" aria-hidden>
+              <ellipse cx="60" cy="60" rx="52" ry="20" fill="none" stroke="var(--line)" transform="rotate(-18 60 60)" />
+              <circle cx="60" cy="60" r="14" fill="var(--ink-2)" />
+              <circle cx="60" cy="60" r="14" fill="none" stroke="var(--brand)" strokeOpacity="0.7" />
+              <circle cx="104" cy="44" r="3" fill="var(--brand)" />
+            </svg>
+            <p className="font-display text-2xl font-semibold">Nothing in this orbit yet.</p>
+            <p className="max-w-xs text-sm text-muted">We haven&apos;t published a {kind === "all" ? "piece" : kind === "video" ? "video" : "graphic"} for {industry} yet, but it&apos;s exactly the kind of thing we make.</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setKind("all");
+                  setIndustry("All");
+                }}
+                className="rounded-full border border-line px-5 py-2.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper"
+              >
+                Show everything
+              </button>
+              <button
+                type="button"
+                onClick={() => lenis?.scrollTo("#contact", { duration: 1.6 })}
+                className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-paper"
+              >
+                Ask us for one →
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Masonry dealt left-to-right, so the first pieces sit side by side across the top row */}
         <div className="mt-6 grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
           {Array.from({ length: cols }, (_, c) => (
             <div key={c} className="flex flex-col gap-4">
               <AnimatePresence mode="popLayout">
                 {list.map((p, i) =>
-                  i % cols === c ? <Tile key={p.id} p={p} index={i} onOpen={() => setOpen(i)} /> : null,
+                  i % cols === c ? (
+                    <Tile
+                      key={p.id}
+                      p={p}
+                      index={i}
+                      onOpen={(el) => {
+                        opener.current = el;
+                        setOpen(i);
+                      }}
+                    />
+                  ) : null,
                 )}
               </AnimatePresence>
             </div>
@@ -477,7 +528,7 @@ export function Library() {
           <Lightbox
             list={list}
             index={open}
-            onClose={() => setOpen(null)}
+            onClose={close}
             onStep={(d) => setOpen((o) => (o === null ? o : (o + d + list.length) % list.length))}
             onContact={() => {
               setOpen(null);

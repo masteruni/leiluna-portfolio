@@ -11,9 +11,13 @@ function Word({ word, i, total, progress }: { word: string; i: number; total: nu
   const opacity = useTransform(progress, [start, start + 1 / total], [0.12, 1]);
   const isAccent = accent.has(word);
   return (
-    <motion.span style={{ opacity }} className={`inline-block pr-[0.25em] ${isAccent ? "serif text-brand" : ""}`}>
-      {word}
-    </motion.span>
+    <>
+      <motion.span style={{ opacity }} className={`inline-block ${isAccent ? "serif text-brand" : ""}`}>
+        {word}
+      </motion.span>
+      {/* a real space between words, so screen readers and search engines read a sentence, not one long word */}
+      {i < total - 1 && " "}
+    </>
   );
 }
 

@@ -84,6 +84,65 @@ function Detail({ i }: { i: number }) {
   );
 }
 
+// Phones and tablets: one service open at a time, so the list stays scannable.
+function MobileServices() {
+  const [openId, setOpenId] = useState<string | null>(services[0].id);
+  const reduce = useReducedMotion();
+  return (
+    <ol className="divide-y divide-line border-t border-line">
+      {services.map((s, i) => {
+        const open = openId === s.id;
+        return (
+          <li key={s.id}>
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-controls={`service-${s.id}`}
+              onClick={() => setOpenId(open ? null : s.id)}
+              className="flex w-full items-start gap-5 py-6 text-left"
+            >
+              <span className="mt-2 font-mono text-xs text-brand">0{i + 1}</span>
+              <span className="flex-1">
+                <span className="block font-display text-3xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-4xl">{s.title}</span>
+                <span className="mt-3 block text-sm text-paper/60 sm:text-base">{s.blurb}</span>
+              </span>
+              <span
+                aria-hidden
+                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-all duration-500 ${
+                  open ? "rotate-45 border-brand bg-brand text-ink" : "text-paper/70"
+                }`}
+              >
+                +
+              </span>
+            </button>
+            <AnimatePresence initial={false}>
+              {open && (
+                <motion.div
+                  id={`service-${s.id}`}
+                  key="items"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: reduce ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
+                >
+                  <ul className="flex flex-wrap gap-2 pb-8 pl-9">
+                    {s.items.map((it) => (
+                      <li key={it} className="rounded-full border border-line px-3 py-1.5 text-xs text-paper/80">
+                        {it}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
 export function Orbits() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -157,22 +216,7 @@ export function Orbits() {
         <p className="mb-10 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
           <span className="text-brand">(02)</span> Services, five orbits
         </p>
-        <ol className="space-y-14">
-          {services.map((s, i) => (
-            <li key={s.id} className="border-t border-line pt-6">
-              <p className="font-mono text-xs text-brand">0{i + 1}</p>
-              <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{s.title}</h3>
-              <p className="mt-4 text-paper/70">{s.blurb}</p>
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {s.items.map((it) => (
-                  <li key={it} className="rounded-full border border-line px-3 py-1.5 text-xs text-paper/80">
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
+        <MobileServices />
       </div>
     </section>
   );

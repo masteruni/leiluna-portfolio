@@ -1,28 +1,62 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useSyncExternalStore } from "react";
 import { useLenis } from "lenis/react";
 import { site } from "@/content/site";
 
+const explore = [
+  { href: "/#work", label: "Work" },
+  { href: "/#library", label: "Library" },
+  { href: "/#services", label: "Services" },
+  { href: "/#studio", label: "Studio" },
+  { href: "/#contact", label: "Contact" },
+];
+
+// The year is read on the client only: a prerendered page may not read the clock (cacheComponents).
+const noSubscribe = () => () => {};
+const currentYear = () => new Date().getFullYear();
+const noYear = () => null;
+
+const heading = "mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+
 export function Footer() {
   const lenis = useLenis();
+  const year = useSyncExternalStore(noSubscribe, currentYear, noYear);
   return (
     <footer className="relative z-10 border-t border-line bg-ink px-5 pt-14 sm:px-10">
-      <div className="mx-auto grid max-w-7xl gap-10 text-sm md:grid-cols-4">
-        <div className="md:col-span-2">
+      <div className="mx-auto grid max-w-7xl gap-10 text-sm sm:grid-cols-2 md:grid-cols-5">
+        <div className="sm:col-span-2">
           <p className="max-w-xs text-paper/60">{site.description}</p>
         </div>
-        <ul className="space-y-2">
-          {site.socials.map((s) => (
-            <li key={s.label}>
-              <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-brand">
-                {s.label} ↗
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <p className={heading}>Explore</p>
+          <ul className="space-y-2">
+            {explore.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="text-paper/70 transition-colors hover:text-brand">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p className={heading}>Follow</p>
+          <ul className="space-y-2">
+            {site.socials.map((s) => (
+              <li key={s.label}>
+                <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-brand">
+                  {s.label} ↗
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="space-y-2 md:text-right">
-          <a href={`mailto:${site.email}`} className="block text-paper/70 hover:text-brand">
+          <p className={heading}>Say hello</p>
+          <a href={`mailto:${site.email}`} className="block break-all text-paper/70 hover:text-brand">
             {site.email}
           </a>
           <button
@@ -45,7 +79,7 @@ export function Footer() {
         />
       </div>
       <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted sm:flex-row sm:justify-between sm:gap-10">
-        <span>© {site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>
+        <span>© {year ? `${year} ` : ""}{site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>
         <span>Your story. Our creative orbit.</span>
       </div>
     </footer>

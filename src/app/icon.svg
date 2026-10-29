@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Leiluna mark as a crisp vector favicon: dark tile, white + pink crescents (same geometry as the intro loader) -->
+  <defs>
+    <mask id="w"><rect width="100" height="100" fill="#fff"/><circle cx="57" cy="47" r="33" fill="#000"/></mask>
+    <mask id="p"><rect width="100" height="100" fill="#fff"/><circle cx="51" cy="56" r="27" fill="#000"/></mask>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="#050506"/>
+  <circle cx="46" cy="44" r="36" fill="#f6f2ef" mask="url(#w)"/>
+  <circle cx="60" cy="60" r="31" fill="#ea6a8e" mask="url(#p)"/>
+</svg>

@@ -32,6 +32,8 @@ export function Nav() {
   return (
     <>
       <header
+        // Keyboard users tabbing into the header bring it back even while scrolled down.
+        onFocusCapture={() => setHidden(false)}
         className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between px-5 py-5 transition-transform duration-700 ease-[var(--ease-out)] sm:px-10 ${
           hidden && !open ? "-translate-y-full" : ""
         }`}
@@ -42,6 +44,16 @@ export function Nav() {
             leiluna<span className="ml-1.5 align-middle font-mono text-[10px] font-normal uppercase tracking-[0.3em] text-muted">studio</span>
           </span>
         </Link>
+
+        {/* Desktop: the sections are one click away without opening the menu */}
+        <nav aria-label="Sections" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
+          {links.map((l) => (
+            <Link key={l.href} href={l.href} className="group relative py-1 text-sm text-paper/70 transition-colors hover:text-paper">
+              {l.label}
+              <span className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100" />
+            </Link>
+          ))}
+        </nav>
 
         <div className="flex items-center gap-3">
           <Magnetic className="hidden sm:block">
@@ -122,9 +134,17 @@ export function Nav() {
               animate={{ opacity: 1, transition: { delay: 0.6 } }}
               exit={{ opacity: 0 }}
             >
-              <a href={`mailto:${site.email}`} className="text-paper hover:text-brand">
-                {site.email}
-              </a>
+              <div className="flex flex-col gap-2">
+                {site.available && (
+                  <span className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/70">
+                    <span className="pulse relative size-1.5 rounded-full bg-brand" />
+                    Open for new projects
+                  </span>
+                )}
+                <a href={`mailto:${site.email}`} className="text-paper hover:text-brand">
+                  {site.email}
+                </a>
+              </div>
               <div className="flex gap-6">
                 {site.socials.map((s) => (
                   <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="hover:text-paper">

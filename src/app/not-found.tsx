@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <>
       <Nav />
-      <main className="relative grid min-h-dvh place-items-center overflow-hidden px-5 text-center">
+      <main id="main" className="relative grid min-h-dvh place-items-center overflow-hidden px-5 text-center">
         <div
           aria-hidden
           className="absolute left-1/2 top-1/2 size-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
