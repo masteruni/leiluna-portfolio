@@ -26,7 +26,9 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const menu = useRef<HTMLElement>(null);
+  const header = useRef<HTMLElement>(null);
   const lenis = useLenis(({ direction, scroll }) => setHidden(direction === 1 && scroll > 200));
   const anchor = useAnchor();
   const active = useActiveSection(ids);
@@ -39,6 +41,28 @@ export function Nav() {
   // footer): it takes on the night colours while it's over one, so it always stays readable.
   const overNight = useOverNight(() => 40);
 
+  // Once the page has scrolled, the header gets a frosted background so nothing shows through it.
+  useEffect(() => {
+    const check = () => setScrolled(window.scrollY > 24);
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, []);
+
+  // Other sticky bars (the Library filters) sit just below the header while it's showing and slide up when
+  // it hides, so the two never overlap: they read --header-h and data-header on <html> (see globals.css).
+  const shown = !hidden || open;
+  useEffect(() => {
+    document.documentElement.dataset.header = shown ? "shown" : "hidden";
+  }, [shown]);
+  useEffect(() => {
+    const el = header.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => document.documentElement.style.setProperty("--header-h", `${el.offsetHeight}px`));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   useEffect(() => {
     if (open) lenis?.stop();
     else lenis?.start();
@@ -50,11 +74,12 @@ export function Nav() {
   return (
     <>
       <header
+        ref={header}
         // Keyboard users tabbing into the header bring it back even while scrolled down.
         onFocusCapture={() => setHidden(false)}
-        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between px-5 py-5 text-paper transition-transform duration-700 ease-[var(--ease-out)] sm:px-10 ${
+        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between border-b px-5 py-5 text-paper transition-[transform,background-color,border-color] duration-700 ease-[var(--ease-out)] sm:px-10 ${
           hidden && !open ? "-translate-y-full" : ""
-        } ${overNight && !open ? "over-night" : ""}`}
+        } ${overNight && !open ? "over-night" : ""} ${scrolled && !open ? "border-line bg-ink/75 backdrop-blur-xl" : "border-transparent"}`}
       >
         <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <Mark width={36} height={38} priority className="h-9 w-auto" />
