@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
@@ -225,6 +226,81 @@ function Brief({ onDone }: { onDone: () => void }) {
   );
 }
 
+// The main call to action as a small moon in orbit: a lit sphere ringed by slowly turning text and a tiny
+// satellite, a comet of light running round its edge, and on hover a moonlight eclipse sweeping across.
+function MoonButton({ open, onClick }: { open: boolean; onClick: () => void }) {
+  const id = `moon${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  const r = 44; // radius of the text ring, in the 100×100 viewBox
+  const circumference = 2 * Math.PI * r;
+  const ring = `Start a project ✦ Reply within ${site.replyTime} ✦ `.toUpperCase();
+
+  return (
+    <div className="relative grid size-64 shrink-0 place-items-center sm:size-72">
+      <svg viewBox="0 0 100 100" className="animate-spin-badge pointer-events-none absolute inset-0 size-full" aria-hidden>
+        <defs>
+          <path id={`${id}-ring`} d={`M50 50 m-${r} 0 a${r} ${r} 0 1 1 ${r * 2} 0 a${r} ${r} 0 1 1 -${r * 2} 0`} />
+        </defs>
+        {/* textLength spreads the sentence so it closes the circle exactly */}
+        <text fill="var(--paper)" fillOpacity="0.55" fontSize="4.2" fontFamily="var(--font-jetbrains), monospace" textLength={circumference} lengthAdjust="spacing">
+          <textPath href={`#${id}-ring`} textLength={circumference}>
+            {ring}
+          </textPath>
+        </text>
+      </svg>
+      {/* the orbit line, with a satellite running the other way */}
+      <div aria-hidden className="pointer-events-none absolute inset-[3%] rounded-full border border-line" />
+      <div aria-hidden className="animate-spin-badge pointer-events-none absolute inset-[3%] [animation-direction:reverse] [animation-duration:11s]">
+        <span className="absolute left-1/2 top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand shadow-[0_0_12px_2px_var(--brand)]" />
+      </div>
+
+      <Magnetic strength={0.4} className="relative">
+        {/* a comet of light circling the moon's edge, with a soft glow beneath it */}
+        <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full">
+          <span
+            className="animate-star-orbit absolute -inset-6 rounded-full opacity-90 blur-xl"
+            style={{ background: "conic-gradient(from 0deg, transparent 0 70%, var(--brand) 85%, var(--brand-2) 95%, transparent)" }}
+          />
+          <span className="absolute inset-0 overflow-hidden rounded-full">
+            <span
+              className="animate-star-orbit absolute -inset-1/2"
+              style={{ background: "conic-gradient(from 0deg, transparent 0 72%, var(--brand-2) 90%, var(--paper) 97%, transparent)" }}
+            />
+          </span>
+        </span>
+        <button
+          type="button"
+          onClick={onClick}
+          aria-expanded={open}
+          aria-controls="project-brief"
+          className="group relative grid size-40 place-items-center overflow-hidden rounded-full text-center text-ink transition-transform duration-300 active:scale-95 sm:size-48"
+          style={{
+            background: "radial-gradient(circle at 32% 26%, var(--brand-2), var(--brand) 45%, var(--brand-3) 100%)",
+            boxShadow:
+              "inset -14px -18px 36px -12px rgb(5 5 6 / 0.5), inset 10px 12px 24px -10px rgb(255 255 255 / 0.45), 0 30px 80px -24px rgb(234 106 142 / 0.7)",
+          }}
+        >
+          {/* moonlight eclipse: a disk sweeps across, a crescent on its way */}
+          <span className="absolute inset-0 -translate-x-[105%] rounded-full bg-paper transition-transform duration-700 ease-[var(--ease-out)] group-hover:translate-x-0 group-focus-visible:translate-x-0" />
+          <span className="relative flex flex-col items-center gap-3">
+            <span className="font-display text-xl font-semibold leading-[1.02] tracking-[-0.03em] sm:text-2xl">
+              {open ? "Close the" : "Start a"}
+              <br />
+              {open ? "brief" : "project"}
+            </span>
+            <span className="grid size-9 place-items-center rounded-full bg-ink text-paper">
+              {open ? (
+                <X aria-hidden className="size-4" />
+              ) : (
+                <ArrowRight aria-hidden className="size-4 -rotate-45 transition-transform duration-500 ease-[var(--ease-out)] group-hover:rotate-0" />
+              )}
+            </span>
+          </span>
+        </button>
+      </Magnetic>
+    </div>
+  );
+}
+
 // The finale: a planet rises over the horizon while the call to action lands.
 export function Contact() {
   const ref = useRef<HTMLElement>(null);
@@ -278,46 +354,8 @@ export function Contact() {
           Tell us about your story. We&apos;ll reply within {site.replyTime} with ideas, not a sales script.
         </p>
 
-        <div className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row">
-          <Magnetic strength={0.5} className="relative">
-            {/* a comet of light circling the button's edge, with a soft glow beneath it */}
-            <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full">
-              <span
-                className="animate-star-orbit absolute -inset-6 rounded-full opacity-90 blur-xl"
-                style={{ background: "conic-gradient(from 0deg, transparent 0 70%, var(--brand) 85%, var(--brand-2) 95%, transparent)" }}
-              />
-              <span className="absolute inset-0 overflow-hidden rounded-full">
-                <span
-                  className="animate-star-orbit absolute -inset-1/2"
-                  style={{ background: "conic-gradient(from 0deg, transparent 0 72%, var(--brand-2) 90%, var(--paper) 97%, transparent)" }}
-                />
-              </span>
-            </span>
-            <button
-              type="button"
-              onClick={() => setBrief((b) => !b)}
-              aria-expanded={brief}
-              aria-controls="project-brief"
-              className="group relative grid size-44 place-items-center overflow-hidden rounded-full bg-brand text-center font-medium text-ink sm:size-52"
-            >
-              <span className="absolute inset-0 scale-0 rounded-full bg-paper transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-100" />
-              <span className="relative text-lg leading-tight">
-                {brief ? (
-                  <>
-                    Close
-                    <br />
-                    the brief ✕
-                  </>
-                ) : (
-                  <>
-                    Start a
-                    <br />
-                    project →
-                  </>
-                )}
-              </span>
-            </button>
-          </Magnetic>
+        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
+          <MoonButton open={brief} onClick={() => setBrief((b) => !b)} />
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-brand sm:text-3xl">
               {site.email}
