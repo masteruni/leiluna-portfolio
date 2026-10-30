@@ -81,7 +81,7 @@ export function Formats() {
               onClick={openShowreel}
               className="group mt-5 inline-flex items-center gap-3 text-sm text-paper/80 transition-colors hover:text-paper"
             >
-              <span className="grid size-9 place-items-center rounded-full border border-line transition-colors group-hover:border-brand group-hover:bg-brand">
+              <span className="grid size-9 place-items-center rounded-full transition-colors group-hover:bg-brand bg-paper/[0.07]">
                 <span className="ml-0.5 border-y-[4px] border-l-[7px] border-y-transparent border-l-paper group-hover:border-l-ink" />
               </span>
               Or watch the full showreel ({showreel.duration})
@@ -91,7 +91,7 @@ export function Formats() {
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
           {/* the list (a swipeable row of chips on phones) */}
-          <div role="tablist" aria-label="Formats" className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:block lg:overflow-visible lg:border-t lg:border-line lg:px-0">
+          <div role="tablist" aria-label="Formats" className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:block lg:overflow-visible lg:px-0">
             {items.map((x, n) => {
               const on = n === i;
               return (
@@ -103,8 +103,8 @@ export function Formats() {
                   aria-selected={on}
                   aria-controls="format-panel"
                   onClick={() => pick(n)}
-                  className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:border max-lg:px-4 max-lg:py-2 max-lg:text-sm lg:flex lg:w-full lg:items-center lg:gap-5 lg:border-b lg:border-line lg:py-5 ${
-                    on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-ink" : "max-lg:border-line max-lg:text-paper/75"
+                  className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:px-4 max-lg:py-2 max-lg:text-sm lg:flex lg:w-full lg:items-center lg:gap-5 lg:py-5 ${
+                    on ? "max-lg:bg-brand max-lg:text-ink" : "max-lg:bg-paper/[0.07] max-lg:text-paper/75"
                   }`}
                 >
                   <span className="lg:flex-1">
@@ -131,7 +131,7 @@ export function Formats() {
 
           {/* the example */}
           <div id="format-panel" role="tabpanel" aria-labelledby={`format-tab-${i}`} className="relative">
-            <div className={`relative mx-auto overflow-hidden rounded-[2rem] border border-line bg-ink-2 shadow-[0_40px_100px_-40px_rgb(234_106_142/0.35)] ${wide ? "aspect-video w-full" : "aspect-[9/16] w-full max-w-[22rem]"}`}>
+            <div className={`relative mx-auto overflow-hidden rounded-[2rem] bg-ink-2 shadow-[0_40px_100px_-40px_rgb(234_106_142/0.35)] ${wide ? "aspect-video w-full" : "aspect-[9/16] w-full max-w-[22rem]"}`}>
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.video
                   key={`${f.piece}-${sound}`}
@@ -185,7 +185,7 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={browse}
-                    className="rounded-full border border-line px-6 py-3 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper"
+                    className="rounded-full px-6 py-3 text-sm text-paper/80 transition-colors hover:text-paper bg-paper/[0.07] hover:bg-paper/15"
                   >
                     See more in the Library
                   </button>

@@ -54,7 +54,6 @@ export function Testimonials() {
                 <span aria-hidden className="text-brand">”</span>
               </blockquote>
               <figcaption className="mt-8 flex items-center gap-4 text-sm">
-                <span aria-hidden className="h-px w-10 bg-brand" />
                 <span>
                   <span className="font-medium text-paper">{t.name}</span>
                   <span className="text-muted"> · {t.role}</span>

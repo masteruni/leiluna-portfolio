@@ -89,7 +89,7 @@ export function Hero() {
               type="button"
               onClick={openShowreel}
               data-cursor="Play"
-              className="group inline-flex items-center gap-3 rounded-full border border-line bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md transition-colors hover:border-paper/60"
+              className="group inline-flex items-center gap-3 rounded-full bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md transition-colors hover:bg-paper/15"
             >
               <span className="relative grid size-10 place-items-center rounded-full bg-paper">
                 <span className="absolute inset-0 animate-ping rounded-full bg-paper/30 [animation-duration:2.4s]" />
@@ -100,7 +100,7 @@ export function Hero() {
           </motion.div>
 
           {/* proof bar */}
-          <motion.dl {...fade(0.5)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
+          <motion.dl {...fade(0.5)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 pt-6 sm:gap-8">
             {stats.map((s) => (
               <div key={s.label} className="flex flex-col-reverse justify-end">
                 <dt className="mt-1.5 text-[13px] leading-snug text-paper/60 sm:text-sm">{s.label}</dt>

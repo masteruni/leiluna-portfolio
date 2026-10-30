@@ -92,7 +92,7 @@ function Detail({ i }: { i: number }) {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.15 + k * 0.035 }}
-            className="flex gap-3 border-t border-line pt-3 short:pt-1"
+            className="flex gap-3 pt-3 short:pt-1"
           >
             {it}
           </motion.li>
@@ -107,7 +107,7 @@ function MobileServices() {
   const [openId, setOpenId] = useState<string | null>(services[0].id);
   const reduce = useReducedMotion();
   return (
-    <ol className="divide-y divide-line border-t border-line">
+    <ol className="space-y-8">
       {services.map((s) => {
         const open = openId === s.id;
         return (
@@ -125,8 +125,8 @@ function MobileServices() {
               </span>
               <span
                 aria-hidden
-                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-all duration-500 ${
-                  open ? "rotate-45 border-brand bg-brand text-ink" : "text-paper/70"
+                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full text-lg transition-all duration-500 ${
+                  open ? "rotate-45 bg-brand text-ink" : "bg-paper/[0.07] text-paper/70"
                 }`}
               >
                 +
@@ -143,9 +143,9 @@ function MobileServices() {
                   transition={{ duration: reduce ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden"
                 >
-                  <ul className="flex flex-wrap gap-2 pb-8 pl-9">
+                  <ul className="grid grid-cols-2 gap-x-6 gap-y-3 pb-10 text-sm text-paper/80">
                     {s.items.map((it) => (
-                      <li key={it} className="rounded-full border border-line px-3 py-1.5 text-[13px] text-paper/80">
+                      <li key={it}>
                         {it}
                       </li>
                     ))}
@@ -220,8 +220,8 @@ export function Orbits() {
                 </button>
               ))}
             </div>
-            <div className="h-px flex-1 bg-line">
-              <motion.div className="h-px bg-brand" style={{ width: bar }} />
+            <div className="h-1 flex-1 rounded-full bg-paper/10">
+              <motion.div className="h-1 rounded-full bg-brand" style={{ width: bar }} />
             </div>
           </div>
         </div>

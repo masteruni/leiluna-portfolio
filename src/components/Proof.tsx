@@ -7,7 +7,7 @@ import { moreProof, stats, topReels } from "@/content/site";
 import { CountUp } from "./CountUp";
 import { LineReveal } from "./LineReveal";
 
-const tile = "relative overflow-hidden rounded-[1.6rem] border border-line bg-ink-2/70 p-5 sm:p-8";
+const tile = "relative overflow-hidden rounded-[1.6rem] bg-ink-2/70 p-5 sm:p-8";
 
 // Horizontal bars that grow to each reel's view count once the chart is on screen.
 function ReelChart() {
@@ -112,12 +112,12 @@ export function Proof() {
                 {Array.from({ length: 11 }, (_, i) => (
                   <motion.span
                     key={i}
-                    className="size-4 rounded-full border border-brand/70"
+                    className="size-4 rounded-full"
                     initial={{ scale: 0, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.06, type: "spring", stiffness: 300, damping: 18 }}
-                    style={{ background: i % 3 === 0 ? "var(--brand)" : "transparent" }}
+                    style={{ background: i % 3 === 0 ? "var(--brand)" : "rgb(246 242 239 / 0.14)" }}
                   />
                 ))}
               </div>
@@ -127,7 +127,7 @@ export function Proof() {
       </div>
 
       {/* running ticker */}
-      <div className="marquee-pause mt-20 overflow-hidden border-y border-line py-6" aria-hidden>
+      <div className="marquee-pause mt-20 overflow-hidden py-6" aria-hidden>
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
           {[...ticker, ...ticker].map((t, i) => (
             <span key={i} className="flex items-center gap-12">

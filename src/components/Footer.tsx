@@ -33,7 +33,7 @@ export function Footer() {
   const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["55%", "0%"]);
   const glow = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [0.15, 1]);
   return (
-    <footer className="relative z-10 border-t border-line bg-ink px-5 pt-14 sm:px-10">
+    <footer className="relative z-10 bg-ink-2 px-5 pt-14 sm:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 text-sm sm:grid-cols-2 md:grid-cols-5">
         <div className="sm:col-span-2">
           <p className="max-w-xs text-paper/60">{site.description}</p>

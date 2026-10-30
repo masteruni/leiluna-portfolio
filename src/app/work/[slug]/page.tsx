@@ -108,7 +108,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               </Reveal>
 
               <Reveal delay={0.1}>
-                <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-line pt-6">
+                <dl className="mt-12 grid grid-cols-3 gap-6 pt-6">
                   {project.metrics.map((m) => (
                     <div key={m.label} className="flex flex-col-reverse justify-end">
                       <dt className="mt-2 text-[13px] text-muted sm:text-sm">{m.label}</dt>
@@ -141,7 +141,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   <h2 className="text-sm text-brand">The approach</h2>
                   <ol className="mt-6 space-y-4">
                     {project.approach.map((a) => (
-                      <li key={a} className="flex gap-5 rounded-2xl border border-line bg-ink-2 p-5">
+                      <li key={a} className="flex gap-5 rounded-2xl bg-ink-2 p-5">
                         <p className="text-lg leading-relaxed">{a}</p>
                       </li>
                     ))}
@@ -162,7 +162,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   <h2 className="text-sm text-muted">Deliverables</h2>
                   <ul className="mt-3 space-y-2">
                     {project.deliverables.map((d) => (
-                      <li key={d} className="border-b border-line pb-2">{d}</li>
+                      <li key={d} className="pb-2">{d}</li>
                     ))}
                   </ul>
                 </div>
@@ -170,7 +170,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   <h2 className="text-sm text-muted">Platforms</h2>
                   <ul className="mt-3 flex flex-wrap gap-2">
                     {project.platforms.map((p) => (
-                      <li key={p} className="rounded-full border border-line px-3 py-1.5 text-sm">{p}</li>
+                      <li key={p} className="rounded-full px-3 py-1.5 text-sm bg-paper/[0.07]">{p}</li>
                     ))}
                   </ul>
                 </div>
@@ -213,7 +213,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             )
           )}
 
-          <nav aria-label="More case studies" className="mt-32 border-y border-line">
+          <nav aria-label="More case studies" className="mt-32">
             <Link
               href={`/work/${next.slug}`}
               data-cursor="Next"
@@ -225,14 +225,14 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   {next.title}
                 </p>
               </div>
-              <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line transition group-hover:rotate-45 group-hover:bg-brand group-hover:text-ink">
+              <span className="grid size-14 shrink-0 place-items-center rounded-full transition group-hover:rotate-45 group-hover:bg-brand group-hover:text-ink bg-paper/[0.07]">
                 <ArrowUpRight />
               </span>
             </Link>
             {prev.slug !== next.slug && (
               <Link
                 href={`/work/${prev.slug}`}
-                className="group flex items-center justify-between gap-6 border-t border-line py-6 text-sm text-muted transition hover:text-paper"
+                className="group flex items-center justify-between gap-6 py-6 text-sm text-muted transition hover:text-paper"
               >
                 <span className="inline-flex items-center gap-2">
                   <ArrowLeft size={16} /> Previous: {prev.title}

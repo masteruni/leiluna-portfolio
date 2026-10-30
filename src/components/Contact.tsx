@@ -23,8 +23,8 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
             type="button"
             aria-pressed={value === o}
             onClick={() => onChange(value === o ? "" : o)}
-            className={`rounded-full border px-3.5 py-2 text-[13px] transition-colors ${
-              value === o ? "border-paper bg-paper text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
+            className={`rounded-full px-3.5 py-2 text-[13px] transition-colors ${
+              value === o ? "bg-paper text-ink" : "bg-paper/[0.07] text-paper/70 hover:bg-paper/15 hover:text-paper"
             }`}
           >
             {o}
@@ -115,7 +115,7 @@ function Brief({ onDone }: { onDone: () => void }) {
         setSent(true);
         window.location.href = mailto;
       }}
-      className="mx-auto mt-14 w-full max-w-3xl rounded-[2rem] border border-line bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
+      className="mx-auto mt-14 w-full max-w-3xl rounded-[2rem] bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
       aria-label="Project brief"
     >
       <div className="grid gap-8 sm:grid-cols-2">
@@ -160,8 +160,8 @@ function Brief({ onDone }: { onDone: () => void }) {
                 type="button"
                 aria-pressed={on}
                 onClick={() => toggle(s.title)}
-                className={`rounded-full border px-3.5 py-2 text-[13px] transition-colors ${
-                  on ? "border-brand bg-brand text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
+                className={`rounded-full px-3.5 py-2 text-[13px] transition-colors ${
+                  on ? "bg-brand text-ink" : "bg-paper/[0.07] text-paper/70 hover:bg-paper/15 hover:text-paper"
                 }`}
               >
                 {s.short}
@@ -195,7 +195,7 @@ function Brief({ onDone }: { onDone: () => void }) {
           <button type="submit" className="rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:bg-paper">
             Send by email →
           </button>
-          <button type="button" onClick={copy} className="rounded-full border border-line px-6 py-3.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper">
+          <button type="button" onClick={copy} className="rounded-full px-6 py-3.5 text-sm text-paper/80 transition-colors hover:text-paper bg-paper/[0.07] hover:bg-paper/15">
             {copied ? "Copied" : "Copy the brief"}
           </button>
         </div>

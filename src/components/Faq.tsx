@@ -18,11 +18,11 @@ export function Faq() {
           <p className="mt-6 max-w-sm text-lg text-paper/60">Still wondering about something? Ask it in your brief and we&apos;ll answer within one business day.</p>
         </div>
 
-        <ul className="border-t border-line">
+        <ul>
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
-              <li key={f.q} className="border-b border-line">
+              <li key={f.q}>
                 <h3>
                   <button
                     type="button"
@@ -37,8 +37,8 @@ export function Faq() {
                     </span>
                     <span
                       aria-hidden
-                      className={`grid size-10 shrink-0 place-items-center rounded-full border transition duration-500 ${
-                        isOpen ? "rotate-45 border-brand bg-brand text-ink" : "border-line text-paper/70 group-hover:border-paper/50"
+                      className={`grid size-10 shrink-0 place-items-center rounded-full transition duration-500 ${
+                        isOpen ? "rotate-45 bg-brand text-ink" : "bg-paper/[0.07] text-paper/70 group-hover:bg-paper/15"
                       }`}
                     >
                       +
@@ -57,7 +57,7 @@ export function Faq() {
                       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-8 pl-10 leading-relaxed text-paper/70 sm:text-lg">{f.a}</p>
+                      <p className="max-w-2xl pb-8 leading-relaxed text-paper/70 sm:text-lg">{f.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

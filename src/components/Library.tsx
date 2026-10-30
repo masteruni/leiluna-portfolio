@@ -126,21 +126,10 @@ function PieceArt({
             radial-gradient(70% 50% at 90% 95%, color-mix(in oklab, ${b} 40%, transparent), transparent 70%), var(--ink-2)`,
         }}
       />
-      {p.kind === "graphic" ? (
-        <>
-          {/* dot grid + crop marks: a designer's canvas */}
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{ backgroundImage: "radial-gradient(rgb(246 242 239 / 0.35) 1px, transparent 1px)", backgroundSize: "14px 14px" }}
-          />
-          {["left-3 top-3 border-l border-t", "right-3 top-3 border-r border-t", "bottom-3 left-3 border-b border-l", "bottom-3 right-3 border-b border-r"].map((c) => (
-            <span key={c} className={`absolute size-4 border-paper/50 ${c}`} />
-          ))}
-        </>
-      ) : (
+      {p.kind === "graphic" ? null : (
         <>
           {(p.format === "reel" || p.format === "portrait") && (
-          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-paper/30 bg-ink/30 backdrop-blur transition-transform duration-500 group-hover:scale-110">
+          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-ink/30 backdrop-blur transition-transform duration-500 group-hover:scale-110">
             <span className="ml-1 border-y-[7px] border-l-[11px] border-y-transparent border-l-paper" />
           </span>
           )}
@@ -202,7 +191,7 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonEleme
           <PieceArt p={p} playing={visible && !reduce} near={near} />
         </div>
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap text-[13px] sm:inset-x-3 sm:top-3 sm:gap-2">
-          <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
+          <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur max-sm:invisible sm:px-2.5">{industryLabel(p)}</span>
           <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
             {p.kind === "video" ? (
               `▶ ${p.duration ?? "Reel"}`
@@ -366,14 +355,14 @@ function Lightbox({
           <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{p.style}</h3>
           <p className="serif mt-2 text-2xl text-paper/70">{p.title}</p>
           <dl className="mt-8 space-y-3 text-sm">
-            <div className="flex justify-between border-t border-line pt-3">
+            <div className="flex justify-between pt-3">
               <dt className="text-muted">{industriesOf(p).length > 1 && industriesOf(p).length < industries.length ? "Industries" : "Industry"}</dt>
               <dd className="max-w-[14rem] text-right">
                 {industriesOf(p).length === industries.length ? "Any industry" : industriesOf(p).join(", ")}
               </dd>
             </div>
             {p.tools && (
-              <div className="flex justify-between gap-6 border-t border-line pt-3">
+              <div className="flex justify-between gap-6 pt-3">
                 <dt className="text-muted">Made with</dt>
                 <dd className="text-right">{p.tools.join(", ")}</dd>
               </div>
@@ -387,13 +376,13 @@ function Lightbox({
             I want this style →
           </button>
           <div className="mt-8 flex items-center gap-3 text-sm text-muted">
-            <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Previous piece">
+            <button type="button" onClick={() => onStep(-1)} className="rounded-full px-3 py-2 transition-colors hover:text-paper bg-paper/[0.07] hover:bg-paper/15" aria-label="Previous piece">
               ←
             </button>
             <span className="tabular-nums">
               {index + 1} of {list.length}
             </span>
-            <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Next piece">
+            <button type="button" onClick={() => onStep(1)} className="rounded-full px-3 py-2 transition-colors hover:text-paper bg-paper/[0.07] hover:bg-paper/15" aria-label="Next piece">
               →
             </button>
           </div>
@@ -468,7 +457,7 @@ export function Library() {
         </div>
 
         {/* filters */}
-        <div className="sticky top-0 z-20 -mx-5 mt-14 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
+        <div className="sticky top-0 z-20 -mx-5 mt-14 bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div role="group" aria-label="Filter by format" className="-mx-5 flex shrink-0 gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
               {kinds.map((k) => (
@@ -482,7 +471,7 @@ export function Library() {
                     setOpen(null);
                   }}
                   className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors ${
-                    kind === k.id ? "bg-paper text-ink" : "border border-line text-paper/70 hover:text-paper"
+                    kind === k.id ? "bg-paper text-ink" : "bg-paper/[0.07] text-paper/70 hover:bg-paper/15 hover:text-paper"
                   }`}
                 >
                   {k.label}
@@ -524,7 +513,7 @@ export function Library() {
         </p>
 
         {list.length === 0 && (
-          <div className="mt-10 flex flex-col items-center gap-6 rounded-[2rem] border border-dashed border-line px-6 py-20 text-center">
+          <div className="mt-10 flex flex-col items-center gap-6 rounded-[2rem] px-6 py-20 text-center bg-paper/[0.07]">
             {/* an empty orbit */}
             <svg viewBox="0 0 120 120" className="size-24" aria-hidden>
               <ellipse cx="60" cy="60" rx="52" ry="20" fill="none" stroke="var(--line)" transform="rotate(-18 60 60)" />
@@ -541,7 +530,7 @@ export function Library() {
                   setKind("all");
                   setIndustry("All");
                 }}
-                className="rounded-full border border-line px-5 py-2.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper"
+                className="rounded-full px-5 py-2.5 text-sm text-paper/80 transition-colors hover:text-paper bg-paper/[0.07] hover:bg-paper/15"
               >
                 Show everything
               </button>

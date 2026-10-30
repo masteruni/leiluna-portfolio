@@ -57,6 +57,7 @@ export function HeroPhone({ play }: { play: boolean }) {
       <div aria-hidden className="absolute -inset-10 rounded-full bg-brand/25 blur-3xl" />
 
       <div
+        data-ui
         className="relative aspect-[9/19.5] overflow-hidden rounded-[2.6rem] border border-paper/15 bg-ink p-2 shadow-[0_50px_120px_-30px_rgb(0_0_0/0.9)]"
         onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
         onPointerLeave={(e) => e.pointerType === "mouse" && setPaused(false)}
@@ -146,7 +147,7 @@ export function HeroPhone({ play }: { play: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-2xl border border-line bg-ink/75 px-4 py-3.5 shadow-[0_20px_60px_-20px_rgb(0_0_0/0.9)] backdrop-blur-md"
+            className="rounded-2xl bg-ink/75 px-4 py-3.5 shadow-[0_20px_60px_-20px_rgb(0_0_0/0.9)] backdrop-blur-md"
           >
             <p className="font-display text-3xl font-semibold tracking-[-0.04em]">
               {p.value}
@@ -159,7 +160,7 @@ export function HeroPhone({ play }: { play: boolean }) {
       </div>
 
       {site.available && (
-        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 text-[13px] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
+        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full bg-ink/75 px-3 py-1.5 text-[13px] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
           <span className="pulse relative size-1.5 rounded-full bg-brand" />
           Open for projects
         </span>

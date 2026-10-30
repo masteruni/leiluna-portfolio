@@ -62,10 +62,10 @@ export function Phases() {
         </div>
 
         <div ref={ref} className="relative mt-20">
-          <div className="absolute left-10 top-0 h-full w-px bg-line md:left-0 md:top-16 md:h-px md:w-full">
-            <motion.div className="hidden h-px bg-brand md:block" style={{ width: line }} />
+          <div className="absolute left-10 top-0 h-full w-1 rounded-full bg-paper/10 md:left-0 md:top-16 md:h-1 md:w-full">
+            <motion.div className="hidden h-1 rounded-full bg-brand md:block" style={{ width: line }} />
           </div>
-          <ol className="relative grid gap-14 md:grid-cols-5 md:gap-8">
+          <ol className="relative grid gap-24 md:grid-cols-5 md:gap-8">
             {process.map((_, i) => (
               <Step key={i} i={i} total={process.length} progress={scrollYProgress} />
             ))}

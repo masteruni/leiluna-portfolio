@@ -84,7 +84,7 @@ export function Nav() {
             <Link
               href="/#contact"
               onClick={anchor}
-              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-ink"
+              className="block rounded-full bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:bg-brand hover:text-ink"
             >
               Let&apos;s talk
             </Link>
@@ -158,7 +158,7 @@ export function Nav() {
             </ul>
 
             <motion.div
-              className="relative flex flex-col gap-4 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+              className="relative flex flex-col gap-4 pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { delay: 0.6 } }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}

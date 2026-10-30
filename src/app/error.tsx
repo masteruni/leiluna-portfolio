@@ -28,7 +28,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <button type="button" onClick={reset} className="rounded-full bg-paper px-7 py-4 font-medium text-ink transition-colors hover:bg-brand">
             Try again
           </button>
-          <Link href="/" className="rounded-full border border-line px-7 py-4 font-medium text-paper transition-colors hover:border-paper">
+          <Link href="/" className="rounded-full px-7 py-4 font-medium text-paper transition-colors bg-paper/[0.07] hover:bg-paper/15">
             Back to the studio
           </Link>
         </div>

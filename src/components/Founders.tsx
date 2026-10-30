@@ -59,11 +59,11 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
         </p>
         <p className="mt-6 max-w-lg text-[1.05rem] leading-relaxed text-paper/70">{f.bio}</p>
         <p className="mt-10 text-sm text-muted">Leads</p>
-        <ol className="mt-3 max-w-lg border-t border-line">
+        <ol className="mt-3 max-w-lg">
           {f.leads.map((l) => (
             <li
               key={l}
-              className="flex items-baseline gap-4 border-b border-line py-3"
+              className="flex items-baseline gap-4 py-3"
             >
               <span className="text-paper/85">{l}</span>
             </li>

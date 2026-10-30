@@ -20,7 +20,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
     <div className="lg:sticky lg:h-svh lg:pt-[12vh]" style={{ top: `${i * 28}px` }}>
       <motion.article
         style={{ scale, transformOrigin: "top center" }}
-        className="group relative overflow-hidden rounded-[2rem] border border-line lg:h-[76vh]"
+        className="group relative overflow-hidden rounded-[2rem] lg:h-[76vh] bg-paper/[0.07]"
       >
         {/* palette glow behind the card */}
         <div
@@ -41,17 +41,10 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
                 {p.client} · {p.year}
               </p>
               <p className="mt-5 max-w-lg text-paper/70 sm:text-lg">{p.summary}</p>
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {p.categories.map((c) => (
-                  <li key={c} className="rounded-full border border-paper/15 bg-ink/30 px-3 py-1 text-[13px] text-paper/80 backdrop-blur">
-                    {c}
-                  </li>
-                ))}
-              </ul>
             </div>
 
             <div>
-              <dl className="grid grid-cols-3 gap-4 border-t border-paper/15 pt-6">
+              <dl className="grid grid-cols-3 gap-4 pt-6">
                 {p.metrics.map((m) => (
                   <div key={m.label} className="flex flex-col-reverse justify-end">
                     <dt className="mt-1 text-[13px] text-paper/60 sm:text-sm">{m.label}</dt>
@@ -70,7 +63,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
 
           {p.cover && (
             <div className="relative mx-auto aspect-[9/16] w-full max-w-[20rem] lg:h-full lg:w-auto lg:max-w-none">
-              <div className="absolute inset-0 overflow-hidden rounded-[1.6rem] border border-paper/15 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)] transition-transform duration-700 ease-[var(--ease-out)] group-hover:-rotate-2 group-hover:scale-[1.03]">
+              <div className="absolute inset-0 overflow-hidden rounded-[1.6rem] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)] transition-transform duration-700 ease-[var(--ease-out)] group-hover:-rotate-2 group-hover:scale-[1.03]">
                 <Image src={p.cover} alt={`${p.title} for ${p.client}`} fill sizes="(min-width: 1024px) 30vw, 80vw" className="object-cover" />
               </div>
             </div>
@@ -110,12 +103,12 @@ export function SelectedWork() {
           href="/#contact"
           onClick={anchor}
           data-cursor="Let's go"
-          className="group mt-16 flex flex-col items-start justify-between gap-6 border-y border-line py-10 sm:flex-row sm:items-center"
+          className="group mt-16 flex flex-col items-start justify-between gap-6 py-10 sm:flex-row sm:items-center"
         >
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">
             Your story <span className="serif font-normal text-brand">goes here next.</span>
           </span>
-          <span className="grid size-16 shrink-0 place-items-center rounded-full border border-line text-2xl transition duration-500 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-ink">
+          <span className="grid size-16 shrink-0 place-items-center rounded-full text-2xl transition duration-500 group-hover:rotate-45 group-hover:bg-brand group-hover:text-ink bg-paper/[0.07]">
             ↗
           </span>
         </Link>
