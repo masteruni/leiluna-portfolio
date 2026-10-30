@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ViewTransition } from "react";
 import { CountUp } from "@/components/CountUp";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Contact } from "@/components/Contact";
@@ -121,11 +122,15 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               </Reveal>
             </div>
 
-            <Reveal delay={0.15} className={isTall ? "mx-auto w-full max-w-sm" : ""}>
-              <div className="group">
-                <ProjectCover project={project} priority />
-              </div>
-            </Reveal>
+            {/* The cover arrives by morphing out of the card on the homepage (same view-transition name there),
+                so it isn't faded in like the text around it. */}
+            <div className={isTall ? "mx-auto w-full max-w-sm" : ""}>
+              <ViewTransition name={`cover-${project.slug}`} share="cover-morph" default="none">
+                <div className="group">
+                  <ProjectCover project={project} priority />
+                </div>
+              </ViewTransition>
+            </div>
           </div>
 
           <div className="mt-24 grid gap-16 lg:grid-cols-[1fr_280px]">

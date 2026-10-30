@@ -210,6 +210,20 @@ html.has-cursor textarea { cursor: text !important; }
 [data-theme="light"] :is(.night, .over-night) .mark-day { display: none; }
 [data-theme="light"] :is(.night, .over-night) .mark-night { display: revert-layer; }
 
+/* A case-study cover morphing between the homepage card and its page (see SelectedWork + work/[slug]):
+   unhurried enough to follow, with a soft blur mid-flight to hide the scaling. */
+::view-transition-group(.cover-morph) {
+  animation-duration: 650ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+::view-transition-image-pair(.cover-morph) { animation-name: cover-blur; }
+@keyframes cover-blur { 35% { filter: blur(3px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}
+
 /* Phones: the small spaced-out labels (mono eyebrows, tags, counts) never drop below 11-12px, so they stay
    readable on a small screen. Larger screens keep the original sizes. */
 @media (max-width: 639px) {

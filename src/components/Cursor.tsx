@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 // A soft ring that trails the pointer. Elements can set data-cursor="View" (any label) to morph it.
@@ -10,6 +11,16 @@ export function Cursor() {
   const [hover, setHover] = useState(false);
   const [away, setAway] = useState(false); // pointer has left the window
   const [overNight, setOverNight] = useState(false); // over a dark section, so light mode draws it in night colours
+  const pathname = usePathname();
+
+  // A new page: whatever the ring was labelled ("View" on a case-study card) no longer applies, even if the
+  // pointer hasn't moved since the click.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setLabel(null);
+    setHover(false);
+  }
 
   useEffect(() => {
     const mq = window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)");

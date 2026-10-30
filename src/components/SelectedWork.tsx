@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
-import { useRef } from "react";
+import { useRef, ViewTransition } from "react";
 import { projects, type Project } from "@/content/projects";
 import { useAnchor } from "@/lib/anchor";
 import { CountUp } from "./CountUp";
@@ -107,14 +107,18 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
           </div>
 
           {p.cover && (
-            <div className="relative mx-auto aspect-[9/16] w-full max-w-[20rem] perspective-[900px] lg:h-full lg:w-auto lg:max-w-none">
-              <motion.div
-                style={{ rotateX, rotateY, scale: lift }}
-                className="absolute inset-0 overflow-hidden rounded-[1.6rem] border border-paper/15 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)]"
-              >
-                <Image src={p.cover} alt={`${p.title} for ${p.client}`} fill sizes="(min-width: 1024px) 30vw, 80vw" className="object-cover" />
-              </motion.div>
-            </div>
+            // Shares its name with the case study's hero cover, so opening the case study morphs this cover
+            // into that one instead of cutting to a new page.
+            <ViewTransition name={`cover-${p.slug}`} share="cover-morph" default="none">
+              <div className="relative mx-auto aspect-[9/16] w-full max-w-[20rem] perspective-[900px] lg:h-full lg:w-auto lg:max-w-none">
+                <motion.div
+                  style={{ rotateX, rotateY, scale: lift }}
+                  className="absolute inset-0 overflow-hidden rounded-[1.6rem] border border-paper/15 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)]"
+                >
+                  <Image src={p.cover} alt={`${p.title} for ${p.client}`} fill sizes="(min-width: 1024px) 30vw, 80vw" className="object-cover" />
+                </motion.div>
+              </div>
+            </ViewTransition>
           )}
         </Link>
       </motion.article>
