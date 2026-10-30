@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
 import { openBriefWith } from "@/lib/brief";
@@ -243,21 +243,76 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
   );
 }
 
+// The image a tile shows (a video's poster, a graphic itself), used to fly the tile into the viewer.
+const tileImage = (p: Piece) => (p.kind === "video" ? p.poster : p.src);
+
 function Lightbox({
   list,
   index,
+  from,
   onClose,
   onStep,
   onContact,
 }: {
   list: Piece[];
   index: number;
+  from: DOMRect | null; // where the tile that opened the viewer sits on screen
   onClose: () => void;
   onStep: (d: number) => void;
   onContact: () => void;
 }) {
   const p = list[index];
+  const reduce = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const frame = useRef<HTMLDivElement>(null);
+  // The piece the viewer opened on flies out of its tile; pieces you step to afterwards just crossfade in.
+  const [openedOn] = useState(p.id);
+  const flying = !!from && !reduce && p.id === openedOn;
+  const [landed, setLanded] = useState(!flying);
+
+  // Open out of the tile: a copy of the tile's image travels from the tile to the viewer's frame (FLIP), then
+  // hands over to the real player. It's a fixed overlay above the dialog, so the dialog's scrolling and fade
+  // can't clip or dim it on the way.
+  useLayoutEffect(() => {
+    const el = frame.current;
+    if (!flying || !from || !el) return;
+    const to = el.getBoundingClientRect();
+    const src = tileImage(p);
+    const ghost = document.createElement("div");
+    ghost.setAttribute("aria-hidden", "true");
+    Object.assign(ghost.style, {
+      position: "fixed",
+      left: `${to.left}px`,
+      top: `${to.top}px`,
+      width: `${to.width}px`,
+      height: `${to.height}px`,
+      zIndex: "86",
+      borderRadius: "1rem",
+      pointerEvents: "none",
+      transformOrigin: "top left",
+      background: src ? `center / cover no-repeat url("${src}")` : "var(--ink-2)",
+      backgroundPosition: p.format === "long" ? "top" : "center",
+    });
+    document.body.appendChild(ghost);
+    const flight = ghost.animate(
+      [
+        { transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})` },
+        { transform: "none" },
+      ],
+      { duration: 600, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+    );
+    flight.onfinish = () => {
+      setLanded(true);
+      // one more frame, so the real frame has painted before the copy goes
+      requestAnimationFrame(() => ghost.remove());
+    };
+    return () => {
+      flight.cancel();
+      ghost.remove();
+    };
+    // Runs once, for the piece the viewer opened on.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const dialog = useRef<HTMLDivElement>(null);
   useFocusTrap(dialog, true);
   // Carousels flip through their slides first, then on to the next piece.
@@ -319,12 +374,15 @@ function Lightbox({
       <motion.div
         key={p.id}
         className="flex max-h-full w-full max-w-[1320px] flex-col items-center gap-6 overflow-y-auto lg:flex-row lg:items-end lg:justify-center lg:gap-12"
-        initial={{ opacity: 0, y: 30, scale: 0.97 }}
+        // When the piece flies in from its tile, the frame mustn't also slide: it's measured as it mounts.
+        initial={flying ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
         <motion.div
+          ref={frame}
+          style={{ opacity: landed || p.id !== openedOn ? 1 : 0 }}
           className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media} ${p.kind === "graphic" ? "touch-pan-y" : ""}`}
           // A horizontal swipe moves through slides, then on to the next piece. Videos are left alone so the
           // native scrub bar keeps working.
@@ -445,6 +503,7 @@ export function Library() {
   const [expandedFor, setExpandedFor] = useState<string | null>(null);
   const grid = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<number | null>(null);
+  const [openedFrom, setOpenedFrom] = useState<DOMRect | null>(null); // the tile it opened out of
   // The tile that opened the viewer, so focus goes back there when it closes.
   const opener = useRef<HTMLButtonElement | null>(null);
   const lenis = useLenis();
@@ -640,6 +699,7 @@ export function Library() {
                 spot={masonry.spots[i]}
                 onOpen={(el) => {
                   opener.current = el;
+                  setOpenedFrom(el.getBoundingClientRect());
                   track("Library piece opened", { piece: p.id, kind: p.kind });
                   setOpen(i);
                 }}
@@ -676,6 +736,7 @@ export function Library() {
           <Lightbox
             list={list}
             index={open}
+            from={openedFrom}
             onClose={close}
             onStep={(d) => setOpen((o) => (o === null ? o : (o + d + list.length) % list.length))}
             onContact={() => {
