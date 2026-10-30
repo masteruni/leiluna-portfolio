@@ -6,6 +6,7 @@ import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
+import { openBriefWith } from "@/lib/brief";
 import { spark } from "@/lib/spark";
 import { track } from "@/lib/track";
 import { Eyebrow } from "./Eyebrow";
@@ -477,6 +478,19 @@ export function Library() {
     const columns = units.flatMap((u, c) => (count[c] ? [`${u} * ${colW} + ${(count[c] - 1) * GAP}px`] : []));
     return { spots, height: columns.length ? `max(${columns.join(", ")})` : "0px" };
   }, [shown, cols]);
+  // Open the project brief with a note about what the visitor wants, then glide to it (the viewer, if open,
+  // closes first). Same flow as "I want this" in Pick a format.
+  const askFor = (message: string) => {
+    setOpen(null);
+    openBriefWith({ need: "Content Creation & Production", message });
+    requestAnimationFrame(() => {
+      const t = document.querySelector<HTMLElement>("#project-brief") ?? document.querySelector<HTMLElement>("#contact");
+      if (!t) return;
+      if (lenis) lenis.scrollTo(t, { offset: -140, duration: 1.6, force: true });
+      else t.scrollIntoView({ behavior: "smooth" });
+    });
+  };
+
   // Only offer industries that have pieces in the current format.
   const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).flatMap(industriesOf)), [kind]);
 
@@ -602,7 +616,10 @@ export function Library() {
               </button>
               <button
                 type="button"
-                onClick={() => lenis?.scrollTo("#contact", { duration: 1.6 })}
+                onClick={() => {
+                  track("Style requested", { piece: `${kind}/${industry}` });
+                  askFor(`We'd like a ${kind === "graphic" ? "graphic" : kind === "video" ? "video" : "piece"} for ${industry}.`);
+                }}
                 className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
               >
                 Ask us for one →
@@ -662,9 +679,9 @@ export function Library() {
             onClose={close}
             onStep={(d) => setOpen((o) => (o === null ? o : (o + d + list.length) % list.length))}
             onContact={() => {
-              setOpen(null);
-              lenis?.start();
-              lenis?.scrollTo("#contact", { duration: 1.6 });
+              const p = list[open];
+              track("Style requested", { piece: p.id });
+              askFor(`We'd like something in the style of your "${p.style}" piece ("${p.title}").`);
             }}
           />
         )}

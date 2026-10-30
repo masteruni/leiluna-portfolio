@@ -12,6 +12,7 @@ type Events = {
   "Showreel opened": Record<string, never>;
   "Library piece opened": { piece: string; kind: string };
   "Library expanded": { pieces: number };
+  "Style requested": { piece: string };
   "Case study shared": { how: "share sheet" | "link copied" };
   "Theme changed": { to: string };
 };
