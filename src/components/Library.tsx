@@ -56,7 +56,19 @@ const kinds: { id: "all" | Kind; label: string }[] = [
 ];
 
 // Placeholder artwork until a real file is added, or the real image/video.
-function PieceArt({ p, playing, large, slide = 0 }: { p: Piece; playing: boolean; large?: boolean; slide?: number }) {
+function PieceArt({
+  p,
+  playing,
+  large,
+  slide = 0,
+  near = true,
+}: {
+  p: Piece;
+  playing: boolean;
+  large?: boolean;
+  slide?: number;
+  near?: boolean; // tiles hold off loading their video until they are close to the screen
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const v = ref.current;
@@ -66,6 +78,7 @@ function PieceArt({ p, playing, large, slide = 0 }: { p: Piece; playing: boolean
   }, [playing]);
 
   if (p.src && p.kind === "video") {
+    if (!near) return null;
     return (
       <video controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback
         ref={ref}
@@ -151,14 +164,21 @@ function PieceArt({ p, playing, large, slide = 0 }: { p: Piece; playing: boolean
 function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonElement) => void; index: number }) {
   const ref = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
+  const [near, setNear] = useState(false);
   const reduce = useReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.45 });
+    // Start loading a tile's video about a screen before it scrolls into view, and keep it once loaded.
+    const pre = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "100% 0px" });
     io.observe(el);
-    return () => io.disconnect();
+    pre.observe(el);
+    return () => {
+      io.disconnect();
+      pre.disconnect();
+    };
   }, []);
 
   return (
@@ -178,7 +198,7 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonEleme
         className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
       >
         <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
-          <PieceArt p={p} playing={visible && !reduce} />
+          <PieceArt p={p} playing={visible && !reduce} near={near} />
         </div>
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
           <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>

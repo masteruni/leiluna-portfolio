@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLenis } from "lenis/react";
-import { site } from "@/content/site";
+import { profileLinks, site } from "@/content/site";
 import { Magnetic } from "./Magnetic";
 
 const links = [
@@ -148,7 +148,7 @@ export function Nav() {
                 </a>
               </div>
               <div className="flex gap-6">
-                {site.socials.map((s) => (
+                {profileLinks.map((s) => (
                   <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="hover:text-paper">
                     {s.label}
                   </a>

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useId, useMemo, useRef, useState } from "react";
-import { services, site } from "@/content/site";
+import { brief as briefOptions, services, site } from "@/content/site";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 
@@ -10,12 +10,39 @@ const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
 const field =
   "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand";
 
+// Single-choice chips; tapping the selected one again clears it.
+function Choice({ legend, options, value, onChange }: { legend: string; options: string[]; value: string; onChange: (v: string) => void }) {
+  return (
+    <fieldset>
+      <legend className={label}>{legend}</legend>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {options.map((o) => (
+          <button
+            key={o}
+            type="button"
+            aria-pressed={value === o}
+            onClick={() => onChange(value === o ? "" : o)}
+            className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
+              value === o ? "border-paper bg-paper text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
+            }`}
+          >
+            {o}
+          </button>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 // A short project brief that turns into a ready-to-send email (no backend needed).
 function Brief({ onDone }: { onDone: () => void }) {
   const id = useId();
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
+  const [link, setLink] = useState("");
   const [needs, setNeeds] = useState<string[]>([]);
+  const [timeline, setTimeline] = useState("");
+  const [budget, setBudget] = useState("");
   const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -25,7 +52,11 @@ function Brief({ onDone }: { onDone: () => void }) {
         `Hi Leiluna,`,
         ``,
         `I'm ${name || "…"}${brand ? ` from ${brand}` : ""}.`,
-        needs.length ? `We're looking for: ${needs.join(", ")}.` : ``,
+        link ? `You can find us at ${link}.` : ``,
+        ``,
+        needs.length ? `What we need: ${needs.join(", ")}` : ``,
+        timeline ? `Timeline: ${timeline}` : ``,
+        budget ? `Budget: ${budget}` : ``,
         ``,
         message,
         ``,
@@ -33,7 +64,7 @@ function Brief({ onDone }: { onDone: () => void }) {
       ]
         .filter((l, i, all) => !(l === "" && all[i - 1] === ""))
         .join("\n"),
-    [name, brand, needs, message],
+    [name, brand, link, needs, timeline, budget, message],
   );
   const mailto = `mailto:${site.email}?subject=${encodeURIComponent(`New project${brand ? `: ${brand}` : ""}`)}&body=${encodeURIComponent(body)}`;
 
@@ -75,6 +106,19 @@ function Brief({ onDone }: { onDone: () => void }) {
         </div>
       </div>
 
+      <div className="mt-8">
+        <label htmlFor={`${id}-link`} className={label}>
+          Where can we see your brand? <span className="normal-case tracking-normal text-paper/30">(optional)</span>
+        </label>
+        <input
+          id={`${id}-link`}
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          className={field}
+          placeholder="@yourbrand or yourbrand.com"
+        />
+      </div>
+
       <fieldset className="mt-8">
         <legend className={label}>What do you need?</legend>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -96,6 +140,11 @@ function Brief({ onDone }: { onDone: () => void }) {
           })}
         </div>
       </fieldset>
+
+      <div className="mt-8 grid gap-8 sm:grid-cols-2">
+        <Choice legend="Timeline" options={briefOptions.timelines} value={timeline} onChange={setTimeline} />
+        <Choice legend="Budget" options={briefOptions.budgets} value={budget} onChange={setBudget} />
+      </div>
 
       <div className="mt-8">
         <label htmlFor={`${id}-msg`} className={label}>
@@ -170,7 +219,7 @@ export function Contact() {
 
       <div className="relative mx-auto w-full max-w-7xl text-center">
         <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(09)</span> Contact
+          <span className="text-brand">(08)</span> Contact
         </p>
         <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal

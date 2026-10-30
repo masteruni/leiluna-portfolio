@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { useLenis } from "lenis/react";
-import { site } from "@/content/site";
+import { profileLinks, site } from "@/content/site";
 
 const explore = [
   { href: "/#work", label: "Work" },
@@ -42,18 +42,20 @@ export function Footer() {
             ))}
           </ul>
         </div>
-        <div>
-          <p className={heading}>Follow</p>
-          <ul className="space-y-2">
-            {site.socials.map((s) => (
-              <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-brand">
-                  {s.label} ↗
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {profileLinks.length > 0 && (
+          <div>
+            <p className={heading}>Follow</p>
+            <ul className="space-y-2">
+              {profileLinks.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-brand">
+                    {s.label} ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="space-y-2 md:text-right">
           <p className={heading}>Say hello</p>
           <a href={`mailto:${site.email}`} className="block break-all text-paper/70 hover:text-brand">

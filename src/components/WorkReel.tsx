@@ -78,7 +78,7 @@ export function WorkReel() {
                 <span className="serif font-normal text-brand">orbit.</span>
               </h2>
               <p className="max-w-xs text-paper/60">
-                A few campaigns, series and systems. Keep scrolling to travel through them →
+                Real pages we grow and manage, with the numbers to show for it. Keep scrolling →
               </p>
             </div>
 

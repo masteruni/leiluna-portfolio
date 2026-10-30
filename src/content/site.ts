@@ -14,7 +14,8 @@ export const site = {
     "Leiluna Studio is a social media and content studio. Strategy, content creation, and AI-powered workflows that keep your brand in everyone's orbit.",
   pillars: ["Social Media Management", "Content Creation", "AI Workflows"],
   socials: [
-    { label: "Instagram", href: "https://instagram.com/" }, // [PLACEHOLDER] links
+    // Add the studio's profile URLs (e.g. https://instagram.com/leilunastudio); bare domains stay hidden.
+    { label: "Instagram", href: "https://instagram.com/" },
     { label: "TikTok", href: "https://tiktok.com/" },
     { label: "LinkedIn", href: "https://linkedin.com/" },
     { label: "Facebook", href: "https://facebook.com/" },
@@ -112,11 +113,17 @@ export const services = [
   },
 ];
 
-// [PLACEHOLDER] numbers — replace with real results.
+// Choices in the "Start a project" brief. Budget ranges are a starting point: change them to match your pricing.
+export const brief = {
+  timelines: ["As soon as possible", "Within a month", "1–3 months", "Just exploring"],
+  budgets: ["Under $500 / mo", "$500–1,500 / mo", "$1,500–3,000 / mo", "$3,000+ / mo", "One-off project", "Not sure yet"],
+};
+
+// Verified from client screenshots (see the two case studies).
 export const stats = [
-  { value: 48, suffix: "M", label: "organic views delivered" },
-  { value: 340, suffix: "%", label: "average engagement lift" },
-  { value: 60, suffix: "+", label: "brands in our orbit" },
+  { value: 29, suffix: "M+", label: "views on our clients' six pinned reels" },
+  { value: 680, suffix: "×", label: "top reel reach vs. the page's followers" },
+  { value: 306, suffix: "K", label: "followers on a page we grow and manage" },
 ];
 
 // The five phases of a project, drawn as phases of the moon.
@@ -159,21 +166,11 @@ export const founders = [
   },
 ];
 
-// [PLACEHOLDER] quotes.
-export const testimonials = [
-  {
-    quote: "Our reels went from 300 views to 300K. They just get what makes people stop scrolling.",
-    name: "Maya R.",
-    title: "Founder, Bakery Brand",
-  },
-  {
-    quote: "Strategy, editing, design and automations from one team, and it all feels like one brand.",
-    name: "Jordan K.",
-    title: "Marketing Lead, Tech Startup",
-  },
-  {
-    quote: "They automated our onboarding and reporting. We got back ten hours a week and the content got better.",
-    name: "Sofia L.",
-    title: "Content Creator",
-  },
-];
+// Only socials that point at a real profile (not a bare domain) are shown or shared with search engines.
+export const profileLinks = site.socials.filter((s) => {
+  try {
+    return new URL(s.href).pathname.length > 1;
+  } catch {
+    return false;
+  }
+});

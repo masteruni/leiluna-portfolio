@@ -9,7 +9,6 @@ import { Numbers } from "@/components/Numbers";
 import { Orbits } from "@/components/Orbits";
 import { Phases } from "@/components/Phases";
 import { Pillars } from "@/components/Pillars";
-import { Voices } from "@/components/Voices";
 import { WorkReel } from "@/components/WorkReel";
 
 export default function Home() {
@@ -26,7 +25,6 @@ export default function Home() {
         <Numbers />
         <Phases />
         <Founders />
-        <Voices />
         <Contact />
       </main>
       <Footer />

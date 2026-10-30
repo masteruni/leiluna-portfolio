@@ -44,7 +44,7 @@ export type Piece = {
   tools?: string[];
 };
 
-// Real pieces first; the rest are [PLACEHOLDER] samples showing the range. Swap in real files as you add them.
+// Real pieces only. A piece without `src` shows a designed placeholder card, so only add one once its file is ready.
 export const pieces: Piece[] = [
   {
     id: "client-interviews",
@@ -309,15 +309,6 @@ export const pieces: Piece[] = [
     title: "Escape the matrix",
     src: "/library/thumbnail-the-matrix.webp",
   },
-  { id: "cafe-ugc", kind: "video", format: "reel", style: "UGC talking head", industry: "Food & Beverage", title: "Café opening-day story", duration: "0:28", tools: ["CapCut", "Premiere Pro"] },
-  { id: "skin-carousel", kind: "graphic", format: "portrait", style: "Educational carousel", industry: "Beauty & Wellness", title: "5 skincare myths", tools: ["Figma", "Canva"] },
-  { id: "condo-tour", kind: "video", format: "reel", style: "Cinematic property tour", industry: "Real Estate", title: "Sunset condo walkthrough", duration: "0:45", tools: ["DaVinci Resolve"] },
-  { id: "saas-explainer", kind: "video", format: "wide", style: "Motion graphics explainer", industry: "Tech & SaaS", title: "Feature launch in 60 seconds", duration: "1:00", tools: ["After Effects", "Figma"] },
-  { id: "spa-ai", kind: "video", format: "reel", style: "AI-generated visuals", industry: "Beauty & Wellness", title: "Dreamscape spa teaser", duration: "0:12", tools: ["AI video", "Premiere Pro"] },
-  { id: "hotel-story", kind: "graphic", format: "reel", style: "Story template", industry: "Hospitality", title: "Staycation story pack", tools: ["Canva"] },
-  { id: "realty-quote", kind: "graphic", format: "square", style: "Quote & stat card", industry: "Real Estate", title: "Market update cards", tools: ["Figma"] },
-  { id: "podcast-clip", kind: "video", format: "reel", style: "Podcast clip with captions", industry: "Education", title: "Founder podcast highlight", duration: "0:38", tools: ["Premiere Pro", "AI captions"] },
-  { id: "resto-broll", kind: "video", format: "wide", style: "Cinematic B-roll", industry: "Hospitality", title: "Chef's table B-roll", duration: "0:30", tools: ["DaVinci Resolve"] },
 ];
 
 export const industriesOf = (p: Piece): Industry[] => (Array.isArray(p.industry) ? p.industry : [p.industry]);

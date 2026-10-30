@@ -6,7 +6,7 @@ import { Loader } from "@/components/Loader";
 import { Protect } from "@/components/Protect";
 import { ScrollOrbit } from "@/components/ScrollOrbit";
 import { SmoothScroll } from "@/components/SmoothScroll";
-import { founders, site } from "@/content/site";
+import { founders, profileLinks, site } from "@/content/site";
 import "./globals.css";
 
 const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], display: "swap" });
@@ -37,15 +37,6 @@ export const viewport: Viewport = {
   themeColor: "#050506",
   colorScheme: "dark",
 };
-
-// Social profiles count for search engines only once they point at a real profile, not a bare domain.
-const profileLinks = site.socials.filter((s) => {
-  try {
-    return new URL(s.href).pathname.length > 1;
-  } catch {
-    return false;
-  }
-});
 
 // Structured data: tells Google who the studio is, what it does and who runs it.
 const organization = {
