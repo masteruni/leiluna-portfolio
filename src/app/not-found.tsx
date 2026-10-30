@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { Nav } from "@/components/Nav";
+import { Starfield } from "@/components/Starfield";
 
 export default function NotFound() {
   return (
     <>
       <Nav />
       <main id="main" className="relative grid min-h-dvh place-items-center overflow-hidden px-5 text-center">
+        <Starfield />
         <div
           aria-hidden
-          className="absolute left-1/2 top-1/2 size-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          className="absolute left-1/2 top-1/2 size-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink"
           style={{ boxShadow: "inset 2.5vmin -1.5vmin 0 0 var(--brand), 0 0 120px -30px var(--brand)" }}
         />
         <div className="relative">
