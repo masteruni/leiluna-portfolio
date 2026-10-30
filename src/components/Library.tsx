@@ -611,7 +611,7 @@ export function Library() {
                   }`}
                 >
                   {k.label}
-                  <sup className="ml-1 font-mono text-[9px] opacity-60">{count(k.id)}</sup>
+                  <sup className="ml-1 font-mono text-[10px] opacity-90">{count(k.id)}</sup>
                 </button>
               ))}
             </div>
@@ -637,7 +637,7 @@ export function Library() {
                     }`}
                   >
                     {ind}
-                    {ind !== "All" && !disabled && <sup className="ml-1 font-mono text-[9px] opacity-60">{perIndustry.get(ind)}</sup>}
+                    {ind !== "All" && !disabled && <sup className="ml-1 font-mono text-[10px] opacity-90">{perIndustry.get(ind)}</sup>}
                   </button>
                 );
               })}
