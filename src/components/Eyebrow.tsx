@@ -17,7 +17,7 @@ export function Eyebrow({
   const label = children ?? sections.find((s) => s.id === id)?.label;
   return (
     <Tag className={`font-mono text-[11px] font-normal uppercase tracking-[0.3em] text-muted ${className}`}>
-      <span className="text-brand">{sectionNumber(id)}</span> {label}
+      <span className="text-accent">{sectionNumber(id)}</span> {label}
     </Tag>
   );
 }

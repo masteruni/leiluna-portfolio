@@ -202,17 +202,31 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
           type="button"
           onClick={(e) => onOpen(e.currentTarget)}
           data-cursor={p.kind === "video" ? "Play" : "View"}
-          aria-label={`${p.kind === "video" ? "Play" : "View"} ${p.style}, ${industriesOf(p).join(", ")}`}
           className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
         >
+          {/* The tile's own words name it ("Play Client interview edit, Multi-industry, 1:05"), so what a screen
+              reader or voice control hears matches what's on screen. */}
+          <span className="sr-only">{p.kind === "video" ? "Play" : "View"} </span>
+          {p.src ? (
+            <span className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-ink/90 to-transparent p-4 pt-10 font-display text-lg font-medium">
+              {p.style}
+            </span>
+          ) : (
+            <span className="sr-only">{p.style}</span>
+          )}
+          <span className="sr-only">, </span>
           <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
             <PieceArt p={p} playing={visible && !reduce} near={near} />
           </div>
           <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
             <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
-            <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
+            <span className="sr-only">, </span>
+            <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-accent backdrop-blur sm:px-2.5">
               {p.kind === "video" ? (
-                `▶ ${p.duration ?? "Reel"}`
+                <>
+                  <span aria-hidden>▶ </span>
+                  {p.duration ?? "Reel"}
+                </>
               ) : (
                 <>
                   <span className="sm:hidden" aria-hidden>{p.slides ? `◼ ${p.slides.length}` : "◼"}</span>
@@ -221,11 +235,6 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
               )}
             </span>
           </div>
-          {p.src && (
-            <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-4 pt-10 font-display text-lg font-medium">
-              {p.style}
-            </span>
-          )}
         </button>
       </motion.div>
     </div>
@@ -362,7 +371,7 @@ function Lightbox({
           )}
         </motion.div>
         <div className="w-full max-w-sm shrink-0 lg:w-80">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand">
+          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent">
             {p.kind === "video"
               ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}`
               : slides
@@ -488,7 +497,7 @@ export function Library() {
             <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
               Every format.
               <br />
-              <span className="serif font-normal text-brand">Every industry.</span>
+              <span className="serif font-normal text-accent">Every industry.</span>
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">

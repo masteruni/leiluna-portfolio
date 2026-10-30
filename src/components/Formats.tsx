@@ -144,7 +144,7 @@ export function Formats() {
           <div>
             <Eyebrow id="formats" />
             <h2 id="formats-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Pick a format.", <span key="b" className="serif font-normal text-brand">See it work.</span>]} />
+              <LineReveal inView lines={["Pick a format.", <span key="b" className="serif font-normal text-accent">See it work.</span>]} />
             </h2>
           </div>
           <div className="max-w-sm">
@@ -185,12 +185,12 @@ export function Formats() {
                     on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-on-brand" : "max-lg:border-line max-lg:text-paper/75"
                   }`}
                 >
-                  <span className={`hidden font-mono text-xs lg:block ${on ? "text-brand" : "text-muted"}`}>0{n + 1}</span>
+                  <span className={`hidden font-mono text-xs lg:block ${on ? "text-accent" : "text-muted"}`}>0{n + 1}</span>
                   <span className="lg:flex-1">
                     <span className={`block whitespace-nowrap font-display font-semibold tracking-[-0.02em] lg:whitespace-normal lg:text-2xl ${on ? "lg:text-paper" : "lg:text-paper/55 lg:group-hover:text-paper/85"}`}>
                       {x.name}
                     </span>
-                    <span className={`mt-1 hidden text-sm lg:block ${on ? "text-paper/65" : "text-paper/55"}`}>{x.bestFor}</span>
+                    <span className={`mt-1 hidden text-sm lg:block ${on ? "text-paper/75" : "text-paper/65"}`}>{x.bestFor}</span>
                   </span>
                   {on && (
                     <motion.span
@@ -200,7 +200,7 @@ export function Formats() {
                       transition={{ type: "spring", stiffness: 400, damping: 34 }}
                     />
                   )}
-                  <span aria-hidden className={`hidden text-xl transition-transform duration-500 lg:block ${on ? "translate-x-0 text-brand" : "-translate-x-2 text-paper/20"}`}>
+                  <span aria-hidden className={`hidden text-xl transition-transform duration-500 lg:block ${on ? "translate-x-0 text-accent" : "-translate-x-2 text-paper/20"}`}>
                     →
                   </span>
                 </button>
@@ -245,7 +245,7 @@ export function Formats() {
             <p className={`mx-auto mt-5 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-muted ${wide ? "" : "max-w-[22rem]"}`}>
               <span>← Swipe for more →</span>
               <span>
-                <span className="text-brand">0{i + 1}</span> / 0{items.length}
+                <span className="text-accent">0{i + 1}</span> / 0{items.length}
               </span>
             </p>
 
@@ -258,7 +258,7 @@ export function Formats() {
                 transition={{ duration: 0.35 }}
                 className={`mx-auto mt-8 ${wide ? "" : "max-w-[22rem] lg:max-w-none"}`}
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-brand">Best for · {f.bestFor}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-accent">Best for · {f.bestFor}</p>
                 <p className="mt-3 text-lg leading-relaxed text-paper/80">{f.pitch}</p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <button

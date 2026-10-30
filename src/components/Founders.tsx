@@ -92,8 +92,8 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
         <h3 className="font-display text-5xl font-bold tracking-[-0.04em]">{f.name}</h3>
         <p className="serif mt-1 text-2xl text-muted">{f.fullName}</p>
         <p className="mt-4 font-mono text-[11px] uppercase leading-relaxed tracking-[0.25em]">
-          <span className="text-paper/50">{role[0]}</span>
-          {role[1] && <span className="block text-brand">{role[1]}</span>}
+          <span className="text-paper/65">{role[0]}</span>
+          {role[1] && <span className="block text-accent">{role[1]}</span>}
         </p>
         <p className="mt-6 max-w-lg text-[1.05rem] leading-relaxed text-paper/70">{f.bio}</p>
         <p className="mt-10 font-mono text-[10px] uppercase tracking-[0.3em] text-muted">Leads</p>
@@ -103,7 +103,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
               key={l}
               className="flex items-baseline gap-4 border-b border-line py-3"
             >
-              <span className="font-mono text-[10px] text-brand/80">{String(n + 1).padStart(2, "0")}</span>
+              <span className="font-mono text-[10px] text-accent">{String(n + 1).padStart(2, "0")}</span>
               <span className="text-paper/85">{l}</span>
             </li>
           ))}
@@ -119,7 +119,7 @@ export function Founders() {
       <div className="mx-auto max-w-7xl">
         <Eyebrow id="founders" />
         <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-          <LineReveal inView lines={["Two crescents,", <span key="b" className="serif font-normal text-brand">one orbit.</span>]} />
+          <LineReveal inView lines={["Two crescents,", <span key="b" className="serif font-normal text-accent">one orbit.</span>]} />
         </h2>
         <p className="mt-6 max-w-xl text-lg text-paper/60">
           Like the two halves of our mark: one shapes the strategy and looks after every client, the other powers the

@@ -13,7 +13,7 @@ function Word({ word, i, total, progress }: { word: string; i: number; total: nu
   const isAccent = accent.has(word);
   return (
     <>
-      <motion.span style={{ opacity }} className={`inline-block ${isAccent ? "serif text-brand" : ""}`}>
+      <motion.span style={{ opacity }} className={`inline-block ${isAccent ? "serif text-accent" : ""}`}>
         {word}
       </motion.span>
       {/* a real space between words, so screen readers and search engines read a sentence, not one long word */}

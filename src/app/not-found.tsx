@@ -14,11 +14,11 @@ export default function NotFound() {
           style={{ boxShadow: "inset 2.5vmin -1.5vmin 0 0 var(--brand), 0 0 120px -30px var(--brand)" }}
         />
         <div className="relative">
-          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-brand">404 · Lost in space</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent">404 · Lost in space</p>
           <h1 className="mt-6 font-display text-[clamp(3rem,11vw,9rem)] font-bold leading-[0.85] tracking-[-0.05em]">
             This page
             <br />
-            <span className="serif font-normal text-brand">left orbit.</span>
+            <span className="serif font-normal text-accent">left orbit.</span>
           </h1>
           <Link
             href="/"

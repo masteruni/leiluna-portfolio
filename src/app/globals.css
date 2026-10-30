@@ -19,6 +19,7 @@
   --paper: #f6f2ef; /* moonlight white */
   --muted: #8e8893; /* secondary text */
   --line: rgb(246 242 239 / 0.1);
+  --accent: #ea6a8e; /* pink for text: the brand pink on dark */
   color-scheme: dark;
 }
 
@@ -28,8 +29,9 @@
   --ink-2: #ece6e2;
   --ink-3: #ddd5d0;
   --paper: #141217;
-  --muted: #6c6570;
+  --muted: #605a64;
   --line: rgb(20 18 23 / 0.12);
+  --accent: #b0365f; /* a deeper pink, so pink text stays readable on the light page (5.3:1) */
   color-scheme: light;
 }
 
@@ -60,6 +62,7 @@
   --color-brand-2: var(--brand-2);
   --color-brand-3: var(--brand-3);
   --color-on-brand: var(--on-brand);
+  --color-accent: var(--accent);
 
   --font-display: var(--font-outfit);
   --font-sans: var(--font-outfit);
@@ -108,7 +111,7 @@ body {
 
 /* Keyboard focus is visible on the dark background (the custom cursor hides the pointer, not the focus ring) */
 :focus-visible {
-  outline: 2px solid var(--brand);
+  outline: 2px solid var(--accent);
   outline-offset: 4px;
   border-radius: 4px;
 }

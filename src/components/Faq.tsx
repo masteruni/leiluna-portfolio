@@ -17,7 +17,7 @@ export function Faq() {
         <div className="lg:sticky lg:top-32 lg:self-start">
           <Eyebrow id="faq" />
           <h2 id={`${id}-title`} className="mt-6 font-display text-[clamp(3rem,6vw,6rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-            <LineReveal inView lines={["Before you", <span key="a" className="serif font-normal text-brand">ask.</span>]} />
+            <LineReveal inView lines={["Before you", <span key="a" className="serif font-normal text-accent">ask.</span>]} />
           </h2>
           <p className="mt-6 max-w-sm text-lg text-paper/60">Still wondering about something? Ask it in your brief and we&apos;ll answer within one business day.</p>
         </div>
@@ -51,7 +51,7 @@ export function Faq() {
                     onClick={() => setOpen(isOpen ? null : i)}
                     className="group flex w-full items-center gap-6 py-7 text-left"
                   >
-                    <span className={`font-mono text-xs transition-colors ${isOpen ? "text-brand" : "text-brand/60"}`}>0{i + 1}</span>
+                    <span className={`font-mono text-xs transition-colors ${isOpen ? "text-accent" : "text-muted"}`}>0{i + 1}</span>
                     <span className={`flex-1 font-display text-xl font-medium tracking-[-0.02em] transition-colors sm:text-2xl ${isOpen ? "text-paper" : "text-paper/80 group-hover:text-paper"}`}>
                       {f.q}
                     </span>

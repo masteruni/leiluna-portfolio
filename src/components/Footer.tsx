@@ -65,7 +65,7 @@ export function Footer() {
           <ul className="space-y-2">
             {explore.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} onClick={anchor} className="text-paper/70 transition-colors hover:text-brand">
+                <Link href={l.href} onClick={anchor} className="text-paper/70 transition-colors hover:text-accent">
                   {l.label}
                 </Link>
               </li>
@@ -78,7 +78,7 @@ export function Footer() {
             <ul className="space-y-2">
               {profileLinks.map((s) => (
                 <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-brand">
+                  <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-accent">
                     {s.label} ↗
                   </a>
                 </li>
@@ -88,13 +88,13 @@ export function Footer() {
         )}
         <div className="space-y-2 md:text-right">
           <p className={heading}>Say hello</p>
-          <a href={`mailto:${site.email}`} className="block break-all text-paper/70 hover:text-brand">
+          <a href={`mailto:${site.email}`} className="block break-all text-paper/70 hover:text-accent">
             {site.email}
           </a>
           <button
             type="button"
             onClick={() => (lenis ? lenis.scrollTo(0, { duration: 2 }) : window.scrollTo({ top: 0 }))}
-            className="text-paper/70 hover:text-brand"
+            className="text-paper/70 hover:text-accent"
           >
             Back to orbit ↑
           </button>

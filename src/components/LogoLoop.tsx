@@ -48,7 +48,7 @@ function Sequence({ hidden, ref }: { hidden?: boolean; ref?: React.Ref<HTMLUList
               <span className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">{it.name}</span>
             </span>
           ) : (
-            <span className="font-display text-2xl tracking-[-0.03em] text-paper/35 sm:text-3xl">{it.name}</span>
+            <span className="font-display text-2xl tracking-[-0.03em] text-paper/50 sm:text-3xl">{it.name}</span>
           )}
           <span aria-hidden className="size-1.5 rounded-full bg-brand/70" />
         </li>

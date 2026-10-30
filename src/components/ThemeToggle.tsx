@@ -13,7 +13,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       type="button"
       onClick={() => setTheme(next)}
       aria-label={theme ? `Switch to ${next} mode` : "Switch theme"}
-      className={`grid size-10 place-items-center rounded-full border border-line bg-ink/50 text-paper backdrop-blur-md transition-colors duration-300 hover:border-brand hover:text-brand ${className}`}
+      className={`grid size-10 place-items-center rounded-full border border-line bg-ink/50 text-paper backdrop-blur-md transition-colors duration-300 hover:border-brand hover:text-accent ${className}`}
     >
       <Sun aria-hidden className="hidden size-4 light:block" />
       <Moon aria-hidden className="size-4 light:hidden" />

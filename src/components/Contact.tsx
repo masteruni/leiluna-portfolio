@@ -360,7 +360,7 @@ export function Contact() {
         <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal
             inView
-            lines={["Let's build", <span key="b">your <span className="serif font-normal text-brand">brand.</span></span>]}
+            lines={["Let's build", <span key="b">your <span className="serif font-normal text-accent">brand.</span></span>]}
           />
         </h2>
         <p className="mx-auto mt-8 max-w-md text-lg text-paper/60">
@@ -370,7 +370,7 @@ export function Contact() {
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
           <MoonButton open={brief} onClick={() => setBrief((b) => !b)} />
           <div className="flex flex-col items-center gap-2 sm:items-start">
-            <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-brand sm:text-3xl">
+            <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-accent sm:text-3xl">
               {site.email}
             </a>
             <button

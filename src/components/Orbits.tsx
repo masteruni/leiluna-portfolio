@@ -97,7 +97,7 @@ function Detail({ i }: { i: number }) {
             transition={{ delay: 0.15 + k * 0.035 }}
             className="flex gap-3 border-t border-line pt-3 short:pt-1"
           >
-            <span className="text-brand">✦</span>
+            <span className="text-accent">✦</span>
             {it}
           </motion.li>
         ))}
@@ -123,7 +123,7 @@ function MobileServices() {
               onClick={() => setOpenId(open ? null : s.id)}
               className="flex w-full items-start gap-5 py-6 text-left"
             >
-              <span className="mt-2 font-mono text-xs text-brand">0{i + 1}</span>
+              <span className="mt-2 font-mono text-xs text-accent">0{i + 1}</span>
               <span className="flex-1">
                 <span className="block font-display text-3xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-4xl">{s.title}</span>
                 <span className="mt-3 block text-sm text-paper/60 sm:text-base">{s.blurb}</span>

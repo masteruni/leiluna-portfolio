@@ -103,7 +103,7 @@ export function Loader() {
             </span>
             <span className="font-display text-6xl font-light tracking-tight text-paper tabular-nums sm:text-8xl">
               {count}
-              <span className="text-brand">%</span>
+              <span className="text-accent">%</span>
             </span>
           </div>
         </motion.div>

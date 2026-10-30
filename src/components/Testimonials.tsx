@@ -37,7 +37,7 @@ export function Testimonials() {
       <div className="mx-auto max-w-7xl">
         <Eyebrow id="testimonials" />
         <h2 id="testimonials-title" className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-          <LineReveal inView lines={["What clients", <span key="s" className="serif font-normal text-brand">say.</span>]} />
+          <LineReveal inView lines={["What clients", <span key="s" className="serif font-normal text-accent">say.</span>]} />
         </h2>
 
         <div className="relative mt-16 min-h-[14rem] md:min-h-[12rem]">
@@ -51,7 +51,7 @@ export function Testimonials() {
               className="max-w-4xl"
             >
               <blockquote className="serif text-[clamp(1.8rem,4vw,3.6rem)] leading-[1.15] text-paper">
-                <span aria-hidden className="text-brand">“</span>
+                <span aria-hidden className="text-accent">“</span>
                 {/* the quote comes into focus word by word */}
                 {t.quote.split(" ").map((w, k) => (
                   <Fragment key={k}>
@@ -66,7 +66,7 @@ export function Testimonials() {
                     </motion.span>
                   </Fragment>
                 ))}
-                <span aria-hidden className="text-brand">”</span>
+                <span aria-hidden className="text-accent">”</span>
               </blockquote>
               <figcaption className="mt-8 flex items-center gap-4 text-sm">
                 <span aria-hidden className="h-px w-10 bg-brand" />

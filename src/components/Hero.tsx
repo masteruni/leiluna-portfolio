@@ -75,7 +75,7 @@ export function Hero() {
                 </span>,
                 <span key="b">
                   {site.hero.title[1].replace("stop for.", "")}
-                  <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-brand">stop for.</span>
+                  <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-accent">stop for.</span>
                 </span>,
               ]}
             />
@@ -118,7 +118,7 @@ export function Hero() {
                 <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
                 <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
                   {s.value}
-                  <span className="text-brand">{s.suffix}</span>
+                  <span className="text-accent">{s.suffix}</span>
                 </dd>
               </div>
             ))}

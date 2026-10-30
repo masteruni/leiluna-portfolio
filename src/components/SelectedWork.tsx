@@ -70,12 +70,12 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
           <div className="flex flex-col justify-between gap-10">
             <div>
               <p className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.25em] text-paper/60">
-                <span className="text-brand">0{i + 1}</span>
+                <span className="text-accent">0{i + 1}</span>
                 {p.client}
                 <span className="text-paper/30">·</span>
                 {p.year}
               </p>
-              <h3 className="mt-5 font-display text-[clamp(2.6rem,5.4vw,5.6rem)] font-bold leading-[0.9] tracking-[-0.045em] transition-colors duration-500 group-hover:text-brand">
+              <h3 className="mt-5 font-display text-[clamp(2.6rem,5.4vw,5.6rem)] font-bold leading-[0.9] tracking-[-0.045em] transition-colors duration-500 group-hover:text-accent">
                 {p.title}
               </h3>
               <p className="mt-5 max-w-lg text-paper/70 sm:text-lg">{p.summary}</p>
@@ -134,7 +134,7 @@ export function SelectedWork() {
           <div>
             <Eyebrow id="work" />
             <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Stories we put", <span key="o" className="serif font-normal text-brand">in orbit.</span>]} />
+              <LineReveal inView lines={["Stories we put", <span key="o" className="serif font-normal text-accent">in orbit.</span>]} />
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">
@@ -155,7 +155,7 @@ export function SelectedWork() {
           className="group mt-16 flex flex-col items-start justify-between gap-6 border-y border-line py-10 sm:flex-row sm:items-center"
         >
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">
-            Your story <span className="serif font-normal text-brand">goes here next.</span>
+            Your story <span className="serif font-normal text-accent">goes here next.</span>
           </span>
           <span className="grid size-16 shrink-0 place-items-center rounded-full border border-line text-2xl transition duration-500 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-on-brand">
             ↗

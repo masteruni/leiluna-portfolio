@@ -199,10 +199,10 @@ export function Nav() {
                       className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
                     >
                       <span className="font-mono text-xs font-normal tracking-normal text-muted">0{i + 1}</span>
-                      <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-brand ${active === l.id ? "text-brand" : ""}`}>
+                      <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-accent ${active === l.id ? "text-accent" : ""}`}>
                         {l.label}
                       </span>
-                      <span className="serif text-[0.5em] text-brand opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                      <span className="serif text-[0.5em] text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                         ✦
                       </span>
                     </Link>
@@ -224,7 +224,7 @@ export function Nav() {
                     Open for new projects
                   </span>
                 )}
-                <a href={`mailto:${site.email}`} className="text-paper hover:text-brand">
+                <a href={`mailto:${site.email}`} className="text-paper hover:text-accent">
                   {site.email}
                 </a>
               </div>

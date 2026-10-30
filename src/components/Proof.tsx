@@ -59,7 +59,7 @@ export function Proof() {
             <div>
               <Eyebrow id="proof" />
               <h2 id="proof-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-                <LineReveal inView lines={["Numbers that", <span key="t" className="serif font-normal text-brand">travel.</span>]} />
+                <LineReveal inView lines={["Numbers that", <span key="t" className="serif font-normal text-accent">travel.</span>]} />
               </h2>
             </div>
             <p className="max-w-sm text-lg text-paper/60">
@@ -93,7 +93,7 @@ export function Proof() {
 
             {stats.slice(1).map((s) => (
               <div key={s.label} className={tile}>
-                <p className="font-display text-4xl font-semibold tracking-[-0.05em] text-brand sm:text-6xl">
+                <p className="font-display text-4xl font-semibold tracking-[-0.05em] text-accent sm:text-6xl">
                   <CountUp value={`${s.value}${s.suffix}`} />
                 </p>
                 <p className="mt-3 text-sm text-paper/70">{s.label}</p>
@@ -112,7 +112,7 @@ export function Proof() {
 
             <div className={`${tile} col-span-2 flex items-center justify-between gap-6`}>
               <div>
-                <p className="font-display text-6xl font-semibold tracking-[-0.05em] text-brand">
+                <p className="font-display text-6xl font-semibold tracking-[-0.05em] text-accent">
                   <CountUp value={moreProof[2].value} />
                 </p>
                 <p className="mt-3 text-sm text-paper/70">{moreProof[2].label}</p>
@@ -142,7 +142,7 @@ export function Proof() {
           {[...ticker, ...ticker].map((t, i) => (
             <span key={i} className="flex items-center gap-12">
               <span className={i % 2 ? "text-outline" : ""}>{t}</span>
-              <span className="text-brand">✦</span>
+              <span className="text-accent">✦</span>
             </span>
           ))}
         </div>
