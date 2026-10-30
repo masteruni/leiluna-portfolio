@@ -119,11 +119,63 @@ export const brief = {
   budgets: ["Under $500 / mo", "$500–1,500 / mo", "$1,500–3,000 / mo", "$3,000+ / mo", "One-off project", "Not sure yet"],
 };
 
+// Floating proof in the hero. All from client screenshots.
+export const heroProof = [
+  { value: "9M", label: "views on a single reel", source: "Business Resilience Mindset" },
+  { value: "306K", label: "followers and growing", source: "Business Resilience Mindset" },
+  { value: "2.6M", label: "views on a 3.8K-follower page", source: "The AI Edge Daily" },
+];
+
 // Verified from client screenshots (see the two case studies).
 export const stats = [
   { value: 29, suffix: "M+", label: "views on our clients' six pinned reels" },
   { value: 680, suffix: "×", label: "top reel reach vs. the page's followers" },
   { value: 306, suffix: "K", label: "followers on a page we grow and manage" },
+];
+
+// Top reels for the proof chart (views), from the two case studies.
+export const topReels = [
+  { views: 9, label: "9M", page: "Business Resilience Mindset" },
+  { views: 8.3, label: "8.3M", page: "Business Resilience Mindset" },
+  { views: 6.2, label: "6.2M", page: "Business Resilience Mindset" },
+  { views: 2.6, label: "2.6M", page: "The AI Edge Daily" },
+  { views: 2.2, label: "2.2M", page: "The AI Edge Daily" },
+  { views: 0.852, label: "852K", page: "The AI Edge Daily" },
+];
+
+// Smaller proof tiles and the running ticker.
+export const moreProof = [
+  { value: "1.1M", label: "likes on one reel" },
+  { value: "147K", label: "reposts on that same reel" },
+  { value: "11", label: "reels past 3M views on one page" },
+];
+
+// Questions people ask before booking. Answers only use what the studio already states on this site.
+export const faqs = [
+  {
+    q: "What exactly do you do?",
+    a: "Five things, together or on their own: social media management, content creation and production, AI-powered content generation, AI automation and workflows, and content strategy and growth. Most clients start with management and content, then add the rest.",
+  },
+  {
+    q: "Which platforms do you work on?",
+    a: "Instagram, TikTok, YouTube and Facebook. We edit short-form for Reels, TikTok and Shorts, cut long-form videos and repurpose podcasts into clips, carousels and thumbnails.",
+  },
+  {
+    q: "How does a project start?",
+    a: "Send us a brief with the button below. We reply within one business day, then begin with a discovery call and an audit of your channels. From there we plan your content pillars and calendar before anything gets made.",
+  },
+  {
+    q: "Will AI make my content look generic?",
+    a: "No. AI speeds up ideas, drafts and visuals, but people make every call and every final cut. You get the pace of AI with human taste on top.",
+  },
+  {
+    q: "Do you work with brands outside your country?",
+    a: "Yes. We work fully remotely with brands worldwide.",
+  },
+  {
+    q: "Can I see more of your work?",
+    a: "Open any case study above for the full story and results, or browse the Library for single reels, edits and graphics filtered by industry.",
+  },
 ];
 
 // The five phases of a project, drawn as phases of the moon.

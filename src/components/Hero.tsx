@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { site } from "@/content/site";
+import { heroProof, site } from "@/content/site";
+import { openShowreel } from "@/lib/showreel";
 import { useReady } from "@/lib/ready";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -73,7 +74,7 @@ export function Hero() {
             ))}
           </motion.ul>
 
-          <motion.div {...fade(0.85)}>
+          <motion.div {...fade(0.85)} className="flex flex-wrap items-center gap-3">
             <Magnetic className="inline-block">
               <Link
                 href="/#contact"
@@ -84,9 +85,53 @@ export function Hero() {
                 <span className="relative transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
             </Magnetic>
+            <button
+              type="button"
+              onClick={openShowreel}
+              data-cursor="Play"
+              className="group inline-flex items-center gap-3 rounded-full border border-line bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md transition-colors hover:border-paper/60"
+            >
+              <span className="relative grid size-10 place-items-center rounded-full bg-paper">
+                <span className="absolute inset-0 animate-ping rounded-full bg-paper/30 [animation-duration:2.4s]" />
+                <span className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-ink" />
+              </span>
+              Watch showreel
+            </button>
           </motion.div>
         </div>
+
+        {/* proof in one line on small screens; the floating chips take over on large ones */}
+        <motion.p {...fade(1)} className="mt-8 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/60 xl:hidden">
+          <span className="text-brand">29M+</span> views on our clients&apos; pinned reels
+        </motion.p>
       </motion.div>
+
+      {/* Floating proof chips: real results drifting in orbit around the planet */}
+      <div aria-label="Results" className="pointer-events-none absolute inset-0 z-10 hidden xl:block">
+        {heroProof.map((p, i) => (
+          <motion.div
+            key={p.value}
+            initial={reduce ? false : { opacity: 0, scale: 0.9 }}
+            animate={ready ? { opacity: 1, scale: 1 } : undefined}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 1.2 + i * 0.18 }}
+            className="absolute"
+            style={[{ right: "5%", top: "15%" }, { right: "18%", top: "38%" }, { right: "4%", top: "57%" }][i]}
+          >
+            <motion.div
+              animate={reduce ? undefined : { y: [0, i % 2 ? 10 : -10, 0] }}
+              transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
+              className="rounded-2xl border border-line bg-ink/55 px-5 py-4 shadow-[0_20px_60px_-20px_rgb(0_0_0/0.8)] backdrop-blur-md"
+            >
+              <p className="font-display text-4xl font-semibold tracking-[-0.04em]">
+                {p.value}
+                <span className="ml-1 text-brand">↑</span>
+              </p>
+              <p className="mt-1 text-xs text-paper/70">{p.label}</p>
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">{p.source}</p>
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
 
       {site.available && (
         <motion.div {...fade(1.2)} className="absolute bottom-24 right-6 z-10 hidden md:block lg:right-14">
