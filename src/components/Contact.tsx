@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } fr
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
 import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBriefVersion } from "@/lib/brief";
+import { spark } from "@/lib/spark";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -13,7 +14,7 @@ const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
 const field =
   "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand";
 
-// Single-choice chips; tapping the selected one again clears it.
+// Single-choice chips; tapping the selected one again clears it. Picking one throws a little spark.
 function Choice({ legend, options, value, onChange }: { legend: string; options: string[]; value: string; onChange: (v: string) => void }) {
   return (
     <fieldset>
@@ -24,7 +25,10 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
             key={o}
             type="button"
             aria-pressed={value === o}
-            onClick={() => onChange(value === o ? "" : o)}
+            onClick={(e) => {
+              if (value !== o) spark(e);
+              onChange(value === o ? "" : o);
+            }}
             className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
               value === o ? "border-paper bg-paper text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
             }`}
@@ -161,7 +165,10 @@ function Brief({ onDone }: { onDone: () => void }) {
                 key={s.id}
                 type="button"
                 aria-pressed={on}
-                onClick={() => toggle(s.title)}
+                onClick={(e) => {
+                  if (!on) spark(e);
+                  toggle(s.title);
+                }}
                 className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
                   on ? "border-brand bg-brand text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
                 }`}
