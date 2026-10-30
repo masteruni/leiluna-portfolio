@@ -12,8 +12,7 @@ export const site = {
   replyTime: "one business day",
   // Bump this when the content changes; it's the "last modified" date search engines see in the sitemap.
   updated: "2026-10-30",
-  headline: ["Your story.", "Our creative", "orbit."], // the slogan, shown small above the hero headline
-  // The hero says plainly what the studio does; the slogan sits above it.
+  // The hero says plainly what the studio does.
   hero: {
     title: ["Social media that", "people stop for."],
     intro:

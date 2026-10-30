@@ -21,7 +21,7 @@ const noSubscribe = () => () => {};
 const currentYear = () => new Date().getFullYear();
 const noYear = () => null;
 
-const heading = "mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+const heading = "mb-4 text-sm text-muted";
 
 export function Footer() {
   const lenis = useLenis();
@@ -85,7 +85,7 @@ export function Footer() {
           <Wordmark title={site.name} className="h-auto w-full select-none text-paper/90" />
         </motion.div>
       </div>
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted sm:flex-row sm:justify-between sm:gap-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 text-sm text-muted sm:flex-row sm:justify-between sm:gap-10">
         <span>© {year ? `${year} ` : ""}{site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>
         <span>Your story. Our creative orbit.</span>
       </div>

@@ -3,7 +3,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { testimonials } from "@/content/site";
-import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 // Client quotes, one at a time, in the same cinematic serif as the case studies.
@@ -35,8 +34,7 @@ export function Testimonials() {
       onBlurCapture={() => setPaused(false)}
     >
       <div className="mx-auto max-w-7xl">
-        <Eyebrow id="testimonials" />
-        <h2 id="testimonials-title" className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
+        <h2 id="testimonials-title" className="font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
           <LineReveal inView lines={["What clients", <span key="s" className="serif font-normal text-brand">say.</span>]} />
         </h2>
 
@@ -78,8 +76,8 @@ export function Testimonials() {
                 className={`h-1.5 rounded-full transition-all duration-500 ${n === i ? "w-10 bg-brand" : "w-4 bg-paper/25 hover:bg-paper/60"}`}
               />
             ))}
-            <span className="ml-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted tabular-nums">
-              {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+            <span className="ml-3 text-sm text-muted tabular-nums">
+              {i + 1} of {total}
             </span>
           </div>
         )}

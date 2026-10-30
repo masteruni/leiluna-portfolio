@@ -6,7 +6,6 @@ import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
-import { Eyebrow } from "./Eyebrow";
 
 const aspect: Record<PieceFormat, string> = {
   reel: "aspect-[9/16]",
@@ -202,7 +201,7 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonEleme
         <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
           <PieceArt p={p} playing={visible && !reduce} near={near} />
         </div>
-        <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
+        <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap text-[13px] sm:inset-x-3 sm:top-3 sm:gap-2">
           <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
           <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
             {p.kind === "video" ? (
@@ -355,7 +354,7 @@ function Lightbox({
           )}
         </motion.div>
         <div className="w-full max-w-sm shrink-0 lg:w-80">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-brand">
+          <p className="text-sm text-brand">
             {p.kind === "video"
               ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}`
               : slides
@@ -387,18 +386,18 @@ function Lightbox({
           >
             I want this style →
           </button>
-          <div className="mt-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+          <div className="mt-8 flex items-center gap-3 text-sm text-muted">
             <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Previous piece">
               ←
             </button>
             <span className="tabular-nums">
-              {String(index + 1).padStart(2, "0")} / {String(list.length).padStart(2, "0")}
+              {index + 1} of {list.length}
             </span>
             <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Next piece">
               →
             </button>
           </div>
-          <p className="mt-4 hidden font-mono text-[10px] uppercase tracking-[0.2em] text-muted/70 lg:block" aria-hidden>
+          <p className="mt-4 hidden text-sm text-muted/70 lg:block" aria-hidden>
             ← → to browse · Esc to close
           </p>
         </div>
@@ -456,8 +455,7 @@ export function Library() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <Eyebrow id="library" />
-            <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+            <h2 className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
               Every format.
               <br />
               <span className="serif font-normal text-brand">Every industry.</span>
@@ -488,7 +486,7 @@ export function Library() {
                   }`}
                 >
                   {k.label}
-                  <sup className="ml-1 font-mono text-[9px] opacity-60">{count(k.id)}</sup>
+                  <sup className="ml-1 text-[13px] opacity-60">{count(k.id)}</sup>
                 </button>
               ))}
             </div>
@@ -506,12 +504,12 @@ export function Library() {
                     disabled={disabled}
                     aria-pressed={industry === ind}
                     onClick={() => setIndustry(ind)}
-                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs transition-colors disabled:opacity-25 ${
+                    className={`shrink-0 rounded-full px-3 py-1.5 text-[13px] transition-colors disabled:opacity-25 ${
                       industry === ind ? "bg-brand text-ink" : "text-paper/60 hover:text-paper"
                     }`}
                   >
                     {ind}
-                    {ind !== "All" && !disabled && <sup className="ml-1 font-mono text-[9px] opacity-60">{perIndustry.get(ind)}</sup>}
+                    {ind !== "All" && !disabled && <sup className="ml-1 text-[13px] opacity-60">{perIndustry.get(ind)}</sup>}
                   </button>
                 );
               })}
@@ -519,7 +517,7 @@ export function Library() {
           </div>
         </div>
 
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.25em] text-muted" aria-live="polite">
+        <p className="mt-6 text-sm text-muted" aria-live="polite">
           Showing {list.length} {list.length === 1 ? "piece" : "pieces"}
           {industry !== "All" && <span className="text-paper/60"> · {industry}</span>}
           <span className="hidden sm:inline"> · tap any piece to open it</span>

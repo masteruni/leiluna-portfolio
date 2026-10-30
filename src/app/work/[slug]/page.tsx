@@ -98,7 +98,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           <div className={`mt-10 grid gap-12 ${isTall ? "lg:grid-cols-[1.2fr_0.8fr] lg:items-end" : ""}`}>
             <div>
               <Reveal>
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
+                <p className="text-sm text-muted">
                   <span className="text-brand">{project.client}</span> · {project.year} · {project.categories.join(" / ")}
                 </p>
                 <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] font-bold leading-[0.88] tracking-[-0.045em]">
@@ -111,7 +111,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                 <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-line pt-6">
                   {project.metrics.map((m) => (
                     <div key={m.label} className="flex flex-col-reverse justify-end">
-                      <dt className="mt-2 text-xs text-muted sm:text-sm">{m.label}</dt>
+                      <dt className="mt-2 text-[13px] text-muted sm:text-sm">{m.label}</dt>
                       <dd className="font-display text-3xl font-semibold tracking-tight text-brand sm:text-5xl">
                         <CountUp value={m.value} />
                       </dd>
@@ -132,17 +132,16 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             <div className="space-y-16">
               <Reveal>
                 <section>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-brand">The challenge</h2>
+                  <h2 className="text-sm text-brand">The challenge</h2>
                   <p className="serif mt-4 text-3xl leading-tight sm:text-5xl">{project.challenge}</p>
                 </section>
               </Reveal>
               <Reveal>
                 <section>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-brand">The approach</h2>
+                  <h2 className="text-sm text-brand">The approach</h2>
                   <ol className="mt-6 space-y-4">
-                    {project.approach.map((a, i) => (
+                    {project.approach.map((a) => (
                       <li key={a} className="flex gap-5 rounded-2xl border border-line bg-ink-2 p-5">
-                        <span className="font-mono text-sm text-muted">0{i + 1}</span>
                         <p className="text-lg leading-relaxed">{a}</p>
                       </li>
                     ))}
@@ -151,7 +150,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               </Reveal>
               <Reveal>
                 <section>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-brand">The results</h2>
+                  <h2 className="text-sm text-brand">The results</h2>
                   <p className="serif mt-4 text-3xl leading-tight text-brand-2 sm:text-5xl">{project.results}</p>
                 </section>
               </Reveal>
@@ -160,7 +159,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             <Reveal>
               <div className="space-y-8 lg:sticky lg:top-28">
                 <div>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Deliverables</h2>
+                  <h2 className="text-sm text-muted">Deliverables</h2>
                   <ul className="mt-3 space-y-2">
                     {project.deliverables.map((d) => (
                       <li key={d} className="border-b border-line pb-2">{d}</li>
@@ -168,7 +167,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   </ul>
                 </div>
                 <div>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Platforms</h2>
+                  <h2 className="text-sm text-muted">Platforms</h2>
                   <ul className="mt-3 flex flex-wrap gap-2">
                     {project.platforms.map((p) => (
                       <li key={p} className="rounded-full border border-line px-3 py-1.5 text-sm">{p}</li>
@@ -221,7 +220,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               className="group flex items-end justify-between gap-6 py-12"
             >
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Next project · {next.client}</p>
+                <p className="text-sm text-muted">Next project · {next.client}</p>
                 <p className="mt-3 font-display text-5xl font-bold tracking-[-0.04em] transition group-hover:text-brand sm:text-8xl">
                   {next.title}
                 </p>
@@ -238,7 +237,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                 <span className="inline-flex items-center gap-2">
                   <ArrowLeft size={16} /> Previous: {prev.title}
                 </span>
-                <span className="font-mono text-xs uppercase tracking-[0.2em]">{prev.client}</span>
+                <span className="text-sm ">{prev.client}</span>
               </Link>
             )}
           </nav>

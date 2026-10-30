@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { founders } from "@/content/site";
-import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
@@ -46,7 +45,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
             />
           </motion.div>
         )}
-        <span className="absolute left-5 top-5 rounded-full bg-ink/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest backdrop-blur">
+        <span className="absolute left-5 top-5 rounded-full bg-ink/60 px-3 py-1 text-[13px] backdrop-blur">
           {f.photo ? "Co-founder" : "Photo coming soon"}
         </span>
       </div>
@@ -54,19 +53,18 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
       <div className="mt-8">
         <h3 className="font-display text-5xl font-bold tracking-[-0.04em]">{f.name}</h3>
         <p className="serif mt-1 text-2xl text-muted">{f.fullName}</p>
-        <p className="mt-4 font-mono text-[11px] uppercase leading-relaxed tracking-[0.25em]">
+        <p className="mt-4 text-sm leading-relaxed ">
           <span className="text-paper/50">{role[0]}</span>
           {role[1] && <span className="block text-brand">{role[1]}</span>}
         </p>
         <p className="mt-6 max-w-lg text-[1.05rem] leading-relaxed text-paper/70">{f.bio}</p>
-        <p className="mt-10 font-mono text-[10px] uppercase tracking-[0.3em] text-muted">Leads</p>
+        <p className="mt-10 text-sm text-muted">Leads</p>
         <ol className="mt-3 max-w-lg border-t border-line">
-          {f.leads.map((l, n) => (
+          {f.leads.map((l) => (
             <li
               key={l}
               className="flex items-baseline gap-4 border-b border-line py-3"
             >
-              <span className="font-mono text-[10px] text-brand/80">{String(n + 1).padStart(2, "0")}</span>
               <span className="text-paper/85">{l}</span>
             </li>
           ))}
@@ -80,8 +78,7 @@ export function Founders() {
   return (
     <section id="founders" className="px-5 py-32 sm:px-10 md:py-44">
       <div className="mx-auto max-w-7xl">
-        <Eyebrow id="founders" />
-        <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
+        <h2 className="font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
           <LineReveal inView lines={["Two crescents,", <span key="b" className="serif font-normal text-brand">one orbit.</span>]} />
         </h2>
         <p className="mt-6 max-w-xl text-lg text-paper/60">

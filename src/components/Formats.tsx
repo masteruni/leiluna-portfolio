@@ -8,7 +8,6 @@ import { industriesOf, pieces, type Piece } from "@/content/library";
 import { formats } from "@/content/site";
 import { openBriefWith } from "@/lib/brief";
 import { openShowreel } from "@/lib/showreel";
-import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { showreel } from "./Showreel";
 
@@ -69,8 +68,7 @@ export function Formats() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <Eyebrow id="formats" />
-            <h2 id="formats-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+            <h2 id="formats-title" className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
               <LineReveal inView lines={["Pick a format.", <span key="b" className="serif font-normal text-brand">See it work.</span>]} />
             </h2>
           </div>
@@ -109,7 +107,6 @@ export function Formats() {
                     on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-ink" : "max-lg:border-line max-lg:text-paper/75"
                   }`}
                 >
-                  <span className={`hidden font-mono text-xs lg:block ${on ? "text-brand" : "text-muted"}`}>0{n + 1}</span>
                   <span className="lg:flex-1">
                     <span className={`block whitespace-nowrap font-display font-semibold tracking-[-0.02em] lg:whitespace-normal lg:text-2xl ${on ? "lg:text-paper" : "lg:text-paper/55 lg:group-hover:text-paper/85"}`}>
                       {x.name}
@@ -156,12 +153,12 @@ export function Formats() {
               <button
                 type="button"
                 onClick={() => setSound((s) => !s)}
-                className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-xs text-paper backdrop-blur-md transition-colors hover:bg-paper hover:text-ink"
+                className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-[13px] text-paper backdrop-blur-md transition-colors hover:bg-paper hover:text-ink"
               >
                 {sound ? <VolumeX aria-hidden className="size-4" /> : <Volume2 aria-hidden className="size-4" />}
                 {sound ? "Sound off" : "Sound on"}
               </button>
-              <span className="absolute left-4 top-4 z-10 rounded-full bg-ink/60 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/80 backdrop-blur">
+              <span className="absolute left-4 top-4 z-10 rounded-full bg-ink/60 px-3 py-1 text-[13px] text-paper/80 backdrop-blur">
                 {industriesOf(f.p).length > 2 ? "Multi-industry" : industriesOf(f.p).join(" · ")} · {f.p.duration}
               </span>
             </div>
@@ -175,7 +172,7 @@ export function Formats() {
                 transition={{ duration: 0.35 }}
                 className={`mx-auto mt-8 ${wide ? "" : "max-w-[22rem] lg:max-w-none"}`}
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-brand">Best for · {f.bestFor}</p>
+                <p className="text-sm text-brand">Best for · {f.bestFor}</p>
                 <p className="mt-3 text-lg leading-relaxed text-paper/80">{f.pitch}</p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <button

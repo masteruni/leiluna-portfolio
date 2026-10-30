@@ -30,7 +30,7 @@ export function ShareButton({ title, text, className = "" }: { title: string; te
       aria-live="polite"
       className={`inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper ${className}`}
     >
-      {state === "copied" ? "Link copied ✦" : state === "shared" ? "Shared ✦" : "Share this case study"}
+      {state === "copied" ? "Link copied" : state === "shared" ? "Shared" : "Share this case study"}
     </button>
   );
 }

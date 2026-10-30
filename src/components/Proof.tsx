@@ -1,10 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { moreProof, stats, topReels } from "@/content/site";
 import { CountUp } from "./CountUp";
-import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 const tile = "relative overflow-hidden rounded-[1.6rem] border border-line bg-ink-2/70 p-5 sm:p-8";
@@ -17,7 +17,7 @@ function ReelChart() {
   const max = Math.max(...topReels.map((r) => r.views));
   return (
     <div ref={ref} className={`${tile} col-span-2 lg:row-span-2`}>
-      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Top client reels · views</p>
+      <p className="text-sm text-muted">Top client reels · views</p>
       <ol className="mt-8 space-y-5" aria-label="Views on the six top-performing client reels">
         {topReels.map((r, i) => (
           <li key={i}>
@@ -40,7 +40,7 @@ function ReelChart() {
           </li>
         ))}
       </ol>
-      <p className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs text-paper/60">
+      <p className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-paper/60">
         <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-brand" /> Business Resilience Mindset</span>
         <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-[#5ab8e8]" /> The AI Edge Daily</span>
       </p>
@@ -56,8 +56,7 @@ export function Proof() {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <Eyebrow id="proof" />
-              <h2 id="proof-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+              <h2 id="proof-title" className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
                 <LineReveal inView lines={["Numbers that", <span key="t" className="serif font-normal text-brand">travel.</span>]} />
               </h2>
             </div>
@@ -74,8 +73,7 @@ export function Proof() {
                 className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full"
                 style={{ boxShadow: "inset 2.2rem -1.4rem 0 0 rgb(234 106 142 / 0.18)" }}
               />
-              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Across our clients&apos; pinned reels</p>
-              <div className="mt-16">
+              <div className="mt-auto">
                 <p className="font-display text-[clamp(5rem,13vw,11rem)] font-bold leading-[0.8] tracking-[-0.06em]">
                   <CountUp value={`${stats[0].value}${stats[0].suffix}`} />
                 </p>
@@ -134,7 +132,7 @@ export function Proof() {
           {[...ticker, ...ticker].map((t, i) => (
             <span key={i} className="flex items-center gap-12">
               <span className={i % 2 ? "text-outline" : ""}>{t}</span>
-              <span className="text-brand">✦</span>
+              <Image src="/brand/mark.png" alt="" width={44} height={46} className="h-8 w-auto opacity-80" />
             </span>
           ))}
         </div>

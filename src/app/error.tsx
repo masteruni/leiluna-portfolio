@@ -17,7 +17,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         style={{ boxShadow: "inset -2.5vmin 1.5vmin 0 0 var(--brand), 0 0 120px -30px var(--brand)" }}
       />
       <div className="relative">
-        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-brand">Something slipped out of orbit</p>
+        <p className="text-sm text-brand">Something slipped out of orbit</p>
         <h1 className="mt-6 font-display text-[clamp(3rem,11vw,9rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           That didn&apos;t
           <br />
@@ -32,7 +32,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             Back to the studio
           </Link>
         </div>
-        {error.digest && <p className="mt-10 font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Ref {error.digest}</p>}
+        {error.digest && <p className="mt-10 text-sm text-muted">Ref {error.digest}</p>}
       </div>
     </main>
   );

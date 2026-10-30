@@ -4,11 +4,10 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } fr
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
 import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBriefVersion } from "@/lib/brief";
-import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 
-const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+const label = " text-sm text-muted";
 const field =
   "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand";
 
@@ -24,7 +23,7 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
             type="button"
             aria-pressed={value === o}
             onClick={() => onChange(value === o ? "" : o)}
-            className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
+            className={`rounded-full border px-3.5 py-2 text-[13px] transition-colors ${
               value === o ? "border-paper bg-paper text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
             }`}
           >
@@ -161,7 +160,7 @@ function Brief({ onDone }: { onDone: () => void }) {
                 type="button"
                 aria-pressed={on}
                 onClick={() => toggle(s.title)}
-                className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
+                className={`rounded-full border px-3.5 py-2 text-[13px] transition-colors ${
                   on ? "border-brand bg-brand text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
                 }`}
               >
@@ -197,10 +196,10 @@ function Brief({ onDone }: { onDone: () => void }) {
             Send by email →
           </button>
           <button type="button" onClick={copy} className="rounded-full border border-line px-6 py-3.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper">
-            {copied ? "Copied ✦" : "Copy the brief"}
+            {copied ? "Copied" : "Copy the brief"}
           </button>
         </div>
-        <div className="flex gap-6 font-mono text-[11px] uppercase tracking-[0.25em] text-muted">
+        <div className="flex gap-6 text-sm text-muted">
           <button
             type="button"
             onClick={() => {
@@ -216,7 +215,7 @@ function Brief({ onDone }: { onDone: () => void }) {
           </button>
         </div>
       </div>
-      <p className="mt-6 text-xs text-muted" aria-live="polite">
+      <p className="mt-6 text-[13px] text-muted" aria-live="polite">
         {sent
           ? `Your mail app should have opened with the brief filled in. If it didn't, copy the brief and send it to ${site.email}. We reply within ${site.replyTime}.`
           : `Opens in your mail app, or copy the text and send it from anywhere. We reply within ${site.replyTime}.`}
@@ -267,8 +266,7 @@ export function Contact() {
       </motion.div>
 
       <div className="relative mx-auto w-full max-w-7xl text-center">
-        <Eyebrow id="contact" />
-        <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
+        <h2 className="font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal
             inView
             lines={["Let's build", <span key="b">your <span className="serif font-normal text-brand">brand.</span></span>]}
@@ -309,8 +307,8 @@ export function Contact() {
             <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-brand sm:text-3xl">
               {site.email}
             </a>
-            <button type="button" onClick={copy} className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper">
-              {copied ? "Copied ✦" : "Copy email"}
+            <button type="button" onClick={copy} className="text-sm text-muted hover:text-paper">
+              {copied ? "Copied" : "Copy email"}
             </button>
           </div>
         </div>

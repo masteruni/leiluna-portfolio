@@ -3,7 +3,6 @@
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
 import { manifesto } from "@/content/site";
-import { Eyebrow } from "./Eyebrow";
 
 const accent = new Set(["orbiting.", "stop"]);
 
@@ -31,7 +30,7 @@ export function Manifesto() {
   return (
     <section id="studio" className="relative px-5 py-32 sm:px-10 md:py-48">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[180px_1fr]">
-        <Eyebrow id="studio" />
+        <h2 className="text-lg font-medium text-paper/70">The studio</h2>
         <div ref={ref}>
           <p className="font-display text-[clamp(1.9rem,4.4vw,4.4rem)] font-medium leading-[1.08] tracking-[-0.03em]">
             {words.map((w, i) => (

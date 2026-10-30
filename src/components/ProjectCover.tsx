@@ -67,7 +67,7 @@ export function ProjectCover({
               boxShadow: `0 -2px 0 0 color-mix(in oklab, ${a} 90%, white), 0 -18px 60px -6px ${a}, inset 0 18px 40px -20px ${b}`,
             }}
           />
-          <span className="absolute left-5 top-5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/60">
+          <span className="absolute left-5 top-5 text-[13px] text-paper/60">
             {project.client}
           </span>
           <span className="serif absolute bottom-12 left-5 right-5 text-[clamp(1.8rem,3vw,2.6rem)] leading-none text-paper">
@@ -88,7 +88,7 @@ export function ProjectCover({
         />
       )}
 
-      <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-widest text-paper/60">
+      <span className="absolute bottom-4 left-5 text-[13px] text-paper/60">
         {formatLabel[format]}
       </span>
     </div>

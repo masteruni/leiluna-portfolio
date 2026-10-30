@@ -3,7 +3,6 @@
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
 import { process } from "@/content/site";
-import { Eyebrow } from "./Eyebrow";
 
 // A moon whose lit side grows with `phase` (0 = new moon, 1 = full).
 function Moon({ phase }: { phase: MotionValue<number> }) {
@@ -30,12 +29,10 @@ function Step({ i, total, progress }: { i: number; total: number; progress: Moti
         <Moon phase={phase} />
       </div>
       <div className="md:mt-10">
-        <p className="font-mono text-xs text-brand">Phase 0{i + 1}</p>
-        <h3 className="mt-2 font-display text-3xl font-semibold tracking-tight">{p.title}</h3>
+        <h3 className="font-display text-3xl font-semibold tracking-tight">{p.title}</h3>
         <p className="mt-3 max-w-[30ch] text-sm leading-relaxed text-paper/60">{p.text}</p>
         {p.output && (
           <p className="mt-4 flex max-w-[30ch] gap-2 text-sm text-paper/85">
-            <span aria-hidden className="text-brand">✦</span>
             <span>
               <span className="text-muted">You get: </span>
               {p.output}
@@ -55,9 +52,8 @@ export function Phases() {
   return (
     <section id="process" className="px-5 py-32 sm:px-10 md:py-44">
       <div className="mx-auto max-w-7xl">
-        <Eyebrow id="process" />
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <h2 className="mt-6 max-w-4xl font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
+          <h2 className="max-w-4xl font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
             From new moon to <span className="serif font-normal text-brand">full orbit.</span>
           </h2>
           <p className="max-w-sm text-lg text-paper/60">

@@ -7,7 +7,6 @@ import { useRef } from "react";
 import { projects, type Project } from "@/content/projects";
 import { useAnchor } from "@/lib/anchor";
 import { CountUp } from "./CountUp";
-import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 // One project as a full-width showcase. On large screens the cards pin and stack,
@@ -35,19 +34,16 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
         <Link href={`/work/${p.slug}`} data-cursor="View" className="relative grid h-full gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-14">
           <div className="flex flex-col justify-between gap-10">
             <div>
-              <p className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.25em] text-paper/60">
-                <span className="text-brand">0{i + 1}</span>
-                {p.client}
-                <span className="text-paper/30">·</span>
-                {p.year}
-              </p>
-              <h3 className="mt-5 font-display text-[clamp(2.6rem,5.4vw,5.6rem)] font-bold leading-[0.9] tracking-[-0.045em] transition-colors duration-500 group-hover:text-brand">
+              <h3 className="font-display text-[clamp(2.6rem,5.4vw,5.6rem)] font-bold leading-[0.9] tracking-[-0.045em] transition-colors duration-500 group-hover:text-brand">
                 {p.title}
               </h3>
+              <p className="mt-4 text-sm text-paper/60">
+                {p.client} · {p.year}
+              </p>
               <p className="mt-5 max-w-lg text-paper/70 sm:text-lg">{p.summary}</p>
               <ul className="mt-6 flex flex-wrap gap-2">
                 {p.categories.map((c) => (
-                  <li key={c} className="rounded-full border border-paper/15 bg-ink/30 px-3 py-1 text-xs text-paper/80 backdrop-blur">
+                  <li key={c} className="rounded-full border border-paper/15 bg-ink/30 px-3 py-1 text-[13px] text-paper/80 backdrop-blur">
                     {c}
                   </li>
                 ))}
@@ -58,7 +54,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
               <dl className="grid grid-cols-3 gap-4 border-t border-paper/15 pt-6">
                 {p.metrics.map((m) => (
                   <div key={m.label} className="flex flex-col-reverse justify-end">
-                    <dt className="mt-1 text-xs text-paper/60 sm:text-sm">{m.label}</dt>
+                    <dt className="mt-1 text-[13px] text-paper/60 sm:text-sm">{m.label}</dt>
                     <dd className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-5xl">
                       <CountUp value={m.value} />
                     </dd>
@@ -95,8 +91,7 @@ export function SelectedWork() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <Eyebrow id="work" />
-            <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+            <h2 className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
               <LineReveal inView lines={["Stories we put", <span key="o" className="serif font-normal text-brand">in orbit.</span>]} />
             </h2>
           </div>

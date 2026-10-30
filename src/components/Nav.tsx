@@ -52,7 +52,7 @@ export function Nav() {
         <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <Image src="/brand/mark.png" alt="" width={36} height={38} priority className="h-9 w-auto" />
           <span className="hidden font-display text-lg font-semibold tracking-tight sm:block">
-            leiluna<span className="ml-1.5 align-middle font-mono text-[10px] font-normal uppercase tracking-[0.3em] text-muted">studio</span>
+            leiluna<span className="ml-1.5 align-middle text-sm font-normal text-muted">studio</span>
           </span>
         </Link>
 
@@ -148,12 +148,8 @@ export function Nav() {
                       }}
                       className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
                     >
-                      <span className="font-mono text-xs font-normal tracking-normal text-muted">0{i + 1}</span>
                       <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-brand ${active === l.id ? "text-brand" : ""}`}>
                         {l.label}
-                      </span>
-                      <span className="serif text-[0.5em] text-brand opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                        ✦
                       </span>
                     </Link>
                   </motion.div>
@@ -169,7 +165,7 @@ export function Nav() {
             >
               <div className="flex flex-col gap-2">
                 {site.available && (
-                  <span className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/70">
+                  <span className="flex items-center gap-2.5 text-sm text-paper/70">
                     <span className="pulse relative size-1.5 rounded-full bg-brand" />
                     Open for new projects
                   </span>

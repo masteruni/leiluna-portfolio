@@ -55,13 +55,6 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
-          <motion.p {...fade(0.1)} className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-            <span className="flex items-center gap-3">
-              <span className="h-px w-10 bg-brand" />
-              {site.headline.join(" ")}
-            </span>
-          </motion.p>
-
           <h1 className="font-display text-[clamp(2.3rem,7.4vw,8rem)] font-bold leading-[0.9] tracking-[-0.045em]">
             <LineReveal
               delay={0}
@@ -110,7 +103,7 @@ export function Hero() {
           <motion.dl {...fade(0.5)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
             {stats.map((s) => (
               <div key={s.label} className="flex flex-col-reverse justify-end">
-                <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
+                <dt className="mt-1.5 text-[13px] leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
                 <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
                   {s.value}
                   <span className="text-brand">{s.suffix}</span>
@@ -131,22 +124,6 @@ export function Hero() {
         </motion.div>
       </div>
 
-      <motion.div
-        {...fade(0.6)}
-        className="absolute inset-x-5 bottom-6 z-10 hidden items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10 lg:flex"
-      >
-        <span className="flex items-center gap-3">
-          <span className="relative h-8 w-px overflow-hidden bg-line">
-            <motion.span
-              className="absolute inset-x-0 top-0 h-1/2 bg-brand"
-              animate={reduce ? undefined : { y: ["-100%", "200%"] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </span>
-          Scroll to explore
-        </span>
-        <span>{site.location}</span>
-      </motion.div>
     </section>
   );
 }

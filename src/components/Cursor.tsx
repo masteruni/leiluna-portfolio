@@ -60,7 +60,7 @@ export function Cursor() {
       </div>
       <div ref={ring} className="absolute left-0 top-0">
         <span
-          className={`grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border font-mono text-[10px] uppercase tracking-widest transition-all duration-500 ease-[var(--ease-out)] ${
+          className={`grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border text-[13px] font-medium transition-all duration-500 ease-[var(--ease-out)] ${
             label
               ? "size-24 border-brand bg-brand text-ink"
               : hover

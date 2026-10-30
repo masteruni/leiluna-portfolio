@@ -111,7 +111,7 @@ export function HeroPhone({ play }: { play: boolean }) {
             <span className="grid size-7 place-items-center rounded-full bg-ink/70 ring-1 ring-brand">
               <Image src="/brand/mark.png" alt="" width={18} height={19} className="h-4 w-auto" />
             </span>
-            <span className="text-xs font-medium text-paper drop-shadow">Leiluna Studio</span>
+            <span className="text-[13px] font-medium text-paper drop-shadow">Leiluna Studio</span>
           </div>
 
           {/* caption */}
@@ -125,7 +125,7 @@ export function HeroPhone({ play }: { play: boolean }) {
                 transition={{ duration: 0.4 }}
               >
                 <p className="font-display text-base font-semibold leading-tight">{reel.style}</p>
-                <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-paper/60">
+                <p className="mt-1 text-[13px] text-paper/60">
                   {industriesOf(reel).length > 2 ? "Multi-industry" : industriesOf(reel).join(" · ")} · {reel.duration}
                 </p>
               </motion.div>
@@ -152,14 +152,14 @@ export function HeroPhone({ play }: { play: boolean }) {
               {p.value}
               <span className="ml-1.5 inline-block size-2 rounded-full bg-brand align-middle" />
             </p>
-            <p className="mt-1 text-xs text-paper/75">{p.label}</p>
-            <p className="mt-1.5 font-mono text-[8.5px] uppercase tracking-[0.18em] text-muted">{p.source}</p>
+            <p className="mt-1 text-[13px] text-paper/75">{p.label}</p>
+            <p className="mt-1.5 text-[13px] text-muted">{p.source}</p>
           </motion.div>
         </AnimatePresence>
       </div>
 
       {site.available && (
-        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
+        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 text-[13px] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
           <span className="pulse relative size-1.5 rounded-full bg-brand" />
           Open for projects
         </span>
