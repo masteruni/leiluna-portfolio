@@ -432,9 +432,17 @@ function Lightbox({
   );
 }
 
+// How many pieces show before "Show all": two rows on desktop, four on phones. A filter with only a few more
+// than that simply shows everything; a button hiding one or two pieces isn't worth the extra tap.
+const FIRST = 8;
+const FOLD_FROM = FIRST + 5;
+
 export function Library() {
   const [kind, setKind] = useState<"all" | Kind>("all");
   const [industry, setIndustry] = useState<"All" | Industry>("All");
+  // Which filter combination was expanded, so changing a filter folds the grid back to its first pieces.
+  const [expandedFor, setExpandedFor] = useState<string | null>(null);
+  const grid = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<number | null>(null);
   // The tile that opened the viewer, so focus goes back there when it closes.
   const opener = useRef<HTMLButtonElement | null>(null);
@@ -445,6 +453,9 @@ export function Library() {
     () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || industriesOf(p).includes(industry))),
     [kind, industry],
   );
+  const filterKey = `${kind}|${industry}`;
+  const expanded = expandedFor === filterKey || list.length < FOLD_FROM;
+  const shown = expanded ? list : list.slice(0, FIRST);
   // Masonry: each piece drops into whichever column is shortest so far, so the columns end level (the first
   // row still reads left to right). Spots are in container-query units, so they're right on the first paint.
   const masonry = useMemo(() => {
@@ -452,7 +463,7 @@ export function Library() {
     const units = Array<number>(cols).fill(0); // summed height ÷ width of the tiles in each column
     const count = Array<number>(cols).fill(0);
     const length = (c: number) => units[c] * 300 + count[c] * GAP; // a typical column width, to compare columns
-    const spots = list.map((p): CSSProperties => {
+    const spots = shown.map((p): CSSProperties => {
       let c = 0;
       for (let k = 1; k < cols; k++) if (length(k) < length(c) - 1) c = k;
       const spot = {
@@ -465,7 +476,7 @@ export function Library() {
     });
     const columns = units.flatMap((u, c) => (count[c] ? [`${u} * ${colW} + ${(count[c] - 1) * GAP}px`] : []));
     return { spots, height: columns.length ? `max(${columns.join(", ")})` : "0px" };
-  }, [list, cols]);
+  }, [shown, cols]);
   // Only offer industries that have pieces in the current format.
   const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).flatMap(industriesOf)), [kind]);
 
@@ -562,7 +573,7 @@ export function Library() {
         </div>
 
         <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.25em] text-muted" aria-live="polite">
-          Showing {list.length} {list.length === 1 ? "piece" : "pieces"}
+          Showing {expanded ? list.length : `${shown.length} of ${list.length}`} {list.length === 1 ? "piece" : "pieces"}
           {industry !== "All" && <span className="text-paper/60"> · {industry}</span>}
           <span className="hidden sm:inline"> · tap any piece to open it</span>
         </p>
@@ -600,11 +611,11 @@ export function Library() {
           </div>
         )}
 
-        <div className="@container relative mt-6">
+        <div ref={grid} className="@container relative mt-6">
           {/* holds the height: container units only resolve inside the container, not on it */}
           <div aria-hidden className="motion-safe:transition-[height] motion-safe:duration-700" style={{ height: masonry.height }} />
           <AnimatePresence>
-            {list.map((p, i) => (
+            {shown.map((p, i) => (
               <Tile
                 key={p.id}
                 p={p}
@@ -618,7 +629,29 @@ export function Library() {
               />
             ))}
           </AnimatePresence>
+          {/* the folded grid fades out at the bottom, so it reads as "there's more" */}
+          {!expanded && <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ink to-transparent" />}
         </div>
+
+        {!expanded && (
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                setExpandedFor(filterKey);
+                track("Library expanded", { pieces: list.length });
+                // Keyboard users carry on from the first newly shown piece rather than losing their place.
+                requestAnimationFrame(() =>
+                  requestAnimationFrame(() => grid.current?.querySelectorAll<HTMLButtonElement>("button[data-cursor]")[FIRST]?.focus({ preventScroll: true })),
+                );
+              }}
+              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 transition-colors hover:border-paper hover:text-paper pointer-coarse:min-h-11"
+            >
+              Show all {list.length} pieces
+              <span className="rounded-full bg-paper/10 px-2 py-0.5 font-mono text-xs text-muted">+{list.length - FIRST}</span>
+            </button>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>
