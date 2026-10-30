@@ -19,7 +19,8 @@ const DRIFT = 50 / 90; // % of the track per second: the band is twice as long a
 
 // Slow-drifting band of the five service pillars, alternating solid and outline type. Scrolling pushes it:
 // it speeds up and leans with a fast scroll, turns around when you scroll back up, then settles back to its
-// drift. Hovering eases it almost to a stop so a word can be read.
+// drift. Hovering eases it almost to a stop so a word can be read; on touch screens a tap stops it (and
+// another tap sets it going again).
 export function Pillars() {
   // Twice round the five pillars makes one full solid/outline cycle; the band is two such cycles, so it can
   // wrap at the halfway point without a visible jump.
@@ -28,6 +29,7 @@ export function Pillars() {
   const reduce = useReducedMotion();
   const onScreen = useInView(ref);
   const hover = useRef(false);
+  const held = useRef(false); // tapped to stop
   const calm = useRef(1); // eases toward 0.15 on hover and back to 1
   const direction = useRef(1);
 
@@ -41,7 +43,7 @@ export function Pillars() {
   useAnimationFrame((_, delta) => {
     if (reduce || !onScreen) return;
     const dt = Math.min(delta, 100) / 1000;
-    calm.current += ((hover.current ? 0.15 : 1) - calm.current) * Math.min(1, dt * 4);
+    calm.current += ((held.current ? 0 : hover.current ? 0.15 : 1) - calm.current) * Math.min(1, dt * 4);
     const b = boost.get();
     if (b < 0) direction.current = -1;
     else if (b > 0) direction.current = 1;
@@ -57,6 +59,7 @@ export function Pillars() {
       aria-hidden
       onMouseEnter={() => (hover.current = true)}
       onMouseLeave={() => (hover.current = false)}
+      onPointerUp={(e) => e.pointerType !== "mouse" && (held.current = !held.current)}
     >
       <motion.div
         style={{ x, skewX: skew }}

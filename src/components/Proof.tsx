@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView, useReducedMotion } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { moreProof, stats, topReels } from "@/content/site";
 import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
@@ -50,6 +50,7 @@ function ReelChart() {
 }
 
 export function Proof() {
+  const [held, setHeld] = useState(false); // a tap stops the ticker on touch screens (hover does it with a mouse)
   const ticker = [...stats.map((s) => `${s.value}${s.suffix} ${s.label}`), ...moreProof.map((m) => `${m.value} ${m.label}`)];
   return (
     <section id="proof" className="relative overflow-hidden py-32 md:py-44" aria-labelledby="proof-title">
@@ -137,7 +138,11 @@ export function Proof() {
       </div>
 
       {/* running ticker */}
-      <div className="marquee-pause mt-20 overflow-hidden border-y border-line py-6" aria-hidden>
+      <div
+        className={`marquee-pause mt-20 overflow-hidden border-y border-line py-6 ${held ? "marquee-held" : ""}`}
+        aria-hidden
+        onPointerUp={(e) => e.pointerType !== "mouse" && setHeld((h) => !h)}
+      >
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
           {[...ticker, ...ticker].map((t, i) => (
             <span key={i} className="flex items-center gap-12">

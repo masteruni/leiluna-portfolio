@@ -156,7 +156,7 @@ export function Formats() {
             <button
               type="button"
               onClick={openShowreel}
-              className="group mt-5 inline-flex items-center gap-3 text-sm text-paper/80 transition-colors hover:text-paper"
+              className="group mt-5 inline-flex items-center gap-3 text-sm text-paper/80 pointer-coarse:min-h-11 transition-colors hover:text-paper"
             >
               <span className="grid size-9 place-items-center rounded-full border border-line transition-colors group-hover:border-brand group-hover:bg-brand">
                 <span className="ml-0.5 border-y-[4px] border-l-[7px] border-y-transparent border-l-paper group-hover:border-l-on-brand" />
@@ -183,7 +183,7 @@ export function Formats() {
                     if (n !== i) spark(e);
                     pick(n);
                   }}
-                  className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:border max-lg:px-4 max-lg:py-2 max-lg:text-sm lg:flex lg:w-full lg:items-center lg:gap-5 lg:border-b lg:border-line lg:py-5 ${
+                  className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:border max-lg:px-4 max-lg:py-2 max-lg:text-sm max-lg:pointer-coarse:min-h-11 lg:flex lg:w-full lg:items-center lg:gap-5 lg:border-b lg:border-line lg:py-5 ${
                     on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-on-brand" : "max-lg:border-line max-lg:text-paper/75"
                   }`}
                 >
@@ -233,7 +233,7 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={() => setSound((s) => !s)}
-                    className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-xs text-paper backdrop-blur-md transition-colors hover:bg-paper hover:text-ink"
+                    className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-xs pointer-coarse:min-h-11 text-paper backdrop-blur-md transition-colors hover:bg-paper hover:text-ink"
                   >
                     {sound ? <VolumeX aria-hidden className="size-4" /> : <Volume2 aria-hidden className="size-4" />}
                     {sound ? "Sound off" : "Sound on"}

@@ -88,7 +88,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         <article className="mx-auto max-w-7xl px-5 sm:px-10 xl:box-content">
           <Reveal>
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper">
+              <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper pointer-coarse:min-h-11">
                 <ArrowLeft size={16} /> All work
               </Link>
               <ShareButton title={`${project.title} · ${project.client}`} text={project.summary} />

@@ -57,13 +57,15 @@ function Sequence({ hidden, ref }: { hidden?: boolean; ref?: React.Ref<HTMLUList
   );
 }
 
-// Clients and industries gliding past. Hovering eases it to a stop (and back), so a name can be read.
+// Clients and industries gliding past. Hovering eases it to a stop (and back), so a name can be read; on
+// touch screens a tap stops it and another tap sets it going again.
 export function LogoLoop() {
   const wrap = useRef<HTMLDivElement>(null);
   const seq = useRef<HTMLUListElement>(null);
   const [width, setWidth] = useState(0);
   const [copies, setCopies] = useState(2);
   const hover = useRef(false);
+  const held = useRef(false); // tapped to stop
   const velocity = useRef(SPEED);
   const x = useMotionValue(0);
   const reduce = useReducedMotion();
@@ -86,7 +88,7 @@ export function LogoLoop() {
   useAnimationFrame((_, delta) => {
     if (reduce || !onScreen || !width) return;
     const dt = Math.min(delta, 100) / 1000; // a backgrounded tab shouldn't make it jump
-    velocity.current += ((hover.current ? 0 : SPEED) - velocity.current) * Math.min(1, dt * 4);
+    velocity.current += ((hover.current || held.current ? 0 : SPEED) - velocity.current) * Math.min(1, dt * 4);
     let next = x.get() - velocity.current * dt;
     if (next <= -width) next += width;
     x.set(next);
@@ -98,6 +100,7 @@ export function LogoLoop() {
       className="overflow-hidden py-2 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)] motion-reduce:[mask-image:none]"
       onMouseEnter={() => (hover.current = true)}
       onMouseLeave={() => (hover.current = false)}
+      onPointerUp={(e) => e.pointerType !== "mouse" && (held.current = !held.current)}
     >
       <motion.div className="flex w-max motion-reduce:w-auto" style={{ x }}>
         <Sequence ref={seq} />

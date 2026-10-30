@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Pause, Play } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { industriesOf, pieces, type Piece } from "@/content/library";
@@ -17,15 +18,17 @@ const protect = {
   disableRemotePlayback: true,
 } as const;
 
-// A phone playing real Library reels one after another, like stories: tap to skip, hover to pause.
+// A phone playing real Library reels one after another, like stories: tap to skip, hover to pause, and a
+// pause button so touch and keyboard users can stop it too (it moves on its own for more than five seconds).
 export function HeroPhone({ play }: { play: boolean }) {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(false); // mouse over the phone
+  const [stopped, setStopped] = useState(false); // the pause button
   const [proof, setProof] = useState(0);
   const video = useRef<HTMLVideoElement>(null);
   const reel = reels[i];
-  const running = play && !paused && !reduce;
+  const running = play && !paused && !stopped && !reduce;
 
   // advance the reel
   useEffect(() => {
@@ -36,10 +39,10 @@ export function HeroPhone({ play }: { play: boolean }) {
 
   // rotate the proof card
   useEffect(() => {
-    if (!play || reduce) return;
+    if (!play || reduce || stopped) return;
     const id = setInterval(() => setProof((n) => (n + 1) % heroProof.length), 3800);
     return () => clearInterval(id);
-  }, [play, reduce]);
+  }, [play, reduce, stopped]);
 
   useEffect(() => {
     const v = video.current;
@@ -131,6 +134,19 @@ export function HeroPhone({ play }: { play: boolean }) {
               </motion.div>
             </AnimatePresence>
           </div>
+        </button>
+
+        {/* pause / play: a sibling of the reel button, since buttons can't nest. With reduced motion nothing
+            moves, so it's hidden in CSS rather than left out, which keeps server and browser markup the same. */}
+        <button
+          type="button"
+          onClick={() => setStopped((s) => !s)}
+          aria-label={stopped ? "Play reels" : "Pause reels"}
+          aria-pressed={stopped}
+          data-cursor={stopped ? "Play" : "Pause"}
+          className="absolute right-4 top-[3.25rem] z-10 grid size-8 place-items-center rounded-full bg-ink/60 text-paper backdrop-blur-md transition-colors hover:bg-ink/80 pointer-coarse:size-11 motion-reduce:hidden"
+        >
+          {stopped ? <Play aria-hidden className="ml-0.5 size-3.5" /> : <Pause aria-hidden className="size-3.5" />}
         </button>
 
         {/* notch */}

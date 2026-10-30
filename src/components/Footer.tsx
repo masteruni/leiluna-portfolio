@@ -66,7 +66,7 @@ export function Footer() {
           <ul className="space-y-2">
             {explore.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} onClick={anchor} className="text-paper/70 transition-colors hover:text-accent">
+                <Link href={l.href} onClick={anchor} className="text-paper/70 transition-colors hover:text-accent pointer-coarse:inline-flex pointer-coarse:min-h-11 pointer-coarse:min-w-11 pointer-coarse:items-center">
                   {l.label}
                 </Link>
               </li>
@@ -79,7 +79,7 @@ export function Footer() {
             <ul className="space-y-2">
               {profileLinks.map((s) => (
                 <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-accent">
+                  <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-accent pointer-coarse:inline-flex pointer-coarse:min-h-11 pointer-coarse:min-w-11 pointer-coarse:items-center">
                     {s.label} ↗
                   </a>
                 </li>
@@ -89,13 +89,13 @@ export function Footer() {
         )}
         <div className="space-y-2 md:text-right">
           <p className={heading}>Say hello</p>
-          <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "footer" })} className="block break-all text-paper/70 hover:text-accent">
+          <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "footer" })} className="block break-all text-paper/70 hover:text-accent pointer-coarse:flex pointer-coarse:min-h-11 pointer-coarse:items-center md:pointer-coarse:justify-end">
             {site.email}
           </a>
           <button
             type="button"
             onClick={() => (lenis ? lenis.scrollTo(0, { duration: 2 }) : window.scrollTo({ top: 0 }))}
-            className="text-paper/70 hover:text-accent"
+            className="text-paper/70 hover:text-accent pointer-coarse:min-h-11"
           >
             Back to orbit ↑
           </button>

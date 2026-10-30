@@ -219,10 +219,10 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
           <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
             <PieceArt p={p} playing={visible && !reduce} near={near} />
           </div>
-          <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
+          <div className="pointer-events-none absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-x-1.5 gap-y-1 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.04em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
             <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
             <span className="sr-only">, </span>
-            <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-accent backdrop-blur sm:px-2.5">
+            <span className="ml-auto shrink-0 rounded-full bg-ink/60 px-2 py-1 text-accent backdrop-blur sm:px-2.5">
               {p.kind === "video" ? (
                 <>
                   <span aria-hidden>▶ </span>
@@ -522,7 +522,7 @@ export function Library() {
                     setIndustry("All");
                     setOpen(null);
                   }}
-                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors ${
+                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors pointer-coarse:min-h-11 ${
                     kind === k.id ? "bg-paper text-ink" : "border border-line text-paper/70 hover:text-paper"
                   }`}
                 >
@@ -548,7 +548,7 @@ export function Library() {
                       if (industry !== ind) spark(e);
                       setIndustry(ind);
                     }}
-                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs transition-colors disabled:opacity-25 ${
+                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs transition-colors disabled:opacity-25 pointer-coarse:min-h-11 pointer-coarse:min-w-11 ${
                       industry === ind ? "bg-brand text-on-brand" : "text-paper/60 hover:text-paper"
                     }`}
                   >

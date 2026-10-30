@@ -30,7 +30,7 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
               if (value !== o) spark(e);
               onChange(value === o ? "" : o);
             }}
-            className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
+            className={`rounded-full border px-3.5 py-2 text-xs transition-colors pointer-coarse:min-h-11 ${
               value === o ? "border-paper bg-paper text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
             }`}
           >
@@ -172,7 +172,7 @@ function Brief({ onDone }: { onDone: () => void }) {
                   if (!on) spark(e);
                   toggle(s.title);
                 }}
-                className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
+                className={`rounded-full border px-3.5 py-2 text-xs transition-colors pointer-coarse:min-h-11 ${
                   on ? "border-brand bg-brand text-on-brand" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
                 }`}
               >
@@ -224,11 +224,11 @@ function Brief({ onDone }: { onDone: () => void }) {
               setDraft(empty);
               setSent(false);
             }}
-            className="hover:text-paper"
+            className="hover:text-paper pointer-coarse:min-h-11"
           >
             Clear
           </button>
-          <button type="button" onClick={onDone} className="hover:text-paper">
+          <button type="button" onClick={onDone} className="hover:text-paper pointer-coarse:min-h-11">
             Close
           </button>
         </div>
@@ -380,7 +380,7 @@ export function Contact() {
             }}
           />
           <div className="flex flex-col items-center gap-2 sm:items-start">
-            <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "contact" })} className="font-display text-2xl font-medium transition-colors hover:text-accent sm:text-3xl">
+            <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "contact" })} className="font-display text-2xl font-medium transition-colors pointer-coarse:inline-flex pointer-coarse:min-h-11 pointer-coarse:items-center hover:text-accent sm:text-3xl">
               {site.email}
             </a>
             <button
@@ -389,7 +389,7 @@ export function Contact() {
                 spark(e);
                 copy();
               }}
-              className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper">
+              className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper pointer-coarse:min-h-11 pointer-coarse:px-3">
               {copied ? "Copied ✦" : "Copy email"}
             </button>
           </div>

@@ -210,6 +210,15 @@ html.has-cursor textarea { cursor: text !important; }
 [data-theme="light"] :is(.night, .over-night) .mark-day { display: none; }
 [data-theme="light"] :is(.night, .over-night) .mark-night { display: revert-layer; }
 
+/* Phones: the small spaced-out labels (mono eyebrows, tags, counts) never drop below 11-12px, so they stay
+   readable on a small screen. Larger screens keep the original sizes. */
+@media (max-width: 639px) {
+  .text-\[8\.5px\],
+  .text-\[9px\] { font-size: 11px; }
+  .text-\[10px\],
+  .text-\[11px\] { font-size: 12px; }
+}
+
 /* Sticky bars (the Library filters) sit just below the fixed header while it's showing, and slide up to the
    top of the screen when it hides, so the two never overlap. Nav.tsx sets --header-h and data-header. */
 .sticky-below-header {
@@ -257,6 +266,8 @@ html.has-cursor textarea { cursor: text !important; }
 .animate-marquee { animation: marquee 45s linear infinite; }
 /* Hovering a band pauses it, so a number or a word can actually be read */
 .marquee-pause:hover .animate-marquee { animation-play-state: paused; }
+/* …and on touch screens a tap holds it (Proof.tsx toggles .marquee-held) */
+.marquee-held .animate-marquee { animation-play-state: paused; }
 
 /* A streak of light crossing the hero every so often (two of them, offset, so it never looks like a loop) */
 .shooting-star {

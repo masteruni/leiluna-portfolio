@@ -82,7 +82,7 @@ export function Nav() {
           hidden && !open ? "-translate-y-full" : ""
         } ${overNight && !open ? "over-night" : ""} ${scrolled && !open ? "border-line bg-ink/75 backdrop-blur-xl" : "border-transparent"}`}
       >
-        <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3" onClick={() => setOpen(false)}>
+        <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3 pointer-coarse:min-h-11 pointer-coarse:min-w-11" onClick={() => setOpen(false)}>
           <Mark width={36} height={38} priority className="h-9 w-auto" />
           <span className="hidden font-display text-lg font-semibold tracking-tight sm:block">
             leiluna<span className="ml-1.5 align-middle font-mono text-[10px] font-normal uppercase tracking-[0.3em] text-muted">studio</span>
@@ -146,7 +146,7 @@ export function Nav() {
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
               aria-controls="menu"
-              className="flex items-center gap-3 rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink"
+              className="flex items-center gap-3 rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink pointer-coarse:min-h-11"
             >
               <span>{open ? "Close" : "Menu"}</span>
               <span className="relative block h-2.5 w-4">
