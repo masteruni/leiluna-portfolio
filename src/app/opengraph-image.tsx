@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { site, stats } from "@/content/site";
+import { ogFonts } from "./og-fonts";
 
 // The preview card shown when the site link is shared on social media / iMessage / Slack.
 export const alt = `${site.name}: Your story. Our creative orbit.`;
@@ -18,7 +19,8 @@ const stars = [
   [540, 300, 2], [640, 420, 2], [40, 330, 2], [150, 240, 3], [370, 360, 2], [720, 240, 2],
 ];
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const fonts = await ogFonts();
   return new ImageResponse(
     (
       <div
@@ -31,7 +33,7 @@ export default function OpengraphImage() {
           background: `radial-gradient(45% 70% at 12% 50%, rgba(234,106,142,0.16), transparent 70%), ${INK}`,
           color: PAPER,
           overflow: "hidden",
-          fontFamily: "sans-serif",
+          fontFamily: "Outfit",
         }}
       >
         {stars.map(([x, y, r], i) => (
@@ -79,7 +81,7 @@ export default function OpengraphImage() {
             <div style={{ display: "flex" }}>Our creative</div>
             <div style={{ display: "flex", color: PINK, fontStyle: "italic", fontWeight: 400 }}>orbit.</div>
           </div>
-          <div style={{ display: "flex", gap: 14, marginTop: 40, fontSize: 24, color: PAPER, opacity: 0.85 }}>
+          <div style={{ display: "flex", gap: 14, marginTop: 40, fontSize: 21, color: PAPER, opacity: 0.85, whiteSpace: "nowrap" }}>
             {site.pillars.map((p, i) => (
               <div key={p} style={{ display: "flex", alignItems: "center", gap: 14 }}>
                 {i > 0 && <div style={{ width: 6, height: 6, borderRadius: 9999, background: PINK }} />}
@@ -102,6 +104,6 @@ export default function OpengraphImage() {
         </div>
       </div>
     ),
-    size,
+    { ...size, fonts },
   );
 }
