@@ -11,7 +11,8 @@ import { Phases } from "@/components/Phases";
 import { Pillars } from "@/components/Pillars";
 import { Proof } from "@/components/Proof";
 import { SelectedWork } from "@/components/SelectedWork";
-import { ShowreelPlayer, ShowreelSection } from "@/components/Showreel";
+import { Formats } from "@/components/Formats";
+import { ShowreelPlayer } from "@/components/Showreel";
 import { Testimonials } from "@/components/Testimonials";
 import { faqs } from "@/content/site";
 
@@ -30,7 +31,7 @@ export default function Home() {
         <Hero />
         <Pillars />
         <Manifesto />
-        <ShowreelSection />
+        <Formats />
         <Orbits />
         <SelectedWork />
         <Library />

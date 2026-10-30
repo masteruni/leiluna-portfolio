@@ -131,6 +131,53 @@ export const brief = {
   budgets: ["Under $500 / mo", "$500–1,500 / mo", "$1,500–3,000 / mo", "$3,000+ / mo", "One-off project", "Not sure yet"],
 };
 
+// "Pick a format": the formats we make, each shown with a real Library piece.
+// `need` is the service it pre-selects in the brief; `bestFor` and `pitch` are the sales copy.
+export const formats = [
+  {
+    piece: "promotion-reel",
+    name: "Talking head + motion graphics",
+    bestFor: "Coaches, educators and founders",
+    pitch: "Turn what you know into reels that teach, build trust and bring people to your offer.",
+    need: "Content Creation & Production",
+  },
+  {
+    piece: "client-interviews",
+    name: "Client interview edit",
+    bestFor: "Products and services that need social proof",
+    pitch: "Real customers telling their story, cut tight with captions and on-brand titles.",
+    need: "Content Creation & Production",
+  },
+  {
+    piece: "lipstick-ad",
+    name: "Luxury product ad",
+    bestFor: "Beauty, fashion and product launches",
+    pitch: "Slow, premium visuals that make one product feel like the only one worth buying.",
+    need: "Content Creation & Production",
+  },
+  {
+    piece: "lot-to-home",
+    name: "3D build reveal",
+    bestFor: "Real estate, construction and interiors",
+    pitch: "Show the journey from empty lot to finished home in seconds.",
+    need: "Content Creation & Production",
+  },
+  {
+    piece: "ramen-ad",
+    name: "Animated menu ad",
+    bestFor: "Restaurants, cafés and food brands",
+    pitch: "Bold, hungry motion for menus, promos and openings that stop the scroll at lunchtime.",
+    need: "Content Creation & Production",
+  },
+  {
+    piece: "kinetic-typography",
+    name: "Kinetic typography",
+    bestFor: "Fitness, motivation and announcements",
+    pitch: "Words that move to the beat, for messages people should feel, not just read.",
+    need: "Content Creation & Production",
+  },
+];
+
 // Floating proof in the hero. All from client screenshots.
 export const heroProof = [
   { value: "9M", label: "views on a single reel", source: "Business Resilience Mindset" },

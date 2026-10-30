@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
-import { setBriefOpen, useBriefOpen } from "@/lib/brief";
+import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBriefVersion } from "@/lib/brief";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -42,12 +42,16 @@ const empty: Draft = { name: "", brand: "", link: "", needs: [], timeline: "", b
 
 // The brief is only mounted after a click, so it's safe to read storage during the first render.
 function loadDraft(): Draft {
+  let draft = empty;
   try {
     const raw = sessionStorage.getItem(DRAFT_KEY);
-    return raw ? { ...empty, ...(JSON.parse(raw) as Partial<Draft>) } : empty;
-  } catch {
-    return empty;
-  }
+    if (raw) draft = { ...empty, ...(JSON.parse(raw) as Partial<Draft>) };
+  } catch {}
+  // Details handed over by another section ("I want this" on a format) are added on top of the draft.
+  const p = peekBriefPrefill();
+  if (p?.need && !draft.needs.includes(p.need)) draft = { ...draft, needs: [...draft.needs, p.need] };
+  if (p?.message && !draft.message.includes(p.message)) draft = { ...draft, message: draft.message ? `${draft.message}\n\n${p.message}` : p.message };
+  return draft;
 }
 
 // A short project brief that turns into a ready-to-send email (no backend needed).
@@ -66,6 +70,7 @@ function Brief({ onDone }: { onDone: () => void }) {
       sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
     } catch {}
   }, [draft]);
+  useEffect(clearBriefPrefill, []);
 
   const body = useMemo(
     () =>
@@ -226,6 +231,7 @@ export function Contact() {
   const reduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
   const brief = useBriefOpen();
+  const briefVersion = useBriefVersion();
   const setBrief = setBriefOpen;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
   const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["35%", "0%"]);
@@ -310,7 +316,7 @@ export function Contact() {
         </div>
 
         <div id="project-brief">
-          <AnimatePresence>{brief && <Brief onDone={() => setBrief(false)} />}</AnimatePresence>
+          <AnimatePresence>{brief && <Brief key={briefVersion} onDone={() => setBrief(false)} />}</AnimatePresence>
         </div>
       </div>
     </section>
