@@ -5,7 +5,7 @@ import { services } from "@/content/site";
 export function Pillars() {
   const row = [...services, ...services];
   return (
-    <div className="overflow-hidden border-y border-line py-8" aria-hidden>
+    <div className="marquee-pause overflow-hidden border-y border-line py-8" aria-hidden>
       <div className="animate-marquee flex w-max items-center gap-10 whitespace-nowrap font-display text-5xl font-semibold tracking-[-0.03em] sm:text-7xl">
         {row.map((s, i) => (
           <span key={i} className="flex items-center gap-10">

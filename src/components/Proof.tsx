@@ -4,6 +4,7 @@ import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { moreProof, stats, topReels } from "@/content/site";
 import { CountUp } from "./CountUp";
+import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 const tile = "relative overflow-hidden rounded-[1.6rem] border border-line bg-ink-2/70 p-5 sm:p-8";
@@ -17,7 +18,7 @@ function ReelChart() {
   return (
     <div ref={ref} className={`${tile} col-span-2 lg:row-span-2`}>
       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Top client reels · views</p>
-      <ol className="mt-8 space-y-5">
+      <ol className="mt-8 space-y-5" aria-label="Views on the six top-performing client reels">
         {topReels.map((r, i) => (
           <li key={i}>
             <div className="flex items-baseline justify-between gap-4 text-sm">
@@ -50,14 +51,12 @@ function ReelChart() {
 export function Proof() {
   const ticker = [...stats.map((s) => `${s.value}${s.suffix} ${s.label}`), ...moreProof.map((m) => `${m.value} ${m.label}`)];
   return (
-    <section className="relative overflow-hidden py-32 md:py-44" aria-labelledby="proof-title">
+    <section id="proof" className="relative overflow-hidden py-32 md:py-44" aria-labelledby="proof-title">
       <div className="px-5 sm:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-                <span className="text-brand">(05)</span> Proof, not promises
-              </p>
+              <Eyebrow id="proof" />
               <h2 id="proof-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
                 <LineReveal inView lines={["Numbers that", <span key="t" className="serif font-normal text-brand">travel.</span>]} />
               </h2>
@@ -130,7 +129,7 @@ export function Proof() {
       </div>
 
       {/* running ticker */}
-      <div className="mt-20 overflow-hidden border-y border-line py-6" aria-hidden>
+      <div className="marquee-pause mt-20 overflow-hidden border-y border-line py-6" aria-hidden>
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
           {[...ticker, ...ticker].map((t, i) => (
             <span key={i} className="flex items-center gap-12">

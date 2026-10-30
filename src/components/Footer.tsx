@@ -5,6 +5,7 @@ import { useRef, useSyncExternalStore } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
 import { profileLinks, site } from "@/content/site";
+import { useAnchor } from "@/lib/anchor";
 import { Wordmark } from "./Wordmark";
 
 const explore = [
@@ -24,6 +25,7 @@ const heading = "mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-mut
 
 export function Footer() {
   const lenis = useLenis();
+  const anchor = useAnchor();
   const year = useSyncExternalStore(noSubscribe, currentYear, noYear);
   const floor = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -41,7 +43,7 @@ export function Footer() {
           <ul className="space-y-2">
             {explore.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="text-paper/70 transition-colors hover:text-brand">
+                <Link href={l.href} onClick={anchor} className="text-paper/70 transition-colors hover:text-brand">
                   {l.label}
                 </Link>
               </li>

@@ -2,24 +2,35 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { useLenis } from "lenis/react";
 import { profileLinks, site } from "@/content/site";
+import { useAnchor } from "@/lib/anchor";
+import { useFocusTrap } from "@/lib/focus";
+import { useActiveSection } from "@/lib/useActiveSection";
 import { Magnetic } from "./Magnetic";
 
 const links = [
-  { href: "/#work", label: "Work" },
-  { href: "/#library", label: "Library" },
-  { href: "/#services", label: "Services" },
-  { href: "/#studio", label: "Studio" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/#work", id: "work", label: "Work" },
+  { href: "/#library", id: "library", label: "Library" },
+  { href: "/#services", id: "services", label: "Services" },
+  { href: "/#studio", id: "studio", label: "Studio" },
+  { href: "/#contact", id: "contact", label: "Contact" },
 ];
+const ids = links.map((l) => l.id);
 
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const menu = useRef<HTMLElement>(null);
   const lenis = useLenis(({ direction, scroll }) => setHidden(direction === 1 && scroll > 200));
+  const anchor = useAnchor();
+  const active = useActiveSection(ids);
+  // Thin line under the header: how far down the page you are.
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
+  useFocusTrap(menu, open);
 
   useEffect(() => {
     if (open) lenis?.stop();
@@ -47,18 +58,32 @@ export function Nav() {
 
         {/* Desktop: the sections are one click away without opening the menu */}
         <nav aria-label="Sections" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
-          {links.map((l) => (
-            <Link key={l.href} href={l.href} className="group relative py-1 text-sm text-paper/70 transition-colors hover:text-paper">
-              {l.label}
-              <span className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100" />
-            </Link>
-          ))}
+          {links.map((l) => {
+            const current = active === l.id;
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={anchor}
+                aria-current={current ? "location" : undefined}
+                className={`group relative py-1 text-sm transition-colors hover:text-paper ${current ? "text-paper" : "text-paper/70"}`}
+              >
+                {l.label}
+                <span
+                  className={`absolute inset-x-0 -bottom-px h-px origin-left bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100 ${
+                    current ? "scale-x-100" : "scale-x-0"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
           <Magnetic className="hidden sm:block">
             <Link
               href="/#contact"
+              onClick={anchor}
               className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-ink"
             >
               Let&apos;s talk
@@ -80,6 +105,7 @@ export function Nav() {
             </button>
           </Magnetic>
         </div>
+        <motion.span aria-hidden className="scroll-progress" style={{ scaleX: progress }} />
       </header>
 
       <AnimatePresence>
@@ -87,6 +113,7 @@ export function Nav() {
           // Slides in as one viewport-sized layer (transform only), so phones and tablets animate it on the GPU
           // instead of repainting the whole screen every frame, which broke up into blocks on Android.
           <motion.nav
+            ref={menu}
             id="menu"
             aria-label="Main"
             className="fixed inset-0 z-[70] flex flex-col justify-between gap-6 overflow-y-auto overflow-x-hidden bg-ink px-5 pb-8 pt-28 will-change-transform sm:px-10 short:pb-5 short:pt-20"
@@ -114,11 +141,15 @@ export function Nav() {
                   >
                     <Link
                       href={l.href}
-                      onClick={() => setOpen(false)}
+                      aria-current={active === l.id ? "location" : undefined}
+                      onClick={(e) => {
+                        setOpen(false);
+                        anchor(e);
+                      }}
                       className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
                     >
                       <span className="font-mono text-xs font-normal tracking-normal text-muted">0{i + 1}</span>
-                      <span className="transition-all duration-500 group-hover:translate-x-4 group-hover:text-brand">
+                      <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-brand ${active === l.id ? "text-brand" : ""}`}>
                         {l.label}
                       </span>
                       <span className="serif text-[0.5em] text-brand opacity-0 transition-opacity duration-500 group-hover:opacity-100">

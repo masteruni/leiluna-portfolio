@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
+import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 
@@ -34,17 +35,36 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
   );
 }
 
+const DRAFT_KEY = "leiluna:brief";
+type Draft = { name: string; brand: string; link: string; needs: string[]; timeline: string; budget: string; message: string };
+const empty: Draft = { name: "", brand: "", link: "", needs: [], timeline: "", budget: "", message: "" };
+
+// The brief is only mounted after a click, so it's safe to read storage during the first render.
+function loadDraft(): Draft {
+  try {
+    const raw = sessionStorage.getItem(DRAFT_KEY);
+    return raw ? { ...empty, ...(JSON.parse(raw) as Partial<Draft>) } : empty;
+  } catch {
+    return empty;
+  }
+}
+
 // A short project brief that turns into a ready-to-send email (no backend needed).
+// Whatever you type is kept for the session, so an accidental reload doesn't wipe it.
 function Brief({ onDone }: { onDone: () => void }) {
   const id = useId();
-  const [name, setName] = useState("");
-  const [brand, setBrand] = useState("");
-  const [link, setLink] = useState("");
-  const [needs, setNeeds] = useState<string[]>([]);
-  const [timeline, setTimeline] = useState("");
-  const [budget, setBudget] = useState("");
-  const [message, setMessage] = useState("");
+  const [draft, setDraft] = useState<Draft>(loadDraft);
+  const { name, brand, link, needs, timeline, budget, message } = draft;
+  const set = <K extends keyof Draft>(key: K) => (value: Draft[K]) => setDraft((d) => ({ ...d, [key]: value }));
+  const setName = set("name"), setBrand = set("brand"), setLink = set("link"), setTimeline = set("timeline"), setBudget = set("budget"), setMessage = set("message");
   const [copied, setCopied] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch {}
+  }, [draft]);
 
   const body = useMemo(
     () =>
@@ -68,7 +88,8 @@ function Brief({ onDone }: { onDone: () => void }) {
   );
   const mailto = `mailto:${site.email}?subject=${encodeURIComponent(`New project${brand ? `: ${brand}` : ""}`)}&body=${encodeURIComponent(body)}`;
 
-  const toggle = (n: string) => setNeeds((cur) => (cur.includes(n) ? cur.filter((x) => x !== n) : [...cur, n]));
+  const toggle = (n: string) =>
+    setDraft((d) => ({ ...d, needs: d.needs.includes(n) ? d.needs.filter((x) => x !== n) : [...d.needs, n] }));
 
   const copy = async () => {
     try {
@@ -86,6 +107,7 @@ function Brief({ onDone }: { onDone: () => void }) {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       onSubmit={(e) => {
         e.preventDefault();
+        setSent(true);
         window.location.href = mailto;
       }}
       className="mx-auto mt-14 w-full max-w-3xl rounded-[2rem] border border-line bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
@@ -114,6 +136,9 @@ function Brief({ onDone }: { onDone: () => void }) {
           id={`${id}-link`}
           value={link}
           onChange={(e) => setLink(e.target.value)}
+          autoComplete="url"
+          inputMode="url"
+          autoCapitalize="none"
           className={field}
           placeholder="@yourbrand or yourbrand.com"
         />
@@ -169,11 +194,27 @@ function Brief({ onDone }: { onDone: () => void }) {
             {copied ? "Copied ✦" : "Copy the brief"}
           </button>
         </div>
-        <button type="button" onClick={onDone} className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper">
-          Close
-        </button>
+        <div className="flex gap-6 font-mono text-[11px] uppercase tracking-[0.25em] text-muted">
+          <button
+            type="button"
+            onClick={() => {
+              setDraft(empty);
+              setSent(false);
+            }}
+            className="hover:text-paper"
+          >
+            Clear
+          </button>
+          <button type="button" onClick={onDone} className="hover:text-paper">
+            Close
+          </button>
+        </div>
       </div>
-      <p className="mt-6 text-xs text-muted">Opens in your mail app, or copy the text and send it from anywhere. We reply within one business day.</p>
+      <p className="mt-6 text-xs text-muted" aria-live="polite">
+        {sent
+          ? `Your mail app should have opened with the brief filled in. If it didn't, copy the brief and send it to ${site.email}. We reply within ${site.replyTime}.`
+          : `Opens in your mail app, or copy the text and send it from anywhere. We reply within ${site.replyTime}.`}
+      </p>
     </motion.form>
   );
 }
@@ -218,9 +259,7 @@ export function Contact() {
       </motion.div>
 
       <div className="relative mx-auto w-full max-w-7xl text-center">
-        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(09)</span> Contact
-        </p>
+        <Eyebrow id="contact" />
         <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal
             inView
@@ -228,7 +267,7 @@ export function Contact() {
           />
         </h2>
         <p className="mx-auto mt-8 max-w-md text-lg text-paper/60">
-          Tell us about your story. We&apos;ll reply within one business day with ideas, not a sales script.
+          Tell us about your story. We&apos;ll reply within {site.replyTime} with ideas, not a sales script.
         </p>
 
         <div className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row">

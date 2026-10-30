@@ -41,6 +41,30 @@
 html {
   overflow-x: clip;
   background: var(--ink);
+  color-scheme: dark;
+  /* anchors land just below the fixed header */
+  scroll-padding-top: 6rem;
+}
+
+/* A thin dark scrollbar that matches the page instead of the browser's default light one */
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink-3) var(--ink);
+  }
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--ink-3); border-radius: 999px; border: 2px solid var(--ink); }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-3); }
+
+/* Form fields keep the dark theme (no white autofill or date pickers) */
+input, textarea, select { color-scheme: dark; }
+input:-webkit-autofill,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--paper);
+  box-shadow: 0 0 0 1000px var(--ink-2) inset;
+  caret-color: var(--paper);
 }
 
 body {
@@ -182,6 +206,46 @@ html.has-cursor textarea { cursor: text !important; }
 }
 
 .animate-marquee { animation: marquee 45s linear infinite; }
+/* Hovering a band pauses it, so a number or a word can actually be read */
+.marquee-pause:hover .animate-marquee { animation-play-state: paused; }
+
+/* A streak of light crossing the hero every so often (two of them, offset, so it never looks like a loop) */
+.shooting-star {
+  position: absolute;
+  width: 160px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--paper), transparent);
+  opacity: 0;
+  transform: rotate(-32deg);
+  transform-origin: left center;
+  animation: shoot 11s ease-out infinite;
+}
+.shooting-star::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: -1.5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 0 10px 2px rgb(246 242 239 / 0.7);
+}
+@keyframes shoot {
+  0% { opacity: 0; transform: translate(0, 0) rotate(-32deg); }
+  2% { opacity: 0.9; }
+  9% { opacity: 0; transform: translate(-380px, 237px) rotate(-32deg); }
+  100% { opacity: 0; transform: translate(-380px, 237px) rotate(-32deg); }
+}
+
+/* The thin progress line under the header: distance scrolled through the page */
+.scroll-progress {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--brand-3), var(--brand), var(--brand-2));
+  transform-origin: left center;
+}
 .animate-spin-slow { animation: spin-slow 40s linear infinite; }
 
 .text-outline {
@@ -197,7 +261,9 @@ html.has-cursor textarea { cursor: text !important; }
   .grain::after,
   .stars,
   .pulse::after,
+  .shooting-star,
   .animate-marquee,
   .animate-spin-badge,
   .animate-spin-slow { animation: none !important; }
+  .shooting-star { display: none; }
 }

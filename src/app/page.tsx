@@ -12,6 +12,7 @@ import { Pillars } from "@/components/Pillars";
 import { Proof } from "@/components/Proof";
 import { SelectedWork } from "@/components/SelectedWork";
 import { ShowreelPlayer, ShowreelSection } from "@/components/Showreel";
+import { Testimonials } from "@/components/Testimonials";
 import { faqs } from "@/content/site";
 
 // Lets search engines show the FAQ answers directly in results.
@@ -36,6 +37,7 @@ export default function Home() {
         <Proof />
         <Phases />
         <Founders />
+        <Testimonials />
         <Faq />
         <Contact />
       </main>

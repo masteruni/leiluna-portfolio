@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useEffect, useRef } from "react";
+import { useFocusTrap } from "@/lib/focus";
 import { closeShowreel, openShowreel, useShowreel } from "@/lib/showreel";
 
 export const showreel = {
@@ -24,6 +25,8 @@ export function ShowreelPlayer() {
   const open = useShowreel();
   const lenis = useLenis();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialog = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialog, open);
 
   useEffect(() => {
     if (!open) return;
@@ -41,6 +44,7 @@ export function ShowreelPlayer() {
     <AnimatePresence>
       {open && (
         <motion.div
+          ref={dialog}
           role="dialog"
           aria-modal="true"
           aria-label="Leiluna Studio showreel"
@@ -114,7 +118,7 @@ export function ShowreelSection() {
             className="absolute inset-x-5 bottom-10 flex flex-col gap-6 sm:inset-x-10 md:flex-row md:items-end md:justify-between"
           >
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/70">Showreel · {showreel.duration}</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/70">Showreel 2026 · {showreel.duration} · cut from client work</p>
               <p className="mt-3 font-display text-[clamp(2.6rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
                 See us <span className="serif font-normal text-brand">in motion.</span>
               </p>

@@ -5,11 +5,12 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import { useLenis } from "lenis/react";
 import { useRef, useState } from "react";
 import { services } from "@/content/site";
+import { Eyebrow } from "./Eyebrow";
 
 const CX = 300;
 const CY = 300;
 
-function OrbitPlanet({ i, active }: { i: number; active: boolean }) {
+function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: string }) {
   const time = useTime();
   const reduce = useReducedMotion();
   const rx = 80 + i * 48;
@@ -19,6 +20,8 @@ function OrbitPlanet({ i, active }: { i: number; active: boolean }) {
   const angle = useTransform(time, (t) => (reduce ? phase : phase + t * speed * Math.PI * 2));
   const x = useTransform(angle, (a) => CX + rx * Math.cos(a));
   const y = useTransform(angle, (a) => CY + ry * Math.sin(a));
+  // the name tag rides just above its planet (and tilts with the whole system)
+  const labelY = useTransform(y, (v) => v - 18);
   return (
     <>
       <ellipse
@@ -32,7 +35,26 @@ function OrbitPlanet({ i, active }: { i: number; active: boolean }) {
         className="transition-all duration-700"
       />
       <motion.circle cx={x} cy={y} r={active ? 9 : 4} fill={active ? "var(--brand)" : "var(--paper)"} className="transition-[r] duration-500" />
-      {active && <motion.circle cx={x} cy={y} r={22} fill="var(--brand)" opacity={0.18} />}
+      {active && (
+        <>
+          <motion.circle cx={x} cy={y} r={22} fill="var(--brand)" opacity={0.18} />
+          <motion.text
+            x={x}
+            y={labelY}
+            textAnchor="middle"
+            fill="var(--paper)"
+            fontSize="11"
+            fontFamily="var(--font-jetbrains), monospace"
+            letterSpacing="2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.9 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            style={{ textTransform: "uppercase" }}
+          >
+            {label}
+          </motion.text>
+        </>
+      )}
     </>
   );
 }
@@ -48,7 +70,7 @@ function OrbitSystem({ active }: { active: number }) {
       </defs>
       <circle cx={CX} cy={CY} r="90" fill="url(#core)" />
       {services.map((s, i) => (
-        <OrbitPlanet key={s.id} i={i} active={i === active} />
+        <OrbitPlanet key={s.id} i={i} active={i === active} label={s.short} />
       ))}
     </svg>
   );
@@ -165,9 +187,7 @@ export function Orbits() {
       <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 90 + 10}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
           <div className="flex shrink-0 items-end justify-between">
-            <h2 className="font-mono text-[11px] font-normal uppercase tracking-[0.3em] text-muted">
-              <span className="text-brand">(02)</span> Services, five orbits
-            </h2>
+            <Eyebrow id="services" as="h2" />
             <p className="font-display text-sm tabular-nums text-muted">
               <span className="text-3xl font-semibold text-paper">0{active + 1}</span> / 0{services.length}
             </p>
@@ -214,9 +234,7 @@ export function Orbits() {
 
       {/* Mobile / tablet: stacked */}
       <div className="px-5 py-24 sm:px-10 lg:hidden">
-        <h2 className="mb-10 font-mono text-[11px] font-normal uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(02)</span> Services, five orbits
-        </h2>
+        <Eyebrow id="services" as="h2" className="mb-10" />
         <MobileServices />
       </div>
     </section>

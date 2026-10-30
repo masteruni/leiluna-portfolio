@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, animate, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, animate, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { markReady } from "@/lib/ready";
 
@@ -8,26 +8,40 @@ const KEY = "leiluna:intro";
 
 // First visit per session: the two crescents spin in, lock into the mark, then the curtain lifts.
 export function Loader() {
-  const reduce = useReducedMotion();
   const [show, setShow] = useState(true);
   const [count, setCount] = useState(0);
 
+  // Runs exactly once. (Reading the reduced-motion setting here, rather than through a hook in the
+  // dependency list, means a re-render can never restart the counter or mark the intro as "seen" twice.)
   useEffect(() => {
     let seen = false;
     try {
       seen = sessionStorage.getItem(KEY) === "1";
-      sessionStorage.setItem(KEY, "1");
     } catch {}
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Returning visitors (and reduced motion) skip straight to the curtain lift.
-    const skip = seen || !!reduce;
+    const skip = seen || reduce;
+    const done = () => {
+      // Marked as seen only once the intro has actually played, so a cancelled first run (React's
+      // development double-mount, a quick back-navigation) doesn't count.
+      try {
+        sessionStorage.setItem(KEY, "1");
+      } catch {}
+      setShow(false);
+    };
     const counter = animate(skip ? 100 : 0, 100, {
       duration: skip ? 0 : 1.9,
       ease: [0.65, 0, 0.35, 1],
       onUpdate: (v) => setCount(Math.round(v)),
-      onComplete: () => setShow(false),
+      onComplete: done,
     });
-    return () => counter.stop();
-  }, [reduce]);
+    // Belt and braces: whatever happens, the curtain lifts within four seconds.
+    const failsafe = window.setTimeout(done, 4000);
+    return () => {
+      counter.stop();
+      window.clearTimeout(failsafe);
+    };
+  }, []);
 
   return (
     <AnimatePresence onExitComplete={markReady}>
@@ -83,7 +97,10 @@ export function Loader() {
           </div>
 
           <div className="absolute inset-x-6 bottom-6 flex items-end justify-between font-mono text-xs uppercase tracking-[0.25em] text-muted sm:inset-x-10 sm:bottom-10">
-            <span>Leiluna Studio</span>
+            <span className="flex flex-col gap-1.5">
+              <span className="text-paper">Leiluna Studio</span>
+              <span className="text-[10px] normal-case tracking-[0.1em] text-muted">Your story. Our creative orbit.</span>
+            </span>
             <span className="font-display text-6xl font-light tracking-tight text-paper tabular-nums sm:text-8xl">
               {count}
               <span className="text-brand">%</span>

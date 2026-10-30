@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { heroProof, site } from "@/content/site";
+import { heroProof, site, stats } from "@/content/site";
+import { useAnchor } from "@/lib/anchor";
 import { openShowreel } from "@/lib/showreel";
 import { useReady } from "@/lib/ready";
 import { LineReveal } from "./LineReveal";
@@ -15,6 +16,7 @@ export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const ready = useReady();
   const reduce = useReducedMotion();
+  const anchor = useAnchor();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-35%"]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
@@ -29,6 +31,12 @@ export function Hero() {
     <section ref={ref} className="relative h-[100svh] min-h-[640px] overflow-hidden">
       <div className="absolute inset-0">
         <Planet progress={scrollYProgress} />
+      </div>
+
+      {/* two streaks of light, far apart in time, so the sky never quite sits still */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
+        <span className="shooting-star left-[72%] top-[12%]" />
+        <span className="shooting-star left-[38%] top-[6%] [animation-delay:6.5s] [animation-duration:14s]" />
       </div>
 
       <motion.div
@@ -78,6 +86,7 @@ export function Hero() {
             <Magnetic className="inline-block">
               <Link
                 href="/#contact"
+                onClick={anchor}
                 className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-brand px-7 py-4 font-medium text-ink"
               >
                 <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-y-0" />
@@ -102,7 +111,11 @@ export function Hero() {
 
         {/* proof in one line on small screens; the floating chips take over on large ones */}
         <motion.p {...fade(1)} className="mt-8 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/60 xl:hidden">
-          <span className="text-brand">29M+</span> views on our clients&apos; pinned reels
+          <span className="text-brand">
+            {stats[0].value}
+            {stats[0].suffix}
+          </span>{" "}
+          {stats[0].label}
         </motion.p>
       </motion.div>
 
@@ -124,7 +137,7 @@ export function Hero() {
             >
               <p className="font-display text-4xl font-semibold tracking-[-0.04em]">
                 {p.value}
-                <span className="ml-1 text-brand">↑</span>
+                <span className="ml-1.5 inline-block size-2 rounded-full bg-brand align-middle" />
               </p>
               <p className="mt-1 text-xs text-paper/70">{p.label}</p>
               <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">{p.source}</p>

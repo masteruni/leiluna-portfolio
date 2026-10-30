@@ -8,6 +8,7 @@ export function Cursor() {
   const ring = useRef<HTMLDivElement>(null);
   const [label, setLabel] = useState<string | null>(null);
   const [hover, setHover] = useState(false);
+  const [away, setAway] = useState(false); // pointer has left the window
 
   useEffect(() => {
     const mq = window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)");
@@ -21,9 +22,14 @@ export function Cursor() {
     const move = (e: PointerEvent) => {
       pos.x = e.clientX;
       pos.y = e.clientY;
-      const t = (e.target as HTMLElement).closest<HTMLElement>("[data-cursor], a, button");
+      setAway(false);
+      const t = (e.target as HTMLElement | null)?.closest<HTMLElement>("[data-cursor], a, button") ?? null;
       setLabel(t?.dataset.cursor ?? null);
       setHover(!!t);
+    };
+    const leave = (e: PointerEvent) => {
+      // Only when the pointer actually exits the document, not when it crosses into a child element.
+      if (!e.relatedTarget) setAway(true);
     };
     const tick = () => {
       ringPos.x += (pos.x - ringPos.x) * 0.16;
@@ -33,16 +39,18 @@ export function Cursor() {
       raf = requestAnimationFrame(tick);
     };
     window.addEventListener("pointermove", move);
+    document.addEventListener("pointerout", leave);
     raf = requestAnimationFrame(tick);
     return () => {
       window.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerout", leave);
       cancelAnimationFrame(raf);
       document.documentElement.classList.remove("has-cursor");
     };
   }, []);
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[95] hidden in-[.has-cursor]:block">
+    <div aria-hidden className={`pointer-events-none fixed inset-0 z-[95] hidden transition-opacity duration-300 in-[.has-cursor]:block ${away ? "opacity-0" : "opacity-100"}`}>
       <div ref={dot} className="absolute left-0 top-0">
         <span
           className={`block size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-paper transition-opacity duration-200 ${

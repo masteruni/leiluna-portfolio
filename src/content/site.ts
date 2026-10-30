@@ -8,6 +8,10 @@ export const site = {
   email: "leilunastudio@gmail.com",
   location: "Working worldwide",
   available: true,
+  // How fast you reply to a brief. Used in the FAQ, the contact section and the brief itself.
+  replyTime: "one business day",
+  // Bump this when the content changes; it's the "last modified" date search engines see in the sitemap.
+  updated: "2026-10-30",
   headline: ["Your story.", "Our creative", "orbit."],
   tagline: "Let's build your brand.",
   description:
@@ -169,6 +173,14 @@ export const faqs = [
     a: "No. AI speeds up ideas, drafts and visuals, but people make every call and every final cut. You get the pace of AI with human taste on top.",
   },
   {
+    q: "How much does it cost?",
+    a: "It depends on the mix of services and how much content you need. We work on monthly plans and one-off projects. Pick a budget range in the brief below (or 'Not sure yet') and we'll scope the right mix with you before anything starts.",
+  },
+  {
+    q: "What do you need from us to start?",
+    a: "Access to the accounts we'll manage, your brand assets (logo, fonts, colors, any past content) and time for a discovery call. If you don't have all of it yet, that's fine: building it is part of the work.",
+  },
+  {
     q: "Do you work with brands outside your country?",
     a: "Yes. We work fully remotely with brands worldwide.",
   },
@@ -180,12 +192,37 @@ export const faqs = [
 
 // The five phases of a project, drawn as phases of the moon.
 export const process = [
-  { title: "Discover", text: "A discovery call, an audit of your channels and a look at what competitors miss." },
-  { title: "Plan", text: "Content pillars, formats and a calendar. Every post gets a purpose before it gets made." },
-  { title: "Create", text: "We shoot, edit, design and write, with AI speeding up the drafts and humans making the calls." },
-  { title: "Launch", text: "Scheduled, published and managed, plus a community that hears back from you." },
-  { title: "Grow", text: "Monthly reports, honest insights, and we double down on what works." },
+  {
+    title: "Discover",
+    text: "A discovery call, an audit of your channels and a look at what competitors miss.",
+    output: "Channel audit and kickoff notes",
+  },
+  {
+    title: "Plan",
+    text: "Content pillars, formats and a calendar. Every post gets a purpose before it gets made.",
+    output: "Content pillars and a monthly calendar",
+  },
+  {
+    title: "Create",
+    text: "We shoot, edit, design and write, with AI speeding up the drafts and humans making the calls.",
+    output: "Reels, graphics and captions, ready to post",
+  },
+  {
+    title: "Launch",
+    text: "Scheduled, published and managed, plus a community that hears back from you.",
+    output: "Scheduled posts and community replies",
+  },
+  {
+    title: "Grow",
+    text: "Monthly reports, honest insights, and we double down on what works.",
+    output: "A monthly performance report",
+  },
 ];
+
+// Client quotes. The section only appears once there is at least one; add them as they come in.
+// Example:
+//   { quote: "They turned our page around in two months.", name: "Alex Rivera", role: "Founder, Whisk & Crumb" }
+export const testimonials: { quote: string; name: string; role: string }[] = [];
 
 export const founders = [
   {

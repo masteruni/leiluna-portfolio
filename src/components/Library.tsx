@@ -5,6 +5,8 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
+import { useFocusTrap } from "@/lib/focus";
+import { Eyebrow } from "./Eyebrow";
 
 const aspect: Record<PieceFormat, string> = {
   reel: "aspect-[9/16]",
@@ -238,6 +240,8 @@ function Lightbox({
 }) {
   const p = list[index];
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialog = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialog, true);
   // Carousels flip through their slides first, then on to the next piece.
   const [at, setAt] = useState({ id: p.id, slide: 0 });
   const slide = at.id === p.id ? at.slide : 0;
@@ -262,6 +266,15 @@ function Lightbox({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose, go]);
+  // Warm the cache for whatever comes next (the following slide, or the next piece's poster/image),
+  // so stepping through never shows an empty frame.
+  useEffect(() => {
+    const next = p.slides?.[slide + 1] ?? list[(index + 1) % list.length];
+    const src = typeof next === "string" ? next : next.kind === "video" ? next.poster : next.src;
+    if (!src) return;
+    const img = new window.Image();
+    img.src = src;
+  }, [p, slide, index, list]);
 
   const media = {
     reel: "aspect-[9/16] h-[min(58vh,760px)] lg:h-[min(78vh,760px)]",
@@ -275,6 +288,7 @@ function Lightbox({
 
   return (
     <motion.div
+      ref={dialog}
       role="dialog"
       aria-modal="true"
       aria-label={`${p.style}, ${industriesOf(p).join(", ")}`}
@@ -293,10 +307,23 @@ function Lightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <motion.div
-          className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media} ${slides ? "touch-pan-y" : ""}`}
-          onPanEnd={slides ? (_, info) => Math.abs(info.offset.x) > 40 && go(info.offset.x < 0 ? 1 : -1) : undefined}
+          className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media} ${p.kind === "graphic" ? "touch-pan-y" : ""}`}
+          // A horizontal swipe moves through slides, then on to the next piece. Videos are left alone so the
+          // native scrub bar keeps working.
+          onPanEnd={p.kind === "graphic" ? (_, info) => Math.abs(info.offset.x) > 40 && go(info.offset.x < 0 ? 1 : -1) : undefined}
         >
-          <PieceArt p={p} playing large slide={slide} />
+          <AnimatePresence initial={false} mode="popLayout">
+            <motion.div
+              key={`${p.id}-${slide}`}
+              className="absolute inset-0"
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <PieceArt p={p} playing large slide={slide} />
+            </motion.div>
+          </AnimatePresence>
           {slides > 1 && (
             <>
               {[-1, 1].map((d) => (
@@ -361,16 +388,19 @@ function Lightbox({
             I want this style →
           </button>
           <div className="mt-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-            <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 hover:text-paper" aria-label="Previous piece">
+            <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Previous piece">
               ←
             </button>
             <span className="tabular-nums">
               {String(index + 1).padStart(2, "0")} / {String(list.length).padStart(2, "0")}
             </span>
-            <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 hover:text-paper" aria-label="Next piece">
+            <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Next piece">
               →
             </button>
           </div>
+          <p className="mt-4 hidden font-mono text-[10px] uppercase tracking-[0.2em] text-muted/70 lg:block" aria-hidden>
+            ← → to browse · Esc to close
+          </p>
         </div>
       </motion.div>
       <button
@@ -412,15 +442,21 @@ export function Library() {
   }, []);
 
   const count = (k: "all" | Kind) => pieces.filter((p) => k === "all" || p.kind === k).length;
+  // How many pieces each industry chip would show, given the current format.
+  const perIndustry = useMemo(() => {
+    const m = new Map<string, number>();
+    pieces
+      .filter((p) => kind === "all" || p.kind === kind)
+      .forEach((p) => industriesOf(p).forEach((ind) => m.set(ind, (m.get(ind) ?? 0) + 1)));
+    return m;
+  }, [kind]);
 
   return (
     <section id="library" className="relative px-5 py-32 sm:px-10 md:py-44">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-              <span className="text-brand">(04)</span> The library
-            </p>
+            <Eyebrow id="library" />
             <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
               Every format.
               <br />
@@ -475,6 +511,7 @@ export function Library() {
                     }`}
                   >
                     {ind}
+                    {ind !== "All" && !disabled && <sup className="ml-1 font-mono text-[9px] opacity-60">{perIndustry.get(ind)}</sup>}
                   </button>
                 );
               })}
@@ -484,6 +521,8 @@ export function Library() {
 
         <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.25em] text-muted" aria-live="polite">
           Showing {list.length} {list.length === 1 ? "piece" : "pieces"}
+          {industry !== "All" && <span className="text-paper/60"> · {industry}</span>}
+          <span className="hidden sm:inline"> · tap any piece to open it</span>
         </p>
 
         {list.length === 0 && (

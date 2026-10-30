@@ -110,7 +110,7 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
-    let w = 0, h = 0, raf = 0, visible = true;
+    let w = 0, h = 0, raf = 0, inView = true, tabVisible = true;
     const start = performance.now();
 
     const resize = () => {
@@ -144,7 +144,7 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
     };
 
     const loop = () => {
-      if (visible) draw();
+      if (inView && tabVisible) draw();
       raf = requestAnimationFrame(loop);
     };
 
@@ -153,8 +153,17 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
       mouse.ty = -(e.clientY / innerHeight - 0.5) * 2;
     };
 
-    const io = new IntersectionObserver(([entry]) => (visible = entry.isIntersecting));
+    const io = new IntersectionObserver(([entry]) => (inView = entry.isIntersecting));
     io.observe(canvas);
+    // Background tabs don't need 60 frames a second of planet.
+    const onVisibility = () => (tabVisible = document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", onVisibility);
+    // If the GPU drops the context (memory pressure, driver reset), swap to the CSS planet instead of a black box.
+    const onLost = (e: Event) => {
+      e.preventDefault();
+      setFallback(true);
+    };
+    canvas.addEventListener("webglcontextlost", onLost);
     const ro = new ResizeObserver(() => {
       resize();
       draw();
@@ -172,6 +181,8 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
       cancelAnimationFrame(raf);
       io.disconnect();
       ro.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      canvas.removeEventListener("webglcontextlost", onLost);
       window.removeEventListener("pointermove", onMove);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };

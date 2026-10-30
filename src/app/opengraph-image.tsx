@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { site } from "@/content/site";
+import { site, stats } from "@/content/site";
 
 // The preview card shown when the site link is shared on social media / iMessage / Slack.
 export const alt = `${site.name}: Your story. Our creative orbit.`;
@@ -91,6 +91,14 @@ export default function OpengraphImage() {
 
         <div style={{ position: "absolute", left: 84, bottom: 44, display: "flex", fontSize: 18, letterSpacing: 5, color: "#8e8893" }}>
           LEILUNASTUDIO.COM
+        </div>
+        {/* One line of proof, so the shared card already makes the case */}
+        <div style={{ position: "absolute", right: 84, bottom: 40, display: "flex", alignItems: "baseline", gap: 10, color: PAPER }}>
+          <div style={{ display: "flex", fontSize: 30, fontWeight: 800, letterSpacing: -1 }}>
+            {stats[0].value}
+            {stats[0].suffix}
+          </div>
+          <div style={{ display: "flex", fontSize: 16, letterSpacing: 2, color: "#8e8893" }}>VIEWS ON CLIENT REELS</div>
         </div>
       </div>
     ),

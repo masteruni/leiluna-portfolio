@@ -10,7 +10,9 @@ import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ProjectCover } from "@/components/ProjectCover";
 import { Reveal } from "@/components/Reveal";
+import { ShareButton } from "@/components/ShareButton";
 import { getProject, projects } from "@/content/projects";
+import { site } from "@/content/site";
 
 // Break a title into two lines: at a comma if it has one, otherwise in the middle.
 function titleLines(title: string) {
@@ -52,6 +54,30 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
 
   const index = projects.indexOf(project);
   const next = projects[(index + 1) % projects.length];
+  const prev = projects[(index - 1 + projects.length) % projects.length];
+
+  // Search engines get the case study as a piece of work by the studio, plus a breadcrumb trail.
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: `${project.title} · ${project.client}`,
+      description: project.summary,
+      url: `${site.url}/work/${project.slug}`,
+      creator: { "@type": "Organization", name: site.name, url: site.url },
+      about: project.client,
+      keywords: [...project.categories, ...project.deliverables].join(", "),
+      ...(project.cover ? { image: `${site.url}${project.cover}` } : {}),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Work", item: `${site.url}/#work` },
+        { "@type": "ListItem", position: 2, name: project.client, item: `${site.url}/work/${project.slug}` },
+      ],
+    },
+  ];
   // Landscape formats get a full-width hero; vertical ones sit beside the text.
   const isTall = project.format === "reel" || project.format === "portrait";
 
@@ -61,9 +87,12 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       <main id="main" className="pt-32 md:pt-40">
         <article className="mx-auto max-w-7xl px-5 sm:px-10 xl:box-content">
           <Reveal>
-            <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper">
-              <ArrowLeft size={16} /> All work
-            </Link>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper">
+                <ArrowLeft size={16} /> All work
+              </Link>
+              <ShareButton title={`${project.title} · ${project.client}`} text={project.summary} />
+            </div>
           </Reveal>
 
           <div className={`mt-10 grid gap-12 ${isTall ? "lg:grid-cols-[1.2fr_0.8fr] lg:items-end" : ""}`}>
@@ -185,21 +214,35 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             )
           )}
 
-          <Link
-            href={`/work/${next.slug}`}
-            data-cursor="Next"
-            className="group mt-32 flex items-end justify-between gap-6 border-y border-line py-12"
-          >
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Next project</p>
-              <p className="mt-3 font-display text-5xl font-bold tracking-[-0.04em] transition group-hover:text-brand sm:text-8xl">
-                {next.title}
-              </p>
-            </div>
-            <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line transition group-hover:rotate-45 group-hover:bg-brand group-hover:text-ink">
-              <ArrowUpRight />
-            </span>
-          </Link>
+          <nav aria-label="More case studies" className="mt-32 border-y border-line">
+            <Link
+              href={`/work/${next.slug}`}
+              data-cursor="Next"
+              className="group flex items-end justify-between gap-6 py-12"
+            >
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Next project · {next.client}</p>
+                <p className="mt-3 font-display text-5xl font-bold tracking-[-0.04em] transition group-hover:text-brand sm:text-8xl">
+                  {next.title}
+                </p>
+              </div>
+              <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line transition group-hover:rotate-45 group-hover:bg-brand group-hover:text-ink">
+                <ArrowUpRight />
+              </span>
+            </Link>
+            {prev.slug !== next.slug && (
+              <Link
+                href={`/work/${prev.slug}`}
+                className="group flex items-center justify-between gap-6 border-t border-line py-6 text-sm text-muted transition hover:text-paper"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <ArrowLeft size={16} /> Previous: {prev.title}
+                </span>
+                <span className="font-mono text-xs uppercase tracking-[0.2em]">{prev.client}</span>
+              </Link>
+            )}
+          </nav>
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
         </article>
         <Contact />
       </main>

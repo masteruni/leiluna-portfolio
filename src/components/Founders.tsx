@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { founders } from "@/content/site";
+import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
@@ -77,11 +78,9 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
 
 export function Founders() {
   return (
-    <section className="px-5 py-32 sm:px-10 md:py-44">
+    <section id="founders" className="px-5 py-32 sm:px-10 md:py-44">
       <div className="mx-auto max-w-7xl">
-        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="text-brand">(07)</span> The founders
-        </p>
+        <Eyebrow id="founders" />
         <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
           <LineReveal inView lines={["Two crescents,", <span key="b" className="serif font-normal text-brand">one orbit.</span>]} />
         </h2>

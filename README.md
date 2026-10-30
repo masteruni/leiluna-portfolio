@@ -8,7 +8,8 @@ Built with Next.js, Tailwind CSS, Motion and Lenis, and deployed on Vercel at [l
 
 | What | Where |
 | --- | --- |
-| Email, socials, headline, manifesto, services, stats, process, founders, testimonials | `src/content/site.ts` |
+| Email, socials, headline, manifesto, services, stats, process (and what each phase delivers), founders, FAQs, testimonials, reply time, `updated` date | `src/content/site.ts` |
+| Section order and numbering ("(03) Selected work") | `src/lib/sections.ts` |
 | Portfolio projects and case studies (per brand) | `src/content/projects.ts` |
 | The Library: single reels, videos and graphics by style and industry | `src/content/library.ts` (files go in `public/library/`) |
 | Brand colors | the `:root` block at the top of `src/app/globals.css` |
@@ -29,10 +30,12 @@ Anything marked `[PLACEHOLDER]` is sample content.
 7. **Numbers:** odometer-style rolling digits.
 8. **Process:** five phases of the moon, waxing as you scroll.
 9. **Founders:** Juri & Sven, framed by the logo's crescents.
-10. **Testimonials:** cinematic serif quotes.
+10. **Testimonials:** cinematic serif quotes; appears automatically once `testimonials` in `site.ts` has an entry.
 11. **Contact:** a planet rises over the horizon behind the call to action.
 
 Motion respects the "reduce motion" accessibility setting, and the custom cursor appears only on devices with a mouse.
+
+Also built in: a scroll-progress line and active-section underline in the header, smooth in-page anchor scrolling, focus-trapped dialogs (menu, library viewer, showreel), a project brief that keeps its draft for the session, Share buttons and previous/next links on case studies, an on-brand error page, a web-app manifest, and long-lived CDN caching for videos and images.
 
 ## Run locally
 

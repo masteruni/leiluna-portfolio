@@ -5,7 +5,9 @@ import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
 import { projects, type Project } from "@/content/projects";
+import { useAnchor } from "@/lib/anchor";
 import { CountUp } from "./CountUp";
+import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 // One project as a full-width showcase. On large screens the cards pin and stack,
@@ -85,6 +87,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
 
 export function SelectedWork() {
   const ref = useRef<HTMLDivElement>(null);
+  const anchor = useAnchor();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   return (
@@ -92,9 +95,7 @@ export function SelectedWork() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-              <span className="text-brand">(03)</span> Selected work
-            </p>
+            <Eyebrow id="work" />
             <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
               <LineReveal inView lines={["Stories we put", <span key="o" className="serif font-normal text-brand">in orbit.</span>]} />
             </h2>
@@ -112,6 +113,7 @@ export function SelectedWork() {
 
         <Link
           href="/#contact"
+          onClick={anchor}
           data-cursor="Let's go"
           className="group mt-16 flex flex-col items-start justify-between gap-6 border-y border-line py-10 sm:flex-row sm:items-center"
         >
