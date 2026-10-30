@@ -7,6 +7,7 @@ import { useRef, type MouseEvent } from "react";
 import { site, stats } from "@/content/site";
 import { setBriefOpen } from "@/lib/brief";
 import { openShowreel } from "@/lib/showreel";
+import { useReady } from "@/lib/ready";
 import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -16,6 +17,7 @@ import { Planet } from "./Planet";
 // two next steps (start a brief, watch the showreel) above the fold.
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const ready = useReady();
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -24,10 +26,9 @@ export function Hero() {
   const fadeOut = useTransform(scrollYProgress, [0.45, 0.95], [1, 0]);
 
   const fade = (delay: number) => ({
-    "data-enter": "",
     initial: reduce ? false : { opacity: 0, y: 16 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const, delay },
+    animate: ready ? { opacity: 1, y: 0 } : undefined,
+    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const, delay },
   });
 
   // Opens the project brief and glides to it.
@@ -48,22 +49,39 @@ export function Hero() {
       <div className="absolute inset-0">
         <Planet progress={scrollYProgress} />
       </div>
+      <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
+        <span className="shooting-star left-[72%] top-[12%]" />
+        <span className="shooting-star left-[38%] top-[6%] [animation-delay:6.5s] [animation-duration:14s]" />
+      </div>
 
-      <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[85rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
+      <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
+          <motion.p {...fade(0.2)} className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+            <span className="flex items-center gap-3">
+              <span className="h-px w-10 bg-brand" />
+              {site.headline.join(" ")}
+            </span>
+          </motion.p>
+
           <h1 className="font-display text-[clamp(2.3rem,7.4vw,8rem)] font-bold leading-[0.9] tracking-[-0.045em]">
             <LineReveal
-              delay={0}
-              duration={0.9}
-              lines={site.hero.title}
+              play={ready}
+              delay={0.1}
+              lines={[
+                site.hero.title[0],
+                <span key="b">
+                  {site.hero.title[1].replace("stop for.", "")}
+                  <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-brand">stop for.</span>
+                </span>,
+              ]}
             />
           </h1>
 
-          <motion.p {...fade(0.3)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
+          <motion.p {...fade(0.55)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
             {site.hero.intro}
           </motion.p>
 
-          <motion.div {...fade(0.4)} className="mt-9 flex flex-wrap items-center gap-3">
+          <motion.div {...fade(0.75)} className="mt-9 flex flex-wrap items-center gap-3">
             <Magnetic className="inline-block">
               <Link
                 href="/#contact"
@@ -79,9 +97,10 @@ export function Hero() {
               type="button"
               onClick={openShowreel}
               data-cursor="Play"
-              className="group inline-flex items-center gap-3 rounded-full bg-ink/85 py-2 pl-2 pr-5 text-sm transition-colors hover:bg-paper/15"
+              className="group inline-flex items-center gap-3 rounded-full border border-line bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md transition-colors hover:border-paper/60"
             >
               <span className="relative grid size-10 place-items-center rounded-full bg-paper">
+                <span className="absolute inset-0 animate-ping rounded-full bg-paper/30 [animation-duration:2.4s]" />
                 <span className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-ink" />
               </span>
               Watch the showreel
@@ -89,10 +108,10 @@ export function Hero() {
           </motion.div>
 
           {/* proof bar */}
-          <motion.dl {...fade(0.5)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 pt-6 sm:gap-8">
+          <motion.dl {...fade(0.95)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
             {stats.map((s) => (
               <div key={s.label} className="flex flex-col-reverse justify-end">
-                <dt className="mt-1.5 text-[13px] leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
+                <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
                 <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
                   {s.value}
                   <span className="text-brand">{s.suffix}</span>
@@ -103,16 +122,31 @@ export function Hero() {
         </motion.div>
 
         <motion.div
-          data-enter=""
           style={{ y: phoneY, opacity: fadeOut }}
           initial={reduce ? false : { opacity: 0, y: 40, rotate: 4 }}
-          animate={{ opacity: 1, y: 0, rotate: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
+          animate={ready ? { opacity: 1, y: 0, rotate: 0 } : undefined}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
         >
-          <HeroPhone play />
+          <HeroPhone play={ready} />
         </motion.div>
       </div>
 
+      <motion.div
+        {...fade(1.1)}
+        className="absolute inset-x-5 bottom-6 z-10 hidden items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10 lg:flex"
+      >
+        <span className="flex items-center gap-3">
+          <span className="relative h-8 w-px overflow-hidden bg-line">
+            <motion.span
+              className="absolute inset-x-0 top-0 h-1/2 bg-brand"
+              animate={reduce ? undefined : { y: ["-100%", "200%"] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </span>
+          Scroll to explore
+        </span>
+        <span>{site.location}</span>
+      </motion.div>
     </section>
   );
 }

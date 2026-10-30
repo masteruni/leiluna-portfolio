@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useRef } from "react";
 import type { Format, Project } from "@/content/projects";
-import { Crescent } from "./Crescent";
 
 export const formatAspect: Record<Format, string> = {
   reel: "aspect-[9/16]",
@@ -19,7 +18,7 @@ const formatLabel: Record<Format, string> = {
   portrait: "4:5 · Feed",
 };
 
-// Shows the real cover image/video when provided, otherwise a drawn planet in the project's colours.
+// Shows the real cover image/video when provided, otherwise generated gradient art from the project's palette.
 export function ProjectCover({
   project,
   format = project.format,
@@ -34,7 +33,7 @@ export function ProjectCover({
   className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [a] = project.palette;
+  const [a, b] = project.palette;
 
   return (
     <div
@@ -55,18 +54,20 @@ export function ProjectCover({
         <div aria-hidden className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.06]">
           <div
             className="absolute inset-0"
-            style={{ background: `color-mix(in oklab, ${a} 14%, var(--ink-2))` }}
+            style={{ background: `radial-gradient(120% 80% at ${30 + variant * 20}% 0%, color-mix(in oklab, ${a} 22%, transparent), transparent 60%), var(--ink-2)` }}
           />
           {/* planet */}
-          <Crescent
-            className="absolute aspect-square"
-            style={{ width: "115%", left: `${[-35, 20, -10, 30, -25][variant % 5]}%`, top: `${[45, 55, 62, 40, 50][variant % 5]}%` }}
-            color={a}
-            base="var(--ink)"
-            dx={0}
-            dy={1.5}
+          <div
+            className="absolute aspect-square rounded-full"
+            style={{
+              width: "115%",
+              left: `${[-35, 20, -10, 30, -25][variant % 5]}%`,
+              top: `${[45, 55, 62, 40, 50][variant % 5]}%`,
+              background: `radial-gradient(circle at 50% 0%, color-mix(in oklab, ${b} 55%, var(--ink)) 0%, var(--ink) 38%)`,
+              boxShadow: `0 -2px 0 0 color-mix(in oklab, ${a} 90%, white), 0 -18px 60px -6px ${a}, inset 0 18px 40px -20px ${b}`,
+            }}
           />
-          <span className="absolute left-5 top-5 text-[13px] text-paper/60">
+          <span className="absolute left-5 top-5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/60">
             {project.client}
           </span>
           <span className="serif absolute bottom-12 left-5 right-5 text-[clamp(1.8rem,3vw,2.6rem)] leading-none text-paper">
@@ -87,7 +88,7 @@ export function ProjectCover({
         />
       )}
 
-      <span className="absolute bottom-4 left-5 text-[13px] text-paper/60">
+      <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-widest text-paper/60">
         {formatLabel[format]}
       </span>
     </div>

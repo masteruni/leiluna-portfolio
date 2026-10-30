@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Crescent } from "@/components/Crescent";
 import { useEffect } from "react";
 
 // Shown if a page throws at runtime. Same tone as the 404: calm, on-brand, with a way back.
@@ -12,23 +11,28 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
 
   return (
     <main id="main" className="relative grid min-h-dvh place-items-center overflow-hidden px-5 text-center">
-      <Crescent className="absolute left-1/2 top-1/2 size-[60vmin] -translate-x-1/2 -translate-y-1/2" color="var(--brand)" dx={-4.2} dy={2.5} />
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-1/2 size-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{ boxShadow: "inset -2.5vmin 1.5vmin 0 0 var(--brand), 0 0 120px -30px var(--brand)" }}
+      />
       <div className="relative">
-        <h1 className="font-display text-[clamp(3rem,11vw,9rem)] font-bold leading-[0.85] tracking-[-0.05em]">
+        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-brand">Something slipped out of orbit</p>
+        <h1 className="mt-6 font-display text-[clamp(3rem,11vw,9rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           That didn&apos;t
           <br />
-          load right.
+          <span className="serif font-normal text-brand">load right.</span>
         </h1>
-        <p className="mx-auto mt-8 max-w-sm text-paper/70">Something slipped out of orbit, and nothing you did. Try again, or head back to the studio.</p>
+        <p className="mx-auto mt-8 max-w-sm text-paper/60">Nothing you did. Try again, or head back to the studio.</p>
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
           <button type="button" onClick={reset} className="rounded-full bg-paper px-7 py-4 font-medium text-ink transition-colors hover:bg-brand">
             Try again
           </button>
-          <Link href="/" className="rounded-full px-7 py-4 font-medium text-paper transition-colors bg-paper/[0.07] hover:bg-paper/15">
+          <Link href="/" className="rounded-full border border-line px-7 py-4 font-medium text-paper transition-colors hover:border-paper">
             Back to the studio
           </Link>
         </div>
-        {error.digest && <p className="mt-10 text-sm text-muted">Ref {error.digest}</p>}
+        {error.digest && <p className="mt-10 font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Ref {error.digest}</p>}
       </div>
     </main>
   );

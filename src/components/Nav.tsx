@@ -52,7 +52,7 @@ export function Nav() {
         <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <Image src="/brand/mark.png" alt="" width={36} height={38} priority className="h-9 w-auto" />
           <span className="hidden font-display text-lg font-semibold tracking-tight sm:block">
-            leiluna<span className="ml-1.5 align-middle text-sm font-normal text-muted">studio</span>
+            leiluna<span className="ml-1.5 align-middle font-mono text-[10px] font-normal uppercase tracking-[0.3em] text-muted">studio</span>
           </span>
         </Link>
 
@@ -70,7 +70,7 @@ export function Nav() {
               >
                 {l.label}
                 <span
-                  className={`absolute inset-x-0 -bottom-0.5 h-0.5 origin-left bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100 ${
+                  className={`absolute inset-x-0 -bottom-px h-px origin-left bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100 ${
                     current ? "scale-x-100" : "scale-x-0"
                   }`}
                 />
@@ -84,7 +84,7 @@ export function Nav() {
             <Link
               href="/#contact"
               onClick={anchor}
-              className="block rounded-full bg-ink/85 px-5 py-2.5 text-sm transition-colors duration-300 hover:bg-brand hover:text-ink"
+              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-ink"
             >
               Let&apos;s talk
             </Link>
@@ -99,8 +99,8 @@ export function Nav() {
             >
               <span>{open ? "Close" : "Menu"}</span>
               <span className="relative block h-2.5 w-4">
-                <span className={`absolute left-0 block h-0.5 w-4 bg-ink transition-[top,transform] duration-500 ${open ? "top-1 rotate-45" : "top-0"}`} />
-                <span className={`absolute left-0 block h-0.5 w-4 bg-ink transition-[top,transform] duration-500 ${open ? "top-1 -rotate-45" : "top-2"}`} />
+                <span className={`absolute left-0 block h-px w-4 bg-ink transition-all duration-500 ${open ? "top-1 rotate-45" : "top-0"}`} />
+                <span className={`absolute left-0 block h-px w-4 bg-ink transition-all duration-500 ${open ? "top-1 -rotate-45" : "top-2"}`} />
               </span>
             </button>
           </Magnetic>
@@ -148,8 +148,12 @@ export function Nav() {
                       }}
                       className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
                     >
-                      <span className={`transition-[transform,color] duration-500 group-hover:translate-x-4 group-hover:text-brand ${active === l.id ? "text-brand" : ""}`}>
+                      <span className="font-mono text-xs font-normal tracking-normal text-muted">0{i + 1}</span>
+                      <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-brand ${active === l.id ? "text-brand" : ""}`}>
                         {l.label}
+                      </span>
+                      <span className="serif text-[0.5em] text-brand opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                        ✦
                       </span>
                     </Link>
                   </motion.div>
@@ -158,14 +162,14 @@ export function Nav() {
             </ul>
 
             <motion.div
-              className="relative flex flex-col gap-4 pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+              className="relative flex flex-col gap-4 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { delay: 0.6 } }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
             >
               <div className="flex flex-col gap-2">
                 {site.available && (
-                  <span className="flex items-center gap-2.5 text-sm text-paper/70">
+                  <span className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/70">
                     <span className="pulse relative size-1.5 rounded-full bg-brand" />
                     Open for new projects
                   </span>

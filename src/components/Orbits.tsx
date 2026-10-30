@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import { useLenis } from "lenis/react";
 import { useRef, useState } from "react";
 import { services } from "@/content/site";
+import { Eyebrow } from "./Eyebrow";
 
 const CX = 300;
 const CY = 300;
@@ -31,7 +32,7 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
         fill="none"
         stroke={active ? "var(--brand)" : "var(--line)"}
         strokeWidth={active ? 1.5 : 1}
-        className="transition-[stroke,stroke-width] duration-700"
+        className="transition-all duration-700"
       />
       <motion.circle cx={x} cy={y} r={active ? 9 : 4} fill={active ? "var(--brand)" : "var(--paper)"} className="transition-[r] duration-500" />
       {active && (
@@ -42,11 +43,13 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
             y={labelY}
             textAnchor="middle"
             fill="var(--paper)"
-            fontSize="13"
-            fontFamily="var(--font-outfit), sans-serif"
+            fontSize="11"
+            fontFamily="var(--font-jetbrains), monospace"
+            letterSpacing="2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.9 }}
             transition={{ duration: 0.5, delay: 0.2 }}
+            style={{ textTransform: "uppercase" }}
           >
             {label}
           </motion.text>
@@ -85,15 +88,16 @@ function Detail({ i }: { i: number }) {
     >
       <h3 className="font-display text-[clamp(2.4rem,4.6vw,4.8rem)] font-semibold leading-[0.95] tracking-[-0.04em] short:text-[clamp(1.9rem,6svh,3.4rem)]">{s.title}</h3>
       <p className="mt-6 max-w-lg text-lg leading-relaxed text-paper/70 short:mt-3 short:text-base">{s.blurb}</p>
-      <ul className="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-3 text-sm text-paper/80 short:mt-4 short:gap-y-1 short:text-[13px]">
+      <ul className="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-3 text-sm text-paper/80 short:mt-4 short:gap-y-1 short:text-xs">
         {s.items.map((it, k) => (
           <motion.li
             key={it}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.15 + k * 0.035 }}
-            className="flex gap-3 pt-3 short:pt-1"
+            className="flex gap-3 border-t border-line pt-3 short:pt-1"
           >
+            <span className="text-brand">✦</span>
             {it}
           </motion.li>
         ))}
@@ -107,8 +111,8 @@ function MobileServices() {
   const [openId, setOpenId] = useState<string | null>(services[0].id);
   const reduce = useReducedMotion();
   return (
-    <ol className="space-y-8">
-      {services.map((s) => {
+    <ol className="divide-y divide-line border-t border-line">
+      {services.map((s, i) => {
         const open = openId === s.id;
         return (
           <li key={s.id}>
@@ -119,14 +123,15 @@ function MobileServices() {
               onClick={() => setOpenId(open ? null : s.id)}
               className="flex w-full items-start gap-5 py-6 text-left"
             >
+              <span className="mt-2 font-mono text-xs text-brand">0{i + 1}</span>
               <span className="flex-1">
                 <span className="block font-display text-3xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-4xl">{s.title}</span>
                 <span className="mt-3 block text-sm text-paper/60 sm:text-base">{s.blurb}</span>
               </span>
               <span
                 aria-hidden
-                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full text-lg transition-[transform,background-color,color] duration-500 ${
-                  open ? "rotate-45 bg-brand text-ink" : "bg-paper/[0.07] text-paper/70"
+                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-all duration-500 ${
+                  open ? "rotate-45 border-brand bg-brand text-ink" : "text-paper/70"
                 }`}
               >
                 +
@@ -143,9 +148,9 @@ function MobileServices() {
                   transition={{ duration: reduce ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden"
                 >
-                  <ul className="grid grid-cols-2 gap-x-6 gap-y-3 pb-10 text-sm text-paper/80">
+                  <ul className="flex flex-wrap gap-2 pb-8 pl-9">
                     {s.items.map((it) => (
-                      <li key={it}>
+                      <li key={it} className="rounded-full border border-line px-3 py-1.5 text-xs text-paper/80">
                         {it}
                       </li>
                     ))}
@@ -181,10 +186,10 @@ export function Orbits() {
       {/* Desktop: pinned orbital system */}
       <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 90 + 10}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
-          <div className="mx-auto flex w-full max-w-7xl shrink-0 items-end justify-between">
-            <h2 className="text-lg font-medium text-paper/70">Services</h2>
-            <p className="text-sm tabular-nums text-muted">
-              {active + 1} of {services.length}
+          <div className="flex shrink-0 items-end justify-between">
+            <Eyebrow id="services" as="h2" />
+            <p className="font-display text-sm tabular-nums text-muted">
+              <span className="text-3xl font-semibold text-paper">0{active + 1}</span> / 0{services.length}
             </p>
           </div>
 
@@ -202,12 +207,12 @@ export function Orbits() {
                 alt=""
                 width={92}
                 height={96}
-                className="absolute left-1/2 top-1/2 h-24 w-auto -translate-x-1/2 -translate-y-1/2"
+                className="absolute left-1/2 top-1/2 h-24 w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_30px_rgba(234,106,142,0.6)]"
               />
             </div>
           </div>
 
-          <div className="mx-auto flex w-full max-w-7xl shrink-0 items-center gap-8">
+          <div className="flex shrink-0 items-center gap-8">
             <div className="flex gap-6">
               {services.map((s, i) => (
                 <button
@@ -220,8 +225,8 @@ export function Orbits() {
                 </button>
               ))}
             </div>
-            <div className="h-1 flex-1 rounded-full bg-paper/10">
-              <motion.div className="h-1 rounded-full bg-brand" style={{ width: bar }} />
+            <div className="h-px flex-1 bg-line">
+              <motion.div className="h-px bg-brand" style={{ width: bar }} />
             </div>
           </div>
         </div>
@@ -229,7 +234,7 @@ export function Orbits() {
 
       {/* Mobile / tablet: stacked */}
       <div className="px-5 py-24 sm:px-10 lg:hidden">
-        <h2 className="mb-10 font-display text-5xl font-bold tracking-[-0.04em]">Services</h2>
+        <Eyebrow id="services" as="h2" className="mb-10" />
         <MobileServices />
       </div>
     </section>
