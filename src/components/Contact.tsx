@@ -279,7 +279,20 @@ export function Contact() {
         </p>
 
         <div className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row">
-          <Magnetic strength={0.5}>
+          <Magnetic strength={0.5} className="relative">
+            {/* a comet of light circling the button's edge, with a soft glow beneath it */}
+            <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full">
+              <span
+                className="animate-star-orbit absolute -inset-6 rounded-full opacity-90 blur-xl"
+                style={{ background: "conic-gradient(from 0deg, transparent 0 70%, var(--brand) 85%, var(--brand-2) 95%, transparent)" }}
+              />
+              <span className="absolute inset-0 overflow-hidden rounded-full">
+                <span
+                  className="animate-star-orbit absolute -inset-1/2"
+                  style={{ background: "conic-gradient(from 0deg, transparent 0 72%, var(--brand-2) 90%, var(--paper) 97%, transparent)" }}
+                />
+              </span>
+            </span>
             <button
               type="button"
               onClick={() => setBrief((b) => !b)}
