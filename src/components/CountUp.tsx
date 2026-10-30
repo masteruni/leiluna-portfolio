@@ -13,11 +13,18 @@ export function CountUp({ value, className }: { value: string; className?: strin
   const target = match ? parseFloat(match[2].replace(",", ".")) : 0;
   const decimals = match?.[2].split(/[.,]/)[1]?.length ?? 0;
   const valid = match !== null;
-  const n = useMotionValue(reduce ? target : 0);
+  // Always starts at zero, as the server renders it, so the page hydrates cleanly.
+  const n = useMotionValue(0);
   const text = useTransform(n, (v) => v.toFixed(decimals));
 
   useEffect(() => {
-    if (!inView || reduce || !valid) return;
+    if (!valid) return;
+    // Reduced motion: show the final number straight away, no count.
+    if (reduce) {
+      n.set(target);
+      return;
+    }
+    if (!inView) return;
     const controls = animate(n, target, { duration: 1.8, ease: [0.16, 1, 0.3, 1] });
     return () => controls.stop();
   }, [inView, reduce, valid, n, target]);

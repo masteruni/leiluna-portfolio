@@ -21,13 +21,17 @@ const items: Item[] = clients.length
     })
   : rest;
 
-function Sequence({ hidden, still, ref }: { hidden?: boolean; still?: boolean; ref?: React.Ref<HTMLUListElement> }) {
+// With reduced motion, the first copy wraps into a still, centred list and the rest are hidden. That's done
+// in CSS so the server and browser render the same markup.
+function Sequence({ hidden, ref }: { hidden?: boolean; ref?: React.Ref<HTMLUListElement> }) {
   return (
     <ul
       ref={ref}
       aria-hidden={hidden || undefined}
       aria-label={hidden ? undefined : "Clients and industries"}
-      className={`flex items-center gap-10 ${still ? "flex-wrap justify-center gap-y-5" : "shrink-0 pr-10"}`}
+      className={`flex shrink-0 items-center gap-10 pr-10 motion-reduce:shrink motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-y-5 motion-reduce:pr-0 ${
+        hidden ? "motion-reduce:hidden" : ""
+      }`}
     >
       {items.map((it) => (
         <li key={it.name} className="group flex items-center gap-10 whitespace-nowrap">
@@ -88,18 +92,14 @@ export function LogoLoop() {
     x.set(next);
   });
 
-  // Reduced motion: every name at once, wrapped, nothing moving.
-  if (reduce) return <Sequence still />;
-
   return (
     <div
       ref={wrap}
-      className="overflow-hidden py-2"
-      style={{ maskImage: "linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)" }}
+      className="overflow-hidden py-2 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)] motion-reduce:[mask-image:none]"
       onMouseEnter={() => (hover.current = true)}
       onMouseLeave={() => (hover.current = false)}
     >
-      <motion.div className="flex w-max" style={{ x }}>
+      <motion.div className="flex w-max motion-reduce:w-auto" style={{ x }}>
         <Sequence ref={seq} />
         {Array.from({ length: copies - 1 }, (_, i) => (
           <Sequence key={i} hidden />
