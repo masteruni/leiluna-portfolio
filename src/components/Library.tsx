@@ -3,10 +3,14 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
 import { Eyebrow } from "./Eyebrow";
+
+// Height ÷ width of each shape, so the masonry can be laid out before anything has loaded.
+const ratio: Record<PieceFormat, number> = { reel: 16 / 9, square: 1, portrait: 5 / 4, tall: 4 / 3, wide: 9 / 16, landscape: 3 / 4, long: 16 / 9 };
+const GAP = 16; // px between tiles
 
 const aspect: Record<PieceFormat, string> = {
   reel: "aspect-[9/16]",
@@ -163,7 +167,7 @@ function PieceArt({
   );
 }
 
-function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonElement) => void; index: number }) {
+function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButtonElement) => void; index: number; spot: CSSProperties }) {
   const ref = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
   const [near, setNear] = useState(false);
@@ -183,45 +187,47 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonEleme
     };
   }, []);
 
+  // The outer box glides to the tile's new spot when the filters change; the inner one fades it in and out.
   return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.94 }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: Math.min(index, 8) * 0.04 }}
-      className="w-full"
-    >
-      <button
-        ref={ref}
-        type="button"
-        onClick={(e) => onOpen(e.currentTarget)}
-        data-cursor={p.kind === "video" ? "Play" : "View"}
-        aria-label={`${p.kind === "video" ? "Play" : "View"} ${p.style}, ${industriesOf(p).join(", ")}`}
-        className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
+    <div className="absolute left-0 top-0 motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[var(--ease-out)]" style={spot}>
+      <motion.div
+        initial={reduce ? false : { opacity: 0, y: 30, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, scale: 0.94 }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: Math.min(index, 8) * 0.04 }}
       >
-        <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
-          <PieceArt p={p} playing={visible && !reduce} near={near} />
-        </div>
-        <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
-          <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
-          <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
-            {p.kind === "video" ? (
-              `▶ ${p.duration ?? "Reel"}`
-            ) : (
-              <>
-                <span className="sm:hidden" aria-hidden>{p.slides ? `◼ ${p.slides.length}` : "◼"}</span>
-                <span className="max-sm:sr-only">{p.slides ? `Carousel · ${p.slides.length}` : "Graphic"}</span>
-              </>
-            )}
-          </span>
-        </div>
-        {p.src && (
-          <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-4 pt-10 font-display text-lg font-medium">
-            {p.style}
-          </span>
-        )}
-      </button>
-    </motion.div>
+        <button
+          ref={ref}
+          type="button"
+          onClick={(e) => onOpen(e.currentTarget)}
+          data-cursor={p.kind === "video" ? "Play" : "View"}
+          aria-label={`${p.kind === "video" ? "Play" : "View"} ${p.style}, ${industriesOf(p).join(", ")}`}
+          className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
+        >
+          <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
+            <PieceArt p={p} playing={visible && !reduce} near={near} />
+          </div>
+          <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
+            <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
+            <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
+              {p.kind === "video" ? (
+                `▶ ${p.duration ?? "Reel"}`
+              ) : (
+                <>
+                  <span className="sm:hidden" aria-hidden>{p.slides ? `◼ ${p.slides.length}` : "◼"}</span>
+                  <span className="max-sm:sr-only">{p.slides ? `Carousel · ${p.slides.length}` : "Graphic"}</span>
+                </>
+              )}
+            </span>
+          </div>
+          {p.src && (
+            <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-4 pt-10 font-display text-lg font-medium">
+              {p.style}
+            </span>
+          )}
+        </button>
+      </motion.div>
+    </div>
   );
 }
 
@@ -428,6 +434,27 @@ export function Library() {
     () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || industriesOf(p).includes(industry))),
     [kind, industry],
   );
+  // Masonry: each piece drops into whichever column is shortest so far, so the columns end level (the first
+  // row still reads left to right). Spots are in container-query units, so they're right on the first paint.
+  const masonry = useMemo(() => {
+    const colW = `((100cqw - ${(cols - 1) * GAP}px) / ${cols})`;
+    const units = Array<number>(cols).fill(0); // summed height ÷ width of the tiles in each column
+    const count = Array<number>(cols).fill(0);
+    const length = (c: number) => units[c] * 300 + count[c] * GAP; // a typical column width, to compare columns
+    const spots = list.map((p): CSSProperties => {
+      let c = 0;
+      for (let k = 1; k < cols; k++) if (length(k) < length(c) - 1) c = k;
+      const spot = {
+        width: `calc${colW}`,
+        transform: `translate(calc(${c} * (${colW} + ${GAP}px)), calc(${units[c]} * ${colW} + ${count[c] * GAP}px))`,
+      };
+      units[c] += ratio[p.format];
+      count[c] += 1;
+      return spot;
+    });
+    const columns = units.flatMap((u, c) => (count[c] ? [`${u} * ${colW} + ${(count[c] - 1) * GAP}px`] : []));
+    return { spots, height: columns.length ? `max(${columns.join(", ")})` : "0px" };
+  }, [list, cols]);
   // Only offer industries that have pieces in the current format.
   const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).flatMap(industriesOf)), [kind]);
 
@@ -558,27 +585,23 @@ export function Library() {
           </div>
         )}
 
-        {/* Masonry dealt left-to-right, so the first pieces sit side by side across the top row */}
-        <div className="mt-6 grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
-          {Array.from({ length: cols }, (_, c) => (
-            <div key={c} className="flex flex-col gap-4">
-              <AnimatePresence mode="popLayout">
-                {list.map((p, i) =>
-                  i % cols === c ? (
-                    <Tile
-                      key={p.id}
-                      p={p}
-                      index={i}
-                      onOpen={(el) => {
-                        opener.current = el;
-                        setOpen(i);
-                      }}
-                    />
-                  ) : null,
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
+        <div className="@container relative mt-6">
+          {/* holds the height: container units only resolve inside the container, not on it */}
+          <div aria-hidden className="motion-safe:transition-[height] motion-safe:duration-700" style={{ height: masonry.height }} />
+          <AnimatePresence>
+            {list.map((p, i) => (
+              <Tile
+                key={p.id}
+                p={p}
+                index={i}
+                spot={masonry.spots[i]}
+                onOpen={(el) => {
+                  opener.current = el;
+                  setOpen(i);
+                }}
+              />
+            ))}
+          </AnimatePresence>
         </div>
       </div>
 
