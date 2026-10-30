@@ -23,6 +23,7 @@ const ids = links.map((l) => l.id);
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
   const menu = useRef<HTMLElement>(null);
   const lenis = useLenis(({ direction, scroll }) => setHidden(direction === 1 && scroll > 200));
   const anchor = useAnchor();
@@ -56,8 +57,13 @@ export function Nav() {
           </span>
         </Link>
 
-        {/* Desktop: the sections are one click away without opening the menu */}
-        <nav aria-label="Sections" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
+        {/* Desktop: the sections are one click away without opening the menu. A pink pill slides to the
+            section you're reading; a faint one follows the pointer. */}
+        <nav
+          aria-label="Sections"
+          onMouseLeave={() => setHovered(null)}
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-line bg-ink/50 p-1.5 backdrop-blur-md lg:flex"
+        >
           {links.map((l) => {
             const current = active === l.id;
             return (
@@ -65,15 +71,27 @@ export function Nav() {
                 key={l.href}
                 href={l.href}
                 onClick={anchor}
+                onMouseEnter={() => setHovered(l.id)}
                 aria-current={current ? "location" : undefined}
-                className={`group relative py-1 text-sm transition-colors hover:text-paper ${current ? "text-paper" : "text-paper/70"}`}
+                className={`relative rounded-full px-4 py-2 text-sm transition-colors duration-300 ${current ? "text-ink" : "text-paper/70 hover:text-paper"}`}
               >
-                {l.label}
-                <span
-                  className={`absolute inset-x-0 -bottom-px h-px origin-left bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100 ${
-                    current ? "scale-x-100" : "scale-x-0"
-                  }`}
-                />
+                {hovered === l.id && !current && (
+                  <motion.span
+                    layoutId="nav-hover"
+                    aria-hidden
+                    className="absolute inset-0 rounded-full bg-paper/10"
+                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                  />
+                )}
+                {current && (
+                  <motion.span
+                    layoutId="nav-pill"
+                    aria-hidden
+                    className="absolute inset-0 rounded-full bg-brand"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+                <span className="relative">{l.label}</span>
               </Link>
             );
           })}
