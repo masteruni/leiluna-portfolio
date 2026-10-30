@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
+import { useRef, useSyncExternalStore } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
 import { profileLinks, site } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
+import { Wordmark } from "./Wordmark";
 
 const explore = [
   { href: "/#work", label: "Work" },
@@ -19,60 +21,73 @@ const noSubscribe = () => () => {};
 const currentYear = () => new Date().getFullYear();
 const noYear = () => null;
 
-// The last chapter: a full rose field whose headline is the way to get in touch.
+const heading = "mb-4 text-sm text-muted";
+
 export function Footer() {
   const lenis = useLenis();
   const anchor = useAnchor();
   const year = useSyncExternalStore(noSubscribe, currentYear, noYear);
-  const [user, domain] = site.email.split("@");
-
+  const floor = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: floor, offset: ["start end", "end end"] });
+  const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["55%", "0%"]);
+  const glow = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [0.15, 1]);
   return (
-    <footer data-chapter="rose" className="ch-field ch-rose relative z-10 flex min-h-[90svh] flex-col px-5 pt-10 sm:px-10">
-      <div className="mx-auto flex w-full max-w-7xl flex-wrap items-start justify-between gap-x-10 gap-y-6 text-[15px]">
-        <div className="max-w-sm">
-          <p className="font-display text-lg font-semibold tracking-tight">leiluna studio</p>
-          <p className="mt-2">{site.description}</p>
+    <footer className="relative z-10 bg-ink-2 px-5 pt-14 sm:px-10">
+      <div className="mx-auto grid max-w-7xl gap-10 text-sm sm:grid-cols-2 md:grid-cols-5">
+        <div className="sm:col-span-2">
+          <p className="max-w-xs text-paper/60">{site.description}</p>
         </div>
-        <p className="max-w-[16rem]">
-          {site.location}. We reply to every brief within {site.replyTime}.
-        </p>
-        <button
-          type="button"
-          onClick={() => (lenis ? lenis.scrollTo(0, { duration: 2 }) : window.scrollTo({ top: 0 }))}
-          className="underline-offset-4 hover:underline"
-        >
-          Back to the top ↑
-        </button>
+        <div>
+          <p className={heading}>Explore</p>
+          <ul className="space-y-2">
+            {explore.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} onClick={anchor} className="text-paper/70 transition-colors hover:text-brand">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {profileLinks.length > 0 && (
+          <div>
+            <p className={heading}>Follow</p>
+            <ul className="space-y-2">
+              {profileLinks.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noreferrer" className="text-paper/70 transition-colors hover:text-brand">
+                    {s.label} ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div className="space-y-2 md:text-right">
+          <p className={heading}>Say hello</p>
+          <a href={`mailto:${site.email}`} className="block break-all text-paper/70 hover:text-brand">
+            {site.email}
+          </a>
+          <button
+            type="button"
+            onClick={() => (lenis ? lenis.scrollTo(0, { duration: 2 }) : window.scrollTo({ top: 0 }))}
+            className="text-paper/70 hover:text-brand"
+          >
+            Back to orbit ↑
+          </button>
+        </div>
       </div>
 
-      <div className="mx-auto mt-auto w-full max-w-7xl pt-24">
-        <a
-          href={`mailto:${site.email}`}
-          className="group block font-display text-[clamp(2.75rem,10.5vw,10rem)] font-bold leading-[0.9] tracking-[-0.05em]"
-        >
-          <span className="block">{user}</span>
-          <span className="block transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-4">@{domain}</span>
-        </a>
-
-        <div className="mt-12 grid gap-4 py-8 text-sm sm:grid-cols-3 sm:items-end">
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
-            {explore.map((l) => (
-              <Link key={l.href} href={l.href} onClick={anchor} className="underline-offset-4 hover:underline">
-                {l.label}
-              </Link>
-            ))}
-            {profileLinks.map((s) => (
-              <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
-                {s.label} ↗
-              </a>
-            ))}
-          </nav>
-          <p className="sm:text-center">Your story. Our creative orbit.</p>
-          <p className="sm:text-right">
-            © {year ? `${year} ` : ""}
-            {site.name}. All work shown is protected.
-          </p>
-        </div>
+      {/* The wordmark rises out of the floor as the page ends */}
+      <div ref={floor} className="mx-auto mt-16 max-w-7xl overflow-hidden">
+        <motion.div style={{ y: rise, opacity: glow }}>
+          <Wordmark title={site.name} className="h-auto w-full select-none text-paper/90" />
+        </motion.div>
+      </div>
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 text-sm text-muted sm:flex-row sm:justify-between sm:gap-10">
+        <span>© {year ? `${year} ` : ""}{site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>
+        <span>Your story. Our creative orbit.</span>
       </div>
     </footer>
   );

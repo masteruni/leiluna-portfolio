@@ -21,79 +21,6 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ───────────────────────────────────────────────────────────
-   CHAPTERS — the page runs through the lunar cycle as you scroll:
-   new-moon night, a deep-rose crescent, rose and soft-pink quarters,
-   and a full-moon paper chapter in the middle. Each chapter swaps the
-   palette roles, so every component keeps its classes (text-paper is
-   "the ink of this field", bg-ink is "the ground of this field").
-   ─────────────────────────────────────────────────────────── */
-.ch-crescent {
-  --ch: #8e3358;
-  --ink: #5e1f3a;
-  --ink-2: #7a2a4b;
-  --ink-3: #6a2443;
-  --muted: #ecc9d6;
-  --line: rgb(242 241 238 / 0.18);
-  --brand: #f2f1ee;
-  --brand-2: #f6a6bd;
-  --brand-3: #f6a6bd;
-}
-.ch-rose {
-  --ch: #ea6a8e;
-  --paper: #050506;
-  --ink: #f2f1ee;
-  --ink-2: #e25d84;
-  --ink-3: #d64f77;
-  --muted: #3d1422;
-  --line: rgb(5 5 6 / 0.16);
-  --brand: #050506;
-  --brand-2: #3d1422;
-  --brand-3: #3d1422;
-}
-.ch-pink {
-  --ch: #f6a6bd;
-  --paper: #050506;
-  --ink: #f2f1ee;
-  --ink-2: #f197b2;
-  --ink-3: #ea87a5;
-  --muted: #4a2030;
-  --line: rgb(5 5 6 / 0.14);
-  --brand: #050506;
-  --brand-2: #4a2030;
-  --brand-3: #4a2030;
-}
-.ch-full {
-  --ch: #f2f1ee;
-  --paper: #050506;
-  --ink: #f2f1ee;
-  --ink-2: #e6e4df;
-  --ink-3: #d9d7d1;
-  --muted: #57525c;
-  --line: rgb(5 5 6 / 0.12);
-  --brand: #8e3358;
-  --brand-2: #a8436a;
-  --brand-3: #8e3358;
-}
-/* Something that must stay night wherever it sits (a video player, a case-study card). */
-.tone-night {
-  --ink: #050506;
-  --ink-2: #0e0d11;
-  --ink-3: #1a181e;
-  --paper: #f2f1ee;
-  --muted: #8e8893;
-  --line: rgb(242 241 238 / 0.1);
-  --brand: #ea6a8e;
-  --brand-2: #f6a6bd;
-  --brand-3: #a8436a;
-  color: var(--paper);
-}
-/* A chapter's field: its flat colour floor to ceiling, edge to edge, with the field's own ink. */
-.ch-field {
-  background: var(--ch, transparent);
-  color: var(--paper);
-}
-
 @theme inline {
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
@@ -290,6 +217,10 @@ html.has-cursor textarea { cursor: text !important; }
 }
 .animate-spin-slow { animation: spin-slow 40s linear infinite; }
 
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(242 241 238 / 0.55);
+}
 
 .serif { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; }
 

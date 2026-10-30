@@ -17,7 +17,7 @@ export function Pillars() {
     </span>
   );
   return (
-    <div data-chapter="night" className="py-8" aria-hidden>
+    <div className="py-8" aria-hidden>
       <ScrollVelocity
         texts={[row]}
         velocity={60}

@@ -25,13 +25,13 @@ export function Manifesto() {
   const words = manifesto.text.split(" ");
 
   return (
-    <section id="studio" data-chapter="crescent" aria-labelledby="studio-title" className="ch-field ch-crescent relative flex min-h-[90svh] flex-col justify-center px-5 py-20 sm:px-10 md:py-28">
+    <section id="studio" aria-labelledby="studio-title" className="relative px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <h2 id="studio-title" className="font-display text-[clamp(3rem,8vw,8rem)] font-bold leading-[0.9] tracking-[-0.045em]">
           {manifesto.title}
         </h2>
         <div ref={ref} className="mt-12 md:ml-[33%] md:mt-16">
-          <p className="max-w-[54rem] font-display text-[clamp(1.375rem,2.2vw,2rem)] font-medium leading-[1.25] tracking-[-0.02em]">
+          <p className="max-w-[54rem] font-display text-[clamp(1.375rem,2.4vw,2.25rem)] font-medium leading-[1.25] tracking-[-0.02em]">
             {words.map((w, i) => (
               <Word key={i} word={w} i={i} total={words.length} progress={scrollYProgress} />
             ))}

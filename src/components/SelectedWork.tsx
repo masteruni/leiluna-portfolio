@@ -20,7 +20,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
     <div className="lg:sticky lg:h-svh lg:pt-[12vh]" style={{ top: `${i * 28}px` }}>
       <motion.article
         style={{ scale, transformOrigin: "top center" }}
-        className="tone-night group relative overflow-hidden rounded-[2rem] bg-ink-2 lg:h-[76vh]"
+        className="group relative overflow-hidden rounded-[2rem] lg:h-[76vh]"
       >
         {/* the project's own colour as the card's field */}
         <div aria-hidden className="absolute inset-0" style={{ background: `color-mix(in oklab, ${b} 30%, var(--ink-2))` }} />
@@ -33,7 +33,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
               <p className="mt-4 text-sm text-paper/60">
                 {p.client} · {p.year}
               </p>
-              <p className="mt-5 max-w-lg text-paper/90 sm:text-lg">{p.summary}</p>
+              <p className="mt-5 max-w-lg text-paper/70 sm:text-lg">{p.summary}</p>
             </div>
 
             <div>
@@ -73,7 +73,7 @@ export function SelectedWork() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   return (
-    <section id="work" data-chapter="rose" className="ch-field ch-rose relative px-5 py-20 sm:px-10 md:py-28">
+    <section id="work" className="relative px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -81,7 +81,7 @@ export function SelectedWork() {
               <LineReveal inView lines={["Stories we put", "in orbit."]} />
             </h2>
           </div>
-          <p className="max-w-sm text-lg text-paper">
+          <p className="max-w-sm text-lg text-paper/60">
             Real pages we run every day, from strategy and editing to posting and community. The numbers are theirs.
           </p>
         </div>

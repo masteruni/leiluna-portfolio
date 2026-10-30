@@ -44,7 +44,7 @@ export function Hero() {
   };
 
   return (
-    <section data-chapter="night" ref={ref} className="relative min-h-[100svh] overflow-hidden">
+    <section ref={ref} className="relative min-h-[100svh] overflow-hidden">
       <div className="absolute inset-0">
         <Planet progress={scrollYProgress} />
       </div>
@@ -59,7 +59,7 @@ export function Hero() {
             />
           </h1>
 
-          <motion.p {...fade(0.3)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/90 sm:text-xl">
+          <motion.p {...fade(0.3)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
             {site.hero.intro}
           </motion.p>
 

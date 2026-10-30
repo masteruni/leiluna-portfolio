@@ -1,104 +1,74 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { useRef } from "react";
 import { process } from "@/content/site";
 
-// One panel per phase, new moon to full: each a lighter flat colour than the last, each with its moon.
-const tones = [
-  { bg: "#1d1a22", fg: "#f2f1ee", soft: "#c4bfc8", moon: "#f2f1ee", lit: 0.1 },
-  { bg: "#5e1f3a", fg: "#f2f1ee", soft: "#e4bfcd", moon: "#f2f1ee", lit: 0.32 },
-  { bg: "#8e3358", fg: "#f2f1ee", soft: "#ecc9d6", moon: "#f2f1ee", lit: 0.56 },
-  { bg: "#ea6a8e", fg: "#050506", soft: "#3d1422", moon: "#f2f1ee", lit: 0.8 },
-  { bg: "#f2f1ee", fg: "#050506", soft: "#57525c", moon: "#ea6a8e", lit: 1 },
-];
-
-// The lit part of a moon: a disc with an offset disc in the panel's own colour laid over it.
-function Moon({ lit, color, bg }: { lit: number; color: string; bg: string }) {
+// A moon whose lit side grows with `phase` (0 = new moon, 1 = full).
+function Moon({ phase }: { phase: MotionValue<number> }) {
+  const shadowX = useTransform(phase, [0, 1], [50, 150]);
   return (
     <svg viewBox="0 0 100 100" className="size-full" aria-hidden>
-      <circle cx="50" cy="50" r="46" fill={color} />
-      {lit < 1 && <circle cx={50 + lit * 100} cy="50" r="47" fill={bg} />}
+      <circle cx="50" cy="50" r="40" fill="var(--paper)" />
+      <motion.circle cx={shadowX} cy="50" r="41" fill="var(--ink)" />
+      <circle cx="50" cy="50" r="40" fill="none" stroke="var(--line)" />
     </svg>
   );
 }
 
+function Step({ i, total, progress }: { i: number; total: number; progress: MotionValue<number> }) {
+  const p = process[i];
+  const start = (i / total) * 0.9;
+  const phase = useTransform(progress, [start, start + 0.18], [0.02 + (i / (total - 1)) * 0.2, 0.2 + (i / (total - 1)) * 0.8]);
+  const opacity = useTransform(progress, [start - 0.05, start + 0.12], [0.25, 1]);
+  return (
+    <motion.li style={{ opacity }} className="flex gap-6 md:flex-col md:gap-0">
+      <div className="size-20 shrink-0 md:size-28 lg:size-32">
+        <Moon phase={phase} />
+      </div>
+      <div className="md:mt-10">
+        <h3 className="font-display text-3xl font-semibold tracking-tight">{p.title}</h3>
+        <p className="mt-3 max-w-[30ch] text-sm leading-relaxed text-paper/60">{p.text}</p>
+        {p.output && (
+          <p className="mt-4 flex max-w-[30ch] gap-2 text-sm text-paper/85">
+            <span>
+              <span className="text-muted">You get: </span>
+              {p.output}
+            </span>
+          </p>
+        )}
+      </div>
+    </motion.li>
+  );
+}
+
 export function Phases() {
-  const [open, setOpen] = useState(0);
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.6"] });
+  const line = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <section data-chapter="night" id="process" aria-labelledby="process-title" className="px-5 py-20 sm:px-10 md:py-28">
+    <section id="process" className="px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-          <h2 id="process-title" className="font-display text-[clamp(2.75rem,5vw,4.5rem)] font-bold leading-[0.92] tracking-[-0.045em] lg:col-span-6">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <h2 className="max-w-4xl font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
             From new moon to full orbit.
           </h2>
-          <p className="max-w-md text-lg leading-relaxed text-paper/80 lg:col-span-5 lg:col-start-8">
+          <p className="max-w-sm text-lg text-paper/60">
             Five phases in order the first time, then Create, Launch and Grow on repeat every month. You always know what&apos;s being made, why, and what you get back.
           </p>
         </div>
 
-        <ol className="mt-16 flex flex-col overflow-hidden rounded-[1.6rem] lg:h-[34rem] lg:flex-row">
-          {process.map((p, i) => {
-            const on = open === i;
-            const t = tones[i];
-            return (
-              <li
-                key={p.title}
-                style={{ background: t.bg, color: t.fg }}
-                className={`relative transition-[flex-grow] duration-[450ms] ease-[var(--ease-out)] lg:basis-0 ${on ? "lg:grow-[58]" : "lg:grow-[10.5]"}`}
-              >
-                <h3>
-                  <button
-                    type="button"
-                    aria-expanded={on}
-                    aria-controls={`phase-${i}`}
-                    onClick={() => setOpen(i)}
-                    className={`flex min-h-16 w-full items-center justify-between gap-4 px-6 text-left font-display text-lg font-semibold tracking-tight lg:absolute lg:inset-0 lg:items-end lg:p-6 lg:text-xl ${
-                      on ? "lg:pointer-events-none lg:opacity-0" : ""
-                    }`}
-                  >
-                    {/* on wide screens a closed phase is a sliver: its name runs up the panel */}
-                    <span className="lg:[writing-mode:vertical-rl] lg:rotate-180">{p.title}</span>
-                    <span aria-hidden className="text-2xl lg:hidden">
-                      {on ? "–" : "+"}
-                    </span>
-                  </button>
-                </h3>
-                <AnimatePresence initial={false}>
-                  {on && (
-                    <motion.div
-                      id={`phase-${i}`}
-                      role="region"
-                      aria-label={p.title}
-                      initial={reduce ? false : { opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                      transition={{ duration: 0.4, delay: reduce ? 0 : 0.2 }}
-                      className="grid gap-8 px-6 pb-8 lg:absolute lg:inset-0 lg:grid-cols-[1fr_auto] lg:p-10"
-                    >
-                      <div className="flex flex-col justify-between gap-6">
-                        <p aria-hidden className="hidden font-display text-[2.5rem] font-bold leading-none tracking-[-0.04em] lg:block">
-                          {p.title}
-                        </p>
-                        <div>
-                          <p className="max-w-[36ch] text-lg leading-relaxed">{p.text}</p>
-                          <p className="mt-4 max-w-[36ch] text-[15px]" style={{ color: t.soft }}>
-                            You get: {p.output}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="size-28 sm:size-36 lg:size-56 lg:self-center">
-                        <Moon lit={t.lit} color={t.moon} bg={t.bg} />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </li>
-            );
-          })}
-        </ol>
+        <div ref={ref} className="relative mt-20">
+          <div className="absolute left-10 top-0 h-full w-1 rounded-full bg-paper/10 md:left-0 md:top-16 md:h-1 md:w-full">
+            <motion.div className="hidden h-1 rounded-full bg-brand md:block" style={{ width: line }} />
+          </div>
+          <ol className="relative grid gap-24 md:grid-cols-5 md:gap-8">
+            {process.map((_, i) => (
+              <Step key={i} i={i} total={process.length} progress={scrollYProgress} />
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
