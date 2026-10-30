@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import sharp from "sharp";
 import { getProject, projects } from "@/content/projects";
 import { ogFonts } from "../../og-fonts";
 
@@ -20,13 +19,12 @@ export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
-// The cover as a JPEG data URL (the image renderer can't read WebP), sized for the frame; null when the
-// project has no cover, and the card then simply leaves the frame out.
-async function cover(path?: string) {
-  if (!path) return null;
+// The cover for the card: a small JPEG copy kept in src/app/og-covers/<slug>.jpg (the image renderer can't read
+// the site's WebP covers, and reading from public/ would pull every video into the server bundle). Null when a
+// project has no copy yet; the card then simply leaves the frame out.
+async function cover(slug: string) {
   try {
-    const file = await readFile(join(process.cwd(), "public", path));
-    const jpeg = await sharp(file).resize(600, 1120, { fit: "cover", position: "top" }).jpeg({ quality: 82 }).toBuffer();
+    const jpeg = await readFile(join(process.cwd(), "src/app/og-covers", `${slug}.jpg`));
     return `data:image/jpeg;base64,${jpeg.toString("base64")}`;
   } catch {
     return null;
@@ -38,7 +36,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const p = getProject(slug);
   if (!p) return new ImageResponse(<div style={{ width: "100%", height: "100%", display: "flex", background: INK }} />, size);
   const [a, b] = p.palette;
-  const [img, fonts] = await Promise.all([cover(p.cover), ogFonts()]);
+  const [img, fonts] = await Promise.all([cover(p.slug), ogFonts()]);
 
   return new ImageResponse(
     (

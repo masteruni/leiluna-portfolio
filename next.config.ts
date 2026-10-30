@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  // public/ (about 115MB, mostly videos) is served straight from the CDN, so it never belongs in a server function.
+  // Without this, any route that reads a file at runtime can pull the whole folder into its bundle.
+  outputFileTracingExcludes: {
+    "/*": ["public/**/*"],
+  },
   images: {
     // AVIF first (smaller), WebP as the fallback; both are served automatically by next/image.
     formats: ["image/avif", "image/webp"],
