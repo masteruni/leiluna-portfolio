@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { useLenis } from "lenis/react";
 import { profileLinks, site } from "@/content/site";
+import { Wordmark } from "./Wordmark";
 
 const explore = [
   { href: "/#work", label: "Work" },
@@ -72,13 +72,7 @@ export function Footer() {
       </div>
 
       <div className="mx-auto mt-16 max-w-7xl">
-        <Image
-          src="/brand/wordmark.png"
-          alt={site.name}
-          width={1126}
-          height={424}
-          className="h-auto w-full select-none opacity-90"
-        />
+        <Wordmark title={site.name} className="h-auto w-full select-none text-paper/90" />
       </div>
       <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted sm:flex-row sm:justify-between sm:gap-10">
         <span>© {year ? `${year} ` : ""}{site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>

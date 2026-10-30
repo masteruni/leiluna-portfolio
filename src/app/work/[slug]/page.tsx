@@ -57,8 +57,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   return (
     <>
       <Nav />
-      <main id="main" className="px-5 pt-32 sm:px-10 md:pt-40">
-        <article className="mx-auto max-w-7xl">
+      <main id="main" className="pt-32 md:pt-40">
+        <article className="mx-auto max-w-7xl px-5 sm:px-10 xl:box-content">
           <Reveal>
             <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper">
               <ArrowLeft size={16} /> All work
@@ -126,7 +126,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             </div>
 
             <Reveal>
-              <aside className="space-y-8 lg:sticky lg:top-28">
+              <div className="space-y-8 lg:sticky lg:top-28">
                 <div>
                   <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Deliverables</h2>
                   <ul className="mt-3 space-y-2">
@@ -143,7 +143,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                     ))}
                   </ul>
                 </div>
-              </aside>
+              </div>
             </Reveal>
           </div>
 
@@ -198,8 +198,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             </span>
           </Link>
         </article>
+        <Contact />
       </main>
-      <Contact />
       <Footer />
     </>
   );

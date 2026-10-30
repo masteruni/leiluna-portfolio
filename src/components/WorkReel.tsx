@@ -14,6 +14,18 @@ const frame: Record<Project["format"], { h: number; ratio: number }> = {
   wide: { h: 42, ratio: 16 / 9 },
 };
 
+// The project's lead result, so the proof is visible before anyone clicks through.
+function Headline({ p }: { p: Project }) {
+  const m = p.metrics[0];
+  if (!m) return null;
+  return (
+    <p className="mt-4 flex items-baseline gap-3 border-t border-line pt-4">
+      <span className="font-display text-3xl font-semibold tracking-[-0.03em] text-brand">{m.value}</span>
+      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">{m.label}</span>
+    </p>
+  );
+}
+
 function Card({ p, i, progress }: { p: Project; i: number; progress: MotionValue<number> }) {
   const reduce = useReducedMotion();
   // gentle vertical drift, alternating direction per card
@@ -31,6 +43,7 @@ function Card({ p, i, progress }: { p: Project; i: number; progress: MotionValue
         <p className="mt-1 text-sm text-muted">
           {p.client} · {p.categories.join(" / ")}
         </p>
+        <Headline p={p} />
       </Link>
     </motion.article>
   );
@@ -123,6 +136,7 @@ export function WorkReel() {
               <ProjectCover project={p} format="portrait" variant={i} />
               <h3 className="mt-4 font-display text-xl font-semibold">{p.title}</h3>
               <p className="text-sm text-muted">{p.client}</p>
+              <Headline p={p} />
             </Link>
           ))}
         </div>

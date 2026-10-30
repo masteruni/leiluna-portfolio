@@ -165,9 +165,9 @@ export function Orbits() {
       <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 90 + 10}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
           <div className="flex shrink-0 items-end justify-between">
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+            <h2 className="font-mono text-[11px] font-normal uppercase tracking-[0.3em] text-muted">
               <span className="text-brand">(02)</span> Services, five orbits
-            </p>
+            </h2>
             <p className="font-display text-sm tabular-nums text-muted">
               <span className="text-3xl font-semibold text-paper">0{active + 1}</span> / 0{services.length}
             </p>
@@ -214,9 +214,9 @@ export function Orbits() {
 
       {/* Mobile / tablet: stacked */}
       <div className="px-5 py-24 sm:px-10 lg:hidden">
-        <p className="mb-10 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+        <h2 className="mb-10 font-mono text-[11px] font-normal uppercase tracking-[0.3em] text-muted">
           <span className="text-brand">(02)</span> Services, five orbits
-        </p>
+        </h2>
         <MobileServices />
       </div>
     </section>
