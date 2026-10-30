@@ -12,7 +12,15 @@ export const site = {
   replyTime: "one business day",
   // Bump this when the content changes; it's the "last modified" date search engines see in the sitemap.
   updated: "2026-10-30",
-  headline: ["Your story.", "Our creative", "orbit."],
+  headline: ["Your story.", "Our creative", "orbit."], // the slogan, shown small above the hero headline
+  // The hero says plainly what the studio does; the slogan sits above it.
+  hero: {
+    title: ["Social media that", "people stop for."],
+    intro:
+      "We plan, film, edit and post content for brands on Instagram, TikTok and YouTube, with strategy, design and AI workflows under one roof.",
+    // Library reels that play in the hero phone, in order.
+    reels: ["muse-beauty-edit", "promotion-reel", "lot-to-home", "ramen-ad", "lipstick-ad", "masterclass-reel", "outfit-details", "kinetic-typography"],
+  },
   tagline: "Let's build your brand.",
   description:
     "Leiluna Studio is a social media and content studio. Strategy, content creation, and AI-powered workflows that keep your brand in everyone's orbit.",

@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
+import { setBriefOpen, useBriefOpen } from "@/lib/brief";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -224,7 +225,8 @@ export function Contact() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
-  const [brief, setBrief] = useState(false);
+  const brief = useBriefOpen();
+  const setBrief = setBriefOpen;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
   const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["35%", "0%"]);
   const glow = useTransform(scrollYProgress, [0.3, 1], [0.2, 1]);

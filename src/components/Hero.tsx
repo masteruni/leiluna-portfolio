@@ -2,24 +2,28 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
-import { heroProof, site, stats } from "@/content/site";
-import { useAnchor } from "@/lib/anchor";
+import { useLenis } from "lenis/react";
+import { useRef, type MouseEvent } from "react";
+import { site, stats } from "@/content/site";
+import { setBriefOpen } from "@/lib/brief";
 import { openShowreel } from "@/lib/showreel";
 import { useReady } from "@/lib/ready";
+import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
-import { OrbitBadge } from "./OrbitBadge";
 import { Planet } from "./Planet";
 
+// Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
+// two next steps (start a brief, watch the showreel) above the fold.
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const ready = useReady();
   const reduce = useReducedMotion();
-  const anchor = useAnchor();
+  const lenis = useLenis();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-35%"]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-25%"]);
+  const phoneY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-12%"]);
+  const fadeOut = useTransform(scrollYProgress, [0.45, 0.95], [1, 0]);
 
   const fade = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 16 },
@@ -27,70 +31,65 @@ export function Hero() {
     transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const, delay },
   });
 
+  // Opens the project brief and glides to it.
+  const startProject = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    setBriefOpen(true);
+    requestAnimationFrame(() => {
+      const target = document.querySelector<HTMLElement>("#project-brief") ?? document.querySelector<HTMLElement>("#contact");
+      if (!target) return;
+      if (lenis) lenis.scrollTo(target, { offset: -140, duration: 1.6, force: true });
+      else target.scrollIntoView({ behavior: "smooth" });
+    });
+  };
+
   return (
-    <section ref={ref} className="relative h-[100svh] min-h-[640px] overflow-hidden">
+    <section ref={ref} className="relative min-h-[100svh] overflow-hidden">
       <div className="absolute inset-0">
         <Planet progress={scrollYProgress} />
       </div>
-
-      {/* two streaks of light, far apart in time, so the sky never quite sits still */}
       <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
         <span className="shooting-star left-[72%] top-[12%]" />
         <span className="shooting-star left-[38%] top-[6%] [animation-delay:6.5s] [animation-duration:14s]" />
       </div>
 
-      <motion.div
-        style={{ y: textY, opacity: textOpacity }}
-        className="relative z-10 flex h-full flex-col justify-end px-5 pb-28 sm:px-10 md:justify-center md:pb-0"
-      >
-        <motion.p {...fade(0.2)} className="mb-6 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
-          <span className="flex items-center gap-3">
-            <span className="h-px w-10 bg-brand" />
-            Social &amp; content studio
-          </span>
-          {site.available && (
-            <span className="flex items-center gap-2.5 text-paper/80 md:hidden">
-              <span className="pulse relative size-1.5 rounded-full bg-brand" />
-              Open for new projects
+      <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
+        <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
+          <motion.p {...fade(0.2)} className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+            <span className="flex items-center gap-3">
+              <span className="h-px w-10 bg-brand" />
+              {site.headline.join(" ")}
             </span>
-          )}
-        </motion.p>
+          </motion.p>
 
-        <h1 className="font-display text-[clamp(3.4rem,10.5vw,10.5rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-          <LineReveal
-            play={ready}
-            delay={0.1}
-            lines={[
-              site.headline[0],
-              site.headline[1],
-              <span key="o" className="relative inline-block">
-                <span className="serif pr-[0.06em] text-[1.12em] font-normal leading-[0.8] tracking-[-0.02em] text-brand">
-                  {site.headline[2]}
-                </span>
-              </span>,
-            ]}
-          />
-        </h1>
+          <h1 className="font-display text-[clamp(2.3rem,7.4vw,8rem)] font-bold leading-[0.9] tracking-[-0.045em]">
+            <LineReveal
+              play={ready}
+              delay={0.1}
+              lines={[
+                site.hero.title[0],
+                <span key="b">
+                  {site.hero.title[1].replace("stop for.", "")}
+                  <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-brand">stop for.</span>
+                </span>,
+              ]}
+            />
+          </h1>
 
-        <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-center md:gap-14">
-          <motion.ul {...fade(0.7)} className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-paper/70">
-            {site.pillars.map((p, i) => (
-              <li key={p} className="flex items-center gap-5">
-                {i > 0 && <span className="size-1 rounded-full bg-brand" />}
-                {p}
-              </li>
-            ))}
-          </motion.ul>
+          <motion.p {...fade(0.55)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
+            {site.hero.intro}
+          </motion.p>
 
-          <motion.div {...fade(0.85)} className="flex flex-wrap items-center gap-3">
+          <motion.div {...fade(0.75)} className="mt-9 flex flex-wrap items-center gap-3">
             <Magnetic className="inline-block">
               <Link
                 href="/#contact"
-                onClick={anchor}
+                onClick={startProject}
                 className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-brand px-7 py-4 font-medium text-ink"
               >
                 <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-y-0" />
-                <span className="relative">{site.tagline}</span>
+                <span className="relative">Start a project</span>
                 <span className="relative transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
             </Magnetic>
@@ -104,57 +103,37 @@ export function Hero() {
                 <span className="absolute inset-0 animate-ping rounded-full bg-paper/30 [animation-duration:2.4s]" />
                 <span className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-ink" />
               </span>
-              Watch showreel
+              Watch the showreel
             </button>
           </motion.div>
-        </div>
 
-        {/* proof in one line on small screens; the floating chips take over on large ones */}
-        <motion.p {...fade(1)} className="mt-8 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/60 xl:hidden">
-          <span className="text-brand">
-            {stats[0].value}
-            {stats[0].suffix}
-          </span>{" "}
-          {stats[0].label}
-        </motion.p>
-      </motion.div>
-
-      {/* Floating proof chips: real results drifting in orbit around the planet */}
-      <div aria-label="Results" className="pointer-events-none absolute inset-0 z-10 hidden xl:block">
-        {heroProof.map((p, i) => (
-          <motion.div
-            key={p.value}
-            initial={reduce ? false : { opacity: 0, scale: 0.9 }}
-            animate={ready ? { opacity: 1, scale: 1 } : undefined}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 1.2 + i * 0.18 }}
-            className="absolute"
-            style={[{ right: "5%", top: "15%" }, { right: "18%", top: "38%" }, { right: "4%", top: "57%" }][i]}
-          >
-            <motion.div
-              animate={reduce ? undefined : { y: [0, i % 2 ? 10 : -10, 0] }}
-              transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
-              className="rounded-2xl border border-line bg-ink/55 px-5 py-4 shadow-[0_20px_60px_-20px_rgb(0_0_0/0.8)] backdrop-blur-md"
-            >
-              <p className="font-display text-4xl font-semibold tracking-[-0.04em]">
-                {p.value}
-                <span className="ml-1.5 inline-block size-2 rounded-full bg-brand align-middle" />
-              </p>
-              <p className="mt-1 text-xs text-paper/70">{p.label}</p>
-              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">{p.source}</p>
-            </motion.div>
-          </motion.div>
-        ))}
-      </div>
-
-      {site.available && (
-        <motion.div {...fade(1.2)} className="absolute bottom-24 right-6 z-10 hidden md:block lg:right-14">
-          <OrbitBadge text="Available for new projects" second={site.location} />
+          {/* proof bar */}
+          <motion.dl {...fade(0.95)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
+            {stats.map((s) => (
+              <div key={s.label} className="flex flex-col-reverse justify-end">
+                <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
+                <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                  {s.value}
+                  <span className="text-brand">{s.suffix}</span>
+                </dd>
+              </div>
+            ))}
+          </motion.dl>
         </motion.div>
-      )}
+
+        <motion.div
+          style={{ y: phoneY, opacity: fadeOut }}
+          initial={reduce ? false : { opacity: 0, y: 40, rotate: 4 }}
+          animate={ready ? { opacity: 1, y: 0, rotate: 0 } : undefined}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+        >
+          <HeroPhone play={ready} />
+        </motion.div>
+      </div>
 
       <motion.div
         {...fade(1.1)}
-        className="absolute inset-x-5 bottom-6 z-10 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10"
+        className="absolute inset-x-5 bottom-6 z-10 hidden items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10 lg:flex"
       >
         <span className="flex items-center gap-3">
           <span className="relative h-8 w-px overflow-hidden bg-line">
@@ -166,7 +145,7 @@ export function Hero() {
           </span>
           Scroll to explore
         </span>
-        <span className="hidden sm:block">{site.location}</span>
+        <span>{site.location}</span>
       </motion.div>
     </section>
   );
