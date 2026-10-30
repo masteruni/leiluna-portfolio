@@ -10,6 +10,16 @@ function litPath(k: number) {
   return `M50 ${50 - r} A${r} ${r} 0 0 1 50 ${50 + r} A${rx} ${r} 0 0 ${sweep} 50 ${50 - r}Z`;
 }
 
+// A small moon, `lit` (0 to 1) of it lit in the accent colour; the rest is a faint outline in the text colour.
+export function MoonPhase({ lit, className = "" }: { lit: number; className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={`shrink-0 ${className}`} aria-hidden>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeOpacity="0.45" strokeWidth="5" />
+      <path d={litPath(lit)} fill="var(--accent)" />
+    </svg>
+  );
+}
+
 // The running head above every section, as a lunar calendar: a small moon that waxes from a thin crescent in
 // the first section to full at the last, beside the section's name. Its phase follows the section's place on
 // the page (see src/lib/sections.ts), so it can't drift when sections are added or moved.
@@ -32,10 +42,7 @@ export function Eyebrow({
   const label = children ?? sections[i]?.label;
   return (
     <Tag className={`inline-flex items-center gap-3 font-serif text-xl font-normal italic leading-none text-muted ${className}`}>
-      <svg viewBox="0 0 100 100" className="size-[1.05em] shrink-0" aria-hidden>
-        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeOpacity="0.45" strokeWidth="5" />
-        <path d={litPath(lit)} fill="var(--accent)" />
-      </svg>
+      <MoonPhase lit={lit} className="size-[1.05em]" />
       <span>{label}</span>
     </Tag>
   );

@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { useLenis } from "lenis/react";
 import { profileLinks, site } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
+import { setBriefOpen } from "@/lib/brief";
 import { useFocusTrap } from "@/lib/focus";
 import { useActiveSection } from "@/lib/useActiveSection";
 import { useOverNight } from "@/lib/useOverNight";
 import { track } from "@/lib/track";
+import { MoonPhase } from "./Eyebrow";
 import { Magnetic } from "./Magnetic";
 import { Mark } from "./Mark";
 import { ThemeToggle } from "./ThemeToggle";
@@ -32,6 +35,19 @@ export function Nav() {
   const header = useRef<HTMLElement>(null);
   const lenis = useLenis(({ direction, scroll }) => setHidden(direction === 1 && scroll > 200));
   const anchor = useAnchor();
+
+  // The menu's main button: close the menu, open the project brief and glide to it.
+  const startProject = () => {
+    track("Start project", { from: "menu" });
+    setOpen(false);
+    setBriefOpen(true);
+    requestAnimationFrame(() => {
+      const target = document.querySelector<HTMLElement>("#project-brief") ?? document.querySelector<HTMLElement>("#contact");
+      if (!target) return;
+      if (lenis) lenis.scrollTo(target, { offset: -140, duration: 1.6, force: true });
+      else target.scrollIntoView({ behavior: "smooth" });
+    });
+  };
   const active = useActiveSection(ids);
   // Thin line under the header: how far down the page you are.
   const { scrollYProgress } = useScroll();
@@ -199,7 +215,8 @@ export function Nav() {
                       }}
                       className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
                     >
-                      <span className="font-mono text-xs font-normal tracking-normal text-muted">0{i + 1}</span>
+                      {/* the moon fills down the list, full at Contact, like the section labels on the page */}
+                      <MoonPhase lit={(i + 1) / links.length} className="size-[0.4em] self-center text-muted" />
                       <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-accent ${active === l.id ? "text-accent" : ""}`}>
                         {l.label}
                       </span>
@@ -213,12 +230,22 @@ export function Nav() {
             </ul>
 
             <motion.div
-              className="relative flex flex-col gap-4 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+              className="relative flex flex-col gap-6 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-end sm:justify-between"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { delay: 0.6 } }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
             >
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={startProject}
+                  className="group inline-flex min-h-12 items-center justify-between gap-6 self-start rounded-full bg-brand py-2 pl-6 pr-2 font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
+                >
+                  Start a project
+                  <span className="grid size-9 place-items-center rounded-full bg-ink text-paper">
+                    <ArrowRight aria-hidden className="size-4 -rotate-45 transition-transform duration-500 ease-[var(--ease-out)] group-hover:rotate-0" />
+                  </span>
+                </button>
                 {site.available && (
                   <span className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/70">
                     <span className="pulse relative size-1.5 rounded-full bg-brand" />

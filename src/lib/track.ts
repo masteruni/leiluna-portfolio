@@ -3,7 +3,7 @@ import { track as send } from "@vercel/analytics";
 // Every conversion the site reports to Vercel Analytics (Analytics → Events), in one place. Properties stay
 // short and never include anything a visitor typed.
 type Events = {
-  "Start project": { from: "hero" | "contact" };
+  "Start project": { from: "hero" | "contact" | "menu" };
   "Format requested": { format: string };
   "Brief sent": { services: number; timeline: string; budget: string };
   "Brief copied": Record<string, never>;
