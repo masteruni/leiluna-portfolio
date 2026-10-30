@@ -27,7 +27,7 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="px-5 py-32 sm:px-10 md:py-44"
+      className="px-5 py-24 sm:px-10 md:py-32"
       aria-labelledby="testimonials-title"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}

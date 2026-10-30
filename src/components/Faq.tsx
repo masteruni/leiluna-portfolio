@@ -12,7 +12,7 @@ export function Faq() {
   const reduce = useReducedMotion();
   const id = useId();
   return (
-    <section id="faq" className="px-5 py-32 sm:px-10 md:py-44" aria-labelledby={`${id}-title`}>
+    <section id="faq" className="px-5 py-24 sm:px-10 md:py-32" aria-labelledby={`${id}-title`}>
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <Eyebrow id="faq" />

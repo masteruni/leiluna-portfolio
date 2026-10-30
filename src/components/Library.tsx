@@ -490,7 +490,7 @@ export function Library() {
   }, [kind]);
 
   return (
-    <section id="library" className="relative px-5 py-32 sm:px-10 md:py-44">
+    <section id="library" className="relative px-5 py-24 sm:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div>

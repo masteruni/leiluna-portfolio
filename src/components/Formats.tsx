@@ -140,7 +140,7 @@ export function Formats() {
   };
 
   return (
-    <section ref={ref} id="formats" className="relative px-5 py-32 sm:px-10 md:py-44" aria-labelledby="formats-title">
+    <section ref={ref} id="formats" className="relative px-5 py-24 sm:px-10 md:py-32" aria-labelledby="formats-title">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>

@@ -115,7 +115,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
 
 export function Founders() {
   return (
-    <section id="founders" className="px-5 py-32 sm:px-10 md:py-44">
+    <section id="founders" className="px-5 py-24 sm:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
         <Eyebrow id="founders" />
         <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">

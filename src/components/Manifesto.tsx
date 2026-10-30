@@ -29,7 +29,7 @@ export function Manifesto() {
   const words = manifesto.split(" ");
 
   return (
-    <section id="studio" className="relative px-5 py-32 sm:px-10 md:py-48">
+    <section id="studio" className="relative px-5 py-24 sm:px-10 md:py-36">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[180px_1fr]">
         <Eyebrow id="studio" />
         <div ref={ref}>

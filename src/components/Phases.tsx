@@ -53,7 +53,7 @@ export function Phases() {
   const line = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <section id="process" className="px-5 py-32 sm:px-10 md:py-44">
+    <section id="process" className="px-5 py-24 sm:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
         <Eyebrow id="process" />
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">

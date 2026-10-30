@@ -53,7 +53,7 @@ export function Proof() {
   const [held, setHeld] = useState(false); // a tap stops the ticker on touch screens (hover does it with a mouse)
   const ticker = [...stats.map((s) => `${s.value}${s.suffix} ${s.label}`), ...moreProof.map((m) => `${m.value} ${m.label}`)];
   return (
-    <section id="proof" className="relative overflow-hidden py-32 md:py-44" aria-labelledby="proof-title">
+    <section id="proof" className="relative overflow-hidden py-24 md:py-32" aria-labelledby="proof-title">
       <div className="px-5 sm:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
