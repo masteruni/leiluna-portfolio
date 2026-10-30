@@ -7,7 +7,6 @@ import { useRef, type MouseEvent } from "react";
 import { site, stats } from "@/content/site";
 import { setBriefOpen } from "@/lib/brief";
 import { openShowreel } from "@/lib/showreel";
-import { useReady } from "@/lib/ready";
 import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -17,7 +16,6 @@ import { Planet } from "./Planet";
 // two next steps (start a brief, watch the showreel) above the fold.
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const ready = useReady();
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -26,9 +24,10 @@ export function Hero() {
   const fadeOut = useTransform(scrollYProgress, [0.45, 0.95], [1, 0]);
 
   const fade = (delay: number) => ({
+    "data-enter": "",
     initial: reduce ? false : { opacity: 0, y: 16 },
-    animate: ready ? { opacity: 1, y: 0 } : undefined,
-    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const, delay },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const, delay },
   });
 
   // Opens the project brief and glides to it.
@@ -56,7 +55,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
-          <motion.p {...fade(0.2)} className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+          <motion.p {...fade(0.1)} className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
             <span className="flex items-center gap-3">
               <span className="h-px w-10 bg-brand" />
               {site.headline.join(" ")}
@@ -65,8 +64,8 @@ export function Hero() {
 
           <h1 className="font-display text-[clamp(2.3rem,7.4vw,8rem)] font-bold leading-[0.9] tracking-[-0.045em]">
             <LineReveal
-              play={ready}
-              delay={0.1}
+              delay={0}
+              duration={0.9}
               lines={[
                 site.hero.title[0],
                 <span key="b">
@@ -77,11 +76,11 @@ export function Hero() {
             />
           </h1>
 
-          <motion.p {...fade(0.55)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
+          <motion.p {...fade(0.3)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
             {site.hero.intro}
           </motion.p>
 
-          <motion.div {...fade(0.75)} className="mt-9 flex flex-wrap items-center gap-3">
+          <motion.div {...fade(0.4)} className="mt-9 flex flex-wrap items-center gap-3">
             <Magnetic className="inline-block">
               <Link
                 href="/#contact"
@@ -108,7 +107,7 @@ export function Hero() {
           </motion.div>
 
           {/* proof bar */}
-          <motion.dl {...fade(0.95)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
+          <motion.dl {...fade(0.5)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
             {stats.map((s) => (
               <div key={s.label} className="flex flex-col-reverse justify-end">
                 <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
@@ -122,17 +121,18 @@ export function Hero() {
         </motion.div>
 
         <motion.div
+          data-enter=""
           style={{ y: phoneY, opacity: fadeOut }}
           initial={reduce ? false : { opacity: 0, y: 40, rotate: 4 }}
-          animate={ready ? { opacity: 1, y: 0, rotate: 0 } : undefined}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
         >
-          <HeroPhone play={ready} />
+          <HeroPhone play />
         </motion.div>
       </div>
 
       <motion.div
-        {...fade(1.1)}
+        {...fade(0.6)}
         className="absolute inset-x-5 bottom-6 z-10 hidden items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10 lg:flex"
       >
         <span className="flex items-center gap-3">
