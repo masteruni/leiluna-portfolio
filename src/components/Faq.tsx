@@ -1,13 +1,15 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useId, useState } from "react";
 import { faqs } from "@/content/site";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
+// Questions slide in one after another as the list scrolls into view; a pink bar glides to the open one.
 export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
+  const reduce = useReducedMotion();
   const id = useId();
   return (
     <section id="faq" className="px-5 py-32 sm:px-10 md:py-44" aria-labelledby={`${id}-title`}>
@@ -24,7 +26,22 @@ export function Faq() {
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
-              <li key={f.q} className="border-b border-line">
+              <motion.li
+                key={f.q}
+                className="relative border-b border-line"
+                initial={{ opacity: 0, x: -24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+                transition={reduce ? { duration: 0 } : { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
+              >
+                {isOpen && (
+                  <motion.span
+                    layoutId="faq-accent"
+                    aria-hidden
+                    className="absolute -left-3 top-7 h-10 w-1 rounded-full bg-brand sm:-left-5"
+                    transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                  />
+                )}
                 <h3>
                   <button
                     type="button"
@@ -34,7 +51,7 @@ export function Faq() {
                     onClick={() => setOpen(isOpen ? null : i)}
                     className="group flex w-full items-center gap-6 py-7 text-left"
                   >
-                    <span className="font-mono text-xs text-brand">0{i + 1}</span>
+                    <span className={`font-mono text-xs transition-colors ${isOpen ? "text-brand" : "text-brand/60"}`}>0{i + 1}</span>
                     <span className={`flex-1 font-display text-xl font-medium tracking-[-0.02em] transition-colors sm:text-2xl ${isOpen ? "text-paper" : "text-paper/80 group-hover:text-paper"}`}>
                       {f.q}
                     </span>
@@ -64,7 +81,7 @@ export function Faq() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </li>
+              </motion.li>
             );
           })}
         </ul>
