@@ -6,6 +6,7 @@ import { moreProof, stats, topReels } from "@/content/site";
 import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
+import { LogoLoop } from "./LogoLoop";
 
 const tile = "relative overflow-hidden rounded-[1.6rem] border border-line bg-ink-2/70 p-5 sm:p-8";
 
@@ -66,7 +67,14 @@ export function Proof() {
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          <div className="mt-14">
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Clients &amp; the industries we create for</p>
+            <div className="mt-5">
+              <LogoLoop />
+            </div>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {/* lead stat */}
             <div className={`${tile} col-span-2 lg:row-span-2 flex flex-col justify-between`}>
               <div

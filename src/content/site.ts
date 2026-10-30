@@ -202,6 +202,13 @@ export const topReels = [
   { views: 0.852, label: "852K", page: "The AI Edge Daily" },
 ];
 
+// The scrolling strip in "Proof": real clients first, spread among the industries we create for (from the Library).
+// Add a client by putting a square logo in /public/clients/ and adding { name, logo } here.
+export const clients = [
+  { name: "Business Resilience Mindset", logo: "/clients/business-resilience-mindset.webp" },
+  { name: "The AI Edge Daily", logo: "/clients/the-ai-edge-daily.webp" },
+];
+
 // Smaller proof tiles and the running ticker.
 export const moreProof = [
   { value: "1.1M", label: "likes on one reel" },

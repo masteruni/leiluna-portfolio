@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       { source: "/(.*)", headers: securityHeaders },
       // Videos, posters and brand files change rarely and are large: let browsers keep them for a day and the
       // CDN for a year (Vercel clears its cache on every deploy, so a replaced file still goes live immediately).
-      { source: "/(library|brand|team|work)/(.*)", headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=604800" }] },
+      { source: "/(library|brand|team|work|clients)/(.*)", headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=604800" }] },
     ];
   },
   turbopack: {

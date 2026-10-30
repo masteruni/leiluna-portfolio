@@ -12,6 +12,7 @@ Built with Next.js, Tailwind CSS, Motion and Lenis, and deployed on Vercel at [l
 | Section order and numbering ("(03) Selected work") | `src/lib/sections.ts` |
 | Portfolio projects and case studies (per brand) | `src/content/projects.ts` |
 | The Library: single reels, videos and graphics by style and industry | `src/content/library.ts` (files go in `public/library/`) |
+| Client logos in the scrolling strip under "Proof" | `clients` in `src/content/site.ts` (logos go in `public/clients/`) |
 | Brand colors | the `:root` block at the top of `src/app/globals.css` |
 | Founder photos | add e.g. `public/team/juri.jpg`, then set `photo: "/team/juri.jpg"` in `site.ts` |
 | Project images / videos | add files to `public/work/` and set `cover` / `video` on the project |
