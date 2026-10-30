@@ -39,6 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# design-taste-frontend working files (screenshots, reports)
-.taste-skill/
