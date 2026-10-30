@@ -330,8 +330,6 @@ html.has-cursor textarea { cursor: text !important; }
 .serif { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; }
 
 .animate-spin-badge { animation: spin-slow 18s linear infinite; }
-/* A comet of light circling the main call to action */
-.animate-star-orbit { animation: spin-slow 5s linear infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   .grain::after,
@@ -340,7 +338,6 @@ html.has-cursor textarea { cursor: text !important; }
   .shooting-star,
   .animate-marquee,
   .animate-spin-badge,
-  .animate-star-orbit,
   .animate-spin-slow { animation: none !important; }
   .shooting-star { display: none; }
 }

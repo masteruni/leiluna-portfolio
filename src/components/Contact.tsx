@@ -242,78 +242,29 @@ function Brief({ onDone }: { onDone: () => void }) {
   );
 }
 
-// The main call to action as a small moon in orbit: a lit sphere ringed by slowly turning text and a tiny
-// satellite, a comet of light running round its edge, and on hover a moonlight eclipse sweeping across.
-function MoonButton({ open, onClick }: { open: boolean; onClick: () => void }) {
-  const id = `moon${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
-  const r = 44; // radius of the text ring, in the 100×100 viewBox
-  const circumference = 2 * Math.PI * r;
-  const ring = `Start a project ✦ Reply within ${site.replyTime} ✦ `.toUpperCase();
-
+// The main call to action, the same pink pill as the hero's "Start a project" at a larger size, so the page's one
+// action looks the same wherever it appears. On hover a light fill rises through it and the arrow moves forward.
+function StartButton({ open, onClick }: { open: boolean; onClick: () => void }) {
   return (
-    <div className="relative grid size-64 shrink-0 place-items-center sm:size-72">
-      <svg viewBox="0 0 100 100" className="animate-spin-badge pointer-events-none absolute inset-0 size-full" aria-hidden>
-        <defs>
-          <path id={`${id}-ring`} d={`M50 50 m-${r} 0 a${r} ${r} 0 1 1 ${r * 2} 0 a${r} ${r} 0 1 1 -${r * 2} 0`} />
-        </defs>
-        {/* textLength spreads the sentence so it closes the circle exactly */}
-        <text fill="var(--paper)" fillOpacity="0.55" fontSize="4.2" fontFamily="var(--font-jetbrains), monospace" textLength={circumference} lengthAdjust="spacing">
-          <textPath href={`#${id}-ring`} textLength={circumference}>
-            {ring}
-          </textPath>
-        </text>
-      </svg>
-      {/* the orbit line, with a satellite running the other way */}
-      <div aria-hidden className="pointer-events-none absolute inset-[3%] rounded-full border border-line" />
-      <div aria-hidden className="animate-spin-badge pointer-events-none absolute inset-[3%] [animation-direction:reverse] [animation-duration:11s]">
-        <span className="absolute left-1/2 top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand shadow-[0_0_12px_2px_var(--brand)]" />
-      </div>
-
-      <Magnetic strength={0.4} className="relative">
-        {/* a comet of light circling the moon's edge, with a soft glow beneath it */}
-        <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full">
-          <span
-            className="animate-star-orbit absolute -inset-6 rounded-full opacity-90 blur-xl"
-            style={{ background: "conic-gradient(from 0deg, transparent 0 70%, var(--brand) 85%, var(--brand-2) 95%, transparent)" }}
-          />
-          <span className="absolute inset-0 overflow-hidden rounded-full">
-            <span
-              className="animate-star-orbit absolute -inset-1/2"
-              style={{ background: "conic-gradient(from 0deg, transparent 0 72%, var(--brand-2) 90%, var(--paper) 97%, transparent)" }}
-            />
-          </span>
+    <Magnetic strength={0.2} className="inline-block">
+      <button
+        type="button"
+        onClick={onClick}
+        aria-expanded={open}
+        aria-controls="project-brief"
+        className="group relative inline-flex h-16 items-center gap-6 overflow-hidden rounded-full bg-brand pl-8 pr-2 text-lg font-medium text-on-brand sm:h-[4.5rem] sm:pl-9 sm:text-xl"
+      >
+        <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-y-0 group-focus-visible:translate-y-0" />
+        <span className="relative">{open ? "Close the brief" : "Start a project"}</span>
+        <span className="relative grid size-12 place-items-center rounded-full bg-ink text-paper sm:size-14">
+          {open ? (
+            <X aria-hidden className="size-5" />
+          ) : (
+            <ArrowRight aria-hidden className="size-5 transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-0.5" />
+          )}
         </span>
-        <button
-          type="button"
-          onClick={onClick}
-          aria-expanded={open}
-          aria-controls="project-brief"
-          className="group relative grid size-40 place-items-center overflow-hidden rounded-full text-center text-ink transition-transform duration-300 active:scale-95 sm:size-48"
-          style={{
-            background: "radial-gradient(circle at 32% 26%, var(--brand-2), var(--brand) 45%, var(--brand-3) 100%)",
-            boxShadow:
-              "inset -14px -18px 36px -12px rgb(5 5 6 / 0.5), inset 10px 12px 24px -10px rgb(255 255 255 / 0.45), 0 30px 80px -24px rgb(234 106 142 / 0.7)",
-          }}
-        >
-          {/* moonlight eclipse: a disk sweeps across, a crescent on its way */}
-          <span className="absolute inset-0 -translate-x-[105%] rounded-full bg-paper transition-transform duration-700 ease-[var(--ease-out)] group-hover:translate-x-0 group-focus-visible:translate-x-0" />
-          <span className="relative flex flex-col items-center gap-3">
-            <span className="font-display text-xl font-semibold leading-[1.02] tracking-[-0.03em] sm:text-2xl">
-              {open ? "Close the" : "Start a"}
-              <br />
-              {open ? "brief" : "project"}
-            </span>
-            <span className="grid size-9 place-items-center rounded-full bg-ink text-paper">
-              {open ? (
-                <X aria-hidden className="size-4" />
-              ) : (
-                <ArrowRight aria-hidden className="size-4 -rotate-45 transition-transform duration-500 ease-[var(--ease-out)] group-hover:rotate-0" />
-              )}
-            </span>
-          </span>
-        </button>
-      </Magnetic>
-    </div>
+      </button>
+    </Magnetic>
   );
 }
 
@@ -343,7 +294,7 @@ export function Contact() {
   return (
     <section ref={ref} id="contact" className="night relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-40 pt-32 sm:px-10">
       {/* rising planet */}
-      <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[62%] w-[170vw] -translate-x-1/2 md:w-[130vw]">
+      <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[62%] w-[170vw] -translate-x-1/2 md:top-[84%] md:w-[130vw]">
         <motion.div
           style={{ opacity: glow }}
           className="aspect-square w-full rounded-full"
@@ -371,15 +322,15 @@ export function Contact() {
           Tell us about your story. We&apos;ll reply within {site.replyTime} with ideas, not a sales script.
         </p>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
-          <MoonButton
+        <div className="mt-12 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-10">
+          <StartButton
             open={brief}
             onClick={() => {
               if (!brief) track("Start project", { from: "contact" });
               setBrief((b) => !b);
             }}
           />
-          <div className="flex flex-col items-center gap-2 sm:items-start">
+          <div className="flex flex-col items-center gap-1 sm:items-start sm:border-l sm:border-line sm:pl-10">
             <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "contact" })} className="font-display text-2xl font-medium transition-colors pointer-coarse:inline-flex pointer-coarse:min-h-11 pointer-coarse:items-center hover:text-accent sm:text-3xl">
               {site.email}
             </a>
@@ -389,8 +340,8 @@ export function Contact() {
                 spark(e);
                 copy();
               }}
-              className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper pointer-coarse:min-h-11 pointer-coarse:px-3">
-              {copied ? "Copied ✦" : "Copy email"}
+              className="text-sm text-muted transition-colors hover:text-paper pointer-coarse:min-h-11 pointer-coarse:px-3">
+              {copied ? "Copied" : "Copy email"}
             </button>
           </div>
         </div>
