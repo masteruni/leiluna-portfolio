@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { testimonials } from "@/content/site";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
@@ -52,7 +52,20 @@ export function Testimonials() {
             >
               <blockquote className="serif text-[clamp(1.8rem,4vw,3.6rem)] leading-[1.15] text-paper">
                 <span aria-hidden className="text-brand">“</span>
-                {t.quote}
+                {/* the quote comes into focus word by word */}
+                {t.quote.split(" ").map((w, k) => (
+                  <Fragment key={k}>
+                    {k > 0 && " "}
+                    <motion.span
+                      className="inline-block"
+                      initial={reduce ? false : { opacity: 0, filter: "blur(10px)", y: 8 }}
+                      animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 + k * 0.035 }}
+                    >
+                      {w}
+                    </motion.span>
+                  </Fragment>
+                ))}
                 <span aria-hidden className="text-brand">”</span>
               </blockquote>
               <figcaption className="mt-8 flex items-center gap-4 text-sm">
