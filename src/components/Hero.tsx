@@ -8,6 +8,7 @@ import { site, stats } from "@/content/site";
 import { setBriefOpen } from "@/lib/brief";
 import { openShowreel } from "@/lib/showreel";
 import { useReady } from "@/lib/ready";
+import { track } from "@/lib/track";
 import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -34,6 +35,7 @@ export function Hero() {
 
   // Opens the project brief and glides to it.
   const startProject = (e: MouseEvent<HTMLAnchorElement>) => {
+    track("Start project", { from: "hero" });
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     setBriefOpen(true);

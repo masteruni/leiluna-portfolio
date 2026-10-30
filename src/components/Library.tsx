@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
 import { spark } from "@/lib/spark";
+import { track } from "@/lib/track";
 import { Eyebrow } from "./Eyebrow";
 
 // Height ÷ width of each shape, so the masonry can be laid out before anything has loaded.
@@ -611,6 +612,7 @@ export function Library() {
                 spot={masonry.spots[i]}
                 onOpen={(el) => {
                   opener.current = el;
+                  track("Library piece opened", { piece: p.id, kind: p.kind });
                   setOpen(i);
                 }}
               />

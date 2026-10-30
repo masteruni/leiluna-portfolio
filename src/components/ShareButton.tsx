@@ -2,6 +2,7 @@
 
 import { useState, type MouseEvent } from "react";
 import { spark } from "@/lib/spark";
+import { track } from "@/lib/track";
 
 // Share the current page: the native share sheet on phones, "copy link" everywhere else.
 export function ShareButton({ title, text, className = "" }: { title: string; text?: string; className?: string }) {
@@ -13,9 +14,11 @@ export function ShareButton({ title, text, className = "" }: { title: string; te
     try {
       if (typeof navigator.share === "function" && navigator.canShare?.({ url })) {
         await navigator.share({ title, text, url });
+        track("Case study shared", { how: "share sheet" });
         setState("shared");
       } else {
         await navigator.clipboard.writeText(url);
+        track("Case study shared", { how: "link copied" });
         setState("copied");
       }
     } catch {

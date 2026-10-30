@@ -9,6 +9,7 @@ import { useAnchor } from "@/lib/anchor";
 import { useFocusTrap } from "@/lib/focus";
 import { useActiveSection } from "@/lib/useActiveSection";
 import { useOverNight } from "@/lib/useOverNight";
+import { track } from "@/lib/track";
 import { Magnetic } from "./Magnetic";
 import { Mark } from "./Mark";
 import { ThemeToggle } from "./ThemeToggle";
@@ -224,7 +225,7 @@ export function Nav() {
                     Open for new projects
                   </span>
                 )}
-                <a href={`mailto:${site.email}`} className="text-paper hover:text-accent">
+                <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "menu" })} className="text-paper hover:text-accent">
                   {site.email}
                 </a>
               </div>

@@ -9,6 +9,7 @@ import { industriesOf, pieces, type Piece } from "@/content/library";
 import { formats } from "@/content/site";
 import { openBriefWith } from "@/lib/brief";
 import { openShowreel } from "@/lib/showreel";
+import { track } from "@/lib/track";
 import { spark } from "@/lib/spark";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
@@ -121,6 +122,7 @@ export function Formats() {
   const step = (d: number) => pick((i + d + items.length) % items.length, d);
 
   const want = () => {
+    track("Format requested", { format: f.name });
     openBriefWith({ need: f.need, message: `We'd like something like your "${f.name}" example.` });
     requestAnimationFrame(() => {
       const t = document.querySelector<HTMLElement>("#project-brief") ?? document.querySelector<HTMLElement>("#contact");

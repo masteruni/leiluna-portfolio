@@ -6,6 +6,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
 import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBriefVersion } from "@/lib/brief";
 import { spark } from "@/lib/spark";
+import { track } from "@/lib/track";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -105,6 +106,7 @@ function Brief({ onDone }: { onDone: () => void }) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(`To: ${site.email}\n\n${body}`);
+      track("Brief copied");
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {}
@@ -118,6 +120,7 @@ function Brief({ onDone }: { onDone: () => void }) {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       onSubmit={(e) => {
         e.preventDefault();
+        track("Brief sent", { services: needs.length, timeline: timeline || "not set", budget: budget || "not set" });
         setSent(true);
         window.location.href = mailto;
       }}
@@ -329,6 +332,7 @@ export function Contact() {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(site.email);
+      track("Email copied", { from: "contact" });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -368,9 +372,15 @@ export function Contact() {
         </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
-          <MoonButton open={brief} onClick={() => setBrief((b) => !b)} />
+          <MoonButton
+            open={brief}
+            onClick={() => {
+              if (!brief) track("Start project", { from: "contact" });
+              setBrief((b) => !b);
+            }}
+          />
           <div className="flex flex-col items-center gap-2 sm:items-start">
-            <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-accent sm:text-3xl">
+            <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "contact" })} className="font-display text-2xl font-medium transition-colors hover:text-accent sm:text-3xl">
               {site.email}
             </a>
             <button

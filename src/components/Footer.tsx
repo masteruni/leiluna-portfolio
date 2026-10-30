@@ -6,6 +6,7 @@ import { motion, useInView, useReducedMotion, useScroll, useTransform } from "mo
 import { useLenis } from "lenis/react";
 import { profileLinks, site } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
+import { track } from "@/lib/track";
 import { Wordmark } from "./Wordmark";
 
 const explore = [
@@ -88,7 +89,7 @@ export function Footer() {
         )}
         <div className="space-y-2 md:text-right">
           <p className={heading}>Say hello</p>
-          <a href={`mailto:${site.email}`} className="block break-all text-paper/70 hover:text-accent">
+          <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "footer" })} className="block break-all text-paper/70 hover:text-accent">
             {site.email}
           </a>
           <button
