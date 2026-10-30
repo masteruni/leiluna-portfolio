@@ -84,7 +84,7 @@ function Detail({ i }: { i: number }) {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
       <h3 className="font-display text-[clamp(2.4rem,4.6vw,4.8rem)] font-semibold leading-[0.95] tracking-[-0.04em] short:text-[clamp(1.9rem,6svh,3.4rem)]">{s.title}</h3>
-      <p className="mt-6 max-w-lg text-lg leading-relaxed text-paper/70 short:mt-3 short:text-base">{s.blurb}</p>
+      <p className="mt-6 max-w-lg text-lg leading-relaxed text-paper/90 short:mt-3 short:text-base">{s.blurb}</p>
       <ul className="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-3 text-sm text-paper/80 short:mt-4 short:gap-y-1 short:text-[13px]">
         {s.items.map((it, k) => (
           <motion.li
@@ -177,7 +177,7 @@ export function Orbits() {
   };
 
   return (
-    <section id="services" className="relative">
+    <section data-chapter="night" id="services" className="relative">
       {/* Desktop: pinned orbital system */}
       <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 90 + 10}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">

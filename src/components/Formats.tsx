@@ -64,7 +64,7 @@ export function Formats() {
   };
 
   return (
-    <section ref={ref} id="formats" className="relative px-5 py-20 sm:px-10 md:py-28" aria-labelledby="formats-title">
+    <section ref={ref} id="formats" data-chapter="pink" className="ch-field ch-pink relative px-5 py-20 sm:px-10 md:py-28" aria-labelledby="formats-title">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -73,13 +73,13 @@ export function Formats() {
             </h2>
           </div>
           <div className="max-w-sm">
-            <p className="text-lg text-paper/60">
+            <p className="text-lg text-paper">
               Not sure what you need yet? Tap through the formats we make most, watch a real example, and ask for the one that fits.
             </p>
             <button
               type="button"
               onClick={openShowreel}
-              className="group mt-5 inline-flex items-center gap-3 text-sm text-paper/80 transition-colors hover:text-paper"
+              className="group mt-5 inline-flex items-center gap-3 text-sm text-paper transition-colors hover:text-paper"
             >
               <span className="grid size-9 place-items-center rounded-full transition-colors group-hover:bg-brand bg-paper/[0.07]">
                 <span className="ml-0.5 border-y-[4px] border-l-[7px] border-y-transparent border-l-paper group-hover:border-l-ink" />
@@ -104,14 +104,14 @@ export function Formats() {
                   aria-controls="format-panel"
                   onClick={() => pick(n)}
                   className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:px-4 max-lg:py-2 max-lg:text-sm lg:flex lg:w-full lg:items-center lg:gap-5 lg:py-5 ${
-                    on ? "max-lg:bg-brand max-lg:text-ink" : "max-lg:bg-paper/[0.07] max-lg:text-paper/75"
+                    on ? "max-lg:bg-brand max-lg:text-ink" : "max-lg:bg-paper/[0.07] max-lg:text-paper"
                   }`}
                 >
                   <span className="lg:flex-1">
-                    <span className={`block whitespace-nowrap font-display font-semibold tracking-[-0.02em] lg:whitespace-normal lg:text-2xl ${on ? "lg:text-paper" : "lg:text-paper/55 lg:group-hover:text-paper/85"}`}>
+                    <span className={`block whitespace-nowrap font-display font-semibold tracking-[-0.02em] lg:whitespace-normal lg:text-2xl ${on ? "lg:text-paper" : "lg:text-paper/70 lg:group-hover:text-paper"}`}>
                       {x.name}
                     </span>
-                    <span className={`mt-1 hidden text-sm lg:block ${on ? "text-paper/65" : "text-paper/55"}`}>{x.bestFor}</span>
+                    <span className={`mt-1 hidden text-sm lg:block ${on ? "text-paper" : "text-paper/80"}`}>{x.bestFor}</span>
                   </span>
                   {on && (
                     <motion.span
@@ -131,7 +131,7 @@ export function Formats() {
 
           {/* the example */}
           <div id="format-panel" role="tabpanel" aria-labelledby={`format-tab-${i}`} className="relative">
-            <div className={`relative mx-auto overflow-hidden rounded-[2rem] bg-ink-2 ${wide ? "aspect-video w-full" : "aspect-[9/16] w-full max-w-[22rem]"}`}>
+            <div className={`tone-night relative mx-auto overflow-hidden rounded-[2rem] bg-ink-2 ${wide ? "aspect-video w-full" : "aspect-[9/16] w-full max-w-[22rem]"}`}>
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.video
                   key={`${f.piece}-${sound}`}
@@ -158,7 +158,7 @@ export function Formats() {
                 {sound ? <VolumeX aria-hidden className="size-4" /> : <Volume2 aria-hidden className="size-4" />}
                 {sound ? "Sound off" : "Sound on"}
               </button>
-              <span className="absolute left-4 top-4 z-10 rounded-full bg-ink/85 px-3 py-1 text-[13px] text-paper/80">
+              <span className="absolute left-4 top-4 z-10 rounded-full bg-ink/85 px-3 py-1 text-[13px] text-paper">
                 {industriesOf(f.p).length > 2 ? "Multi-industry" : industriesOf(f.p).join(" · ")} · {f.p.duration}
               </span>
             </div>
@@ -173,7 +173,7 @@ export function Formats() {
                 className={`mx-auto mt-8 ${wide ? "" : "max-w-[22rem] lg:max-w-none"}`}
               >
                 <p className="text-sm text-brand">Best for · {f.bestFor}</p>
-                <p className="mt-3 text-lg leading-relaxed text-paper/80">{f.pitch}</p>
+                <p className="mt-3 text-lg leading-relaxed text-paper">{f.pitch}</p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <button
                     type="button"
@@ -185,7 +185,7 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={browse}
-                    className="rounded-full px-6 py-3 text-sm text-paper/80 transition-colors hover:text-paper bg-paper/[0.07] hover:bg-paper/15"
+                    className="rounded-full px-6 py-3 text-sm text-paper transition-colors hover:text-paper bg-paper/[0.07] hover:bg-paper/15"
                   >
                     See more in the Library
                   </button>

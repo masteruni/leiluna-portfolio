@@ -7,6 +7,7 @@ import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBri
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { Crescent } from "./Crescent";
+import CircularText from "./CircularText";
 
 const label = " text-sm text-muted";
 const field =
@@ -248,7 +249,7 @@ export function Contact() {
   };
 
   return (
-    <section ref={ref} id="contact" className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-40 pt-32 sm:px-10">
+    <section data-chapter="night" ref={ref} id="contact" className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-40 pt-32 sm:px-10">
       {/* rising planet */}
       <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[62%] w-[170vw] -translate-x-1/2 md:w-[130vw]">
         <motion.div
@@ -267,37 +268,48 @@ export function Contact() {
             lines={["Let's build", "your brand."]}
           />
         </h2>
-        <p className="mx-auto mt-8 max-w-md text-lg text-paper/60">
+        <p className="mx-auto mt-8 max-w-md text-lg text-paper/90">
           Tell us about your story. We&apos;ll reply within {site.replyTime} with ideas, not a sales script.
         </p>
 
         <div className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row">
-          <Magnetic strength={0.5}>
-            <button
-              type="button"
-              onClick={() => setBrief((b) => !b)}
-              aria-expanded={brief}
-              aria-controls="project-brief"
-              className="group relative grid size-44 place-items-center overflow-hidden rounded-full bg-brand text-center font-medium text-ink sm:size-52"
-            >
-              <span className="absolute inset-0 scale-0 rounded-full bg-paper transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-100" />
-              <span className="relative text-lg leading-tight">
-                {brief ? (
-                  <>
-                    Close
-                    <br />
-                    the brief
-                  </>
-                ) : (
-                  <>
-                    Start a
-                    <br />
-                    project →
-                  </>
-                )}
-              </span>
-            </button>
-          </Magnetic>
+          {/* the brief's promise orbits the button that opens it */}
+          <CircularText
+            text={`Start a brief · Reply within ${site.replyTime} · `}
+            size={300}
+            fontSize={15}
+            fontWeight={500}
+            spinDuration={28}
+            onHover="slowDown"
+            ringColor="transparent"
+          >
+            <Magnetic strength={0.5}>
+              <button
+                type="button"
+                onClick={() => setBrief((b) => !b)}
+                aria-expanded={brief}
+                aria-controls="project-brief"
+                className="group relative grid size-44 place-items-center overflow-hidden rounded-full bg-brand text-center font-medium text-ink sm:size-52"
+              >
+                <span className="absolute inset-0 scale-0 rounded-full bg-paper transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-100" />
+                <span className="relative text-lg leading-tight">
+                  {brief ? (
+                    <>
+                      Close
+                      <br />
+                      the brief
+                    </>
+                  ) : (
+                    <>
+                      Start a
+                      <br />
+                      project →
+                    </>
+                  )}
+                </span>
+              </button>
+            </Magnetic>
+          </CircularText>
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-brand sm:text-3xl">
               {site.email}

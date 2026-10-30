@@ -9,6 +9,7 @@ import { profileLinks, site } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
 import { useFocusTrap } from "@/lib/focus";
 import { useActiveSection } from "@/lib/useActiveSection";
+import { useChapter } from "@/lib/useChapter";
 import { Magnetic } from "./Magnetic";
 
 const links = [
@@ -27,6 +28,8 @@ export function Nav() {
   const lenis = useLenis(({ direction, scroll }) => setHidden(direction === 1 && scroll > 200));
   const anchor = useAnchor();
   const active = useActiveSection(ids);
+  // The header takes the ink of the chapter passing beneath it (the menu itself is always night).
+  const chapter = useChapter();
   // Thin line under the header: how far down the page you are.
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
@@ -45,9 +48,9 @@ export function Nav() {
       <header
         // Keyboard users tabbing into the header bring it back even while scrolled down.
         onFocusCapture={() => setHidden(false)}
-        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between px-5 py-5 transition-transform duration-700 ease-[var(--ease-out)] sm:px-10 ${
+        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between px-5 py-5 text-paper transition-[transform,color] duration-700 ease-[var(--ease-out)] sm:px-10 ${
           hidden && !open ? "-translate-y-full" : ""
-        }`}
+        } ${open ? "" : `ch-${chapter}`}`}
       >
         <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <Image src="/brand/mark.png" alt="" width={36} height={38} priority className="h-9 w-auto" />
@@ -84,7 +87,7 @@ export function Nav() {
             <Link
               href="/#contact"
               onClick={anchor}
-              className="block rounded-full bg-ink/85 px-5 py-2.5 text-sm transition-colors duration-300 hover:bg-brand hover:text-ink"
+              className="block rounded-full bg-ink/85 px-5 py-2.5 text-sm text-paper transition-colors duration-300 hover:bg-brand hover:text-ink"
             >
               Let&apos;s talk
             </Link>
@@ -95,7 +98,7 @@ export function Nav() {
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
               aria-controls="menu"
-              className="flex items-center gap-3 rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink"
+              className="flex items-center gap-3 rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink transition-colors duration-300"
             >
               <span>{open ? "Close" : "Menu"}</span>
               <span className="relative block h-2.5 w-4">

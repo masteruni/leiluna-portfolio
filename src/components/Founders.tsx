@@ -16,7 +16,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
 
   return (
     <article ref={ref} className={`group ${i ? "md:mt-40" : ""}`}>
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-2">
+      <div className="tone-night relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-2">
         {/* a field of rose behind the cut-out portrait */}
         <div className="absolute inset-0" style={{ background: "color-mix(in oklab, var(--brand) 14%, var(--ink-2))" }} />
         {/* crescent echoing the logo, orbiting behind the portrait */}
@@ -47,10 +47,10 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
         <h3 className="font-display text-5xl font-bold tracking-[-0.04em]">{f.name}</h3>
         <p className="serif mt-1 text-2xl text-muted">{f.fullName}</p>
         <p className="mt-4 text-sm leading-relaxed ">
-          <span className="text-paper/50">{role[0]}</span>
+          <span className="text-paper">{role[0]}</span>
           {role[1] && <span className="block text-brand">{role[1]}</span>}
         </p>
-        <p className="mt-6 max-w-lg text-[1.05rem] leading-relaxed text-paper/70">{f.bio}</p>
+        <p className="mt-6 max-w-lg text-[1.05rem] leading-relaxed text-paper">{f.bio}</p>
         <p className="mt-10 text-sm text-muted">Leads</p>
         <ol className="mt-3 max-w-lg">
           {f.leads.map((l) => (
@@ -58,7 +58,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
               key={l}
               className="flex items-baseline gap-4 py-3"
             >
-              <span className="text-paper/85">{l}</span>
+              <span className="text-paper">{l}</span>
             </li>
           ))}
         </ol>
@@ -69,12 +69,12 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
 
 export function Founders() {
   return (
-    <section id="founders" className="px-5 py-20 sm:px-10 md:py-28">
+    <section id="founders" data-chapter="crescent" className="ch-field ch-crescent px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <h2 className="font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
           <LineReveal inView lines={["Two crescents,", "one orbit."]} />
         </h2>
-        <p className="mt-6 max-w-xl text-lg text-paper/60">
+        <p className="mt-6 max-w-xl text-lg text-paper">
           Like the two halves of our mark: one shapes the strategy and looks after every client, the other powers the
           creative and the systems behind it. Together they make the full circle.
         </p>

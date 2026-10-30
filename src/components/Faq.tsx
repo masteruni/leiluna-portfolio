@@ -9,20 +9,20 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
   const id = useId();
   return (
-    <section id="faq" className="px-5 py-20 sm:px-10 md:py-28" aria-labelledby={`${id}-title`}>
+    <section id="faq" data-chapter="pink" className="ch-field ch-pink px-5 py-20 sm:px-10 md:py-28" aria-labelledby={`${id}-title`}>
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <h2 id={`${id}-title`} className="font-display text-[clamp(3rem,6vw,6rem)] font-bold leading-[0.88] tracking-[-0.045em]">
             <LineReveal inView lines={["Before you", "ask."]} />
           </h2>
-          <p className="mt-6 max-w-sm text-lg text-paper/60">Still wondering about something? Ask it in your brief and we&apos;ll answer within one business day.</p>
+          <p className="mt-6 max-w-sm text-lg">Still wondering about something? Ask it in your brief and we&apos;ll answer within one business day.</p>
         </div>
 
-        <ul>
+        <ul className="space-y-2">
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
-              <li key={f.q}>
+              <li key={f.q} className={`rounded-[1.6rem] px-6 transition-colors duration-300 sm:px-8 ${isOpen ? "bg-paper text-ink" : "bg-ink-2"}`}>
                 <h3>
                   <button
                     type="button"
@@ -30,15 +30,15 @@ export function Faq() {
                     aria-expanded={isOpen}
                     aria-controls={`${id}-a${i}`}
                     onClick={() => setOpen(isOpen ? null : i)}
-                    className="group flex w-full items-center gap-6 py-7 text-left"
+                    className="group flex min-h-18 w-full items-center gap-6 py-5 text-left"
                   >
-                    <span className={`flex-1 font-display text-xl font-medium tracking-[-0.02em] transition-colors sm:text-2xl ${isOpen ? "text-paper" : "text-paper/80 group-hover:text-paper"}`}>
+                    <span className="flex-1 font-display text-lg font-medium tracking-[-0.02em] sm:text-xl">
                       {f.q}
                     </span>
                     <span
                       aria-hidden
                       className={`grid size-10 shrink-0 place-items-center rounded-full transition duration-500 ${
-                        isOpen ? "rotate-45 bg-brand text-ink" : "bg-paper/[0.07] text-paper/70 group-hover:bg-paper/15"
+                        isOpen ? "rotate-45 bg-ink text-paper" : "bg-paper text-ink group-hover:scale-110"
                       }`}
                     >
                       +
@@ -57,7 +57,7 @@ export function Faq() {
                       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-8 leading-relaxed text-paper/70 sm:text-lg">{f.a}</p>
+                      <p className="max-w-[52ch] pb-7 leading-relaxed sm:text-[17px]">{f.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

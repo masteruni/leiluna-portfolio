@@ -440,7 +440,7 @@ export function Library() {
   }, [kind]);
 
   return (
-    <section id="library" className="relative px-5 py-20 sm:px-10 md:py-28">
+    <section data-chapter="night" id="library" className="relative px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -450,7 +450,7 @@ export function Library() {
               Every industry.
             </h2>
           </div>
-          <p className="max-w-sm text-lg text-paper/60">
+          <p className="max-w-sm text-lg text-paper/90">
             Not case studies, just the craft. Single reels, edits and graphics across industries, so you can find your style
             before we ever talk.
           </p>
@@ -479,8 +479,8 @@ export function Library() {
                 </button>
               ))}
             </div>
-            {/* phones: eleven industries fit better in a picker than in a row that runs off the screen */}
-            <label className="flex items-center gap-3 text-sm text-paper/70 sm:hidden">
+            {/* phones and tablets: eleven industries fit better in a picker than in a row that runs off the screen */}
+            <label className="flex items-center gap-3 text-sm text-paper/70 lg:hidden">
               Industry
               <select
                 value={industry}
@@ -497,7 +497,7 @@ export function Library() {
             <div
               role="group"
               aria-label="Filter by industry"
-              className="flex min-w-0 gap-1 overflow-x-auto [scrollbar-width:none] max-sm:hidden lg:pr-10"
+              className="flex min-w-0 gap-1 overflow-x-auto [scrollbar-width:none] max-lg:hidden lg:pr-10"
             >
               {(["All", ...industries] as const).map((ind) => {
                 const disabled = ind !== "All" && !available.has(ind);
