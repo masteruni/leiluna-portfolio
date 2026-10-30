@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
 import { projects, type Project } from "@/content/projects";
 import { useAnchor } from "@/lib/anchor";
@@ -10,16 +10,44 @@ import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
+const tiltSpring = { stiffness: 160, damping: 18, mass: 0.6 };
+
 // One project as a full-width showcase. On large screens the cards pin and stack,
-// each one easing back as the next slides over it.
+// each one easing back as the next slides over it. With a mouse, a glow in the project's colour
+// follows the pointer and the cover tilts toward it, like a phone in the hand.
 function Showcase({ p, i, total, progress }: { p: Project; i: number; total: number; progress: MotionValue<number> }) {
   const reduce = useReducedMotion();
   const scale = useTransform(progress, [i / total, 1], [1, reduce ? 1 : 1 - (total - 1 - i) * 0.05]);
   const [a, b] = p.palette;
+  const card = useRef<HTMLElement>(null);
+  const rotateX = useSpring(0, tiltSpring);
+  const rotateY = useSpring(0, tiltSpring);
+  const lift = useSpring(1, tiltSpring);
+
+  const follow = (e: React.PointerEvent<HTMLElement>) => {
+    if (e.pointerType !== "mouse" || !card.current) return;
+    const r = card.current.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    card.current.style.setProperty("--mx", `${x * 100}%`);
+    card.current.style.setProperty("--my", `${y * 100}%`);
+    if (reduce) return;
+    rotateY.set((x - 0.5) * 18);
+    rotateX.set((0.5 - y) * 14);
+    lift.set(1.04);
+  };
+  const rest = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+    lift.set(1);
+  };
 
   return (
     <div className="lg:sticky lg:h-svh lg:pt-[12vh]" style={{ top: `${i * 28}px` }}>
       <motion.article
+        ref={card}
+        onPointerMove={follow}
+        onPointerLeave={rest}
         style={{ scale, transformOrigin: "top center" }}
         className="group relative overflow-hidden rounded-[2rem] border border-line lg:h-[76vh]"
       >
@@ -31,6 +59,12 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
             background: `radial-gradient(70% 90% at 85% 10%, color-mix(in oklab, ${a} 30%, transparent), transparent 60%),
               radial-gradient(60% 70% at 0% 100%, color-mix(in oklab, ${b} 55%, transparent), transparent 70%), var(--ink-2)`,
           }}
+        />
+        {/* spotlight that follows the pointer */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{ background: `radial-gradient(40rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, ${a} 20%, transparent), transparent 60%)` }}
         />
         <Link href={`/work/${p.slug}`} data-cursor="View" className="relative grid h-full gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-14">
           <div className="flex flex-col justify-between gap-10">
@@ -73,10 +107,13 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
           </div>
 
           {p.cover && (
-            <div className="relative mx-auto aspect-[9/16] w-full max-w-[20rem] lg:h-full lg:w-auto lg:max-w-none">
-              <div className="absolute inset-0 overflow-hidden rounded-[1.6rem] border border-paper/15 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)] transition-transform duration-700 ease-[var(--ease-out)] group-hover:-rotate-2 group-hover:scale-[1.03]">
+            <div className="relative mx-auto aspect-[9/16] w-full max-w-[20rem] perspective-[900px] lg:h-full lg:w-auto lg:max-w-none">
+              <motion.div
+                style={{ rotateX, rotateY, scale: lift }}
+                className="absolute inset-0 overflow-hidden rounded-[1.6rem] border border-paper/15 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)]"
+              >
                 <Image src={p.cover} alt={`${p.title} for ${p.client}`} fill sizes="(min-width: 1024px) 30vw, 80vw" className="object-cover" />
-              </div>
+              </motion.div>
             </div>
           )}
         </Link>
