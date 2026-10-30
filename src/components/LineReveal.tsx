@@ -10,7 +10,6 @@ export function LineReveal({
   play = true,
   delay = 0,
   stagger = 0.09,
-  duration = 1.1,
   className,
   lineClassName = "",
   inView = false,
@@ -19,7 +18,6 @@ export function LineReveal({
   play?: boolean;
   delay?: number;
   stagger?: number;
-  duration?: number;
   className?: string;
   lineClassName?: string;
   inView?: boolean;
@@ -35,11 +33,10 @@ export function LineReveal({
       {lines.map((line, i) => (
         <span key={i} className={`block overflow-hidden pb-[0.08em] ${lineClassName}`}>
           <motion.span
-            data-enter=""
             className="block origin-top-left"
             initial={reduce ? false : { y: "110%", rotate: 4 }}
             animate={shown ? { y: "0%", rotate: 0 } : undefined}
-            transition={{ duration, ease: [0.16, 1, 0.3, 1], delay: delay + i * stagger }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: delay + i * stagger }}
           >
             {line}
           </motion.span>

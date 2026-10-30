@@ -20,7 +20,7 @@ export function ScrollOrbit() {
       onClick={() => (lenis ? lenis.scrollTo(0, { duration: 2 }) : window.scrollTo({ top: 0, behavior: "smooth" }))}
       aria-label="Back to top"
       data-cursor="Top"
-      className="fixed bottom-6 right-6 z-[60] hidden size-14 rounded-full bg-ink/85 transition-transform duration-500 ease-[var(--ease-out)] hover:scale-110 md:block"
+      className="fixed bottom-6 right-6 z-[60] hidden size-14 rounded-full bg-ink/60 backdrop-blur-md transition-transform duration-500 ease-[var(--ease-out)] hover:scale-110 md:block"
     >
       <svg viewBox="0 0 56 56" className="size-full overflow-visible" aria-hidden>
         <circle cx="28" cy="28" r="21" fill="none" stroke="var(--line)" />

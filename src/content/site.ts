@@ -12,7 +12,8 @@ export const site = {
   replyTime: "one business day",
   // Bump this when the content changes; it's the "last modified" date search engines see in the sitemap.
   updated: "2026-10-30",
-  // The hero says plainly what the studio does.
+  headline: ["Your story.", "Our creative", "orbit."], // the slogan, shown small above the hero headline
+  // The hero says plainly what the studio does; the slogan sits above it.
   hero: {
     title: ["Social media that", "people stop for."],
     intro:
@@ -33,10 +34,8 @@ export const site = {
   ],
 };
 
-export const manifesto = {
-  title: "A story worth orbiting.",
-  text: "Every brand has one. We plan it, shoot it, cut it, design it and automate the busywork around it, so you show up every day with something people actually stop for.",
-};
+export const manifesto =
+  "Every brand has a story worth orbiting. We plan it, shoot it, cut it, design it and automate the busywork around it, so you show up every day with something people actually stop for.";
 
 // From the Leiluna Studio service sheet.
 export const services = [
