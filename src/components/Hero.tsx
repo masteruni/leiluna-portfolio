@@ -12,6 +12,7 @@ import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { Planet } from "./Planet";
+import { RotatingText } from "./RotatingText";
 
 // Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
 // two next steps (start a brief, watch the showreel) above the fold.
@@ -68,7 +69,10 @@ export function Hero() {
               play={ready}
               delay={0.1}
               lines={[
-                site.hero.title[0],
+                <span key="a">
+                  <RotatingText words={site.hero.rotating} play={ready} />
+                  {site.hero.title[0].replace(site.hero.rotating[0], "")}
+                </span>,
                 <span key="b">
                   {site.hero.title[1].replace("stop for.", "")}
                   <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-brand">stop for.</span>

@@ -16,6 +16,8 @@ export const site = {
   // The hero says plainly what the studio does; the slogan sits above it.
   hero: {
     title: ["Social media that", "people stop for."],
+    // The first words of the headline cycle through these. Keep "Social media" first: it's what search engines read.
+    rotating: ["Social media", "Reels", "Content", "Campaigns", "Ads"],
     intro:
       "We plan, film, edit and post content for brands on Instagram, TikTok and YouTube, with strategy, design and AI workflows under one roof.",
     // Library reels that play in the hero phone, in order.
