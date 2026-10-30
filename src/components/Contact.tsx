@@ -170,7 +170,7 @@ function Brief({ onDone }: { onDone: () => void }) {
                   toggle(s.title);
                 }}
                 className={`rounded-full border px-3.5 py-2 text-xs transition-colors ${
-                  on ? "border-brand bg-brand text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
+                  on ? "border-brand bg-brand text-on-brand" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
                 }`}
               >
                 {s.short}
@@ -201,7 +201,7 @@ function Brief({ onDone }: { onDone: () => void }) {
 
       <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-3">
-          <button type="submit" onClick={spark} className="rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:bg-paper">
+          <button type="submit" onClick={spark} className="rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink">
             Send by email →
           </button>
           <button
@@ -337,7 +337,7 @@ export function Contact() {
   };
 
   return (
-    <section ref={ref} id="contact" className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-40 pt-32 sm:px-10">
+    <section ref={ref} id="contact" className="night relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-40 pt-32 sm:px-10">
       {/* rising planet */}
       <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[62%] w-[170vw] -translate-x-1/2 md:w-[130vw]">
         <motion.div

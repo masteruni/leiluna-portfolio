@@ -9,6 +9,7 @@ export function Cursor() {
   const [label, setLabel] = useState<string | null>(null);
   const [hover, setHover] = useState(false);
   const [away, setAway] = useState(false); // pointer has left the window
+  const [overNight, setOverNight] = useState(false); // over a dark section, so light mode draws it in night colours
 
   useEffect(() => {
     const mq = window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)");
@@ -25,6 +26,7 @@ export function Cursor() {
       setAway(false);
       const t = (e.target as HTMLElement | null)?.closest<HTMLElement>("[data-cursor], a, button") ?? null;
       setLabel(t?.dataset.cursor ?? null);
+      setOverNight(!!(e.target as HTMLElement | null)?.closest?.(".night"));
       setHover(!!t);
     };
     const leave = (e: PointerEvent) => {
@@ -50,7 +52,9 @@ export function Cursor() {
   }, []);
 
   return (
-    <div aria-hidden className={`pointer-events-none fixed inset-0 z-[95] hidden transition-opacity duration-300 in-[.has-cursor]:block ${away ? "opacity-0" : "opacity-100"}`}>
+    <div aria-hidden className={`pointer-events-none fixed inset-0 z-[95] hidden transition-opacity duration-300 in-[.has-cursor]:block ${away ? "opacity-0" : "opacity-100"} ${
+        overNight ? "over-night" : ""
+      }`}>
       <div ref={dot} className="absolute left-0 top-0">
         <span
           className={`block size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-paper transition-opacity duration-200 ${
@@ -62,7 +66,7 @@ export function Cursor() {
         <span
           className={`grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border font-mono text-[10px] uppercase tracking-widest transition-all duration-500 ease-[var(--ease-out)] ${
             label
-              ? "size-24 border-brand bg-brand text-ink"
+              ? "size-24 border-brand bg-brand text-on-brand"
               : hover
                 ? "size-14 border-brand/70 bg-brand/10"
                 : "size-9 border-paper/40"

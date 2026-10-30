@@ -58,7 +58,7 @@ export function Faq() {
                     <span
                       aria-hidden
                       className={`grid size-10 shrink-0 place-items-center rounded-full border transition duration-500 ${
-                        isOpen ? "rotate-45 border-brand bg-brand text-ink" : "border-line text-paper/70 group-hover:border-paper/50"
+                        isOpen ? "rotate-45 border-brand bg-brand text-on-brand" : "border-line text-paper/70 group-hover:border-paper/50"
                       }`}
                     >
                       +

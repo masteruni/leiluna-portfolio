@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTime, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useRef, useState } from "react";
 import { services } from "@/content/site";
 import { Eyebrow } from "./Eyebrow";
+import { Mark } from "./Mark";
 
 const CX = 300;
 const CY = 300;
@@ -131,7 +131,7 @@ function MobileServices() {
               <span
                 aria-hidden
                 className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-all duration-500 ${
-                  open ? "rotate-45 border-brand bg-brand text-ink" : "text-paper/70"
+                  open ? "rotate-45 border-brand bg-brand text-on-brand" : "text-paper/70"
                 }`}
               >
                 +
@@ -202,9 +202,7 @@ export function Orbits() {
             {/* on short screens the orbit is sized by the height left over, not the column width */}
             <div className="relative short:mx-auto short:w-[min(100%,calc(100svh-15rem))]">
               <OrbitSystem active={active} />
-              <Image
-                src="/brand/mark.png"
-                alt=""
+              <Mark
                 width={92}
                 height={96}
                 className="absolute left-1/2 top-1/2 h-24 w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_30px_rgba(234,106,142,0.6)]"

@@ -55,7 +55,7 @@ export function Footer() {
     return () => cancelAnimationFrame(raf);
   }, [reduce, markInView]);
   return (
-    <footer className="relative z-10 border-t border-line bg-ink px-5 pt-14 sm:px-10">
+    <footer className="night relative z-10 border-t border-line bg-ink px-5 pt-14 sm:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 text-sm sm:grid-cols-2 md:grid-cols-5">
         <div className="sm:col-span-2">
           <p className="max-w-xs text-paper/60">{site.description}</p>

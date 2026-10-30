@@ -7,6 +7,7 @@ import { Protect } from "@/components/Protect";
 import { ScrollOrbit } from "@/components/ScrollOrbit";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { founders, profileLinks, site } from "@/content/site";
+import { themeScript } from "@/lib/theme-script";
 import "./globals.css";
 
 const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], display: "swap" });
@@ -34,8 +35,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050506",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f2ef" },
+    { media: "(prefers-color-scheme: dark)", color: "#050506" },
+  ],
+  colorScheme: "dark light",
 };
 
 // Structured data: tells Google who the studio is, what it does and who runs it.
@@ -54,7 +58,11 @@ const organization = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${outfit.variable} ${instrument.variable} ${jetbrains.variable} antialiased`}>
+    // The theme attribute is set by the script below before React loads, hence suppressHydrationWarning.
+    <html lang="en" suppressHydrationWarning className={`${outfit.variable} ${instrument.variable} ${jetbrains.variable} antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="grain min-h-dvh overflow-x-clip">
         {/* Without JavaScript the intro curtain would never lift, so hide it and show the page. */}
         <noscript>

@@ -46,7 +46,7 @@ export function Hero() {
   };
 
   return (
-    <section ref={ref} className="relative min-h-[100svh] overflow-hidden">
+    <section ref={ref} className="night relative min-h-[100svh] overflow-hidden">
       <div className="absolute inset-0">
         <Planet progress={scrollYProgress} />
       </div>

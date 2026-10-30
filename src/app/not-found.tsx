@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <>
       <Nav />
-      <main id="main" className="relative grid min-h-dvh place-items-center overflow-hidden px-5 text-center">
+      <main id="main" className="night relative grid min-h-dvh place-items-center overflow-hidden px-5 text-center">
         <Starfield />
         <div
           aria-hidden
@@ -22,7 +22,7 @@ export default function NotFound() {
           </h1>
           <Link
             href="/"
-            className="mt-12 inline-block rounded-full bg-paper px-7 py-4 font-medium text-ink transition-colors hover:bg-brand"
+            className="mt-12 inline-block rounded-full bg-paper px-7 py-4 font-medium text-ink transition-colors hover:bg-brand hover:text-on-brand"
           >
             Back to the studio
           </Link>

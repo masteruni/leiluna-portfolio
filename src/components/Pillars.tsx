@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   motion,
   useAnimationFrame,
@@ -14,6 +13,7 @@ import {
 } from "motion/react";
 import { useRef } from "react";
 import { services } from "@/content/site";
+import { Mark } from "./Mark";
 
 const DRIFT = 50 / 90; // % of the track per second: the band is twice as long as before, so the same pace
 
@@ -65,7 +65,7 @@ export function Pillars() {
         {row.map((s, i) => (
           <span key={i} className="flex items-center gap-10 pr-10">
             <span className={i % 2 ? "text-outline" : ""}>{s.short}</span>
-            <Image src="/brand/mark.png" alt="" width={44} height={46} className="h-10 w-auto opacity-80 sm:h-12" />
+            <Mark width={44} height={46} className="h-10 w-auto opacity-80 sm:h-12" />
           </span>
         ))}
       </motion.div>

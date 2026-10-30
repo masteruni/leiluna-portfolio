@@ -137,7 +137,7 @@ function PieceArt({
           {/* dot grid + crop marks: a designer's canvas */}
           <div
             className="absolute inset-0 opacity-30"
-            style={{ backgroundImage: "radial-gradient(rgb(246 242 239 / 0.35) 1px, transparent 1px)", backgroundSize: "14px 14px" }}
+            style={{ backgroundImage: "radial-gradient(color-mix(in oklab, var(--paper) 35%, transparent) 1px, transparent 1px)", backgroundSize: "14px 14px" }}
           />
           {["left-3 top-3 border-l border-t", "right-3 top-3 border-r border-t", "bottom-3 left-3 border-b border-l", "bottom-3 right-3 border-b border-r"].map((c) => (
             <span key={c} className={`absolute size-4 border-paper/50 ${c}`} />
@@ -390,7 +390,7 @@ function Lightbox({
           <button
             type="button"
             onClick={onContact}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-ink transition-colors hover:bg-paper"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
           >
             I want this style →
           </button>
@@ -539,7 +539,7 @@ export function Library() {
                       setIndustry(ind);
                     }}
                     className={`shrink-0 rounded-full px-3 py-1.5 text-xs transition-colors disabled:opacity-25 ${
-                      industry === ind ? "bg-brand text-ink" : "text-paper/60 hover:text-paper"
+                      industry === ind ? "bg-brand text-on-brand" : "text-paper/60 hover:text-paper"
                     }`}
                   >
                     {ind}
@@ -582,7 +582,7 @@ export function Library() {
               <button
                 type="button"
                 onClick={() => lenis?.scrollTo("#contact", { duration: 1.6 })}
-                className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-paper"
+                className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
               >
                 Ask us for one →
               </button>

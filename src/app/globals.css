@@ -3,22 +3,50 @@
 /* Short screens (landscape tablets, small laptops): pinned sections and the menu tighten up so nothing falls below the fold. */
 @custom-variant short (@media (max-height: 760px));
 
+/* Light mode: [data-theme="light"] on <html> (set before paint by the script in layout.tsx). */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
 /* ───────────────────────────────────────────────────────────
    LEILUNA STUDIO — brand palette (sampled from the logo)
+   "ink" is the background and "paper" the text, in both themes.
    ─────────────────────────────────────────────────────────── */
-:root {
+:root,
+[data-theme="light"] .night,
+[data-theme="light"] .over-night {
   --ink: #050506; /* deep space */
   --ink-2: #0e0d11; /* raised surface */
   --ink-3: #1a181e; /* borders, chips */
   --paper: #f6f2ef; /* moonlight white */
   --muted: #8e8893; /* secondary text */
   --line: rgb(246 242 239 / 0.1);
+  color-scheme: dark;
+}
 
+/* Light mode: moonlight-white page, near-black text, the same pink */
+[data-theme="light"] {
+  --ink: #f6f2ef;
+  --ink-2: #ece6e2;
+  --ink-3: #ddd5d0;
+  --paper: #141217;
+  --muted: #6c6570;
+  --line: rgb(20 18 23 / 0.12);
+  color-scheme: light;
+}
+
+:root {
   --brand: #ea6a8e; /* Leiluna pink */
   --brand-2: #f6a6bd; /* soft pink glow */
   --brand-3: #a8436a; /* deep rose */
+  --on-brand: #050506; /* text on pink, dark in both themes */
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Night islands: the hero, the contact finale, the footer and the 404 stay in deep space in light mode too.
+   (.over-night only switches the colours, for the header while it floats over one of them.) */
+.night {
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
 @theme inline {
@@ -31,6 +59,7 @@
   --color-brand: var(--brand);
   --color-brand-2: var(--brand-2);
   --color-brand-3: var(--brand-3);
+  --color-on-brand: var(--on-brand);
 
   --font-display: var(--font-outfit);
   --font-sans: var(--font-outfit);
@@ -41,7 +70,6 @@
 html {
   overflow-x: clip;
   background: var(--ink);
-  color-scheme: dark;
   /* anchors land just below the fixed header */
   scroll-padding-top: 6rem;
 }
@@ -58,8 +86,8 @@ html {
 ::-webkit-scrollbar-thumb { background: var(--ink-3); border-radius: 999px; border: 2px solid var(--ink); }
 ::-webkit-scrollbar-thumb:hover { background: var(--brand-3); }
 
-/* Form fields keep the dark theme (no white autofill or date pickers) */
-input, textarea, select { color-scheme: dark; }
+/* Form fields follow the theme (autofill and date pickers included) */
+input, textarea, select { color-scheme: inherit; }
 input:-webkit-autofill,
 textarea:-webkit-autofill {
   -webkit-text-fill-color: var(--paper);
@@ -75,7 +103,7 @@ body {
 
 ::selection {
   background: var(--brand);
-  color: var(--ink);
+  color: var(--on-brand);
 }
 
 /* Keyboard focus is visible on the dark background (the custom cursor hides the pointer, not the focus ring) */
@@ -172,6 +200,16 @@ html.has-cursor textarea { cursor: text !important; }
 }
 
 /* Film grain */
+/* The mark's white crescent becomes ink on light backgrounds (see components/Mark.tsx) */
+.mark-day { display: none; }
+[data-theme="light"] .mark-day { display: revert-layer; }
+[data-theme="light"] .mark-night,
+[data-theme="light"] :is(.night, .over-night) .mark-day { display: none; }
+[data-theme="light"] :is(.night, .over-night) .mark-night { display: revert-layer; }
+
+/* The starry backdrop belongs to the night: hidden in light mode (the night islands bring their own space) */
+[data-theme="light"] .stars { display: none; }
+
 .grain::after {
   content: "";
   position: fixed;
@@ -250,7 +288,7 @@ html.has-cursor textarea { cursor: text !important; }
 
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1px rgb(246 242 239 / 0.55);
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--paper) 55%, transparent);
 }
 
 .serif { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; }

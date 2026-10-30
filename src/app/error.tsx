@@ -25,7 +25,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         </h1>
         <p className="mx-auto mt-8 max-w-sm text-paper/60">Nothing you did. Try again, or head back to the studio.</p>
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-          <button type="button" onClick={reset} className="rounded-full bg-paper px-7 py-4 font-medium text-ink transition-colors hover:bg-brand">
+          <button type="button" onClick={reset} className="rounded-full bg-paper px-7 py-4 font-medium text-ink transition-colors hover:bg-brand hover:text-on-brand">
             Try again
           </button>
           <Link href="/" className="rounded-full border border-line px-7 py-4 font-medium text-paper transition-colors hover:border-paper">

@@ -99,7 +99,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
                   </div>
                 ))}
               </dl>
-              <span className="mt-8 inline-flex items-center gap-3 rounded-full bg-paper py-3 pl-5 pr-3 text-sm font-medium text-ink transition-colors duration-300 group-hover:bg-brand">
+              <span className="mt-8 inline-flex items-center gap-3 rounded-full bg-paper py-3 pl-5 pr-3 text-sm font-medium text-ink transition-colors duration-300 group-hover:bg-brand group-hover:text-on-brand">
                 View case study
                 <span className="grid size-7 place-items-center rounded-full bg-ink text-paper transition-transform duration-500 group-hover:rotate-45">↗</span>
               </span>
@@ -157,7 +157,7 @@ export function SelectedWork() {
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">
             Your story <span className="serif font-normal text-brand">goes here next.</span>
           </span>
-          <span className="grid size-16 shrink-0 place-items-center rounded-full border border-line text-2xl transition duration-500 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-ink">
+          <span className="grid size-16 shrink-0 place-items-center rounded-full border border-line text-2xl transition duration-500 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-on-brand">
             ↗
           </span>
         </Link>

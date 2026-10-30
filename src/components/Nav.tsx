@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
@@ -9,7 +8,10 @@ import { profileLinks, site } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
 import { useFocusTrap } from "@/lib/focus";
 import { useActiveSection } from "@/lib/useActiveSection";
+import { useOverNight } from "@/lib/useOverNight";
 import { Magnetic } from "./Magnetic";
+import { Mark } from "./Mark";
+import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
   { href: "/#work", id: "work", label: "Work" },
@@ -33,6 +35,10 @@ export function Nav() {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
   useFocusTrap(menu, open);
 
+  // In light mode the header floats over both light sections and the dark "night" ones (hero, contact,
+  // footer): it takes on the night colours while it's over one, so it always stays readable.
+  const overNight = useOverNight(() => 40);
+
   useEffect(() => {
     if (open) lenis?.stop();
     else lenis?.start();
@@ -46,12 +52,12 @@ export function Nav() {
       <header
         // Keyboard users tabbing into the header bring it back even while scrolled down.
         onFocusCapture={() => setHidden(false)}
-        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between px-5 py-5 transition-transform duration-700 ease-[var(--ease-out)] sm:px-10 ${
+        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between px-5 py-5 text-paper transition-transform duration-700 ease-[var(--ease-out)] sm:px-10 ${
           hidden && !open ? "-translate-y-full" : ""
-        }`}
+        } ${overNight && !open ? "over-night" : ""}`}
       >
         <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <Image src="/brand/mark.png" alt="" width={36} height={38} priority className="h-9 w-auto" />
+          <Mark width={36} height={38} priority className="h-9 w-auto" />
           <span className="hidden font-display text-lg font-semibold tracking-tight sm:block">
             leiluna<span className="ml-1.5 align-middle font-mono text-[10px] font-normal uppercase tracking-[0.3em] text-muted">studio</span>
           </span>
@@ -73,7 +79,7 @@ export function Nav() {
                 onClick={anchor}
                 onMouseEnter={() => setHovered(l.id)}
                 aria-current={current ? "location" : undefined}
-                className={`relative rounded-full px-4 py-2 text-sm transition-colors duration-300 ${current ? "text-ink" : "text-paper/70 hover:text-paper"}`}
+                className={`relative rounded-full px-4 py-2 text-sm transition-colors duration-300 ${current ? "text-on-brand" : "text-paper/70 hover:text-paper"}`}
               >
                 {hovered === l.id && !current && (
                   <motion.span
@@ -98,11 +104,12 @@ export function Nav() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Magnetic className="hidden sm:block">
             <Link
               href="/#contact"
               onClick={anchor}
-              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-ink"
+              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-on-brand"
             >
               Let&apos;s talk
             </Link>

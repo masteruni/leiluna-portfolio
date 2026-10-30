@@ -49,7 +49,7 @@ export function Loader() {
         <motion.div
           key="loader"
           data-loader
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink"
+          className="night fixed inset-0 z-[100] flex items-center justify-center bg-ink"
           exit={{ clipPath: "inset(0 0 100% 0)" }}
           transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
           style={{ clipPath: "inset(0 0 0% 0)" }}

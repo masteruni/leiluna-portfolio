@@ -226,7 +226,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   {next.title}
                 </p>
               </div>
-              <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line transition group-hover:rotate-45 group-hover:bg-brand group-hover:text-ink">
+              <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line transition group-hover:rotate-45 group-hover:bg-brand group-hover:text-on-brand">
                 <ArrowUpRight />
               </span>
             </Link>

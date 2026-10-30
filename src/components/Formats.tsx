@@ -157,7 +157,7 @@ export function Formats() {
               className="group mt-5 inline-flex items-center gap-3 text-sm text-paper/80 transition-colors hover:text-paper"
             >
               <span className="grid size-9 place-items-center rounded-full border border-line transition-colors group-hover:border-brand group-hover:bg-brand">
-                <span className="ml-0.5 border-y-[4px] border-l-[7px] border-y-transparent border-l-paper group-hover:border-l-ink" />
+                <span className="ml-0.5 border-y-[4px] border-l-[7px] border-y-transparent border-l-paper group-hover:border-l-on-brand" />
               </span>
               Or watch the full showreel ({showreel.duration})
             </button>
@@ -182,7 +182,7 @@ export function Formats() {
                     pick(n);
                   }}
                   className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:border max-lg:px-4 max-lg:py-2 max-lg:text-sm lg:flex lg:w-full lg:items-center lg:gap-5 lg:border-b lg:border-line lg:py-5 ${
-                    on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-ink" : "max-lg:border-line max-lg:text-paper/75"
+                    on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-on-brand" : "max-lg:border-line max-lg:text-paper/75"
                   }`}
                 >
                   <span className={`hidden font-mono text-xs lg:block ${on ? "text-brand" : "text-muted"}`}>0{n + 1}</span>
@@ -264,7 +264,7 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={want}
-                    className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-ink transition-colors hover:bg-paper"
+                    className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
                   >
                     I want this →
                   </button>
