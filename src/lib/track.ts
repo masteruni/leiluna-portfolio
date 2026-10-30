@@ -7,6 +7,7 @@ type Events = {
   "Format requested": { format: string };
   "Brief sent": { services: number; timeline: string; budget: string };
   "Brief copied": Record<string, never>;
+  "Brief step": { step: string };
   "Email copied": { from: string };
   "Email clicked": { from: string };
   "Showreel opened": Record<string, never>;
