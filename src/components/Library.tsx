@@ -6,6 +6,7 @@ import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
+import { spark } from "@/lib/spark";
 import { Eyebrow } from "./Eyebrow";
 
 // Height ÷ width of each shape, so the masonry can be laid out before anything has loaded.
@@ -505,7 +506,8 @@ export function Library() {
                   key={k.id}
                   type="button"
                   aria-pressed={kind === k.id}
-                  onClick={() => {
+                  onClick={(e) => {
+                    if (kind !== k.id) spark(e);
                     setKind(k.id);
                     setIndustry("All");
                     setOpen(null);
@@ -532,7 +534,10 @@ export function Library() {
                     type="button"
                     disabled={disabled}
                     aria-pressed={industry === ind}
-                    onClick={() => setIndustry(ind)}
+                    onClick={(e) => {
+                      if (industry !== ind) spark(e);
+                      setIndustry(ind);
+                    }}
                     className={`shrink-0 rounded-full px-3 py-1.5 text-xs transition-colors disabled:opacity-25 ${
                       industry === ind ? "bg-brand text-ink" : "text-paper/60 hover:text-paper"
                     }`}

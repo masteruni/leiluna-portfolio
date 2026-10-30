@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
+import { spark } from "@/lib/spark";
 
 // Share the current page: the native share sheet on phones, "copy link" everywhere else.
 export function ShareButton({ title, text, className = "" }: { title: string; text?: string; className?: string }) {
   const [state, setState] = useState<"idle" | "copied" | "shared">("idle");
 
-  const share = async () => {
+  const share = async (e: MouseEvent<HTMLButtonElement>) => {
+    spark(e);
     const url = window.location.href;
     try {
       if (typeof navigator.share === "function" && navigator.canShare?.({ url })) {

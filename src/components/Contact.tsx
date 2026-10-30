@@ -201,10 +201,16 @@ function Brief({ onDone }: { onDone: () => void }) {
 
       <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-3">
-          <button type="submit" className="rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:bg-paper">
+          <button type="submit" onClick={spark} className="rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:bg-paper">
             Send by email →
           </button>
-          <button type="button" onClick={copy} className="rounded-full border border-line px-6 py-3.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper">
+          <button
+            type="button"
+            onClick={(e) => {
+              spark(e);
+              copy();
+            }}
+            className="rounded-full border border-line px-6 py-3.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper">
             {copied ? "Copied ✦" : "Copy the brief"}
           </button>
         </div>
@@ -367,7 +373,13 @@ export function Contact() {
             <a href={`mailto:${site.email}`} className="font-display text-2xl font-medium transition-colors hover:text-brand sm:text-3xl">
               {site.email}
             </a>
-            <button type="button" onClick={copy} className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper">
+            <button
+              type="button"
+              onClick={(e) => {
+                spark(e);
+                copy();
+              }}
+              className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted hover:text-paper">
               {copied ? "Copied ✦" : "Copy email"}
             </button>
           </div>

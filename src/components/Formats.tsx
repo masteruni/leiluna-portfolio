@@ -9,6 +9,7 @@ import { industriesOf, pieces, type Piece } from "@/content/library";
 import { formats } from "@/content/site";
 import { openBriefWith } from "@/lib/brief";
 import { openShowreel } from "@/lib/showreel";
+import { spark } from "@/lib/spark";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { showreel } from "./Showreel";
@@ -176,7 +177,10 @@ export function Formats() {
                   id={`format-tab-${n}`}
                   aria-selected={on}
                   aria-controls="format-panel"
-                  onClick={() => pick(n)}
+                  onClick={(e) => {
+                    if (n !== i) spark(e);
+                    pick(n);
+                  }}
                   className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:border max-lg:px-4 max-lg:py-2 max-lg:text-sm lg:flex lg:w-full lg:items-center lg:gap-5 lg:border-b lg:border-line lg:py-5 ${
                     on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-ink" : "max-lg:border-line max-lg:text-paper/75"
                   }`}
