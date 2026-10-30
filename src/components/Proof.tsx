@@ -1,13 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { moreProof, stats, topReels } from "@/content/site";
 import { CountUp } from "./CountUp";
-import { Eyebrow } from "./Eyebrow";
+import { Crescent } from "./Crescent";
 import { LineReveal } from "./LineReveal";
 
-const tile = "relative overflow-hidden rounded-[1.6rem] border border-line bg-ink-2/70 p-5 sm:p-8";
+const tile = "relative overflow-hidden rounded-[1.6rem] bg-ink-2/70 p-5 sm:p-8";
 
 // Horizontal bars that grow to each reel's view count once the chart is on screen.
 function ReelChart() {
@@ -17,7 +18,7 @@ function ReelChart() {
   const max = Math.max(...topReels.map((r) => r.views));
   return (
     <div ref={ref} className={`${tile} col-span-2 lg:row-span-2`}>
-      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Top client reels · views</p>
+      <p className="text-sm text-muted">Top client reels · views</p>
       <ol className="mt-8 space-y-5" aria-label="Views on the six top-performing client reels">
         {topReels.map((r, i) => (
           <li key={i}>
@@ -30,7 +31,7 @@ function ReelChart() {
                 className="h-full origin-left rounded-full"
                 style={{
                   width: `${(r.views / max) * 100}%`,
-                  background: i < 3 ? "linear-gradient(90deg, var(--brand-3), var(--brand))" : "linear-gradient(90deg, #1b3a5c, #5ab8e8)",
+                  background: i < 3 ? "var(--brand)" : "#5ab8e8",
                 }}
                 initial={{ scaleX: reduce ? 1 : 0 }}
                 animate={{ scaleX: inView || reduce ? 1 : 0 }}
@@ -40,7 +41,7 @@ function ReelChart() {
           </li>
         ))}
       </ol>
-      <p className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs text-paper/60">
+      <p className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-paper/60">
         <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-brand" /> Business Resilience Mindset</span>
         <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-[#5ab8e8]" /> The AI Edge Daily</span>
       </p>
@@ -51,14 +52,13 @@ function ReelChart() {
 export function Proof() {
   const ticker = [...stats.map((s) => `${s.value}${s.suffix} ${s.label}`), ...moreProof.map((m) => `${m.value} ${m.label}`)];
   return (
-    <section id="proof" className="relative overflow-hidden py-32 md:py-44" aria-labelledby="proof-title">
+    <section id="proof" className="relative overflow-hidden py-20 md:py-28" aria-labelledby="proof-title">
       <div className="px-5 sm:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <Eyebrow id="proof" />
-              <h2 id="proof-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-                <LineReveal inView lines={["Numbers that", <span key="t" className="serif font-normal text-brand">travel.</span>]} />
+              <h2 id="proof-title" className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+                <LineReveal inView lines={["Numbers that", "travel."]} />
               </h2>
             </div>
             <p className="max-w-sm text-lg text-paper/60">
@@ -69,13 +69,8 @@ export function Proof() {
           <div className="mt-16 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {/* lead stat */}
             <div className={`${tile} col-span-2 lg:row-span-2 flex flex-col justify-between`}>
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full"
-                style={{ boxShadow: "inset 2.2rem -1.4rem 0 0 rgb(234 106 142 / 0.18)" }}
-              />
-              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Across our clients&apos; pinned reels</p>
-              <div className="mt-16">
+              <Crescent className="pointer-events-none absolute -right-24 -top-24 size-80" color="rgb(234 106 142 / 0.18)" dx={11} dy={-7} />
+              <div className="mt-auto">
                 <p className="font-display text-[clamp(5rem,13vw,11rem)] font-bold leading-[0.8] tracking-[-0.06em]">
                   <CountUp value={`${stats[0].value}${stats[0].suffix}`} />
                 </p>
@@ -114,12 +109,12 @@ export function Proof() {
                 {Array.from({ length: 11 }, (_, i) => (
                   <motion.span
                     key={i}
-                    className="size-4 rounded-full border border-brand/70"
+                    className="size-4 rounded-full"
                     initial={{ scale: 0, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.06, type: "spring", stiffness: 300, damping: 18 }}
-                    style={{ background: i % 3 === 0 ? "var(--brand)" : "transparent" }}
+                    style={{ background: i % 3 === 0 ? "var(--brand)" : "rgb(242 241 238 / 0.14)" }}
                   />
                 ))}
               </div>
@@ -129,12 +124,12 @@ export function Proof() {
       </div>
 
       {/* running ticker */}
-      <div className="marquee-pause mt-20 overflow-hidden border-y border-line py-6" aria-hidden>
+      <div className="marquee-pause mt-20 overflow-hidden py-6" aria-hidden>
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
           {[...ticker, ...ticker].map((t, i) => (
             <span key={i} className="flex items-center gap-12">
               <span className={i % 2 ? "text-outline" : ""}>{t}</span>
-              <span className="text-brand">✦</span>
+              <Image src="/brand/mark.png" alt="" width={44} height={46} className="h-8 w-auto opacity-80" />
             </span>
           ))}
         </div>

@@ -53,11 +53,9 @@ export function HeroPhone({ play }: { play: boolean }) {
 
   return (
     <div className="relative mx-auto w-[min(62vw,17rem)] sm:w-[18rem] xl:w-[19.5rem]">
-      {/* glow behind the phone */}
-      <div aria-hidden className="absolute -inset-10 rounded-full bg-brand/25 blur-3xl" />
-
       <div
-        className="relative aspect-[9/19.5] overflow-hidden rounded-[2.6rem] border border-paper/15 bg-ink p-2 shadow-[0_50px_120px_-30px_rgb(0_0_0/0.9)]"
+        data-ui
+        className="relative aspect-[9/19.5] overflow-hidden rounded-[2.6rem] border border-paper/15 bg-ink p-2"
         onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
         onPointerLeave={(e) => e.pointerType === "mouse" && setPaused(false)}
       >
@@ -111,11 +109,11 @@ export function HeroPhone({ play }: { play: boolean }) {
             <span className="grid size-7 place-items-center rounded-full bg-ink/70 ring-1 ring-brand">
               <Image src="/brand/mark.png" alt="" width={18} height={19} className="h-4 w-auto" />
             </span>
-            <span className="text-xs font-medium text-paper drop-shadow">Leiluna Studio</span>
+            <span className="text-[13px] font-medium text-paper">Leiluna Studio</span>
           </div>
 
           {/* caption */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink via-ink/60 to-transparent p-4 pt-16">
+          <div className="absolute inset-x-0 bottom-0 bg-ink/85 p-4">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={reel.id}
@@ -125,7 +123,7 @@ export function HeroPhone({ play }: { play: boolean }) {
                 transition={{ duration: 0.4 }}
               >
                 <p className="font-display text-base font-semibold leading-tight">{reel.style}</p>
-                <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-paper/60">
+                <p className="mt-1 text-[13px] text-paper/60">
                   {industriesOf(reel).length > 2 ? "Multi-industry" : industriesOf(reel).join(" · ")} · {reel.duration}
                 </p>
               </motion.div>
@@ -146,20 +144,20 @@ export function HeroPhone({ play }: { play: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-2xl border border-line bg-ink/75 px-4 py-3.5 shadow-[0_20px_60px_-20px_rgb(0_0_0/0.9)] backdrop-blur-md"
+            className="rounded-2xl bg-ink/85 px-4 py-3.5"
           >
             <p className="font-display text-3xl font-semibold tracking-[-0.04em]">
               {p.value}
               <span className="ml-1.5 inline-block size-2 rounded-full bg-brand align-middle" />
             </p>
-            <p className="mt-1 text-xs text-paper/75">{p.label}</p>
-            <p className="mt-1.5 font-mono text-[8.5px] uppercase tracking-[0.18em] text-muted">{p.source}</p>
+            <p className="mt-1 text-[13px] text-paper/75">{p.label}</p>
+            <p className="mt-1.5 text-[13px] text-muted">{p.source}</p>
           </motion.div>
         </AnimatePresence>
       </div>
 
       {site.available && (
-        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
+        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full bg-ink/85 px-3 py-1.5 text-[13px] text-paper/80 sm:flex xl:-right-10">
           <span className="pulse relative size-1.5 rounded-full bg-brand" />
           Open for projects
         </span>

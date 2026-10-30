@@ -21,7 +21,7 @@ const noSubscribe = () => () => {};
 const currentYear = () => new Date().getFullYear();
 const noYear = () => null;
 
-const heading = "mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+const heading = "mb-4 text-sm text-muted";
 
 export function Footer() {
   const lenis = useLenis();
@@ -33,7 +33,7 @@ export function Footer() {
   const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["55%", "0%"]);
   const glow = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [0.15, 1]);
   return (
-    <footer className="relative z-10 border-t border-line bg-ink px-5 pt-14 sm:px-10">
+    <footer className="relative z-10 bg-ink-2 px-5 pt-14 sm:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 text-sm sm:grid-cols-2 md:grid-cols-5">
         <div className="sm:col-span-2">
           <p className="max-w-xs text-paper/60">{site.description}</p>
@@ -85,7 +85,7 @@ export function Footer() {
           <Wordmark title={site.name} className="h-auto w-full select-none text-paper/90" />
         </motion.div>
       </div>
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted sm:flex-row sm:justify-between sm:gap-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 text-sm text-muted sm:flex-row sm:justify-between sm:gap-10">
         <span>© {year ? `${year} ` : ""}{site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>
         <span>Your story. Our creative orbit.</span>
       </div>

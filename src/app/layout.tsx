@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, JetBrains_Mono, Outfit } from "next/font/google";
+import { Instrument_Serif, Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Cursor } from "@/components/Cursor";
-import { Loader } from "@/components/Loader";
 import { Protect } from "@/components/Protect";
 import { ScrollOrbit } from "@/components/ScrollOrbit";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -11,7 +10,6 @@ import "./globals.css";
 
 const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], display: "swap" });
 const instrument = Instrument_Serif({ variable: "--font-instrument", subsets: ["latin"], weight: "400", style: "italic", display: "swap" });
-const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -54,18 +52,17 @@ const organization = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${outfit.variable} ${instrument.variable} ${jetbrains.variable} antialiased`}>
+    <html lang="en" className={`${outfit.variable} ${instrument.variable} antialiased`}>
       <body className="grain min-h-dvh overflow-x-clip">
-        {/* Without JavaScript the intro curtain would never lift, so hide it and show the page. */}
+        {/* Without JavaScript the hero's entrance would never play, so show it as it ends. */}
         <noscript>
-          <style>{`[data-loader]{display:none!important}`}</style>
+          <style>{`[data-enter]{opacity:1!important;transform:none!important}`}</style>
         </noscript>
         <a href="#main" className="skip-link">
           Skip to content
         </a>
         <div aria-hidden className="stars" />
         <SmoothScroll>
-          <Loader />
           <Cursor />
           <Protect />
           {children}
