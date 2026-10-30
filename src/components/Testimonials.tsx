@@ -35,7 +35,7 @@ export function Testimonials() {
     >
       <div className="mx-auto max-w-7xl">
         <h2 id="testimonials-title" className="font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-          <LineReveal inView lines={["What clients", <span key="s" className="serif font-normal text-brand">say.</span>]} />
+          <LineReveal inView lines={["What clients", "say."]} />
         </h2>
 
         <div className="relative mt-16 min-h-[14rem] md:min-h-[12rem]">

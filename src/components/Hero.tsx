@@ -59,13 +59,7 @@ export function Hero() {
             <LineReveal
               delay={0}
               duration={0.9}
-              lines={[
-                site.hero.title[0],
-                <span key="b">
-                  {site.hero.title[1].replace("stop for.", "")}
-                  <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-brand">stop for.</span>
-                </span>,
-              ]}
+              lines={site.hero.title}
             />
           </h1>
 

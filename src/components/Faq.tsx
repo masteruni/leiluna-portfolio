@@ -9,11 +9,11 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
   const id = useId();
   return (
-    <section id="faq" className="px-5 py-32 sm:px-10 md:py-44" aria-labelledby={`${id}-title`}>
+    <section id="faq" className="px-5 py-20 sm:px-10 md:py-28" aria-labelledby={`${id}-title`}>
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <h2 id={`${id}-title`} className="font-display text-[clamp(3rem,6vw,6rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-            <LineReveal inView lines={["Before you", <span key="a" className="serif font-normal text-brand">ask.</span>]} />
+            <LineReveal inView lines={["Before you", "ask."]} />
           </h2>
           <p className="mt-6 max-w-sm text-lg text-paper/60">Still wondering about something? Ask it in your brief and we&apos;ll answer within one business day.</p>
         </div>

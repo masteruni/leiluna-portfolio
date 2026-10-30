@@ -16,7 +16,7 @@ export default function NotFound() {
           <h1 className="mt-6 font-display text-[clamp(3rem,11vw,9rem)] font-bold leading-[0.85] tracking-[-0.05em]">
             This page
             <br />
-            <span className="serif font-normal text-brand">left orbit.</span>
+            left orbit.
           </h1>
           <Link
             href="/"

@@ -64,12 +64,12 @@ export function Formats() {
   };
 
   return (
-    <section ref={ref} id="formats" className="relative px-5 py-32 sm:px-10 md:py-44" aria-labelledby="formats-title">
+    <section ref={ref} id="formats" className="relative px-5 py-20 sm:px-10 md:py-28" aria-labelledby="formats-title">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h2 id="formats-title" className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Pick a format.", <span key="b" className="serif font-normal text-brand">See it work.</span>]} />
+              <LineReveal inView lines={["Pick a format.", "See it work."]} />
             </h2>
           </div>
           <div className="max-w-sm">
@@ -91,7 +91,7 @@ export function Formats() {
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
           {/* the list (a swipeable row of chips on phones) */}
-          <div role="tablist" aria-label="Formats" className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:block lg:overflow-visible lg:px-0">
+          <div role="tablist" aria-label="Formats" className="flex flex-wrap gap-2 lg:block">
             {items.map((x, n) => {
               const on = n === i;
               return (

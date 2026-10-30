@@ -80,12 +80,12 @@ export function SelectedWork() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   return (
-    <section id="work" className="relative px-5 py-32 sm:px-10 md:py-44">
+    <section id="work" className="relative px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h2 className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Stories we put", <span key="o" className="serif font-normal text-brand">in orbit.</span>]} />
+              <LineReveal inView lines={["Stories we put", "in orbit."]} />
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">
@@ -106,7 +106,7 @@ export function SelectedWork() {
           className="group mt-16 flex flex-col items-start justify-between gap-6 py-10 sm:flex-row sm:items-center"
         >
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">
-            Your story <span className="serif font-normal text-brand">goes here next.</span>
+            Your story goes here next.
           </span>
           <span className="grid size-16 shrink-0 place-items-center rounded-full text-2xl transition duration-500 group-hover:rotate-45 group-hover:bg-brand group-hover:text-ink bg-paper/[0.07]">
             ↗

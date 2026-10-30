@@ -21,7 +21,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         <h1 className="mt-6 font-display text-[clamp(3rem,11vw,9rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           That didn&apos;t
           <br />
-          <span className="serif font-normal text-brand">load right.</span>
+          load right.
         </h1>
         <p className="mx-auto mt-8 max-w-sm text-paper/60">Nothing you did. Try again, or head back to the studio.</p>
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3">

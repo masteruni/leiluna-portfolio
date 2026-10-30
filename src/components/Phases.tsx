@@ -50,11 +50,11 @@ export function Phases() {
   const line = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <section id="process" className="px-5 py-32 sm:px-10 md:py-44">
+    <section id="process" className="px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <h2 className="max-w-4xl font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-            From new moon to <span className="serif font-normal text-brand">full orbit.</span>
+            From new moon to full orbit.
           </h2>
           <p className="max-w-sm text-lg text-paper/60">
             Five phases in order the first time, then Create, Launch and Grow on repeat every month. You always know what&apos;s being made, why, and what you get back.

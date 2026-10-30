@@ -76,10 +76,10 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
 
 export function Founders() {
   return (
-    <section id="founders" className="px-5 py-32 sm:px-10 md:py-44">
+    <section id="founders" className="px-5 py-20 sm:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <h2 className="font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-          <LineReveal inView lines={["Two crescents,", <span key="b" className="serif font-normal text-brand">one orbit.</span>]} />
+          <LineReveal inView lines={["Two crescents,", "one orbit."]} />
         </h2>
         <p className="mt-6 max-w-xl text-lg text-paper/60">
           Like the two halves of our mark: one shapes the strategy and looks after every client, the other powers the

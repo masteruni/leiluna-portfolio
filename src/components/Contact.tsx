@@ -269,7 +269,7 @@ export function Contact() {
         <h2 className="font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal
             inView
-            lines={["Let's build", <span key="b">your <span className="serif font-normal text-brand">brand.</span></span>]}
+            lines={["Let's build", "your brand."]}
           />
         </h2>
         <p className="mx-auto mt-8 max-w-md text-lg text-paper/60">

@@ -4,15 +4,12 @@ import { motion, useScroll, useTransform, type MotionValue } from "motion/react"
 import { useRef } from "react";
 import { manifesto } from "@/content/site";
 
-const accent = new Set(["orbiting.", "stop"]);
-
 function Word({ word, i, total, progress }: { word: string; i: number; total: number; progress: MotionValue<number> }) {
   const start = i / total;
   const opacity = useTransform(progress, [start, start + 1 / total], [0.12, 1]);
-  const isAccent = accent.has(word);
   return (
     <>
-      <motion.span style={{ opacity }} className={`inline-block ${isAccent ? "serif text-brand" : ""}`}>
+      <motion.span style={{ opacity }} className="inline-block">
         {word}
       </motion.span>
       {/* a real space between words, so screen readers and search engines read a sentence, not one long word */}
@@ -25,14 +22,16 @@ function Word({ word, i, total, progress }: { word: string; i: number; total: nu
 export function Manifesto() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.45"] });
-  const words = manifesto.split(" ");
+  const words = manifesto.text.split(" ");
 
   return (
-    <section id="studio" className="relative px-5 py-32 sm:px-10 md:py-48">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[180px_1fr]">
-        <h2 className="text-lg font-medium text-paper/70">The studio</h2>
-        <div ref={ref}>
-          <p className="font-display text-[clamp(1.9rem,4.4vw,4.4rem)] font-medium leading-[1.08] tracking-[-0.03em]">
+    <section id="studio" aria-labelledby="studio-title" className="relative px-5 py-20 sm:px-10 md:py-28">
+      <div className="mx-auto max-w-7xl">
+        <h2 id="studio-title" className="font-display text-[clamp(3rem,8vw,8rem)] font-bold leading-[0.9] tracking-[-0.045em]">
+          {manifesto.title}
+        </h2>
+        <div ref={ref} className="mt-12 md:ml-[33%] md:mt-16">
+          <p className="max-w-[54rem] font-display text-[clamp(1.375rem,2.4vw,2.25rem)] font-medium leading-[1.25] tracking-[-0.02em]">
             {words.map((w, i) => (
               <Word key={i} word={w} i={i} total={words.length} progress={scrollYProgress} />
             ))}

@@ -51,13 +51,13 @@ function ReelChart() {
 export function Proof() {
   const ticker = [...stats.map((s) => `${s.value}${s.suffix} ${s.label}`), ...moreProof.map((m) => `${m.value} ${m.label}`)];
   return (
-    <section id="proof" className="relative overflow-hidden py-32 md:py-44" aria-labelledby="proof-title">
+    <section id="proof" className="relative overflow-hidden py-20 md:py-28" aria-labelledby="proof-title">
       <div className="px-5 sm:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <h2 id="proof-title" className="font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-                <LineReveal inView lines={["Numbers that", <span key="t" className="serif font-normal text-brand">travel.</span>]} />
+                <LineReveal inView lines={["Numbers that", "travel."]} />
               </h2>
             </div>
             <p className="max-w-sm text-lg text-paper/60">
