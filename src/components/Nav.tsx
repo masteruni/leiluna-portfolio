@@ -84,14 +84,16 @@ export function Nav() {
 
       <AnimatePresence>
         {open && (
+          // Slides in as one viewport-sized layer (transform only), so phones and tablets animate it on the GPU
+          // instead of repainting the whole screen every frame, which broke up into blocks on Android.
           <motion.nav
             id="menu"
             aria-label="Main"
-            className="fixed inset-0 z-[70] flex flex-col justify-between gap-6 overflow-y-auto overflow-x-hidden bg-ink px-5 pb-8 pt-28 sm:px-10 short:pb-5 short:pt-20"
-            initial={{ clipPath: "circle(0% at 100% 0%)" }}
-            animate={{ clipPath: "circle(150% at 100% 0%)" }}
-            exit={{ clipPath: "circle(0% at 100% 0%)" }}
-            transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[70] flex flex-col justify-between gap-6 overflow-y-auto overflow-x-hidden bg-ink px-5 pb-8 pt-28 will-change-transform sm:px-10 short:pb-5 short:pt-20"
+            initial={{ y: "-100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-100%", transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.15 } }}
+            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
           >
             {/* orbit decoration */}
             <svg aria-hidden viewBox="0 0 600 600" className="animate-spin-slow pointer-events-none absolute -right-40 top-1/2 size-[110vmin] -translate-y-1/2 opacity-40">
@@ -107,7 +109,7 @@ export function Nav() {
                   <motion.div
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
-                    exit={{ y: "100%" }}
+                    exit={{ y: "100%", transition: { duration: 0.3, ease: [0.76, 0, 0.24, 1], delay: i * 0.03 } }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.25 + i * 0.07 }}
                   >
                     <Link
@@ -132,7 +134,7 @@ export function Nav() {
               className="relative flex flex-col gap-4 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { delay: 0.6 } }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
             >
               <div className="flex flex-col gap-2">
                 {site.available && (
