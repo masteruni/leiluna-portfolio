@@ -5,6 +5,7 @@ import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { moreProof, stats, topReels } from "@/content/site";
 import { CountUp } from "./CountUp";
+import { Crescent } from "./Crescent";
 import { LineReveal } from "./LineReveal";
 
 const tile = "relative overflow-hidden rounded-[1.6rem] bg-ink-2/70 p-5 sm:p-8";
@@ -30,7 +31,7 @@ function ReelChart() {
                 className="h-full origin-left rounded-full"
                 style={{
                   width: `${(r.views / max) * 100}%`,
-                  background: i < 3 ? "linear-gradient(90deg, var(--brand-3), var(--brand))" : "linear-gradient(90deg, #1b3a5c, #5ab8e8)",
+                  background: i < 3 ? "var(--brand)" : "#5ab8e8",
                 }}
                 initial={{ scaleX: reduce ? 1 : 0 }}
                 animate={{ scaleX: inView || reduce ? 1 : 0 }}
@@ -68,11 +69,7 @@ export function Proof() {
           <div className="mt-16 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {/* lead stat */}
             <div className={`${tile} col-span-2 lg:row-span-2 flex flex-col justify-between`}>
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full"
-                style={{ boxShadow: "inset 2.2rem -1.4rem 0 0 rgb(234 106 142 / 0.18)" }}
-              />
+              <Crescent className="pointer-events-none absolute -right-24 -top-24 size-80" color="rgb(234 106 142 / 0.18)" dx={11} dy={-7} />
               <div className="mt-auto">
                 <p className="font-display text-[clamp(5rem,13vw,11rem)] font-bold leading-[0.8] tracking-[-0.06em]">
                   <CountUp value={`${stats[0].value}${stats[0].suffix}`} />
@@ -117,7 +114,7 @@ export function Proof() {
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.06, type: "spring", stiffness: 300, damping: 18 }}
-                    style={{ background: i % 3 === 0 ? "var(--brand)" : "rgb(246 242 239 / 0.14)" }}
+                    style={{ background: i % 3 === 0 ? "var(--brand)" : "rgb(242 241 238 / 0.14)" }}
                   />
                 ))}
               </div>

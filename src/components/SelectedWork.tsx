@@ -14,23 +14,16 @@ import { LineReveal } from "./LineReveal";
 function Showcase({ p, i, total, progress }: { p: Project; i: number; total: number; progress: MotionValue<number> }) {
   const reduce = useReducedMotion();
   const scale = useTransform(progress, [i / total, 1], [1, reduce ? 1 : 1 - (total - 1 - i) * 0.05]);
-  const [a, b] = p.palette;
+  const b = p.palette[1];
 
   return (
     <div className="lg:sticky lg:h-svh lg:pt-[12vh]" style={{ top: `${i * 28}px` }}>
       <motion.article
         style={{ scale, transformOrigin: "top center" }}
-        className="group relative overflow-hidden rounded-[2rem] lg:h-[76vh] bg-paper/[0.07]"
+        className="group relative overflow-hidden rounded-[2rem] lg:h-[76vh]"
       >
-        {/* palette glow behind the card */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background: `radial-gradient(70% 90% at 85% 10%, color-mix(in oklab, ${a} 30%, transparent), transparent 60%),
-              radial-gradient(60% 70% at 0% 100%, color-mix(in oklab, ${b} 55%, transparent), transparent 70%), var(--ink-2)`,
-          }}
-        />
+        {/* the project's own colour as the card's field */}
+        <div aria-hidden className="absolute inset-0" style={{ background: `color-mix(in oklab, ${b} 30%, var(--ink-2))` }} />
         <Link href={`/work/${p.slug}`} data-cursor="View" className="relative grid h-full gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-14">
           <div className="flex flex-col justify-between gap-10">
             <div>
@@ -63,7 +56,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
 
           {p.cover && (
             <div className="relative mx-auto aspect-[9/16] w-full max-w-[20rem] lg:h-full lg:w-auto lg:max-w-none">
-              <div className="absolute inset-0 overflow-hidden rounded-[1.6rem] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)] transition-transform duration-700 ease-[var(--ease-out)] group-hover:-rotate-2 group-hover:scale-[1.03]">
+              <div className="absolute inset-0 overflow-hidden rounded-[1.6rem] transition-transform duration-700 ease-[var(--ease-out)] group-hover:-rotate-2 group-hover:scale-[1.03]">
                 <Image src={p.cover} alt={`${p.title} for ${p.client}`} fill sizes="(min-width: 1024px) 30vw, 80vw" className="object-cover" />
               </div>
             </div>

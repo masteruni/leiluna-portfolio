@@ -131,7 +131,7 @@ export function Formats() {
 
           {/* the example */}
           <div id="format-panel" role="tabpanel" aria-labelledby={`format-tab-${i}`} className="relative">
-            <div className={`relative mx-auto overflow-hidden rounded-[2rem] bg-ink-2 shadow-[0_40px_100px_-40px_rgb(234_106_142/0.35)] ${wide ? "aspect-video w-full" : "aspect-[9/16] w-full max-w-[22rem]"}`}>
+            <div className={`relative mx-auto overflow-hidden rounded-[2rem] bg-ink-2 ${wide ? "aspect-video w-full" : "aspect-[9/16] w-full max-w-[22rem]"}`}>
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.video
                   key={`${f.piece}-${sound}`}
@@ -153,12 +153,12 @@ export function Formats() {
               <button
                 type="button"
                 onClick={() => setSound((s) => !s)}
-                className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-[13px] text-paper backdrop-blur-md transition-colors hover:bg-paper hover:text-ink"
+                className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/85 px-4 py-2 text-[13px] text-paper transition-colors hover:bg-paper hover:text-ink"
               >
                 {sound ? <VolumeX aria-hidden className="size-4" /> : <Volume2 aria-hidden className="size-4" />}
                 {sound ? "Sound off" : "Sound on"}
               </button>
-              <span className="absolute left-4 top-4 z-10 rounded-full bg-ink/60 px-3 py-1 text-[13px] text-paper/80 backdrop-blur">
+              <span className="absolute left-4 top-4 z-10 rounded-full bg-ink/85 px-3 py-1 text-[13px] text-paper/80">
                 {industriesOf(f.p).length > 2 ? "Multi-industry" : industriesOf(f.p).join(" · ")} · {f.p.duration}
               </span>
             </div>

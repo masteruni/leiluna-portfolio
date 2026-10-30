@@ -7,10 +7,8 @@ import { process } from "@/content/site";
 // A moon whose lit side grows with `phase` (0 = new moon, 1 = full).
 function Moon({ phase }: { phase: MotionValue<number> }) {
   const shadowX = useTransform(phase, [0, 1], [50, 150]);
-  const glow = useTransform(phase, [0, 1], [0, 0.55]);
   return (
-    <svg viewBox="0 0 100 100" className="size-full overflow-visible" aria-hidden>
-      <motion.circle cx="50" cy="50" r="46" fill="var(--brand)" style={{ opacity: glow, filter: "blur(18px)" }} />
+    <svg viewBox="0 0 100 100" className="size-full" aria-hidden>
       <circle cx="50" cy="50" r="40" fill="var(--paper)" />
       <motion.circle cx={shadowX} cy="50" r="41" fill="var(--ink)" />
       <circle cx="50" cy="50" r="40" fill="none" stroke="var(--line)" />

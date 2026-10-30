@@ -6,6 +6,7 @@ import { brief as briefOptions, services, site } from "@/content/site";
 import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBriefVersion } from "@/lib/brief";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
+import { Crescent } from "./Crescent";
 
 const label = " text-sm text-muted";
 const field =
@@ -115,7 +116,7 @@ function Brief({ onDone }: { onDone: () => void }) {
         setSent(true);
         window.location.href = mailto;
       }}
-      className="mx-auto mt-14 w-full max-w-3xl rounded-[2rem] bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
+      className="mx-auto mt-14 w-full max-w-3xl rounded-[2rem] bg-ink-2 p-6 text-left sm:p-10"
       aria-label="Project brief"
     >
       <div className="grid gap-8 sm:grid-cols-2">
@@ -255,13 +256,7 @@ export function Contact() {
           className="aspect-square w-full rounded-full"
           // pink limb + atmosphere, like the header artwork
         >
-          <div
-            className="size-full rounded-full bg-ink"
-            style={{
-              boxShadow:
-                "0 -1px 0 0 var(--brand-2), 0 -10px 40px -4px var(--brand), 0 -60px 160px -20px rgb(234 106 142 / 0.45), inset 0 30px 80px -40px rgb(234 106 142 / 0.6)",
-            }}
-          />
+          <Crescent className="size-full" color="var(--brand)" base="var(--ink)" dx={0} dy={1.2} />
         </motion.div>
       </motion.div>
 
@@ -291,7 +286,7 @@ export function Contact() {
                   <>
                     Close
                     <br />
-                    the brief ✕
+                    the brief
                   </>
                 ) : (
                   <>

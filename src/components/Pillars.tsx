@@ -1,19 +1,33 @@
+"use client";
+
 import Image from "next/image";
 import { services } from "@/content/site";
+import { ScrollVelocity } from "./ScrollVelocity";
 
-// Slow-drifting band of the five service pillars, alternating solid and outline type.
+// The five service pillars drifting past; scrolling the page speeds the band up and turns it round.
 export function Pillars() {
-  const row = [...services, ...services];
+  const row = (
+    <span className="inline-flex items-center gap-10">
+      {services.map((s) => (
+        <span key={s.id} className="inline-flex items-center gap-10">
+          {s.short}
+          <Image src="/brand/mark.png" alt="" width={44} height={46} className="h-10 w-auto opacity-80 sm:h-12" />
+        </span>
+      ))}
+    </span>
+  );
   return (
-    <div className="marquee-pause overflow-hidden py-8" aria-hidden>
-      <div className="animate-marquee flex w-max items-center gap-10 whitespace-nowrap font-display text-5xl font-semibold tracking-[-0.03em] sm:text-7xl">
-        {row.map((s, i) => (
-          <span key={i} className="flex items-center gap-10">
-            <span className={i % 2 ? "text-outline" : ""}>{s.short}</span>
-            <Image src="/brand/mark.png" alt="" width={44} height={46} className="h-10 w-auto opacity-80 sm:h-12" />
-          </span>
-        ))}
-      </div>
+    <div className="py-8" aria-hidden>
+      <ScrollVelocity
+        texts={[row]}
+        velocity={60}
+        numCopies={4}
+        gap={40}
+        pauseOnHover
+        fontSize="clamp(3rem, 6vw, 4.5rem)"
+        fontWeight={600}
+        scrollerClassName="items-center font-display"
+      />
     </div>
   );
 }

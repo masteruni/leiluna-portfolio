@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Crescent } from "./Crescent";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { founders } from "@/content/site";
@@ -16,23 +17,15 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
   return (
     <article ref={ref} className={`group ${i ? "md:mt-40" : ""}`}>
       <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-2">
-        {/* placeholder backdrop: pink glow + initial — stays behind the cut-out portrait */}
-        <div
-          className="absolute inset-0"
-          style={{ background: `radial-gradient(80% 60% at ${i ? 70 : 30}% 30%, rgb(234 106 142 / 0.35), transparent 70%), var(--ink-2)` }}
-        >
-          <span className="serif absolute inset-0 grid place-items-center text-[14rem] leading-none text-paper/10">{f.name.charAt(0)}</span>
-        </div>
+        {/* a field of rose behind the cut-out portrait */}
+        <div className="absolute inset-0" style={{ background: "color-mix(in oklab, var(--brand) 14%, var(--ink-2))" }} />
         {/* crescent echoing the logo, orbiting behind the portrait */}
         <motion.div
           aria-hidden
           style={{ rotate }}
           className="pointer-events-none absolute -bottom-1/4 -right-1/4 size-[90%] rounded-full"
         >
-          <div
-            className="size-full rounded-full"
-            style={{ boxShadow: `inset ${i ? "-" : ""}2.2rem -1.4rem 0 0 ${i ? "var(--brand)" : "var(--paper)"}` }}
-          />
+          <Crescent className="size-full" color={i ? "var(--brand)" : "var(--paper)"} dx={i ? -7 : 7} dy={-4.5} />
         </motion.div>
         {f.photo && (
           <motion.div style={{ y }} className="absolute inset-x-[-5%] bottom-[-12%] top-[2%]">
@@ -41,11 +34,11 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
               alt={`Portrait of ${f.fullName}`}
               fill
               sizes="(min-width: 768px) 45vw, 100vw"
-              className="object-cover object-top drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
+              className="object-cover object-top"
             />
           </motion.div>
         )}
-        <span className="absolute left-5 top-5 rounded-full bg-ink/60 px-3 py-1 text-[13px] backdrop-blur">
+        <span className="absolute left-5 top-5 rounded-full bg-ink/85 px-3 py-1 text-[13px]">
           {f.photo ? "Co-founder" : "Photo coming soon"}
         </span>
       </div>

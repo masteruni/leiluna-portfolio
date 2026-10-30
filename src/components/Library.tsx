@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
@@ -116,20 +117,19 @@ function PieceArt({
     );
   }
 
-  const [a, b] = tint[industriesOf(p)[0]];
+  const [a] = tint[industriesOf(p)[0]];
   return (
     <div aria-hidden className="absolute inset-0 overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(90% 60% at 20% 10%, color-mix(in oklab, ${a} 45%, transparent), transparent 65%),
-            radial-gradient(70% 50% at 90% 95%, color-mix(in oklab, ${b} 40%, transparent), transparent 70%), var(--ink-2)`,
+          background: `color-mix(in oklab, ${a} 28%, var(--ink-2))`,
         }}
       />
       {p.kind === "graphic" ? null : (
         <>
           {(p.format === "reel" || p.format === "portrait") && (
-          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-ink/30 backdrop-blur transition-transform duration-500 group-hover:scale-110">
+          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-ink/85 transition-transform duration-500 group-hover:scale-110">
             <span className="ml-1 border-y-[7px] border-l-[11px] border-y-transparent border-l-paper" />
           </span>
           )}
@@ -191,8 +191,8 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonEleme
           <PieceArt p={p} playing={visible && !reduce} near={near} />
         </div>
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5 whitespace-nowrap text-[13px] sm:inset-x-3 sm:top-3 sm:gap-2">
-          <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur max-sm:invisible sm:px-2.5">{industryLabel(p)}</span>
-          <span className="shrink-0 rounded-full bg-ink/60 px-2 py-1 text-brand backdrop-blur sm:px-2.5">
+          <span className="min-w-0 truncate rounded-full bg-ink/85 px-2 py-1 text-paper/80 max-sm:invisible sm:px-2.5">{industryLabel(p)}</span>
+          <span className="shrink-0 rounded-full bg-ink/85 px-2 py-1 text-brand sm:px-2.5">
             {p.kind === "video" ? (
               `▶ ${p.duration ?? "Reel"}`
             ) : (
@@ -204,7 +204,7 @@ function Tile({ p, onOpen, index }: { p: Piece; onOpen: (opener: HTMLButtonEleme
           </span>
         </div>
         {p.src && (
-          <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-4 pt-10 font-display text-lg font-medium">
+          <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-ink/85 px-3 py-2 font-display text-[15px] font-medium leading-snug sm:px-4 sm:py-3 sm:text-lg">
             {p.style}
           </span>
         )}
@@ -280,7 +280,7 @@ function Lightbox({
       role="dialog"
       aria-modal="true"
       aria-label={`${p.style}, ${industriesOf(p).join(", ")}`}
-      className="fixed inset-0 z-[85] flex items-center justify-center bg-ink px-4 sm:bg-ink/95 pb-4 pt-20 backdrop-blur-xl sm:p-8"
+      className="fixed inset-0 z-[85] flex items-center justify-center bg-ink px-4 sm:bg-ink/95 pb-4 pt-20 sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -320,7 +320,7 @@ function Lightbox({
                   type="button"
                   onClick={() => go(d)}
                   aria-label={d < 0 ? "Previous slide" : "Next slide"}
-                  className={`absolute top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-ink/60 text-paper backdrop-blur transition-opacity hover:bg-ink/80 ${
+                  className={`absolute top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-ink/85 text-paper transition-opacity hover:bg-ink/80 ${
                     d < 0 ? "left-3" : "right-3"
                   } ${(d < 0 ? slide === 0 : slide === slides - 1) ? "pointer-events-none opacity-0" : ""}`}
                 >
@@ -335,7 +335,7 @@ function Lightbox({
                     onClick={() => setAt({ id: p.id, slide: i })}
                     aria-label={`Slide ${i + 1}`}
                     aria-current={i === slide}
-                    className={`h-1.5 rounded-full transition-all ${i === slide ? "w-5 bg-brand" : "w-1.5 bg-paper/50 hover:bg-paper"}`}
+                    className={`h-1.5 rounded-full transition-[width,background-color] ${i === slide ? "w-5 bg-brand" : "w-1.5 bg-paper/50 hover:bg-paper"}`}
                   />
                 ))}
               </div>
@@ -395,9 +395,9 @@ function Lightbox({
         ref={closeRef}
         type="button"
         onClick={onClose}
-        className="absolute right-5 top-5 rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
+        className="absolute right-5 top-5 inline-flex items-center gap-2 rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
       >
-        Close ✕
+        Close <X aria-hidden className="size-4" />
       </button>
     </motion.div>
   );
@@ -457,7 +457,7 @@ export function Library() {
         </div>
 
         {/* filters */}
-        <div className="sticky top-0 z-20 -mx-5 mt-14 bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
+        <div className="sticky top-0 z-20 -mx-5 mt-14 bg-ink px-5 py-4 sm:-mx-10 sm:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div role="group" aria-label="Filter by format" className="-mx-5 flex shrink-0 gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
               {kinds.map((k) => (
@@ -479,10 +479,25 @@ export function Library() {
                 </button>
               ))}
             </div>
+            {/* phones: eleven industries fit better in a picker than in a row that runs off the screen */}
+            <label className="flex items-center gap-3 text-sm text-paper/70 sm:hidden">
+              Industry
+              <select
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value as typeof industry)}
+                className="min-w-0 flex-1 rounded-full bg-paper/[0.07] px-4 py-2 text-paper"
+              >
+                {(["All", ...industries] as const).map((ind) => (
+                  <option key={ind} value={ind} disabled={ind !== "All" && !available.has(ind)}>
+                    {ind === "All" ? "All industries" : `${ind} (${perIndustry.get(ind) ?? 0})`}
+                  </option>
+                ))}
+              </select>
+            </label>
             <div
               role="group"
               aria-label="Filter by industry"
-              className="-mx-5 flex min-w-0 gap-1 overflow-x-auto px-5 [mask-image:linear-gradient(to_right,black_92%,transparent)] [scrollbar-width:none] sm:mx-0 sm:px-0 lg:pr-10"
+              className="flex min-w-0 gap-1 overflow-x-auto [scrollbar-width:none] max-sm:hidden lg:pr-10"
             >
               {(["All", ...industries] as const).map((ind) => {
                 const disabled = ind !== "All" && !available.has(ind);

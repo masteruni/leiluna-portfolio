@@ -48,12 +48,8 @@ export function Hero() {
       <div className="absolute inset-0">
         <Planet progress={scrollYProgress} />
       </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
-        <span className="shooting-star left-[72%] top-[12%]" />
-        <span className="shooting-star left-[38%] top-[6%] [animation-delay:6.5s] [animation-duration:14s]" />
-      </div>
 
-      <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
+      <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[85rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
           <h1 className="font-display text-[clamp(2.3rem,7.4vw,8rem)] font-bold leading-[0.9] tracking-[-0.045em]">
             <LineReveal
@@ -83,10 +79,9 @@ export function Hero() {
               type="button"
               onClick={openShowreel}
               data-cursor="Play"
-              className="group inline-flex items-center gap-3 rounded-full bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md transition-colors hover:bg-paper/15"
+              className="group inline-flex items-center gap-3 rounded-full bg-ink/85 py-2 pl-2 pr-5 text-sm transition-colors hover:bg-paper/15"
             >
               <span className="relative grid size-10 place-items-center rounded-full bg-paper">
-                <span className="absolute inset-0 animate-ping rounded-full bg-paper/30 [animation-duration:2.4s]" />
                 <span className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-ink" />
               </span>
               Watch the showreel

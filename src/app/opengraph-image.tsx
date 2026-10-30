@@ -7,7 +7,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const INK = "#050506";
-const PAPER = "#f6f2ef";
+const PAPER = "#f2f1ee";
 const PINK = "#ea6a8e";
 const PINK_2 = "#f6a6bd";
 
@@ -28,7 +28,7 @@ export default function OpengraphImage() {
           display: "flex",
           position: "relative",
           // Flat ink around the mark: the crescents are built from stacked circles, so nothing may show through them.
-          background: `radial-gradient(45% 70% at 12% 50%, rgba(234,106,142,0.16), transparent 70%), ${INK}`,
+          background: INK,
           color: PAPER,
           overflow: "hidden",
           fontFamily: "sans-serif",

@@ -31,7 +31,7 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
         fill="none"
         stroke={active ? "var(--brand)" : "var(--line)"}
         strokeWidth={active ? 1.5 : 1}
-        className="transition-all duration-700"
+        className="transition-[stroke,stroke-width] duration-700"
       />
       <motion.circle cx={x} cy={y} r={active ? 9 : 4} fill={active ? "var(--brand)" : "var(--paper)"} className="transition-[r] duration-500" />
       {active && (
@@ -125,7 +125,7 @@ function MobileServices() {
               </span>
               <span
                 aria-hidden
-                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full text-lg transition-all duration-500 ${
+                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full text-lg transition-[transform,background-color,color] duration-500 ${
                   open ? "rotate-45 bg-brand text-ink" : "bg-paper/[0.07] text-paper/70"
                 }`}
               >
@@ -181,7 +181,7 @@ export function Orbits() {
       {/* Desktop: pinned orbital system */}
       <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 90 + 10}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
-          <div className="flex shrink-0 items-end justify-between">
+          <div className="mx-auto flex w-full max-w-7xl shrink-0 items-end justify-between">
             <h2 className="text-lg font-medium text-paper/70">Services</h2>
             <p className="text-sm tabular-nums text-muted">
               {active + 1} of {services.length}
@@ -202,12 +202,12 @@ export function Orbits() {
                 alt=""
                 width={92}
                 height={96}
-                className="absolute left-1/2 top-1/2 h-24 w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_30px_rgba(234,106,142,0.6)]"
+                className="absolute left-1/2 top-1/2 h-24 w-auto -translate-x-1/2 -translate-y-1/2"
               />
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-8">
+          <div className="mx-auto flex w-full max-w-7xl shrink-0 items-center gap-8">
             <div className="flex gap-6">
               {services.map((s, i) => (
                 <button

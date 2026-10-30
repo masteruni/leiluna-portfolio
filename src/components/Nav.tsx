@@ -70,7 +70,7 @@ export function Nav() {
               >
                 {l.label}
                 <span
-                  className={`absolute inset-x-0 -bottom-px h-px origin-left bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100 ${
+                  className={`absolute inset-x-0 -bottom-0.5 h-0.5 origin-left bg-brand transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100 ${
                     current ? "scale-x-100" : "scale-x-0"
                   }`}
                 />
@@ -84,7 +84,7 @@ export function Nav() {
             <Link
               href="/#contact"
               onClick={anchor}
-              className="block rounded-full bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:bg-brand hover:text-ink"
+              className="block rounded-full bg-ink/85 px-5 py-2.5 text-sm transition-colors duration-300 hover:bg-brand hover:text-ink"
             >
               Let&apos;s talk
             </Link>
@@ -99,8 +99,8 @@ export function Nav() {
             >
               <span>{open ? "Close" : "Menu"}</span>
               <span className="relative block h-2.5 w-4">
-                <span className={`absolute left-0 block h-px w-4 bg-ink transition-all duration-500 ${open ? "top-1 rotate-45" : "top-0"}`} />
-                <span className={`absolute left-0 block h-px w-4 bg-ink transition-all duration-500 ${open ? "top-1 -rotate-45" : "top-2"}`} />
+                <span className={`absolute left-0 block h-0.5 w-4 bg-ink transition-[top,transform] duration-500 ${open ? "top-1 rotate-45" : "top-0"}`} />
+                <span className={`absolute left-0 block h-0.5 w-4 bg-ink transition-[top,transform] duration-500 ${open ? "top-1 -rotate-45" : "top-2"}`} />
               </span>
             </button>
           </Magnetic>
@@ -148,7 +148,7 @@ export function Nav() {
                       }}
                       className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
                     >
-                      <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-brand ${active === l.id ? "text-brand" : ""}`}>
+                      <span className={`transition-[transform,color] duration-500 group-hover:translate-x-4 group-hover:text-brand ${active === l.id ? "text-brand" : ""}`}>
                         {l.label}
                       </span>
                     </Link>
