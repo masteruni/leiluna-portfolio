@@ -44,6 +44,13 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* The intro loader: hidden from the first paint for anyone who has seen it this session or prefers reduced
+   motion (Loader.tsx then removes it), so they never get a flash of the dark screen while the page starts up. */
+[data-intro="seen"] [data-loader] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-loader] { display: none; }
+}
+
 /* Night islands: the hero, the contact finale, the footer and the 404 stay in deep space in light mode too.
    (.over-night only switches the colours, for the header while it floats over one of them.) */
 .night {
