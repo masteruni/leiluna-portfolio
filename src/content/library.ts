@@ -38,6 +38,7 @@ export type Piece = {
   title: string;
   src?: string;
   slides?: string[]; // carousels: every slide in order (the first doubles as `src`, the cover)
+  slideLabels?: string[]; // a label per slide, e.g. ["Before", "After"]: shown on the slide and as the slide switcher
   poster?: string;
   preview?: string;
   duration?: string; // videos, e.g. "0:24"
@@ -246,16 +247,18 @@ export const pieces: Piece[] = [
     src: "/library/quote-cards-1.webp",
     slides: [1, 2, 3, 4].map((n) => `/library/quote-cards-${n}.webp`),
   },
-  // Real estate photo edits: the edited listing photo first, then the original as the second slide.
+  // Real estate photo edits: the tile shows the edited photo; the viewer opens on the original ("Before") and
+  // moves on to the edit ("After").
   {
     id: "re-edit-living-room",
     kind: "graphic",
     format: "reel",
     style: "Real estate photo edit",
     industry: "Real Estate",
-    title: "Living room, brightened and colour-corrected (swipe for the original)",
+    title: "Living room, brightened and colour-corrected",
     src: "/library/re-edit-living-room-after.webp",
-    slides: ["after", "before"].map((v) => `/library/re-edit-living-room-${v}.webp`),
+    slides: ["before", "after"].map((v) => `/library/re-edit-living-room-${v}.webp`),
+    slideLabels: ["Before", "After"],
   },
   {
     id: "re-edit-duplex",
@@ -263,9 +266,10 @@ export const pieces: Piece[] = [
     format: "reel",
     style: "Real estate photo edit",
     industry: "Real Estate",
-    title: "Duplex exterior, with sky replacement and virtual landscaping (swipe for the original)",
+    title: "Duplex exterior, with sky replacement and virtual landscaping",
     src: "/library/re-edit-duplex-after.webp",
-    slides: ["after", "before"].map((v) => `/library/re-edit-duplex-${v}.webp`),
+    slides: ["before", "after"].map((v) => `/library/re-edit-duplex-${v}.webp`),
+    slideLabels: ["Before", "After"],
   },
   {
     id: "re-edit-bungalow",
@@ -273,9 +277,10 @@ export const pieces: Piece[] = [
     format: "reel",
     style: "Real estate photo edit",
     industry: "Real Estate",
-    title: "Bungalow exterior, with sky and colour enhancement (swipe for the original)",
+    title: "Bungalow exterior, with sky and colour enhancement",
     src: "/library/re-edit-bungalow-after.webp",
-    slides: ["after", "before"].map((v) => `/library/re-edit-bungalow-${v}.webp`),
+    slides: ["before", "after"].map((v) => `/library/re-edit-bungalow-${v}.webp`),
+    slideLabels: ["Before", "After"],
   },
   {
     id: "wellness-infographic",

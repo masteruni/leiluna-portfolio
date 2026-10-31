@@ -116,7 +116,7 @@ function PieceArt({
       <Image
         key={src}
         src={src}
-        alt={`${p.style}: ${p.title}${p.slides ? `, slide ${slide + 1} of ${p.slides.length}` : ""}`}
+        alt={`${p.style}: ${p.title}${p.slides ? `, ${p.slideLabels?.[slide] ?? `slide ${slide + 1} of ${p.slides.length}`}` : ""}`}
         fill
         sizes={large ? "90vw" : "(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"}
         className={large ? "object-contain" : `object-cover ${p.format === "long" ? "object-top" : ""}`}
@@ -231,8 +231,8 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
                 </>
               ) : (
                 <>
-                  <span className="sm:hidden" aria-hidden>{p.slides ? `◼ ${p.slides.length}` : "◼"}</span>
-                  <span className="max-sm:sr-only">{p.slides ? `Carousel · ${p.slides.length}` : "Graphic"}</span>
+                  <span className="sm:hidden" aria-hidden>{p.slideLabels ? p.slideLabels.join(" / ") : p.slides ? `◼ ${p.slides.length}` : "◼"}</span>
+                  <span className="max-sm:sr-only">{p.slideLabels ? p.slideLabels.join(" / ") : p.slides ? `Carousel · ${p.slides.length}` : "Graphic"}</span>
                 </>
               )}
             </span>
@@ -415,6 +415,36 @@ function Lightbox({
                   {d < 0 ? "←" : "→"}
                 </button>
               ))}
+              {p.slideLabels ? (
+                <>
+                  {/* which side of the comparison this is, big and unmistakable */}
+                  <span
+                    aria-hidden
+                    className={`pointer-events-none absolute left-3 top-3 rounded-full px-4 py-1.5 text-sm font-semibold shadow-lg ${
+                      slide === slides - 1 ? "bg-brand text-on-brand" : "bg-ink/80 text-paper backdrop-blur"
+                    }`}
+                  >
+                    {p.slideLabels[slide]}
+                  </span>
+                  <div role="group" aria-label="Compare" className="absolute inset-x-0 bottom-3 flex justify-center">
+                    <div className="flex gap-1 rounded-full bg-ink/70 p-1 backdrop-blur">
+                      {p.slideLabels.map((label, i) => (
+                        <button
+                          key={label}
+                          type="button"
+                          onClick={() => setAt({ id: p.id, slide: i })}
+                          aria-pressed={i === slide}
+                          className={`rounded-full px-4 py-1.5 text-sm transition-colors pointer-coarse:min-h-11 ${
+                            i === slide ? "bg-paper text-ink" : "text-paper/75 hover:text-paper"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
               <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
                 {p.slides!.map((_, i) => (
                   <button
@@ -427,6 +457,7 @@ function Lightbox({
                   />
                 ))}
               </div>
+              )}
             </>
           )}
         </motion.div>
@@ -435,7 +466,9 @@ function Lightbox({
             {p.kind === "video"
               ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}`
               : slides
-                ? `Carousel · Slide ${slide + 1} of ${slides}`
+                ? p.slideLabels
+                  ? `${p.slideLabels[slide]} · ${slide + 1} of ${slides}`
+                  : `Carousel · Slide ${slide + 1} of ${slides}`
                 : p.format === "long"
                   ? "Graphic · Scroll to read"
                   : "Graphic"}
@@ -502,6 +535,7 @@ export function Library() {
   // Which filter combination was expanded, so changing a filter folds the grid back to its first pieces.
   const [expandedFor, setExpandedFor] = useState<string | null>(null);
   const grid = useRef<HTMLDivElement>(null);
+  const showAll = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState<number | null>(null);
   const [openedFrom, setOpenedFrom] = useState<DOMRect | null>(null); // the tile it opened out of
   // The tile that opened the viewer, so focus goes back there when it closes.
@@ -713,6 +747,7 @@ export function Library() {
         {!expanded && (
           <div className="mt-8 flex justify-center">
             <button
+              ref={showAll}
               type="button"
               onClick={() => {
                 setExpandedFor(filterKey);
@@ -726,6 +761,29 @@ export function Library() {
             >
               Show all {list.length} pieces
               <span className="rounded-full bg-paper/10 px-2 py-0.5 font-mono text-xs text-muted">+{list.length - FIRST}</span>
+            </button>
+          </div>
+        )}
+        {expanded && list.length >= FOLD_FROM && (
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                setExpandedFor(null);
+                // Fold back, then return to the top of the grid so the visitor isn't left far below it, with
+                // keyboard focus on the "Show all" button that takes this one's place.
+                requestAnimationFrame(() => {
+                  const g = grid.current;
+                  if (g) {
+                    if (lenis) lenis.scrollTo(g, { offset: -220, duration: 1 });
+                    else g.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
+                  requestAnimationFrame(() => showAll.current?.focus({ preventScroll: true }));
+                });
+              }}
+              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 transition-colors hover:border-paper hover:text-paper pointer-coarse:min-h-11"
+            >
+              Show less
             </button>
           </div>
         )}
