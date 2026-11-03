@@ -7,11 +7,12 @@ import { useFocusTrap } from "@/lib/focus";
 import { closeShowreel, useShowreel } from "@/lib/showreel";
 
 export const showreel = {
-  // Cut from real client work in the Library, ending on the logo reveal.
-  src: "/library/showreel-2026.mp4",
-  preview: "/library/showreel-2026-preview.mp4",
-  poster: "/library/showreel-2026-poster.webp",
-  duration: "0:16",
+  // The website promo: a tour of the studio's work and site, ending on the logo. (The earlier cut of client work,
+  // showreel-2026.mp4, is still in public/library if it's ever wanted back.)
+  src: "/library/website-promo.mp4",
+  preview: "/library/website-promo-preview.mp4",
+  poster: "/library/website-promo-poster.webp",
+  duration: "0:14",
 };
 
 const protect = {
