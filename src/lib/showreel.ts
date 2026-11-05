@@ -3,20 +3,27 @@
 import { useSyncExternalStore } from "react";
 import { track } from "@/lib/track";
 
-// One shared switch for the full-screen showreel, so any button on the page can open it.
-let open = false;
-const listeners = new Set<() => void>();
-const emit = () => listeners.forEach((l) => l());
+// One shared full-screen player, so any button on the page can open it: with no video named it plays the
+// showreel; Recent work opens it with one of its own clips.
+export type Clip = { src: string; poster?: string; title: string; vertical?: boolean };
 
+// `clip` stays set after closing, so the player keeps showing the same video while it fades out.
+type State = { open: boolean; clip: Clip | "showreel" };
+const initial: State = { open: false, clip: "showreel" };
+let state = initial;
+const listeners = new Set<() => void>();
+const set = (next: State) => {
+  state = next;
+  listeners.forEach((l) => l());
+};
+
+// Takes no arguments on purpose: it's used directly as an onClick handler.
 export const openShowreel = () => {
-  if (!open) track("Showreel opened");
-  open = true;
-  emit();
+  if (!state.open) track("Showreel opened");
+  set({ open: true, clip: "showreel" });
 };
-export const closeShowreel = () => {
-  open = false;
-  emit();
-};
+export const openClip = (clip: Clip) => set({ open: true, clip });
+export const closeShowreel = () => set({ ...state, open: false });
 
 export function useShowreel() {
   return useSyncExternalStore(
@@ -24,7 +31,7 @@ export function useShowreel() {
       listeners.add(cb);
       return () => listeners.delete(cb);
     },
-    () => open,
-    () => false,
+    () => state,
+    () => initial,
   );
 }

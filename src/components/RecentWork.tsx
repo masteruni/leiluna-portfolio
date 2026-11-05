@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { brands, recent, type RecentPiece } from "@/content/recent";
+import { openClip } from "@/lib/showreel";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
@@ -30,11 +31,12 @@ function Clip({ src, poster }: { src: string; poster?: string }) {
 
 function Card({ p }: { p: RecentPiece }) {
   const brand = brands.find((b) => b.name === p.brand);
+  const video = isVideo(p.src);
   const body = (
     <>
       <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem] border border-line bg-ink-2">
-        {isVideo(p.src) ? (
-          <Clip src={p.src} poster={p.poster} />
+        {video ? (
+          <Clip src={p.preview ?? p.src} poster={p.poster} />
         ) : (
           <Image
             src={p.src}
@@ -47,6 +49,14 @@ function Card({ p }: { p: RecentPiece }) {
         <span className="absolute left-3 top-3 rounded-full bg-ink/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-paper backdrop-blur-md">
           {p.kind}
         </span>
+        {video && !p.link && (
+          <span
+            aria-hidden
+            className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-paper text-ink transition duration-500 group-hover:bg-brand group-hover:text-on-brand"
+          >
+            <span className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-current" />
+          </span>
+        )}
         {p.link && (
           <span
             aria-hidden
@@ -73,6 +83,16 @@ function Card({ p }: { p: RecentPiece }) {
           {body}
           <span className="sr-only"> (opens the post in a new tab)</span>
         </a>
+      ) : video ? (
+        <button
+          type="button"
+          onClick={() => openClip({ src: p.src, poster: p.poster, title: `${p.title}, for ${p.brand}`, vertical: p.vertical })}
+          data-cursor="Play"
+          className="group block w-full text-left"
+        >
+          {body}
+          <span className="sr-only"> (play with sound)</span>
+        </button>
       ) : (
         <div className="group">{body}</div>
       )}

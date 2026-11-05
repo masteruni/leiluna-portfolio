@@ -21,9 +21,11 @@ const protect = {
   disableRemotePlayback: true,
 } as const;
 
-// Full-screen player with sound. Opened from the hero button or the showreel section.
+// Full-screen player with sound. Opened from the hero button or the showreel section (the showreel), or from a
+// Recent work card (that clip).
 export function ShowreelPlayer() {
-  const open = useShowreel();
+  const { open, clip: playing } = useShowreel();
+  const clip = playing === "showreel" ? { ...showreel, title: "Leiluna Studio showreel", vertical: false } : playing;
   const lenis = useLenis();
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDivElement>(null);
@@ -48,7 +50,7 @@ export function ShowreelPlayer() {
           ref={dialog}
           role="dialog"
           aria-modal="true"
-          aria-label="Leiluna Studio showreel"
+          aria-label={clip.title}
           className="fixed inset-0 z-[95] grid place-items-center bg-ink/95 p-4 backdrop-blur-xl sm:p-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -56,14 +58,14 @@ export function ShowreelPlayer() {
           onClick={closeShowreel}
         >
           <motion.div
-            className="relative aspect-video w-full max-w-6xl overflow-hidden rounded-2xl bg-black shadow-[0_40px_120px_-20px_rgb(234_106_142/0.35)]"
+            className={`relative overflow-hidden ${clip.vertical ? "mt-12 aspect-[9/16] h-full max-h-[80svh] w-auto max-w-full sm:mt-0 sm:max-h-[85svh]" : "aspect-video w-full max-w-6xl"} rounded-2xl bg-black shadow-[0_40px_120px_-20px_rgb(234_106_142/0.35)]`}
             initial={{ scale: 0.92, y: 30 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, opacity: 0, transition: { duration: 0.25 } }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
-            <video {...protect} src={showreel.src} poster={showreel.poster} autoPlay controls playsInline className="size-full object-contain" />
+            <video {...protect} key={clip.src} src={clip.src} poster={clip.poster} autoPlay controls playsInline className="size-full object-contain" />
           </motion.div>
           <button
             ref={closeRef}
