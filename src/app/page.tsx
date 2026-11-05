@@ -10,6 +10,7 @@ import { Orbits } from "@/components/Orbits";
 import { Phases } from "@/components/Phases";
 import { Pillars } from "@/components/Pillars";
 import { Proof } from "@/components/Proof";
+import { RecentWork } from "@/components/RecentWork";
 import { SelectedWork } from "@/components/SelectedWork";
 import { Formats } from "@/components/Formats";
 import { ShowreelPlayer } from "@/components/Showreel";
@@ -34,6 +35,7 @@ export default function Home() {
         <Formats />
         <Orbits />
         <SelectedWork />
+        <RecentWork />
         <Library />
         <Proof />
         <Phases />
