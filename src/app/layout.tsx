@@ -23,14 +23,15 @@ export const metadata: Metadata = {
   description: site.description,
   alternates: { canonical: "/" },
   openGraph: {
-    title: `${site.name}: Your story. Our creative orbit.`,
+    // Matches the share card: what we do first, in the site's own headline.
+    title: `${site.name}: Social media that people stop for`,
     description: site.description,
     url: site.url,
     siteName: site.name,
     type: "website",
     locale: "en_US",
   },
-  twitter: { card: "summary_large_image", title: site.name, description: site.description },
+  twitter: { card: "summary_large_image", title: `${site.name}: Social media that people stop for`, description: site.description },
   robots: { index: true, follow: true },
 };
 
