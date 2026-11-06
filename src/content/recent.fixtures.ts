@@ -53,7 +53,7 @@ const worstRecent: RecentPiece[] = [
     brand: "Café Ñandú",
     kind: "Reel",
     title: "Menú de temporada: cinco platos, una historia",
-    src: "/recent/kabogera-perfect-bar-ad.mp4",
+    src: "/recent/kabogera-perfect-bar-3d-ad.mp4",
     // no preview and no poster: the full 18MB video loads on the card
     date: "Oct 2026",
   },
