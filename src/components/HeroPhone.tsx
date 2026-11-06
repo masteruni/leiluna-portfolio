@@ -124,8 +124,8 @@ export function HeroPhone({ play }: { play: boolean }) {
                 key={reel.id}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.4 }}
+                exit={{ opacity: 0, y: -6, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               >
                 <p className="font-display text-base font-semibold leading-tight">{reel.style}</p>
                 <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-paper/60">

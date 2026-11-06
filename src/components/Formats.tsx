@@ -30,8 +30,8 @@ type Item = (typeof items)[number];
 // The front card comes forward out of the deck and leaves the way it was swiped (dir 1 = next, -1 = previous).
 const card: Variants = {
   enter: { opacity: 0.6, scale: 0.95, y: 10 },
-  center: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
-  exit: (dir: number) => ({ opacity: 0, x: dir * -420, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }),
+  center: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
+  exit: (dir: number) => ({ opacity: 0, x: dir * -420, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } }),
 };
 
 // The playing example, as the top card of the deck: drag or swipe it sideways for the next or previous format.
@@ -83,8 +83,8 @@ function FrontCard({
           className="pointer-events-none absolute inset-0 size-full object-cover"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, transition: { duration: 0.2 } }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
         />
       </AnimatePresence>
       {children}

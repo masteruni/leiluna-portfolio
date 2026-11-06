@@ -124,7 +124,7 @@ export function Proof() {
                   <motion.span
                     key={i}
                     className="size-4 rounded-full border border-brand/70"
-                    initial={{ scale: 0, opacity: 0 }}
+                    initial={{ scale: 0.6, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.06, type: "spring", stiffness: 300, damping: 18 }}

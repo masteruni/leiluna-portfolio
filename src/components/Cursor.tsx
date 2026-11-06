@@ -75,12 +75,14 @@ export function Cursor() {
       </div>
       <div ref={ring} className="absolute left-0 top-0">
         <span
-          className={`grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border font-mono text-[10px] uppercase tracking-widest transition-[width,height,background-color,border-color,color] duration-300 ease-[var(--ease-out)] ${
+          // One size (96px) that scales down for the smaller states, so changing state never re-lays out the page.
+          // The border is drawn thicker when scaled down, so it always reads as about 1px.
+          className={`grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-solid font-mono text-[10px] uppercase tracking-widest transition-[scale,background-color,border-color,border-width,color] duration-300 ease-[var(--ease-out)] ${
             label
-              ? "size-24 border-brand bg-brand text-on-brand"
+              ? "scale-100 border border-brand bg-brand text-on-brand"
               : hover
-                ? "size-14 border-brand/70 bg-brand/10"
-                : "size-9 border-paper/40"
+                ? "scale-[0.583] border-[1.7px] border-brand/70 bg-brand/10"
+                : "scale-[0.375] border-[2.7px] border-paper/40"
           }`}
         >
           {label}

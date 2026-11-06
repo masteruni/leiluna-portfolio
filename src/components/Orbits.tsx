@@ -144,8 +144,8 @@ function MobileServices() {
                   key="items"
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: reduce ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  exit={{ height: 0, opacity: 0, transition: { duration: reduce ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] } }}
+                  transition={{ duration: reduce ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden"
                 >
                   <ul className="flex flex-wrap gap-2 pb-8 pl-9">

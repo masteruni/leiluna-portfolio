@@ -166,8 +166,8 @@ export function Nav() {
             >
               <span>{open ? "Close" : "Menu"}</span>
               <span className="relative block h-2.5 w-4">
-                <span className={`absolute left-0 block h-px w-4 bg-ink transition-[top,rotate] duration-300 ease-[var(--ease-out)] ${open ? "top-1 rotate-45" : "top-0"}`} />
-                <span className={`absolute left-0 block h-px w-4 bg-ink transition-[top,rotate] duration-300 ease-[var(--ease-out)] ${open ? "top-1 -rotate-45" : "top-2"}`} />
+                <span className={`absolute left-0 top-1 block h-px w-4 bg-ink transition-[translate,rotate] duration-300 ease-[var(--ease-out)] ${open ? "rotate-45" : "-translate-y-1"}`} />
+                <span className={`absolute left-0 top-1 block h-px w-4 bg-ink transition-[translate,rotate] duration-300 ease-[var(--ease-out)] ${open ? "-rotate-45" : "translate-y-1"}`} />
               </span>
             </button>
           </Magnetic>

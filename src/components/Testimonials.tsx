@@ -46,8 +46,8 @@ export function Testimonials() {
               key={i}
               initial={reduce ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={reduce ? undefined : { opacity: 0, y: -20 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              exit={reduce ? undefined : { opacity: 0, y: -12, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-4xl"
             >
               <blockquote className="serif text-[clamp(1.8rem,4vw,3.6rem)] leading-[1.15] text-paper">
@@ -58,9 +58,9 @@ export function Testimonials() {
                     {k > 0 && " "}
                     <motion.span
                       className="inline-block"
-                      initial={reduce ? false : { opacity: 0, filter: "blur(10px)", y: 8 }}
+                      initial={reduce ? false : { opacity: 0, filter: "blur(4px)", y: 6 }}
                       animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 + k * 0.035 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.05 + Math.min(k, 30) * 0.025 }}
                     >
                       {w}
                     </motion.span>

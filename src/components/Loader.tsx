@@ -1,6 +1,6 @@
 "use client";
 
-import { animate, motion, useMotionTemplate, useMotionValue, useMotionValueEvent, useTransform } from "motion/react";
+import { animate, motion, useMotionValue, useMotionValueEvent } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { markReady } from "@/lib/ready";
 import { MoonPhase } from "./Eyebrow";
@@ -10,6 +10,11 @@ const MIN_MS = 900; // long enough for the crescents to lock together
 const IMAGES_MS = 800; // the most it waits for images once the fonts are in (the page is usable by then)
 const MAX_MS = 4000; // whatever happens, the page shows by then
 const REVEAL_S = 0.8;
+const HOLE_PX = 10; // the opening's radius when it starts, hidden under the mark
+// The dark sheet is a square 150vmax across (it covers any screen), with a small soft-edged opening in its middle.
+// The eclipse grows the opening by scaling the whole sheet up from the centre: a transform the GPU handles on its
+// own, so it stays smooth even while the page is still busy loading (redrawing a mask every frame would not).
+const SHEET_MASK = `radial-gradient(circle at 50% 50%, transparent ${HOLE_PX}px, #000 ${HOLE_PX * 1.25}px)`;
 
 // First visit per session: the two crescents of the mark lock together while a small moon waxes with the page's
 // real loading (fonts, then images, though it won't wait long for those), and once it's full the dark lifts like an
@@ -21,9 +26,7 @@ export function Loader() {
   const [lit, setLit] = useState(0.04); // the moon's phase, 0 (new) to 1 (full)
   const [revealing, setRevealing] = useState(false);
   const progress = useMotionValue(0.04);
-  const hole = useMotionValue(0); // radius of the opening, in % of the screen's diagonal
-  const rim = useTransform(hole, (r) => r + 4);
-  const mask = useMotionTemplate`radial-gradient(circle at 50% 50%, transparent ${hole}%, #000 ${rim}%)`;
+  const sheet = useRef<HTMLDivElement>(null);
   const started = useRef(false);
 
   useMotionValueEvent(progress, "change", (v) => setLit(v));
@@ -47,7 +50,7 @@ export function Loader() {
     const t0 = performance.now();
     const steps = { fonts: false, page: document.readyState === "complete" };
     let progressAnim = animate(progress, 0.12, { duration: 0.4 });
-    let revealAnim: ReturnType<typeof animate> | null = null;
+    let revealAnim: Animation | null = null;
     let minTimer = 0;
 
     const reveal = () => {
@@ -62,7 +65,17 @@ export function Loader() {
       progress.set(1);
       setRevealing(true);
       markReady(); // the hero starts its entrance as the dark lifts
-      revealAnim = animate(hole, 160, { duration: REVEAL_S, ease: [0.65, 0, 0.35, 1], onComplete: () => setShow(false) });
+      const el = sheet.current;
+      if (!el) return setShow(false);
+      // Large enough that the opening's soft edge has cleared the corners of the screen.
+      const end = (Math.hypot(window.innerWidth, window.innerHeight) / 2 / HOLE_PX) * 1.15;
+      el.style.maskImage = el.style.webkitMaskImage = SHEET_MASK;
+      revealAnim = el.animate([{ transform: "scale(1)" }, { transform: `scale(${end})` }], {
+        duration: REVEAL_S * 1000,
+        easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+        fill: "forwards",
+      });
+      revealAnim.onfinish = () => setShow(false);
     };
 
     // The moon follows real work: each finished step fills more of it, and it's full when both are done.
@@ -99,7 +112,7 @@ export function Loader() {
     window.addEventListener("pointerdown", skip);
     return () => {
       progressAnim.stop();
-      revealAnim?.stop();
+      revealAnim?.cancel();
       window.clearTimeout(minTimer);
       window.clearTimeout(imagesCap);
       window.clearTimeout(failsafe);
@@ -107,17 +120,17 @@ export function Loader() {
       window.removeEventListener("keydown", skip);
       window.removeEventListener("pointerdown", skip);
     };
-  }, [progress, hole]);
+  }, [progress]);
 
   if (!show) return null;
 
   return (
-    <motion.div
-      data-loader
-      aria-hidden
-      className="night fixed inset-0 z-[100] bg-ink"
-      style={{ maskImage: mask, WebkitMaskImage: mask }}
-    >
+    <div data-loader aria-hidden className="night fixed inset-0 z-[100] overflow-hidden" style={{ background: "transparent" }}>
+      <div
+        ref={sheet}
+        className="absolute left-[calc(50%-75vmax)] top-[calc(50%-75vmax)] size-[150vmax] bg-ink will-change-transform"
+      />
+
       {/* the eclipse's edge: a pink glow that rides the opening outwards */}
       <motion.div
         className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[16rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
@@ -177,6 +190,6 @@ export function Loader() {
         </span>
         <span className="hidden font-serif text-lg italic text-muted sm:block">Your story. Our creative orbit.</span>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }

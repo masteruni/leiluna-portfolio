@@ -30,7 +30,7 @@ export function Hero() {
   const fade = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 16 },
     animate: ready ? { opacity: 1, y: 0 } : undefined,
-    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const, delay },
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const, delay },
   });
 
   // Opens the project brief and glides to it.
@@ -59,7 +59,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
-          <motion.p {...fade(0.2)} className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
+          <motion.p {...fade(0.1)} className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
             <span className="flex items-center gap-3">
               <span className="h-px w-10 bg-brand" />
               {site.headline.join(" ")}
@@ -83,11 +83,11 @@ export function Hero() {
             />
           </h1>
 
-          <motion.p {...fade(0.55)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
+          <motion.p {...fade(0.2)} className="mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
             {site.hero.intro}
           </motion.p>
 
-          <motion.div {...fade(0.75)} className="mt-9 flex flex-wrap items-center gap-3">
+          <motion.div {...fade(0.3)} className="mt-9 flex flex-wrap items-center gap-3">
             <Magnetic className="inline-block">
               <Link
                 href="/#contact"
@@ -114,7 +114,7 @@ export function Hero() {
           </motion.div>
 
           {/* proof bar */}
-          <motion.dl {...fade(0.95)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
+          <motion.dl {...fade(0.4)} className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8">
             {stats.map((s) => (
               <div key={s.label} className="flex flex-col-reverse justify-end">
                 <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
@@ -138,7 +138,7 @@ export function Hero() {
       </div>
 
       <motion.div
-        {...fade(1.1)}
+        {...fade(0.5)}
         className="absolute inset-x-5 bottom-6 z-10 hidden items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10 lg:flex"
       >
         <span className="flex items-center gap-3">

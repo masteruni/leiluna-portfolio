@@ -80,7 +80,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
           <motion.div
             aria-hidden
             style={{ background: sheen }}
-            className="pointer-events-none absolute inset-0 opacity-0 mix-blend-screen transition-opacity duration-500 group-hover:opacity-100"
+            className="pointer-events-none absolute inset-0 opacity-0 mix-blend-screen transition-opacity duration-300 group-hover:opacity-100"
           />
           <span className="absolute left-5 top-5 rounded-full bg-ink/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest backdrop-blur">
             {f.photo ? "Co-founder" : "Photo coming soon"}

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
@@ -170,6 +170,13 @@ function PieceArt({
   );
 }
 
+// One slide of the viewer giving way to the next. `instant` (an arrow-key press) skips the crossfade.
+const slideFade: Variants = {
+  enter: (instant: boolean) => (instant ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.02 }),
+  center: (instant: boolean) => ({ opacity: 1, scale: 1, transition: { duration: instant ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] } }),
+  exit: (instant: boolean) => ({ opacity: 0, scale: instant ? 1 : 0.98, transition: { duration: instant ? 0 : 0.25, ease: [0.16, 1, 0.3, 1] } }),
+};
+
 function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButtonElement) => void; index: number; spot: CSSProperties }) {
   const ref = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
@@ -192,11 +199,12 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
 
   // The outer box glides to the tile's new spot when the filters change; the inner one fades it in and out.
   return (
-    <div className="absolute left-0 top-0 motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[var(--ease-out)]" style={spot}>
+    <div className="absolute left-0 top-0 motion-safe:transition-transform motion-safe:duration-[350ms] motion-safe:ease-[var(--ease-out)]" style={spot}>
       <motion.div
-        initial={reduce ? false : { opacity: 0, y: 30, filter: "blur(10px)" }}
+        initial={reduce ? false : { opacity: 0, y: 24, filter: "blur(4px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        exit={{ opacity: 0, scale: 0.94 }}
+        // Leaving is quicker than arriving, and never waits for the stagger.
+        exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.15, delay: 0 } }}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: Math.min(index, 8) * 0.04 }}
       >
         <button
@@ -319,8 +327,11 @@ function Lightbox({
   const [at, setAt] = useState({ id: p.id, slide: 0 });
   const slide = at.id === p.id ? at.slide : 0;
   const slides = p.slides?.length ?? 0;
+  // Arrow keys switch instantly (keyboard actions never animate); swipes and clicks keep the crossfade.
+  const [instant, setInstant] = useState(false);
   const go = useCallback(
-    (d: number) => {
+    (d: number, viaKey = false) => {
+      setInstant(viaKey);
       const next = slide + d;
       if (next >= 0 && next < slides) setAt({ id: p.id, slide: next });
       else onStep(d);
@@ -333,8 +344,8 @@ function Lightbox({
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") go(1);
-      if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "ArrowRight") go(1, true);
+      if (e.key === "ArrowLeft") go(-1, true);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -386,16 +397,25 @@ function Lightbox({
           className={`relative max-w-full shrink-0 overflow-hidden rounded-2xl bg-ink-2 ${media} ${p.kind === "graphic" ? "touch-pan-y" : ""}`}
           // A horizontal swipe moves through slides, then on to the next piece. Videos are left alone so the
           // native scrub bar keeps working.
-          onPanEnd={p.kind === "graphic" ? (_, info) => Math.abs(info.offset.x) > 40 && go(info.offset.x < 0 ? 1 : -1) : undefined}
+          // A quick flick counts as much as a long drag.
+          onPanEnd={
+            p.kind === "graphic"
+              ? (_, info) => {
+                  const dx = Math.abs(info.offset.x) > 40 ? info.offset.x : Math.abs(info.velocity.x) > 500 ? info.velocity.x : 0;
+                  if (dx) go(dx < 0 ? 1 : -1);
+                }
+              : undefined
+          }
         >
-          <AnimatePresence initial={false} mode="popLayout">
+          <AnimatePresence initial={false} mode="popLayout" custom={instant}>
             <motion.div
               key={`${p.id}-${slide}`}
               className="absolute inset-0"
-              initial={{ opacity: 0, scale: 1.02 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              custom={instant}
+              variants={slideFade}
+              initial="enter"
+              animate="center"
+              exit="exit"
             >
               <PieceArt p={p} playing large slide={slide} />
             </motion.div>
@@ -723,7 +743,7 @@ export function Library() {
 
         <div ref={grid} className="@container relative mt-6">
           {/* holds the height: container units only resolve inside the container, not on it */}
-          <div aria-hidden className="motion-safe:transition-[height] motion-safe:duration-700" style={{ height: masonry.height }} />
+          <div aria-hidden className="motion-safe:transition-[height] motion-safe:duration-[350ms] motion-safe:ease-[var(--ease-out)]" style={{ height: masonry.height }} />
           <AnimatePresence>
             {shown.map((p, i) => (
               <Tile
