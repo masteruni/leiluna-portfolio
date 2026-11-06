@@ -88,7 +88,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       <Nav />
       <main id="main" className="pt-32 md:pt-40">
         <article className="mx-auto max-w-7xl px-5 sm:px-10 xl:box-content">
-          <Reveal>
+          <Reveal css>
             <div className="flex flex-wrap items-center justify-between gap-4">
               <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper pointer-coarse:min-h-11">
                 <ArrowLeft size={16} /> All work
@@ -99,20 +99,21 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
 
           <div className={`mt-10 grid gap-12 ${isTall ? "lg:grid-cols-[1.2fr_0.8fr] lg:items-end" : ""}`}>
             <div>
-              {/* The title rises line by line on its own; the lines around it only fade in, so the words never move twice. */}
-              <Reveal y={0}>
+              {/* The title rises line by line on its own; the lines around it only fade in, so the words never move twice.
+                  All of this runs in CSS, so it shows the moment the page arrives, not after the scripts load. */}
+              <Reveal css y={0}>
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
                   <span className="text-accent">{project.client}</span> · {project.year} · {project.categories.join(" / ")}
                 </p>
               </Reveal>
               <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-                <LineReveal inView lines={titleLines(project.title)} />
+                <LineReveal css delay={0.05} lines={titleLines(project.title)} />
               </h1>
-              <Reveal y={0} delay={0.15}>
+              <Reveal css y={0} delay={0.15}>
                 <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted">{project.summary}</p>
               </Reveal>
 
-              <Reveal delay={0.1}>
+              <Reveal css delay={0.1}>
                 <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-line pt-6">
                   {project.metrics.map((m) => (
                     <div key={m.label} className="flex flex-col-reverse justify-end">

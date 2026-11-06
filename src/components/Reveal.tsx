@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export function Reveal({
   children,
@@ -9,14 +9,26 @@ export function Reveal({
   y = 28,
   className,
   as = "div",
+  css = false,
 }: {
   children: ReactNode;
   delay?: number;
   y?: number;
   className?: string;
   as?: "div" | "li";
+  /** Run the entrance in CSS (`hero-in` / `fade-in` in globals.css) instead of waiting for JavaScript: for content
+   *  above the fold, which should show the moment the page arrives. */
+  css?: boolean;
 }) {
   const reduce = useReducedMotion();
+  if (css) {
+    const Plain = as;
+    return (
+      <Plain className={`${y ? "hero-in" : "fade-in"} ${className ?? ""}`} style={{ "--d": `${delay}s` } as CSSProperties}>
+        {children}
+      </Plain>
+    );
+  }
   const Tag = as === "li" ? motion.li : motion.div;
   return (
     <Tag
