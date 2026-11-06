@@ -59,14 +59,19 @@ export function ShowreelPlayer() {
           onClick={closeShowreel}
         >
           <motion.div
-            className={`relative overflow-hidden ${clip.vertical ? "mt-12 aspect-[9/16] h-full max-h-[80svh] w-auto max-w-full sm:mt-0 sm:max-h-[85svh]" : "aspect-video w-full max-w-6xl"} rounded-2xl bg-black shadow-[0_40px_120px_-20px_rgb(234_106_142/0.35)]`}
+            className={`relative overflow-hidden ${"image" in clip && clip.image ? "mt-12 sm:mt-0" : clip.vertical ? "mt-12 aspect-[9/16] h-full max-h-[80svh] w-auto max-w-full sm:mt-0 sm:max-h-[85svh]" : "aspect-video w-full max-w-6xl"} rounded-2xl bg-black shadow-[0_40px_120px_-20px_rgb(234_106_142/0.35)]`}
             initial={{ scale: 0.92, y: 30 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, opacity: 0, transition: { duration: 0.25 } }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
-            <video {...protect} key={clip.src} src={clip.src} poster={clip.poster} autoPlay controls playsInline className="size-full object-contain" />
+            {"image" in clip && clip.image ? (
+              // eslint-disable-next-line @next/next/no-img-element -- a full-size screenshot, shown as is
+              <img src={clip.src} alt={clip.title} draggable={false} className="block h-auto max-h-[80svh] w-auto max-w-full sm:max-h-[85svh]" />
+            ) : (
+              <video {...protect} key={clip.src} src={clip.src} poster={clip.poster} autoPlay controls playsInline className="size-full object-contain" />
+            )}
           </motion.div>
           <button
             ref={closeRef}

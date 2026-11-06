@@ -2,7 +2,10 @@
 
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef, useState } from "react";
-import { moreProof, stats, topReels } from "@/content/site";
+import Image from "next/image";
+import { moreProof, receipts, stats, topReels } from "@/content/site";
+import { openClip } from "@/lib/showreel";
+import { Tag } from "./ui";
 import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
@@ -45,6 +48,46 @@ function ReelChart() {
         <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-brand" /> Business Resilience Mindset</span>
         <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-[#5ab8e8]" /> The AI Edge Daily</span>
       </p>
+    </div>
+  );
+}
+
+// The screenshots behind the numbers, unedited, straight from the clients' own Instagram. Tapping one opens it full
+// size, so anyone can check a figure for themselves.
+function Receipts() {
+  return (
+    <div className="mt-16">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <h3 className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
+          The receipts <span className="serif font-normal text-accent">behind the numbers.</span>
+        </h3>
+        <p className="max-w-sm text-sm text-paper/60">Unedited screenshots from our clients&apos; Instagram. Tap one to see it full size.</p>
+      </div>
+      <ul className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+        {receipts.map((r, i) => (
+          <li key={r.src} className={i === 2 ? "col-span-2 lg:col-span-1" : ""}>
+            <button
+              type="button"
+              onClick={() => openClip({ src: r.src, title: `${r.client}: ${r.what}`, vertical: true, image: true })}
+              data-cursor="View"
+              className="group block w-full text-left"
+            >
+              <span className="relative block aspect-[4/5] overflow-hidden rounded-[1.4rem] border border-line bg-ink-2">
+                <Image
+                  src={r.src}
+                  alt={`Screenshot from ${r.client}'s Instagram: ${r.what}`}
+                  fill
+                  sizes="(min-width: 1024px) 26rem, 50vw"
+                  className="object-cover object-top transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-[1.03]"
+                />
+                <Tag className="absolute left-3 top-3">Instagram</Tag>
+              </span>
+              <span className="mt-3 block text-sm text-paper/60">{r.client}</span>
+              <span className="mt-0.5 block font-medium leading-snug transition-colors duration-300 group-hover:text-accent">{r.what}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -134,6 +177,8 @@ export function Proof() {
               </div>
             </div>
           </div>
+
+          <Receipts />
         </div>
       </div>
 

@@ -5,7 +5,8 @@ import { track } from "@/lib/track";
 
 // One shared full-screen player, so any button on the page can open it: with no video named it plays the
 // showreel; Recent work opens it with one of its own clips.
-export type Clip = { src: string; poster?: string; title: string; vertical?: boolean };
+// `image` shows a still (a screenshot) instead of playing a video.
+export type Clip = { src: string; poster?: string; title: string; vertical?: boolean; image?: boolean };
 
 // `clip` stays set after closing, so the player keeps showing the same video while it fades out.
 type State = { open: boolean; clip: Clip | "showreel" };

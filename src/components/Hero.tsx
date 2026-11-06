@@ -14,6 +14,7 @@ import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { Planet } from "./Planet";
 import { RotatingText } from "./RotatingText";
+import { TrustLine } from "./TrustLine";
 
 // Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
 // two next steps (start a brief, watch the showreel) above the fold.
@@ -111,6 +112,11 @@ export function Hero() {
               </span>
               Watch the showreel
             </button>
+          </motion.div>
+
+          {/* who we're working with, right under the buttons that ask for a decision */}
+          <motion.div {...fade(0.35)} className="mt-6">
+            <TrustLine />
           </motion.div>
 
           {/* proof bar */}

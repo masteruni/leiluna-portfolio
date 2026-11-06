@@ -11,6 +11,7 @@ import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { buttonClass, chipClass } from "./ui";
+import { TrustLine } from "./TrustLine";
 
 const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
 const field =
@@ -489,6 +490,9 @@ export function Contact() {
             </button>
           </div>
         </div>
+
+        {/* who we're working with, right where the decision is made */}
+        <TrustLine align="center" className="mt-10" />
 
         <div id="project-brief">
           <AnimatePresence>{brief && <Brief key={briefVersion} onDone={() => setBrief(false)} />}</AnimatePresence>

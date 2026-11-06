@@ -205,10 +205,33 @@ export const topReels = [
 ];
 
 // The scrolling strip in "Proof": real clients first, spread among the industries we create for (from the Library).
-// Add a client by putting a square logo in /public/clients/ and adding { name, logo } here.
+// Add a client by putting a square logo in /public/clients/ and adding { name, logo } here (newest first). `short` is
+// an optional shorter name for tight spots, like the "Now working with" line under the buttons.
 export const clients = [
+  { name: "Kabogera Beauty", logo: "/clients/kabogera-beauty.webp" },
+  { name: "MD Raymundo Consulting Services", short: "MD Raymundo", logo: "/clients/md-raymundo.webp" },
   { name: "Business Resilience Mindset", logo: "/clients/business-resilience-mindset.webp" },
   { name: "The AI Edge Daily", logo: "/clients/the-ai-edge-daily.webp" },
+];
+
+// "The receipts" in Proof: unedited screenshots of clients' own Instagram pages and insights, behind the numbers.
+// Add one by putting the screenshot in /public/work/<client>/ and listing it here.
+export const receipts = [
+  {
+    src: "/work/business-resilience-mindset/top-reels.webp",
+    client: "Business Resilience Mindset",
+    what: "Nine reels between 3.3M and 8.3M views",
+  },
+  {
+    src: "/work/business-resilience-mindset/profile.webp",
+    client: "Business Resilience Mindset",
+    what: "306K followers across 672 posts",
+  },
+  {
+    src: "/work/the-ai-edge-daily/profile.webp",
+    client: "The AI Edge Daily",
+    what: "Pinned reels at 2.6M, 2.2M and 852K views",
+  },
 ];
 
 // Smaller proof tiles and the running ticker.
