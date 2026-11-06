@@ -44,6 +44,20 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* The hero's entrance, in CSS so it shows the moment the page arrives (a JS entrance waits for the page's scripts,
+   seconds on a mid-range phone). Each element sets its own delay in --d. On a first visit the intro is still
+   covering the page, so the entrance waits, paused, until the intro starts opening (Loader.tsx sets data-intro). */
+@keyframes hero-rise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes line-rise { from { transform: translateY(110%) rotate(4deg); } }
+@keyframes phone-rise { from { opacity: 0; transform: translateY(40px) rotate(4deg); } }
+.hero-in { animation: hero-rise 0.7s var(--ease-out) var(--d, 0s) both; }
+.line-in { animation: line-rise 1.1s var(--ease-out) var(--d, 0s) both; }
+.hero-phone-in { animation: phone-rise 1.2s var(--ease-out) var(--d, 0s) both; }
+[data-intro="pending"] :is(.hero-in, .line-in, .hero-phone-in) { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-in, .line-in, .hero-phone-in { animation: none; }
+}
+
 /* The intro loader: hidden from the first paint for anyone who has seen it this session or prefers reduced
    motion (Loader.tsx then removes it), so they never get a flash of the dark screen while the page starts up. */
 [data-intro="seen"] [data-loader] { display: none; }

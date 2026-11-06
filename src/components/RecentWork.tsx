@@ -123,7 +123,7 @@ function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
         <span className="min-w-0 truncate text-paper/60" title={p.brand}>
           {p.brand}
         </span>
-        {p.date && <span className="shrink-0 whitespace-nowrap text-paper/40">· {p.date}</span>}
+        {p.date && <span className="shrink-0 whitespace-nowrap text-paper/60">· {p.date}</span>}
       </div>
       <p
         title={p.title}

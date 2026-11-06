@@ -664,7 +664,7 @@ export function Library() {
                   className={chipClass(kind === k.id, "paper", "md", "shrink-0 whitespace-nowrap")}
                 >
                   {k.label}
-                  <sup className="ml-1 font-mono text-[10px] opacity-90">{count(k.id)}</sup>
+                  <sup className="ml-1 font-mono text-[10px]">{count(k.id)}</sup>
                 </button>
               ))}
             </div>
@@ -690,7 +690,7 @@ export function Library() {
                     }`}
                   >
                     {ind}
-                    {ind !== "All" && !disabled && <sup className="ml-1 font-mono text-[10px] opacity-90">{perIndustry.get(ind)}</sup>}
+                    {ind !== "All" && !disabled && <sup className="ml-1 font-mono text-[10px]">{perIndustry.get(ind)}</sup>}
                   </button>
                 );
               })}

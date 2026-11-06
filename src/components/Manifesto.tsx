@@ -9,8 +9,9 @@ const accent = new Set(["orbiting.", "stop"]);
 
 function Word({ word, i, total, progress }: { word: string; i: number; total: number; progress: MotionValue<number> }) {
   const start = i / total;
-  const opacity = useTransform(progress, [start, start + 1 / total], [0.12, 1]);
   const isAccent = accent.has(word);
+  // Words not yet lit stay readable (at least 3:1 for this large text, in both themes); scrolling lights them fully.
+  const opacity = useTransform(progress, [start, start + 1 / total], [isAccent ? 0.75 : 0.47, 1]);
   return (
     <>
       <motion.span style={{ opacity }} className={`inline-block ${isAccent ? "serif text-accent" : ""}`}>

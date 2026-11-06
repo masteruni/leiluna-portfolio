@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, useInView, useReducedMotion } from "motion/react";
-import { useRef, type ReactNode } from "react";
+import { useRef, type CSSProperties, type ReactNode } from "react";
 
 // Each line rises out of a mask — the classic editorial headline reveal.
-// `inView` plays it when the block scrolls into view; otherwise `play` controls it.
+// `inView` plays it when the block scrolls into view; otherwise `play` controls it. `css` runs it in CSS instead
+// (`line-in` in globals.css), for headlines above the fold that must show before JavaScript has loaded.
 export function LineReveal({
   lines,
   play = true,
@@ -13,6 +14,7 @@ export function LineReveal({
   className,
   lineClassName = "",
   inView = false,
+  css = false,
 }: {
   lines: ReactNode[];
   play?: boolean;
@@ -21,6 +23,7 @@ export function LineReveal({
   className?: string;
   lineClassName?: string;
   inView?: boolean;
+  css?: boolean;
 }) {
   const reduce = useReducedMotion();
   // Observe the wrapper: the lines themselves start clipped by their masks, so they never "intersect".
@@ -32,6 +35,11 @@ export function LineReveal({
     <span ref={ref} className={className}>
       {lines.map((line, i) => (
         <span key={i} className={`block overflow-hidden pb-[0.08em] ${lineClassName}`}>
+          {css ? (
+            <span className="line-in block origin-top-left" style={{ "--d": `${delay + i * stagger}s` } as CSSProperties}>
+              {line}
+            </span>
+          ) : (
           <motion.span
             className="block origin-top-left"
             initial={reduce ? false : { y: "110%", rotate: 4 }}
@@ -40,6 +48,7 @@ export function LineReveal({
           >
             {line}
           </motion.span>
+          )}
         </span>
       ))}
     </span>

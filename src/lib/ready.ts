@@ -9,6 +9,10 @@ const listeners = new Set<() => void>();
 export function markReady() {
   if (ready) return;
   ready = true;
+  // Lets the hero's CSS entrance play (it's held while the intro covers the page: see globals.css). "open", not
+  // "seen", because "seen" hides the loader outright and would cut the intro's reveal short.
+  const d = document.documentElement;
+  if (d.dataset.intro === "pending") d.dataset.intro = "open";
   listeners.forEach((l) => l());
 }
 

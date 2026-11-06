@@ -23,15 +23,20 @@ function Step({ i, total, progress }: { i: number; total: number; progress: Moti
   const p = process[i];
   const start = (i / total) * 0.9;
   const phase = useTransform(progress, [start, start + 0.18], [0.02 + (i / (total - 1)) * 0.2, 0.2 + (i / (total - 1)) * 0.8]);
+  // Only the moon and the title dim before their turn (the title no lower than 3:1); the label and the text
+  // underneath always stay fully readable.
   const opacity = useTransform(progress, [start - 0.05, start + 0.12], [0.25, 1]);
+  const titleOpacity = useTransform(progress, [start - 0.05, start + 0.12], [0.5, 1]);
   return (
-    <motion.li style={{ opacity }} className="flex gap-6 md:flex-col md:gap-0">
-      <div className="size-20 shrink-0 md:size-28 lg:size-32">
+    <li className="flex gap-6 md:flex-col md:gap-0">
+      <motion.div style={{ opacity }} className="size-20 shrink-0 md:size-28 lg:size-32">
         <Moon phase={phase} />
-      </div>
+      </motion.div>
       <div className="md:mt-10">
         <p className="font-mono text-xs text-accent">Phase 0{i + 1}</p>
-        <h3 className="mt-2 font-display text-3xl font-semibold tracking-tight">{p.title}</h3>
+        <motion.h3 style={{ opacity: titleOpacity }} className="mt-2 font-display text-3xl font-semibold tracking-tight">
+          {p.title}
+        </motion.h3>
         <p className="mt-3 max-w-[30ch] text-sm leading-relaxed text-paper/60">{p.text}</p>
         {p.output && (
           <p className="mt-4 flex max-w-[30ch] gap-2 text-sm text-paper/85">
@@ -43,7 +48,7 @@ function Step({ i, total, progress }: { i: number; total: number; progress: Moti
           </p>
         )}
       </div>
-    </motion.li>
+    </li>
   );
 }
 
