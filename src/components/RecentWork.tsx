@@ -11,11 +11,13 @@ import { ArrowCircle, IconButton, Tag } from "./ui";
 const isVideo = (src: string) => src.endsWith(".mp4");
 
 // A video plays (muted, looping) only while its card is on screen, so a row of them doesn't all decode at once.
-function Clip({ src, poster }: { src: string; poster?: string }) {
+// A video without a `preview` only shows its poster here (the full file is often 15MB+); it still plays in full
+// when tapped.
+function Clip({ src, poster, still }: { src: string; poster?: string; still?: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const v = ref.current;
-    if (!v) return;
+    if (!v || still) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const io = new IntersectionObserver(
       ([e]) => {
@@ -26,26 +28,82 @@ function Clip({ src, poster }: { src: string; poster?: string }) {
     );
     io.observe(v);
     return () => io.disconnect();
-  }, []);
-  return <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" className="absolute inset-0 size-full object-cover" />;
+  }, [still]);
+  return (
+    <video
+      ref={ref}
+      src={still ? undefined : src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload={still ? "none" : "metadata"}
+      className="absolute inset-0 size-full object-cover"
+    />
+  );
+}
+
+// A brand's round logo, or its first letter when there's no logo or the file is missing (a typo, a forgotten upload).
+function BrandMark({ name, logo, size }: { name: string; logo?: string; size: 24 | 28 }) {
+  const [failed, setFailed] = useState(false);
+  const box = size === 24 ? "size-6 text-[11px]" : "size-7 text-xs";
+  if (!logo || failed) {
+    const initial = Array.from(new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(name.trim()))[0]?.segment ?? "?";
+    return (
+      <span aria-hidden className={`grid shrink-0 place-items-center rounded-full border border-line bg-ink-3 font-medium uppercase text-paper/80 ${box}`}>
+        {initial}
+      </span>
+    );
+  }
+  return (
+    <Image
+      src={logo}
+      alt=""
+      width={size}
+      height={size}
+      onError={() => setFailed(true)}
+      className={`shrink-0 rounded-full border border-line object-cover ${box}`}
+    />
+  );
+}
+
+// The card's picture, or a quiet branded panel if the file is missing, instead of a broken-image icon.
+function CardImage({ src, alt, brand }: { src: string; alt: string; brand: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed)
+    return (
+      <span role="img" aria-label={alt} className="absolute inset-0 grid place-items-center bg-ink-2 p-6 text-center">
+        <span className="serif text-2xl text-paper/50">{brand}</span>
+      </span>
+    );
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes="(min-width: 1024px) 22rem, 75vw"
+      onError={() => setFailed(true)}
+      className="object-cover object-top transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-[1.04]"
+    />
+  );
 }
 
 function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
   const brand = brands.find((b) => b.name === p.brand);
   const video = isVideo(p.src);
+  // Development only: point out entries that will look unfinished, once per card.
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    if (!brand) console.warn(`Recent work: "${p.brand}" isn't in \`brands\` (src/content/recent.ts), so it has no logo.`);
+    if (video && !p.preview) console.warn(`Recent work: "${p.title}" has no \`preview\`, so its card shows only the poster.`);
+  }, [brand, video, p.brand, p.title, p.preview]);
   const body = (
     <>
       <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem] border border-line bg-ink-2">
         {video ? (
-          <Clip src={p.preview ?? p.src} poster={p.poster} />
+          <Clip src={p.preview ?? p.src} poster={p.poster} still={!p.preview} />
         ) : (
-          <Image
-            src={p.src}
-            alt={`${p.title}, for ${p.brand}`}
-            fill
-            sizes="(min-width: 1024px) 22rem, 75vw"
-            className="object-cover object-top transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-[1.04]"
-          />
+          <CardImage src={p.src} alt={`${p.title}, for ${p.brand}`} brand={p.brand} />
         )}
         <Tag className="absolute left-3 top-3">{p.kind}</Tag>
         {video && !p.link && (
@@ -60,14 +118,19 @@ function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
           <ArrowCircle size="sm" className="absolute right-3 top-3" />
         )}
       </div>
-      <div className="mt-4 flex items-center gap-2.5">
-        {brand && <Image src={brand.logo} alt="" width={24} height={24} className="size-6 rounded-full border border-line object-cover" />}
-        <span className="truncate text-sm text-paper/60">
+      <div className="mt-4 flex min-w-0 items-center gap-2.5 text-sm">
+        <BrandMark name={p.brand} logo={brand?.logo} size={24} />
+        <span className="min-w-0 truncate text-paper/60" title={p.brand}>
           {p.brand}
-          {p.date && <span className="text-paper/40"> · {p.date}</span>}
         </span>
+        {p.date && <span className="shrink-0 whitespace-nowrap text-paper/40">· {p.date}</span>}
       </div>
-      <p className="mt-1.5 text-lg font-medium leading-snug tracking-[-0.01em] transition-colors duration-300 group-hover:text-accent">{p.title}</p>
+      <p
+        title={p.title}
+        className="mt-1.5 line-clamp-3 text-lg font-medium leading-snug tracking-[-0.01em] [overflow-wrap:anywhere] transition-colors duration-300 group-hover:text-accent"
+      >
+        {p.title}
+      </p>
     </>
   );
   return (
@@ -198,24 +261,26 @@ export function RecentWork() {
               Brands we&rsquo;ve worked with
             </span>
             {brands.map((b) => {
+              // On phones the row shows logos only, so a long list doesn't push the work off the first screen;
+              // the names stay available to screen readers and as a hover title.
               const inner = (
                 <>
-                  <Image src={b.logo} alt="" width={28} height={28} className="size-7 rounded-full border border-line object-cover" />
-                  <span>{b.name}</span>
+                  <BrandMark name={b.name} logo={b.logo} size={28} />
+                  <span className="max-sm:sr-only">{b.name}</span>
                 </>
               );
               return b.url ? (
-                <a key={b.name} href={b.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-sm transition-colors hover:text-accent">
+                <a key={b.name} href={b.url} target="_blank" rel="noopener noreferrer" title={b.name} className="flex items-center gap-2.5 text-sm transition-colors hover:text-accent">
                   {inner}
                 </a>
               ) : (
-                <span key={b.name} className="flex items-center gap-2.5 text-sm">
+                <span key={b.name} title={b.name} className="flex items-center gap-2.5 text-sm">
                   {inner}
                 </span>
               );
             })}
           </div>
-          <div className="hidden gap-2 sm:flex">
+          <div className={`hidden gap-2 ${edge.start && edge.end ? "" : "sm:flex"}`}>
             {([-1, 1] as const).map((d) => (
               <IconButton
                 key={d}

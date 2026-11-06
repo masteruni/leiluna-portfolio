@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { recent } from "@/content/recent";
 import { clients } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
 
@@ -18,7 +19,7 @@ export function TrustLine({ align = "start", className = "" }: { align?: "start"
 
   return (
     <Link
-      href="/#recent"
+      href={recent.length ? "/#recent" : "/#work"}
       onClick={anchor}
       className={`group inline-flex items-center gap-3 text-sm text-paper/60 transition-colors hover:text-paper pointer-coarse:min-h-11 ${
         align === "center" ? "flex-col justify-center text-center sm:flex-row sm:text-left" : ""
