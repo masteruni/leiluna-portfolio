@@ -1,4 +1,4 @@
-// Recent work: the latest pieces from the brands we're working with right now. Shown on the homepage in
+// Recent work: our newest pieces for client brands. Shown on the homepage in
 // "Recent work", newest first (keep this list in that order).
 //
 // Adding a piece:
@@ -14,7 +14,7 @@
 
 export type Brand = { name: string; logo: string; handle?: string; url?: string };
 
-// The brands we're working with right now: shown as the "Now working with" row.
+// Client brands shown in the "Brands we've worked with" row. The site never says which of them are current.
 export const brands: Brand[] = [
   { name: "Kabogera Beauty", logo: "/clients/kabogera-beauty.webp" },
   { name: "MD Raymundo Consulting Services", logo: "/clients/md-raymundo.webp" },

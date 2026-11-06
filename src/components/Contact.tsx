@@ -491,7 +491,7 @@ export function Contact() {
           </div>
         </div>
 
-        {/* who we're working with, right where the decision is made */}
+        {/* brands we've worked with, right where the decision is made */}
         <TrustLine align="center" className="mt-10" />
 
         <div id="project-brief">

@@ -94,7 +94,8 @@ function Card({ p }: { p: RecentPiece }) {
   );
 }
 
-// The latest pieces from the brands we work with right now, as a row you can swipe or step through. Content lives
+// Our newest pieces for client brands, as a row you can swipe or step through. (It never says which clients are
+// current: the label is "Brands we've worked with".) Content lives
 // in src/content/recent.ts.
 export function RecentWork() {
   const rail = useRef<HTMLUListElement>(null);
@@ -133,17 +134,13 @@ export function RecentWork() {
               <LineReveal inView lines={["Fresh off", <span key="o" className="serif font-normal text-accent">the timeline.</span>]} />
             </h2>
           </div>
-          <p className="max-w-sm text-lg text-paper/60">The latest from the brands we&rsquo;re working with right now, added as it goes live.</p>
+          <p className="max-w-sm text-lg text-paper/60">Our newest pieces for the brands we&rsquo;ve created for.</p>
         </div>
 
         <div className="mt-12 flex flex-col gap-5 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.25em] text-paper/60">
-              <span className="relative flex size-2">
-                <span className="absolute inset-0 animate-ping rounded-full bg-brand opacity-60 motion-reduce:animate-none" />
-                <span className="relative size-2 rounded-full bg-brand" />
-              </span>
-              Now working with
+              Brands we&rsquo;ve worked with
             </span>
             {brands.map((b) => {
               const inner = (

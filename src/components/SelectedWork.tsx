@@ -143,7 +143,7 @@ export function SelectedWork() {
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">
-            Real pages we run every day, from strategy and editing to posting and community. The numbers are theirs.
+            Real pages we&rsquo;ve grown, from strategy and editing to posting and community. The numbers are theirs.
           </p>
         </div>
 

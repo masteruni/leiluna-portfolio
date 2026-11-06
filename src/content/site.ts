@@ -191,7 +191,7 @@ export const heroProof = [
 export const stats = [
   { value: 29, suffix: "M+", label: "views on our clients' six pinned reels" },
   { value: 680, suffix: "×", label: "top reel reach vs. the page's followers" },
-  { value: 306, suffix: "K", label: "followers on a page we grow and manage" },
+  { value: 306, suffix: "K", label: "followers on a page we grew and managed" },
 ];
 
 // Top reels for the proof chart (views), from the two case studies.
@@ -206,7 +206,7 @@ export const topReels = [
 
 // The scrolling strip in "Proof": real clients first, spread among the industries we create for (from the Library).
 // Add a client by putting a square logo in /public/clients/ and adding { name, logo } here (newest first). `short` is
-// an optional shorter name for tight spots, like the "Now working with" line under the buttons.
+// an optional shorter name for tight spots, like the "Trusted by" line under the buttons.
 export const clients = [
   { name: "Kabogera Beauty", logo: "/clients/kabogera-beauty.webp" },
   { name: "MD Raymundo Consulting Services", short: "MD Raymundo", logo: "/clients/md-raymundo.webp" },

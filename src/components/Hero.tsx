@@ -114,7 +114,7 @@ export function Hero() {
             </button>
           </motion.div>
 
-          {/* who we're working with, right under the buttons that ask for a decision */}
+          {/* brands we've worked with, right under the buttons that ask for a decision */}
           <motion.div {...fade(0.35)} className="mt-6">
             <TrustLine />
           </motion.div>

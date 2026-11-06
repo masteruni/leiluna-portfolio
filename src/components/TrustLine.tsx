@@ -5,8 +5,9 @@ import Link from "next/link";
 import { clients } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
 
-// Social proof at the moment of decision: sits right under a "Start a project" button and names who we're working
-// with now, as a row of overlapping client logos. It links to Recent work, where their latest pieces are.
+// Social proof at the moment of decision: sits right under a "Start a project" button and names brands we've worked
+// with, as a row of overlapping client logos. It links to Recent work, where their latest pieces are. (Worded as
+// "Trusted by", never "now working with": the site doesn't say which clients are current.)
 // Driven by `clients` in src/content/site.ts (newest first), so it stays current as clients change.
 export function TrustLine({ align = "start", className = "" }: { align?: "start" | "center"; className?: string }) {
   const anchor = useAnchor();
@@ -36,7 +37,7 @@ export function TrustLine({ align = "start", className = "" }: { align?: "start"
         ))}
       </span>
       <span>
-        Now working with <span className="text-paper/85 group-hover:text-paper">{names}</span>
+        Trusted by <span className="text-paper/85 group-hover:text-paper">{names}</span>
       </span>
     </Link>
   );
