@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { founders } from "@/content/site";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
+import { Tag } from "./ui";
 
 const tiltSpring = { stiffness: 150, damping: 18, mass: 0.6 };
 
@@ -82,9 +83,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
             style={{ background: sheen }}
             className="pointer-events-none absolute inset-0 opacity-0 mix-blend-screen transition-opacity duration-300 group-hover:opacity-100"
           />
-          <span className="absolute left-5 top-5 rounded-full bg-ink/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest backdrop-blur">
-            {f.photo ? "Co-founder" : "Photo coming soon"}
-          </span>
+          <Tag className="absolute left-5 top-5">{f.photo ? "Co-founder" : "Photo coming soon"}</Tag>
         </motion.div>
       </div>
 

@@ -9,6 +9,7 @@ import { useAnchor } from "@/lib/anchor";
 import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
+import { ArrowCircle } from "./ui";
 
 const tiltSpring = { stiffness: 160, damping: 18, mass: 0.6 };
 
@@ -161,9 +162,7 @@ export function SelectedWork() {
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">
             Your story <span className="serif font-normal text-accent">goes here next.</span>
           </span>
-          <span className="grid size-16 shrink-0 place-items-center rounded-full border border-line text-2xl transition-[rotate,background-color,border-color,color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-on-brand">
-            ↗
-          </span>
+          <ArrowCircle size="lg" tone="outline" />
         </Link>
       </div>
     </section>

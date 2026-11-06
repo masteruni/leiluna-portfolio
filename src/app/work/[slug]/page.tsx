@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 import { CountUp } from "@/components/CountUp";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Contact } from "@/components/Contact";
 import { LineReveal } from "@/components/LineReveal";
 import { Footer } from "@/components/Footer";
@@ -14,6 +14,7 @@ import { Reveal } from "@/components/Reveal";
 import { ShareButton } from "@/components/ShareButton";
 import { getProject, projects } from "@/content/projects";
 import { site } from "@/content/site";
+import { ArrowCircle } from "@/components/ui";
 
 // Break a title into two lines: at a comma if it has one, otherwise in the middle.
 function titleLines(title: string) {
@@ -231,9 +232,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   {next.title}
                 </p>
               </div>
-              <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line transition group-hover:rotate-45 group-hover:bg-brand group-hover:text-on-brand">
-                <ArrowUpRight />
-              </span>
+              <ArrowCircle size="lg" tone="outline" />
             </Link>
             {prev.slug !== next.slug && (
               <Link

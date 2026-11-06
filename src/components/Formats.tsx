@@ -14,6 +14,7 @@ import { spark } from "@/lib/spark";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { showreel } from "./Showreel";
+import { Tag, buttonClass } from "./ui";
 
 const protect = {
   controlsList: "nodownload noplaybackrate noremoteplayback",
@@ -233,14 +234,14 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={() => setSound((s) => !s)}
-                    className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-xs pointer-coarse:min-h-11 text-paper backdrop-blur-md press hover:bg-paper hover:text-ink"
+                    className={buttonClass("glass", "sm", "absolute bottom-4 right-4 z-10")}
                   >
                     {sound ? <VolumeX aria-hidden className="size-4" /> : <Volume2 aria-hidden className="size-4" />}
                     {sound ? "Sound off" : "Sound on"}
                   </button>
-                  <span className="absolute left-4 top-4 z-10 rounded-full bg-ink/60 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/80 backdrop-blur">
+                  <Tag className="absolute left-4 top-4 z-10">
                     {industriesOf(f.p).length > 2 ? "Multi-industry" : industriesOf(f.p).join(" · ")} · {f.p.duration}
-                  </span>
+                  </Tag>
                 </FrontCard>
               </AnimatePresence>
             </div>
@@ -266,14 +267,14 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={want}
-                    className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-on-brand press hover:bg-paper hover:text-ink"
+                    className={buttonClass("primary", "lg")}
                   >
                     I want this →
                   </button>
                   <button
                     type="button"
                     onClick={browse}
-                    className="rounded-full border border-line px-6 py-3 text-sm text-paper/80 press hover:border-paper hover:text-paper"
+                    className={buttonClass("outline", "lg")}
                   >
                     See more in the Library
                   </button>

@@ -6,6 +6,7 @@ import { brands, recent, type RecentPiece } from "@/content/recent";
 import { openClip } from "@/lib/showreel";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
+import { ArrowCircle, IconButton, Tag } from "./ui";
 
 const isVideo = (src: string) => src.endsWith(".mp4");
 
@@ -46,9 +47,7 @@ function Card({ p }: { p: RecentPiece }) {
             className="object-cover object-top transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-[1.04]"
           />
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-ink/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-paper backdrop-blur-md">
-          {p.kind}
-        </span>
+        <Tag className="absolute left-3 top-3">{p.kind}</Tag>
         {video && !p.link && (
           <span
             aria-hidden
@@ -58,12 +57,7 @@ function Card({ p }: { p: RecentPiece }) {
           </span>
         )}
         {p.link && (
-          <span
-            aria-hidden
-            className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-paper text-sm text-ink transition-[rotate,background-color,color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:bg-brand group-hover:text-on-brand"
-          >
-            ↗
-          </span>
+          <ArrowCircle size="sm" className="absolute right-3 top-3" />
         )}
       </div>
       <div className="mt-4 flex items-center gap-2.5">
@@ -171,16 +165,14 @@ export function RecentWork() {
           </div>
           <div className="hidden gap-2 sm:flex">
             {([-1, 1] as const).map((d) => (
-              <button
+              <IconButton
                 key={d}
-                type="button"
                 onClick={() => step(d)}
                 disabled={d === -1 ? edge.start : edge.end}
-                aria-label={d === -1 ? "Previous pieces" : "Next pieces"}
-                className="grid size-11 place-items-center rounded-full border border-line press hover:border-paper/60 disabled:pointer-events-none disabled:opacity-30"
+                label={d === -1 ? "Previous pieces" : "Next pieces"}
               >
                 {d === -1 ? "←" : "→"}
-              </button>
+              </IconButton>
             ))}
           </div>
         </div>

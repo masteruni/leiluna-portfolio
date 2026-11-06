@@ -5,6 +5,7 @@ import { useLenis } from "lenis/react";
 import { useEffect, useRef } from "react";
 import { useFocusTrap } from "@/lib/focus";
 import { closeShowreel, useShowreel } from "@/lib/showreel";
+import { buttonClass } from "./ui";
 
 export const showreel = {
   // The website promo: a tour of the studio's work and site, ending on the logo. (The earlier cut of client work,
@@ -71,7 +72,7 @@ export function ShowreelPlayer() {
             ref={closeRef}
             type="button"
             onClick={closeShowreel}
-            className="absolute right-5 top-5 press rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
+            className={buttonClass("solid", "md", "absolute right-5 top-5 sm:right-10 sm:top-6")}
           >
             Close ✕
           </button>

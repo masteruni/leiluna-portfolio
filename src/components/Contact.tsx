@@ -10,6 +10,7 @@ import { track } from "@/lib/track";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
+import { buttonClass, chipClass } from "./ui";
 
 const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
 const field =
@@ -30,9 +31,7 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
               if (value !== o) spark(e);
               onChange(value === o ? "" : o);
             }}
-            className={`rounded-full border px-3.5 py-2 text-xs press pointer-coarse:min-h-11 ${
-              value === o ? "border-paper bg-paper text-ink" : "border-line text-paper/70 hover:border-paper/50 hover:text-paper"
-            }`}
+            className={chipClass(value === o, "paper", "sm")}
           >
             {o}
           </button>
@@ -274,9 +273,7 @@ function Brief({ onDone }: { onDone: () => void }) {
                           if (!on) spark(e);
                           toggle(s.title);
                         }}
-                        className={`rounded-full border px-4 py-2.5 text-sm press pointer-coarse:min-h-11 ${
-                          on ? "border-brand bg-brand text-on-brand" : "border-line text-paper/75 hover:border-paper/50 hover:text-paper"
-                        }`}
+                        className={chipClass(on, "brand", "md")}
                       >
                         {s.title}
                       </button>
@@ -354,7 +351,7 @@ function Brief({ onDone }: { onDone: () => void }) {
           // A submit button, so Enter in a field moves on too (the form turns any submit before the last step into "next").
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-3 rounded-full bg-paper px-6 py-3.5 text-sm font-medium text-ink press hover:bg-brand hover:text-on-brand"
+            className={buttonClass("solid", "lg", "gap-3")}
           >
             {step === 1 && !needs.length ? "Skip for now" : `Next: ${STEPS[step + 1]}`}
             <ArrowRight aria-hidden className="size-4" />
@@ -367,11 +364,11 @@ function Brief({ onDone }: { onDone: () => void }) {
                 spark(e);
                 copy();
               }}
-              className="rounded-full border border-line px-6 py-3.5 text-sm text-paper/80 press hover:border-paper hover:text-paper"
+              className={buttonClass("outline", "lg")}
             >
               {copied ? "Copied" : "Copy the brief"}
             </button>
-            <button type="submit" onClick={spark} className="inline-flex items-center gap-3 rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-on-brand press hover:bg-paper hover:text-ink">
+            <button type="submit" onClick={spark} className={buttonClass("primary", "lg", "gap-3")}>
               Send by email
               <ArrowRight aria-hidden className="size-4" />
             </button>

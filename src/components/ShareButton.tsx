@@ -3,6 +3,7 @@
 import { useState, type MouseEvent } from "react";
 import { spark } from "@/lib/spark";
 import { track } from "@/lib/track";
+import { buttonClass } from "./ui";
 
 // Share the current page: the native share sheet on phones, "copy link" everywhere else.
 export function ShareButton({ title, text, className = "" }: { title: string; text?: string; className?: string }) {
@@ -33,7 +34,7 @@ export function ShareButton({ title, text, className = "" }: { title: string; te
       type="button"
       onClick={share}
       aria-live="polite"
-      className={`inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm text-paper/80 pointer-coarse:min-h-11 press hover:border-paper hover:text-paper ${className}`}
+      className={buttonClass("outline", "md", className)}
     >
       {state === "copied" ? "Link copied ✦" : state === "shared" ? "Shared ✦" : "Share this case study"}
     </button>

@@ -10,6 +10,7 @@ import { openBriefWith } from "@/lib/brief";
 import { spark } from "@/lib/spark";
 import { track } from "@/lib/track";
 import { Eyebrow } from "./Eyebrow";
+import { buttonClass, chipClass } from "./ui";
 
 // Height ÷ width of each shape, so the masonry can be laid out before anything has loaded.
 const ratio: Record<PieceFormat, number> = { reel: 16 / 9, square: 1, portrait: 5 / 4, tall: 4 / 3, wide: 9 / 16, landscape: 3 / 4, long: 16 / 9 };
@@ -512,18 +513,18 @@ function Lightbox({
           <button
             type="button"
             onClick={onContact}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-on-brand press hover:bg-paper hover:text-ink"
+            className={buttonClass("primary", "md", "mt-8")}
           >
             I want this style →
           </button>
           <div className="mt-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-            <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 press hover:border-paper/50 hover:text-paper" aria-label="Previous piece">
+            <button type="button" onClick={() => onStep(-1)} className={buttonClass("outline", "sm")} aria-label="Previous piece">
               ←
             </button>
             <span className="tabular-nums">
               {String(index + 1).padStart(2, "0")} / {String(list.length).padStart(2, "0")}
             </span>
-            <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 press hover:border-paper/50 hover:text-paper" aria-label="Next piece">
+            <button type="button" onClick={() => onStep(1)} className={buttonClass("outline", "sm")} aria-label="Next piece">
               →
             </button>
           </div>
@@ -536,7 +537,7 @@ function Lightbox({
         ref={closeRef}
         type="button"
         onClick={onClose}
-        className="absolute right-5 top-5 press rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
+        className={buttonClass("solid", "md", "absolute right-5 top-5 sm:right-10 sm:top-6")}
       >
         Close ✕
       </button>
@@ -660,9 +661,7 @@ export function Library() {
                     setIndustry("All");
                     setOpen(null);
                   }}
-                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm press pointer-coarse:min-h-11 ${
-                    kind === k.id ? "bg-paper text-ink" : "border border-line text-paper/70 hover:text-paper"
-                  }`}
+                  className={chipClass(kind === k.id, "paper", "md", "shrink-0 whitespace-nowrap")}
                 >
                   {k.label}
                   <sup className="ml-1 font-mono text-[10px] opacity-90">{count(k.id)}</sup>
@@ -723,7 +722,7 @@ export function Library() {
                   setKind("all");
                   setIndustry("All");
                 }}
-                className="rounded-full border border-line px-5 py-2.5 text-sm text-paper/80 press hover:border-paper hover:text-paper"
+                className={buttonClass("outline", "md")}
               >
                 Show everything
               </button>
@@ -733,7 +732,7 @@ export function Library() {
                   track("Style requested", { piece: `${kind}/${industry}` });
                   askFor(`We'd like a ${kind === "graphic" ? "graphic" : kind === "video" ? "video" : "piece"} for ${industry}.`);
                 }}
-                className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-on-brand press hover:bg-paper hover:text-ink"
+                className={buttonClass("primary", "md")}
               >
                 Ask us for one →
               </button>
@@ -777,7 +776,7 @@ export function Library() {
                   requestAnimationFrame(() => grid.current?.querySelectorAll<HTMLButtonElement>("button[data-cursor]")[FIRST]?.focus({ preventScroll: true })),
                 );
               }}
-              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 press hover:border-paper hover:text-paper pointer-coarse:min-h-11"
+              className={buttonClass("outline", "lg", "gap-3")}
             >
               Show all {list.length} pieces
               <span className="rounded-full bg-paper/10 px-2 py-0.5 font-mono text-xs text-muted">+{list.length - FIRST}</span>
@@ -801,7 +800,7 @@ export function Library() {
                   requestAnimationFrame(() => showAll.current?.focus({ preventScroll: true }));
                 });
               }}
-              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 press hover:border-paper hover:text-paper pointer-coarse:min-h-11"
+              className={buttonClass("outline", "lg", "gap-3")}
             >
               Show less
             </button>
