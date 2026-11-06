@@ -40,6 +40,8 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "#050506" },
   ],
   colorScheme: "dark light",
+  // On Android the keyboard shrinks the layout instead of covering it, as it does on iOS (keeps the brief's fields in view).
+  interactiveWidget: "resizes-content",
 };
 
 // Structured data: tells Google who the studio is, what it does and who runs it.

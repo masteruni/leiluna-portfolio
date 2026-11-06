@@ -90,7 +90,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         <article className="mx-auto max-w-7xl px-5 sm:px-10 xl:box-content">
           <Reveal>
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-paper pointer-coarse:min-h-11">
+              <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper pointer-coarse:min-h-11">
                 <ArrowLeft size={16} /> All work
               </Link>
               <ShareButton title={`${project.title} · ${project.client}`} text={project.summary} />
@@ -99,13 +99,16 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
 
           <div className={`mt-10 grid gap-12 ${isTall ? "lg:grid-cols-[1.2fr_0.8fr] lg:items-end" : ""}`}>
             <div>
-              <Reveal>
+              {/* The title rises line by line on its own; the lines around it only fade in, so the words never move twice. */}
+              <Reveal y={0}>
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
                   <span className="text-accent">{project.client}</span> · {project.year} · {project.categories.join(" / ")}
                 </p>
-                <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-                  <LineReveal inView lines={titleLines(project.title)} />
-                </h1>
+              </Reveal>
+              <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+                <LineReveal inView lines={titleLines(project.title)} />
+              </h1>
+              <Reveal y={0} delay={0.15}>
                 <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted">{project.summary}</p>
               </Reveal>
 
@@ -127,9 +130,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                 so it isn't faded in like the text around it. */}
             <div className={isTall ? "mx-auto w-full max-w-sm" : ""}>
               <ViewTransition name={`cover-${project.slug}`} share="cover-morph" default="none">
-                <div className="group">
-                  <ProjectCover project={project} priority />
-                </div>
+                {/* not a link, so no hover zoom (ProjectCover zooms inside a `group`) */}
+                <ProjectCover project={project} priority />
               </ViewTransition>
             </div>
           </div>
@@ -189,7 +191,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           {project.gallery?.length ? (
             <div className="mt-24 columns-1 gap-4 sm:columns-2 lg:columns-3">
               {project.gallery.map((src, i) => (
-                <Reveal key={src} delay={(i % 3) * 0.08} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-ink-2">
+                <Reveal key={src} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-ink-2">
                   {/\.(mp4|webm|mov)$/i.test(src) ? (
                     <video controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback src={src} autoPlay muted loop playsInline preload="metadata" className="block h-auto w-full" />
                   ) : (
@@ -209,12 +211,12 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             !project.cover && (
               <Reveal>
                 <div className="mt-24 grid grid-cols-2 gap-4 md:grid-cols-3">
-                  <div className="group"><ProjectCover project={project} format="reel" variant={1} /></div>
-                  <div className="group flex flex-col gap-4">
+                  <ProjectCover project={project} format="reel" variant={1} />
+                  <div className="flex flex-col gap-4">
                     <ProjectCover project={project} format="square" variant={2} />
                     <ProjectCover project={project} format="portrait" variant={3} />
                   </div>
-                  <div className="group hidden md:block"><ProjectCover project={project} format="reel" variant={4} /></div>
+                  <div className="hidden md:block"><ProjectCover project={project} format="reel" variant={4} /></div>
                 </div>
               </Reveal>
             )
@@ -228,7 +230,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             >
               <div>
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Next project · {next.client}</p>
-                <p className="mt-3 font-display text-5xl font-bold tracking-[-0.04em] transition group-hover:text-accent sm:text-8xl">
+                <p className="mt-3 font-display text-5xl font-bold tracking-[-0.04em] transition-colors duration-300 group-hover:text-accent sm:text-8xl">
                   {next.title}
                 </p>
               </div>
@@ -237,7 +239,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             {prev.slug !== next.slug && (
               <Link
                 href={`/work/${prev.slug}`}
-                className="group flex items-center justify-between gap-6 border-t border-line py-6 text-sm text-muted transition hover:text-paper"
+                className="group flex items-center justify-between gap-6 border-t border-line py-6 text-sm text-muted transition-colors hover:text-paper"
               >
                 <span className="inline-flex items-center gap-2">
                   <ArrowLeft size={16} /> Previous: {prev.title}

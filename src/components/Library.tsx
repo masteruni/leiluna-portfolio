@@ -385,7 +385,7 @@ function Lightbox({
     >
       <motion.div
         key={p.id}
-        className="flex max-h-full w-full max-w-[1320px] flex-col items-center gap-6 overflow-y-auto lg:flex-row lg:items-end lg:justify-center lg:gap-12"
+        className="flex max-h-full w-full max-w-[1320px] flex-col items-center gap-6 overflow-y-auto overscroll-contain lg:flex-row lg:items-end lg:justify-center lg:gap-12"
         // When the piece flies in from its tile, the frame mustn't also slide: it's measured as it mounts.
         initial={flying ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -649,7 +649,7 @@ export function Library() {
         {/* filters */}
         <div className="sticky-below-header sticky z-20 -mx-5 mt-14 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div role="group" aria-label="Filter by format" className="-mx-5 flex shrink-0 gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
+            <div role="group" aria-label="Filter by format" className="-mx-5 flex shrink-0 gap-2 overflow-x-auto overscroll-x-contain px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
               {kinds.map((k) => (
                 <button
                   key={k.id}
@@ -671,7 +671,7 @@ export function Library() {
             <div
               role="group"
               aria-label="Filter by industry"
-              className="-mx-5 flex min-w-0 gap-1 overflow-x-auto px-5 [mask-image:linear-gradient(to_right,black_92%,transparent)] [scrollbar-width:none] sm:mx-0 sm:px-0 lg:pr-10"
+              className="-mx-5 flex min-w-0 gap-1 overflow-x-auto overscroll-x-contain px-5 [mask-image:linear-gradient(to_right,black_92%,transparent)] [scrollbar-width:none] sm:mx-0 sm:px-0 lg:pr-10"
             >
               {(["All", ...industries] as const).map((ind) => {
                 const disabled = ind !== "All" && !available.has(ind);

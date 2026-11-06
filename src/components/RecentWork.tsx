@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { brands, recent, type RecentPiece } from "@/content/recent";
+import { brands as demoBrands, recent as demoRecent, type Brand, type RecentPiece } from "@/content/recent";
 import { openClip } from "@/lib/showreel";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
@@ -30,7 +30,7 @@ function Clip({ src, poster }: { src: string; poster?: string }) {
   return <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" className="absolute inset-0 size-full object-cover" />;
 }
 
-function Card({ p }: { p: RecentPiece }) {
+function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
   const brand = brands.find((b) => b.name === p.brand);
   const video = isVideo(p.src);
   const body = (
@@ -94,11 +94,65 @@ function Card({ p }: { p: RecentPiece }) {
   );
 }
 
+// Dev-only switch between the real data and test data (break-ui). Plain chrome, not part of the design.
+function DataToggle({ mode }: { mode: string }) {
+  const modes = [
+    ["demo", "Demo data"],
+    ["worst", "Worst case"],
+    ["empty", "Empty"],
+    ["one", "One"],
+    ["many", "24 pieces"],
+  ] as const;
+  return (
+    <div
+      role="group"
+      aria-label="Recent work test data (development only)"
+      className="fixed bottom-4 left-1/2 z-[100] flex -translate-x-1/2 gap-0.5 rounded-full bg-[#e5e5e5] p-1 font-sans text-xs text-[#222] shadow-lg"
+    >
+      {modes.map(([m, label]) => (
+        <button
+          key={m}
+          type="button"
+          aria-pressed={mode === m}
+          onClick={() => {
+            const url = new URL(window.location.href);
+            if (m === "demo") url.searchParams.delete("data");
+            else url.searchParams.set("data", m);
+            history.replaceState(null, "", url);
+            window.dispatchEvent(new Event("recent-data"));
+          }}
+          className={`rounded-full px-3 py-1.5 ${mode === m ? "bg-white shadow" : ""}`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // Our newest pieces for client brands, as a row you can swipe or step through. (It never says which clients are
 // current: the label is "Brands we've worked with".) Content lives
 // in src/content/recent.ts.
 export function RecentWork() {
   const rail = useRef<HTMLUListElement>(null);
+  const [{ brands, recent }, setData] = useState({ brands: demoBrands, recent: demoRecent });
+  const [mode, setMode] = useState("demo");
+
+  // Development only: ?data=worst|empty|one|many swaps in test data from src/content/recent.fixtures.ts (the
+  // switch at the bottom of the page sets it). The whole branch is removed from production builds.
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    const sync = () => {
+      const m = new URLSearchParams(window.location.search).get("data") ?? "demo";
+      import("@/content/recent.fixtures").then(({ fixtures }) => {
+        setMode(fixtures[m] ? m : "demo");
+        setData(fixtures[m] ?? { brands: demoBrands, recent: demoRecent });
+      });
+    };
+    sync();
+    window.addEventListener("recent-data", sync);
+    return () => window.removeEventListener("recent-data", sync);
+  }, []);
   const [edge, setEdge] = useState({ start: true, end: false });
 
   useEffect(() => {
@@ -112,7 +166,7 @@ export function RecentWork() {
       el.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
-  }, []);
+  }, [recent]);
 
   const step = (dir: 1 | -1) => {
     const el = rail.current;
@@ -122,7 +176,8 @@ export function RecentWork() {
     el.scrollBy({ left: dir * (card.getBoundingClientRect().width + 24), behavior: reduce ? "auto" : "smooth" });
   };
 
-  if (!recent.length) return null;
+  const toggle = process.env.NODE_ENV !== "production" ? <DataToggle mode={mode} /> : null;
+  if (!recent.length) return toggle;
 
   return (
     <section id="recent" className="relative py-24 md:py-32">
@@ -182,9 +237,10 @@ export function RecentWork() {
         className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain px-5 pb-4 [scrollbar-width:none] sm:px-10 lg:scroll-px-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))] lg:px-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))] [&::-webkit-scrollbar]:hidden"
       >
         {recent.map((p, i) => (
-          <Card key={`${p.src}-${i}`} p={p} />
+          <Card key={`${p.src}-${i}`} p={p} brands={brands} />
         ))}
       </ul>
+      {toggle}
     </section>
   );
 }

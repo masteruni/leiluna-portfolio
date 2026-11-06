@@ -159,9 +159,20 @@ p, blockquote { text-wrap: pretty; }
   }
 }
 
-/* Phones: no grey flash on tap, and no double-tap-zoom wait on controls. */
-html { -webkit-tap-highlight-color: transparent; }
+/* Phones: no grey flash on tap, no double-tap-zoom wait on controls, and no font inflation in landscape. */
+html { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
 a, button, [role="button"], summary, label { touch-action: manipulation; }
+/* A long press on a control shouldn't select its label or pop the copy/share callout, like a native button.
+   (Controls only: body text and links in prose stay selectable.) */
+button, [role="button"], [role="tab"], summary {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* iOS zooms the page into any field under 16px and doesn't zoom back out; keep fields at 16px on touch screens. */
+@media (pointer: coarse) {
+  input, textarea, select { font-size: max(16px, 1em); }
+}
 
 /* Protect our work: no drag-to-save and no long-press "Save image" on media */
 img,

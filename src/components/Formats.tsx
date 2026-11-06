@@ -169,7 +169,7 @@ export function Formats() {
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
           {/* the list (a swipeable row of chips on phones) */}
-          <div role="tablist" aria-label="Formats" className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:block lg:overflow-visible lg:border-t lg:border-line lg:px-0">
+          <div role="tablist" aria-label="Formats" className="-mx-5 flex gap-2 overflow-x-auto overscroll-x-contain px-5 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:block lg:overflow-visible lg:border-t lg:border-line lg:px-0">
             {items.map((x, n) => {
               const on = n === i;
               return (

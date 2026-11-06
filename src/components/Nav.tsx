@@ -9,6 +9,7 @@ import { profileLinks, site } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
 import { setBriefOpen } from "@/lib/brief";
 import { useFocusTrap } from "@/lib/focus";
+import { useTheme } from "@/lib/theme";
 import { useActiveSection } from "@/lib/useActiveSection";
 import { useOverNight } from "@/lib/useOverNight";
 import { track } from "@/lib/track";
@@ -57,6 +58,16 @@ export function Nav() {
   // In light mode the header floats over both light sections and the dark "night" ones (hero, contact,
   // footer): it takes on the night colours while it's over one, so it always stays readable.
   const overNight = useOverNight(() => 40);
+
+  // The phone's status bar and browser chrome take their colour from <meta name="theme-color">. The site's own
+  // light/dark switch and its dark sections don't follow the device setting, so match the colour to whatever is
+  // actually at the top of the screen.
+  const theme = useTheme();
+  useEffect(() => {
+    if (!theme) return;
+    const dark = theme === "dark" || (overNight && !open);
+    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", dark ? "#050506" : "#f6f2ef"));
+  }, [theme, overNight, open]);
 
   // Once the page has scrolled, the header gets a frosted background so nothing shows through it.
   useEffect(() => {
@@ -183,7 +194,7 @@ export function Nav() {
             ref={menu}
             id="menu"
             aria-label="Main"
-            className="fixed inset-0 z-[70] flex flex-col justify-between gap-6 overflow-y-auto overflow-x-hidden bg-ink px-5 pb-8 pt-28 will-change-transform sm:px-10 short:pb-5 short:pt-20"
+            className="fixed inset-0 z-[70] flex flex-col justify-between gap-6 overflow-y-auto overflow-x-hidden overscroll-contain bg-ink px-5 pb-8 pt-28 will-change-transform sm:px-10 short:pb-5 short:pt-20"
             initial={{ y: "-100%" }}
             animate={{ y: 0 }}
             // Opens on the iOS drawer curve; closes faster than it opens, once the links have dropped away.
