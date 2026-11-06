@@ -57,7 +57,7 @@ export function Faq() {
                     </span>
                     <span
                       aria-hidden
-                      className={`grid size-10 shrink-0 place-items-center rounded-full border transition duration-500 ${
+                      className={`grid size-10 shrink-0 place-items-center rounded-full border transition-[rotate,background-color,border-color,color] duration-300 ease-[var(--ease-out)] ${
                         isOpen ? "rotate-45 border-brand bg-brand text-on-brand" : "border-line text-paper/70 group-hover:border-paper/50"
                       }`}
                     >
@@ -74,7 +74,7 @@ export function Faq() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
                       <p className="max-w-2xl pb-8 pl-10 leading-relaxed text-paper/70 sm:text-lg">{f.a}</p>

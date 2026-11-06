@@ -94,7 +94,7 @@ export function Nav() {
         ref={header}
         // Keyboard users tabbing into the header bring it back even while scrolled down.
         onFocusCapture={() => setHidden(false)}
-        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between border-b px-5 py-5 text-paper transition-[transform,background-color,border-color] duration-700 ease-[var(--ease-out)] sm:px-10 ${
+        className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between border-b px-5 py-5 text-paper transition-[transform,background-color,border-color] duration-400 ease-[var(--ease-out)] sm:px-10 ${
           hidden && !open ? "-translate-y-full" : ""
         } ${overNight && !open ? "over-night" : ""} ${scrolled && !open ? "border-line bg-ink/75 backdrop-blur-xl" : "border-transparent"}`}
       >
@@ -121,7 +121,7 @@ export function Nav() {
                 onClick={anchor}
                 onMouseEnter={() => setHovered(l.id)}
                 aria-current={current ? "location" : undefined}
-                className={`relative rounded-full px-4 py-2 text-sm transition-colors duration-300 ${current ? "text-on-brand" : "text-paper/70 hover:text-paper"}`}
+                className={`relative rounded-full px-4 py-2 text-sm press duration-300 ${current ? "text-on-brand" : "text-paper/70 hover:text-paper"}`}
               >
                 {hovered === l.id && !current && (
                   <motion.span
@@ -151,7 +151,7 @@ export function Nav() {
             <Link
               href="/#contact"
               onClick={anchor}
-              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-on-brand"
+              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md press duration-300 hover:border-brand hover:bg-brand hover:text-on-brand"
             >
               Let&apos;s talk
             </Link>
@@ -162,12 +162,12 @@ export function Nav() {
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
               aria-controls="menu"
-              className="flex items-center gap-3 rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink pointer-coarse:min-h-11"
+              className="flex items-center gap-3 press rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink pointer-coarse:min-h-11"
             >
               <span>{open ? "Close" : "Menu"}</span>
               <span className="relative block h-2.5 w-4">
-                <span className={`absolute left-0 block h-px w-4 bg-ink transition-all duration-500 ${open ? "top-1 rotate-45" : "top-0"}`} />
-                <span className={`absolute left-0 block h-px w-4 bg-ink transition-all duration-500 ${open ? "top-1 -rotate-45" : "top-2"}`} />
+                <span className={`absolute left-0 block h-px w-4 bg-ink transition-[top,rotate] duration-300 ease-[var(--ease-out)] ${open ? "top-1 rotate-45" : "top-0"}`} />
+                <span className={`absolute left-0 block h-px w-4 bg-ink transition-[top,rotate] duration-300 ease-[var(--ease-out)] ${open ? "top-1 -rotate-45" : "top-2"}`} />
               </span>
             </button>
           </Magnetic>
@@ -186,8 +186,9 @@ export function Nav() {
             className="fixed inset-0 z-[70] flex flex-col justify-between gap-6 overflow-y-auto overflow-x-hidden bg-ink px-5 pb-8 pt-28 will-change-transform sm:px-10 short:pb-5 short:pt-20"
             initial={{ y: "-100%" }}
             animate={{ y: 0 }}
-            exit={{ y: "-100%", transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.15 } }}
-            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+            // Opens on the iOS drawer curve; closes faster than it opens, once the links have dropped away.
+            exit={{ y: "-100%", transition: { duration: 0.35, ease: [0.77, 0, 0.175, 1], delay: 0.08 } }}
+            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
           >
             {/* orbit decoration */}
             <svg aria-hidden viewBox="0 0 600 600" className="animate-spin-slow pointer-events-none absolute -right-40 top-1/2 size-[110vmin] -translate-y-1/2 opacity-40">
@@ -203,8 +204,8 @@ export function Nav() {
                   <motion.div
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
-                    exit={{ y: "100%", transition: { duration: 0.3, ease: [0.76, 0, 0.24, 1], delay: i * 0.03 } }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.25 + i * 0.07 }}
+                    exit={{ y: "100%", transition: { duration: 0.2, ease: [0.77, 0, 0.175, 1], delay: i * 0.02 } }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.15 + i * 0.05 }}
                   >
                     <Link
                       href={l.href}
@@ -217,10 +218,10 @@ export function Nav() {
                     >
                       {/* the moon fills down the list, full at Contact, like the section labels on the page */}
                       <MoonPhase lit={(i + 1) / links.length} className="size-[0.4em] self-center text-muted" />
-                      <span className={`transition-all duration-500 group-hover:translate-x-4 group-hover:text-accent ${active === l.id ? "text-accent" : ""}`}>
+                      <span className={`transition-[translate,color] duration-300 ease-[var(--ease-out)] group-hover:translate-x-4 group-hover:text-accent ${active === l.id ? "text-accent" : ""}`}>
                         {l.label}
                       </span>
-                      <span className="serif text-[0.5em] text-accent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                      <span className="serif text-[0.5em] text-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         ✦
                       </span>
                     </Link>
@@ -239,11 +240,11 @@ export function Nav() {
                 <button
                   type="button"
                   onClick={startProject}
-                  className="group inline-flex min-h-12 items-center justify-between gap-6 self-start rounded-full bg-brand py-2 pl-6 pr-2 font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
+                  className="group inline-flex min-h-12 items-center justify-between gap-6 self-start rounded-full bg-brand py-2 pl-6 pr-2 font-medium text-on-brand press hover:bg-paper hover:text-ink"
                 >
                   Start a project
                   <span className="grid size-9 place-items-center rounded-full bg-ink text-paper">
-                    <ArrowRight aria-hidden className="size-4 -rotate-45 transition-transform duration-500 ease-[var(--ease-out)] group-hover:rotate-0" />
+                    <ArrowRight aria-hidden className="size-4 -rotate-45 transition-transform duration-300 ease-[var(--ease-out)] group-hover:rotate-0" />
                   </span>
                 </button>
                 {site.available && (

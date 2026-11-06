@@ -32,7 +32,7 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
         fill="none"
         stroke={active ? "var(--brand)" : "var(--line)"}
         strokeWidth={active ? 1.5 : 1}
-        className="transition-all duration-700"
+        className="transition-[stroke,stroke-width] duration-500"
       />
       <motion.circle cx={x} cy={y} r={active ? 9 : 4} fill={active ? "var(--brand)" : "var(--paper)"} className="transition-[r] duration-500" />
       {active && (
@@ -130,7 +130,7 @@ function MobileServices() {
               </span>
               <span
                 aria-hidden
-                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-all duration-500 ${
+                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-[rotate,background-color,border-color,color] duration-300 ease-[var(--ease-out)] ${
                   open ? "rotate-45 border-brand bg-brand text-on-brand" : "text-paper/70"
                 }`}
               >

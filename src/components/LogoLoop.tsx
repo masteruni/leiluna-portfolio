@@ -43,7 +43,7 @@ function Sequence({ hidden, ref }: { hidden?: boolean; ref?: React.Ref<HTMLUList
                 width={48}
                 height={48}
                 loading="eager" // off to the side, so lazy loading would only fetch it as it slides in
-                className="size-10 rounded-full ring-1 ring-line transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-110 sm:size-12"
+                className="size-10 rounded-full ring-1 ring-line transition-transform duration-300 ease-[var(--ease-out)] group-hover:scale-110 sm:size-12"
               />
               <span className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">{it.name}</span>
             </span>

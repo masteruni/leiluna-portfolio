@@ -148,6 +148,21 @@ body {
 h1, h2, h3 { text-wrap: balance; }
 p, blockquote { text-wrap: pretty; }
 
+/* Pressable controls dip slightly while held, so a click or tap is felt the moment it lands. Colours still ease
+   on hover; the dip is quick on the way down and back. (Use `press` in place of `transition-colors`.) */
+@utility press {
+  transition-property: color, background-color, border-color, outline-color, opacity, box-shadow, scale;
+  transition-timing-function: var(--tw-ease, var(--ease-out));
+  transition-duration: var(--tw-duration, 160ms);
+  &:active:not(:disabled) {
+    scale: 0.97;
+  }
+}
+
+/* Phones: no grey flash on tap, and no double-tap-zoom wait on controls. */
+html { -webkit-tap-highlight-color: transparent; }
+a, button, [role="button"], summary, label { touch-action: manipulation; }
+
 /* Protect our work: no drag-to-save and no long-press "Save image" on media */
 img,
 video,
@@ -244,7 +259,7 @@ html.has-cursor textarea { cursor: text !important; }
    top of the screen when it hides, so the two never overlap. Nav.tsx sets --header-h and data-header. */
 .sticky-below-header {
   top: 0;
-  transition: top 0.7s var(--ease-out);
+  transition: top 0.4s var(--ease-out); /* in step with the header (Nav.tsx) */
 }
 [data-header="shown"] .sticky-below-header { top: var(--header-h, 5rem); }
 

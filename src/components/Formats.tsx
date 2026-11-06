@@ -183,7 +183,7 @@ export function Formats() {
                     if (n !== i) spark(e);
                     pick(n);
                   }}
-                  className={`group relative shrink-0 text-left transition-colors max-lg:rounded-full max-lg:border max-lg:px-4 max-lg:py-2 max-lg:text-sm max-lg:pointer-coarse:min-h-11 lg:flex lg:w-full lg:items-center lg:gap-5 lg:border-b lg:border-line lg:py-5 ${
+                  className={`group relative shrink-0 text-left press max-lg:rounded-full max-lg:border max-lg:px-4 max-lg:py-2 max-lg:text-sm max-lg:pointer-coarse:min-h-11 lg:flex lg:w-full lg:items-center lg:gap-5 lg:border-b lg:border-line lg:py-5 ${
                     on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-on-brand" : "max-lg:border-line max-lg:text-paper/75"
                   }`}
                 >
@@ -202,7 +202,7 @@ export function Formats() {
                       transition={{ type: "spring", stiffness: 400, damping: 34 }}
                     />
                   )}
-                  <span aria-hidden className={`hidden text-xl transition-transform duration-500 lg:block ${on ? "translate-x-0 text-accent" : "-translate-x-2 text-paper/20"}`}>
+                  <span aria-hidden className={`hidden text-xl transition-transform duration-300 ease-[var(--ease-out)] lg:block ${on ? "translate-x-0 text-accent" : "-translate-x-2 text-paper/20"}`}>
                     →
                   </span>
                 </button>
@@ -233,7 +233,7 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={() => setSound((s) => !s)}
-                    className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-xs pointer-coarse:min-h-11 text-paper backdrop-blur-md transition-colors hover:bg-paper hover:text-ink"
+                    className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-ink/70 px-4 py-2 text-xs pointer-coarse:min-h-11 text-paper backdrop-blur-md press hover:bg-paper hover:text-ink"
                   >
                     {sound ? <VolumeX aria-hidden className="size-4" /> : <Volume2 aria-hidden className="size-4" />}
                     {sound ? "Sound off" : "Sound on"}
@@ -266,14 +266,14 @@ export function Formats() {
                   <button
                     type="button"
                     onClick={want}
-                    className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
+                    className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-on-brand press hover:bg-paper hover:text-ink"
                   >
                     I want this →
                   </button>
                   <button
                     type="button"
                     onClick={browse}
-                    className="rounded-full border border-line px-6 py-3 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper"
+                    className="rounded-full border border-line px-6 py-3 text-sm text-paper/80 press hover:border-paper hover:text-paper"
                   >
                     See more in the Library
                   </button>

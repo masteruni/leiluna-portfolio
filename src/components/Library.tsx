@@ -148,7 +148,7 @@ function PieceArt({
       ) : (
         <>
           {(p.format === "reel" || p.format === "portrait") && (
-          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-paper/30 bg-ink/30 backdrop-blur transition-transform duration-500 group-hover:scale-110">
+          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-paper/30 bg-ink/30 backdrop-blur transition-transform duration-300 ease-[var(--ease-out)] group-hover:scale-110">
             <span className="ml-1 border-y-[7px] border-l-[11px] border-y-transparent border-l-paper" />
           </span>
           )}
@@ -217,7 +217,7 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
             <span className="sr-only">{p.style}</span>
           )}
           <span className="sr-only">, </span>
-          <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.04]">
+          <div className="absolute inset-0 transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.04]">
             <PieceArt p={p} playing={visible && !reduce} near={near} />
           </div>
           <div className="pointer-events-none absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-x-1.5 gap-y-1 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.04em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
@@ -299,7 +299,7 @@ function Lightbox({
         { transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})` },
         { transform: "none" },
       ],
-      { duration: 600, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+      { duration: 450, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
     );
     flight.onfinish = () => {
       setLanded(true);
@@ -377,7 +377,7 @@ function Lightbox({
         // When the piece flies in from its tile, the frame mustn't also slide: it's measured as it mounts.
         initial={flying ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
         <motion.div
@@ -434,7 +434,7 @@ function Lightbox({
                           type="button"
                           onClick={() => setAt({ id: p.id, slide: i })}
                           aria-pressed={i === slide}
-                          className={`rounded-full px-4 py-1.5 text-sm transition-colors pointer-coarse:min-h-11 ${
+                          className={`rounded-full px-4 py-1.5 text-sm press pointer-coarse:min-h-11 ${
                             i === slide ? "bg-paper text-ink" : "text-paper/75 hover:text-paper"
                           }`}
                         >
@@ -453,7 +453,7 @@ function Lightbox({
                     onClick={() => setAt({ id: p.id, slide: i })}
                     aria-label={`Slide ${i + 1}`}
                     aria-current={i === slide}
-                    className={`h-1.5 rounded-full transition-all ${i === slide ? "w-5 bg-brand" : "w-1.5 bg-paper/50 hover:bg-paper"}`}
+                    className={`h-1.5 rounded-full transition-[width,background-color] duration-200 ease-[var(--ease-out)] ${i === slide ? "w-5 bg-brand" : "w-1.5 bg-paper/50 hover:bg-paper"}`}
                   />
                 ))}
               </div>
@@ -492,18 +492,18 @@ function Lightbox({
           <button
             type="button"
             onClick={onContact}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-on-brand press hover:bg-paper hover:text-ink"
           >
             I want this style →
           </button>
           <div className="mt-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-            <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Previous piece">
+            <button type="button" onClick={() => onStep(-1)} className="rounded-full border border-line px-3 py-2 press hover:border-paper/50 hover:text-paper" aria-label="Previous piece">
               ←
             </button>
             <span className="tabular-nums">
               {String(index + 1).padStart(2, "0")} / {String(list.length).padStart(2, "0")}
             </span>
-            <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 transition-colors hover:border-paper/50 hover:text-paper" aria-label="Next piece">
+            <button type="button" onClick={() => onStep(1)} className="rounded-full border border-line px-3 py-2 press hover:border-paper/50 hover:text-paper" aria-label="Next piece">
               →
             </button>
           </div>
@@ -516,7 +516,7 @@ function Lightbox({
         ref={closeRef}
         type="button"
         onClick={onClose}
-        className="absolute right-5 top-5 rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
+        className="absolute right-5 top-5 press rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
       >
         Close ✕
       </button>
@@ -640,7 +640,7 @@ export function Library() {
                     setIndustry("All");
                     setOpen(null);
                   }}
-                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors pointer-coarse:min-h-11 ${
+                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm press pointer-coarse:min-h-11 ${
                     kind === k.id ? "bg-paper text-ink" : "border border-line text-paper/70 hover:text-paper"
                   }`}
                 >
@@ -666,7 +666,7 @@ export function Library() {
                       if (industry !== ind) spark(e);
                       setIndustry(ind);
                     }}
-                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs transition-colors disabled:opacity-25 pointer-coarse:min-h-11 pointer-coarse:min-w-11 ${
+                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs press disabled:opacity-25 pointer-coarse:min-h-11 pointer-coarse:min-w-11 ${
                       industry === ind ? "bg-brand text-on-brand" : "text-paper/60 hover:text-paper"
                     }`}
                   >
@@ -703,7 +703,7 @@ export function Library() {
                   setKind("all");
                   setIndustry("All");
                 }}
-                className="rounded-full border border-line px-5 py-2.5 text-sm text-paper/80 transition-colors hover:border-paper hover:text-paper"
+                className="rounded-full border border-line px-5 py-2.5 text-sm text-paper/80 press hover:border-paper hover:text-paper"
               >
                 Show everything
               </button>
@@ -713,7 +713,7 @@ export function Library() {
                   track("Style requested", { piece: `${kind}/${industry}` });
                   askFor(`We'd like a ${kind === "graphic" ? "graphic" : kind === "video" ? "video" : "piece"} for ${industry}.`);
                 }}
-                className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-colors hover:bg-paper hover:text-ink"
+                className="rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-on-brand press hover:bg-paper hover:text-ink"
               >
                 Ask us for one →
               </button>
@@ -757,7 +757,7 @@ export function Library() {
                   requestAnimationFrame(() => grid.current?.querySelectorAll<HTMLButtonElement>("button[data-cursor]")[FIRST]?.focus({ preventScroll: true })),
                 );
               }}
-              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 transition-colors hover:border-paper hover:text-paper pointer-coarse:min-h-11"
+              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 press hover:border-paper hover:text-paper pointer-coarse:min-h-11"
             >
               Show all {list.length} pieces
               <span className="rounded-full bg-paper/10 px-2 py-0.5 font-mono text-xs text-muted">+{list.length - FIRST}</span>
@@ -781,7 +781,7 @@ export function Library() {
                   requestAnimationFrame(() => showAll.current?.focus({ preventScroll: true }));
                 });
               }}
-              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 transition-colors hover:border-paper hover:text-paper pointer-coarse:min-h-11"
+              className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-sm text-paper/85 press hover:border-paper hover:text-paper pointer-coarse:min-h-11"
             >
               Show less
             </button>

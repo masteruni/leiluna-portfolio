@@ -48,10 +48,10 @@ export function ProjectCover({
           fill
           priority={priority}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-cover transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-105"
         />
       ) : (
-        <div aria-hidden className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.06]">
+        <div aria-hidden className="absolute inset-0 transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.06]">
           <div
             className="absolute inset-0"
             style={{ background: `radial-gradient(120% 80% at ${30 + variant * 20}% 0%, color-mix(in oklab, ${a} 22%, transparent), transparent 60%), var(--ink-2)` }}
@@ -84,7 +84,7 @@ export function ProjectCover({
           loop
           playsInline
           preload="none"
-          className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         />
       )}
 

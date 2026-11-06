@@ -43,7 +43,7 @@ function Card({ p }: { p: RecentPiece }) {
             alt={`${p.title}, for ${p.brand}`}
             fill
             sizes="(min-width: 1024px) 22rem, 75vw"
-            className="object-cover object-top transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.04]"
+            className="object-cover object-top transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-[1.04]"
           />
         )}
         <span className="absolute left-3 top-3 rounded-full bg-ink/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-paper backdrop-blur-md">
@@ -52,7 +52,7 @@ function Card({ p }: { p: RecentPiece }) {
         {video && !p.link && (
           <span
             aria-hidden
-            className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-paper text-ink transition duration-500 group-hover:bg-brand group-hover:text-on-brand"
+            className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-paper text-ink transition-colors duration-200 group-hover:bg-brand group-hover:text-on-brand"
           >
             <span className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-current" />
           </span>
@@ -60,7 +60,7 @@ function Card({ p }: { p: RecentPiece }) {
         {p.link && (
           <span
             aria-hidden
-            className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-paper text-sm text-ink transition duration-500 group-hover:rotate-45 group-hover:bg-brand group-hover:text-on-brand"
+            className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-paper text-sm text-ink transition-[rotate,background-color,color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:bg-brand group-hover:text-on-brand"
           >
             ↗
           </span>
@@ -177,7 +177,7 @@ export function RecentWork() {
                 onClick={() => step(d)}
                 disabled={d === -1 ? edge.start : edge.end}
                 aria-label={d === -1 ? "Previous pieces" : "Next pieces"}
-                className="grid size-11 place-items-center rounded-full border border-line transition-colors hover:border-paper/60 disabled:pointer-events-none disabled:opacity-30"
+                className="grid size-11 place-items-center rounded-full border border-line press hover:border-paper/60 disabled:pointer-events-none disabled:opacity-30"
               >
                 {d === -1 ? "←" : "→"}
               </button>

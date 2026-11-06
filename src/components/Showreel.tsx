@@ -62,7 +62,7 @@ export function ShowreelPlayer() {
             initial={{ scale: 0.92, y: 30 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, opacity: 0, transition: { duration: 0.25 } }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
             <video {...protect} key={clip.src} src={clip.src} poster={clip.poster} autoPlay controls playsInline className="size-full object-contain" />
@@ -71,7 +71,7 @@ export function ShowreelPlayer() {
             ref={closeRef}
             type="button"
             onClick={closeShowreel}
-            className="absolute right-5 top-5 rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
+            className="absolute right-5 top-5 press rounded-full bg-paper px-5 py-2.5 text-sm font-medium text-ink sm:right-10 sm:top-6"
           >
             Close ✕
           </button>

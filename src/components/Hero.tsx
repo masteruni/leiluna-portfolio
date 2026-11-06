@@ -92,18 +92,18 @@ export function Hero() {
               <Link
                 href="/#contact"
                 onClick={startProject}
-                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-brand px-7 py-4 font-medium text-ink"
+                className="group relative inline-flex items-center gap-3 overflow-hidden press rounded-full bg-brand px-7 py-4 font-medium text-ink"
               >
-                <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-y-0" />
+                <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0" />
                 <span className="relative">Start a project</span>
-                <span className="relative transition-transform duration-500 group-hover:translate-x-1">→</span>
+                <span className="relative transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-x-1">→</span>
               </Link>
             </Magnetic>
             <button
               type="button"
               onClick={openShowreel}
               data-cursor="Play"
-              className="group inline-flex items-center gap-3 rounded-full border border-line bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md transition-colors hover:border-paper/60"
+              className="group inline-flex items-center gap-3 rounded-full border border-line bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md press hover:border-paper/60"
             >
               <span className="relative grid size-10 place-items-center rounded-full bg-paper">
                 <span className="absolute inset-0 animate-ping rounded-full bg-paper/30 [animation-duration:2.4s]" />

@@ -75,7 +75,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
                 <span className="text-paper/30">·</span>
                 {p.year}
               </p>
-              <h3 className="mt-5 font-display text-[clamp(2.6rem,5.4vw,5.6rem)] font-bold leading-[0.9] tracking-[-0.045em] transition-colors duration-500 group-hover:text-accent">
+              <h3 className="mt-5 font-display text-[clamp(2.6rem,5.4vw,5.6rem)] font-bold leading-[0.9] tracking-[-0.045em] transition-colors duration-300 group-hover:text-accent">
                 {p.title}
               </h3>
               <p className="mt-5 max-w-lg text-paper/70 sm:text-lg">{p.summary}</p>
@@ -101,7 +101,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
               </dl>
               <span className="mt-8 inline-flex items-center gap-3 rounded-full bg-paper py-3 pl-5 pr-3 text-sm font-medium text-ink transition-colors duration-300 group-hover:bg-brand group-hover:text-on-brand">
                 View case study
-                <span className="grid size-7 place-items-center rounded-full bg-ink text-paper transition-transform duration-500 group-hover:rotate-45">↗</span>
+                <span className="grid size-7 place-items-center rounded-full bg-ink text-paper transition-transform duration-300 ease-[var(--ease-out)] group-hover:rotate-45">↗</span>
               </span>
             </div>
           </div>
@@ -161,7 +161,7 @@ export function SelectedWork() {
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">
             Your story <span className="serif font-normal text-accent">goes here next.</span>
           </span>
-          <span className="grid size-16 shrink-0 place-items-center rounded-full border border-line text-2xl transition duration-500 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-on-brand">
+          <span className="grid size-16 shrink-0 place-items-center rounded-full border border-line text-2xl transition-[rotate,background-color,border-color,color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-on-brand">
             ↗
           </span>
         </Link>

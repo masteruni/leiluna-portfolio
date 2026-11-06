@@ -88,7 +88,7 @@ export function Testimonials() {
                 onClick={() => setI(n)}
                 aria-label={`Quote ${n + 1} of ${total}, ${q.name}`}
                 aria-current={n === i}
-                className={`h-1.5 rounded-full transition-all duration-500 ${n === i ? "w-10 bg-brand" : "w-4 bg-paper/25 hover:bg-paper/60"}`}
+                className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ease-[var(--ease-out)] ${n === i ? "w-10 bg-brand" : "w-4 bg-paper/25 hover:bg-paper/60"}`}
               />
             ))}
             <span className="ml-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted tabular-nums">
