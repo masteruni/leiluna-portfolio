@@ -629,7 +629,7 @@ export function Library() {
   }, [kind]);
 
   return (
-    <section id="library" className="relative px-5 py-24 sm:px-10 md:py-32">
+    <section id="library" className="relative px-5 py-16 sm:px-10 md:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -647,7 +647,7 @@ export function Library() {
         </div>
 
         {/* filters */}
-        <div className="sticky-below-header sticky z-20 -mx-5 mt-14 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
+        <div className="sticky-below-header sticky z-20 -mx-5 mt-10 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div role="group" aria-label="Filter by format" className="-mx-5 flex shrink-0 gap-2 overflow-x-auto overscroll-x-contain px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
               {kinds.map((k) => (

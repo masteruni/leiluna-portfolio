@@ -57,7 +57,7 @@ function ReelChart() {
 // size, so anyone can check a figure for themselves.
 function Receipts() {
   return (
-    <div className="mt-16">
+    <div className="mt-12">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <h3 className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
           The receipts behind the numbers.
@@ -97,7 +97,7 @@ export function Proof() {
   const [held, setHeld] = useState(false); // a tap stops the ticker on touch screens (hover does it with a mouse)
   const ticker = [...stats.map((s) => `${s.value}${s.suffix} ${s.label}`), ...moreProof.map((m) => `${m.value} ${m.label}`)];
   return (
-    <section id="proof" className="relative overflow-hidden py-24 md:py-32" aria-labelledby="proof-title">
+    <section id="proof" className="relative overflow-hidden py-16 md:py-24" aria-labelledby="proof-title">
       <div className="px-5 sm:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -112,7 +112,7 @@ export function Proof() {
             </p>
           </div>
 
-          <div className="mt-14">
+          <div className="mt-10">
             <p className="text-xs text-muted">Clients &amp; the industries we create for</p>
             <div className="mt-5">
               <LogoLoop />
@@ -128,7 +128,7 @@ export function Proof() {
                 style={{ boxShadow: "inset 2.2rem -1.4rem 0 0 rgb(234 106 142 / 0.18)" }}
               />
               <p className="text-xs text-muted">Across our clients&apos; pinned reels</p>
-              <div className="mt-16">
+              <div className="mt-12">
                 <p className="font-display text-[clamp(5rem,13vw,11rem)] font-bold leading-[0.8] tracking-[-0.06em]">
                   <CountUp value={`${stats[0].value}${stats[0].suffix}`} />
                 </p>
@@ -185,7 +185,7 @@ export function Proof() {
 
       {/* running ticker */}
       <div
-        className={`marquee-pause mt-20 overflow-hidden border-y border-line py-6 ${held ? "marquee-held" : ""}`}
+        className={`marquee-pause mt-14 overflow-hidden border-y border-line py-6 ${held ? "marquee-held" : ""}`}
         aria-hidden
         onPointerUp={(e) => e.pointerType !== "mouse" && setHeld((h) => !h)}
       >

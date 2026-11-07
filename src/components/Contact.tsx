@@ -450,7 +450,7 @@ export function Contact() {
   };
 
   return (
-    <section ref={ref} id="contact" className="night relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-40 pt-32 sm:px-10">
+    <section ref={ref} id="contact" className="night relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-32 pt-24 sm:px-10">
       {/* rising planet */}
       <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[62%] w-[170vw] -translate-x-1/2 md:top-[84%] md:w-[130vw]">
         <motion.div

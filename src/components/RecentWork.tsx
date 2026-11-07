@@ -243,7 +243,7 @@ export function RecentWork() {
   if (!recent.length) return toggle;
 
   return (
-    <section id="recent" className="relative py-24 md:py-32">
+    <section id="recent" className="relative py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -255,7 +255,7 @@ export function RecentWork() {
           <p className="max-w-sm text-lg text-paper/60">Our newest pieces for the brands we&rsquo;ve created for.</p>
         </div>
 
-        <div className="mt-12 flex flex-col gap-5 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-5 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <span className="flex items-center gap-2 text-[13px] text-paper/60">
               Brands we&rsquo;ve worked with

@@ -46,7 +46,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
   };
 
   return (
-    <article ref={ref} className={`group ${i ? "md:mt-40" : ""}`}>
+    <article ref={ref} className={`group ${i ? "md:mt-28" : ""}`}>
       <div className="perspective-[1200px]" onPointerMove={follow} onPointerLeave={rest}>
         <motion.div style={{ rotateX, rotateY }} className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-2">
           {/* placeholder backdrop: pink glow + initial — stays behind the cut-out portrait */}
@@ -107,6 +107,22 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
             </li>
           ))}
         </ul>
+        {f.certifications.length > 0 && (
+          <>
+            <p className="mt-8 text-xs text-muted">Certified in</p>
+            <ul className="mt-3 max-w-lg border-t border-line">
+              {f.certifications.map((c) => (
+                <li key={c.name} className="flex items-baseline justify-between gap-4 border-b border-line py-3">
+                  <span className="min-w-0">
+                    <span className="block text-paper/85">{c.name}</span>
+                    <span className="block text-sm text-paper/55">{c.issuer}</span>
+                  </span>
+                  {c.date && <span className="shrink-0 text-sm tabular-nums text-paper/55">{c.date}</span>}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     </article>
   );
@@ -114,7 +130,7 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
 
 export function Founders() {
   return (
-    <section id="founders" className="px-5 py-24 sm:px-10 md:py-32">
+    <section id="founders" className="px-5 py-16 sm:px-10 md:py-24">
       <div className="mx-auto max-w-7xl">
         <Eyebrow id="founders" />
         <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
@@ -124,7 +140,7 @@ export function Founders() {
           Like the two halves of our mark: one shapes the strategy and looks after every client, the other powers the
           creative and the systems behind it. Together they make the full circle.
         </p>
-        <div className="mt-20 grid gap-20 md:grid-cols-2 md:gap-16">
+        <div className="mt-12 grid gap-16 md:grid-cols-2 md:gap-16">
           {founders.map((f, i) => (
             <Founder key={f.name} f={f} i={i} />
           ))}

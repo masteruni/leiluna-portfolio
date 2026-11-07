@@ -27,7 +27,7 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="px-5 py-24 sm:px-10 md:py-32"
+      className="px-5 py-16 sm:px-10 md:py-24"
       aria-labelledby="testimonials-title"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -40,7 +40,7 @@ export function Testimonials() {
           <LineReveal inView lines={["What clients", "say."]} />
         </h2>
 
-        <div className="relative mt-16 min-h-[14rem] md:min-h-[12rem]">
+        <div className="relative mt-12 min-h-[14rem] md:min-h-[12rem]">
           <AnimatePresence mode="wait" initial={false}>
             <motion.figure
               key={i}

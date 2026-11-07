@@ -181,7 +181,7 @@ export function Orbits() {
   return (
     <section id="services" className="relative">
       {/* Desktop: pinned orbital system */}
-      <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 90 + 10}vh` }}>
+      <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 70 + 10}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
           <div className="flex shrink-0 items-end justify-between">
             <Eyebrow id="services" as="h2" />
@@ -228,7 +228,7 @@ export function Orbits() {
       </div>
 
       {/* Mobile / tablet: stacked */}
-      <div className="px-5 py-24 sm:px-10 lg:hidden">
+      <div className="px-5 py-16 md:py-24 sm:px-10 lg:hidden">
         <Eyebrow id="services" as="h2" className="mb-10" />
         <MobileServices />
       </div>

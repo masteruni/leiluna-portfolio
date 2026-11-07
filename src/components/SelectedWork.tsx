@@ -131,7 +131,7 @@ export function SelectedWork() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   return (
-    <section id="work" className="relative px-5 py-24 sm:px-10 md:py-32">
+    <section id="work" className="relative px-5 py-16 sm:px-10 md:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -145,7 +145,7 @@ export function SelectedWork() {
           </p>
         </div>
 
-        <div ref={ref} className="mt-16 flex flex-col gap-10 lg:gap-0">
+        <div ref={ref} className="mt-12 flex flex-col gap-10 lg:gap-0">
           {projects.map((p, i) => (
             <Showcase key={p.slug} p={p} i={i} total={projects.length} progress={scrollYProgress} />
           ))}
@@ -155,7 +155,7 @@ export function SelectedWork() {
           href="/#contact"
           onClick={anchor}
           data-cursor="Let's go"
-          className="group mt-16 flex flex-col items-start justify-between gap-6 border-y border-line py-10 sm:flex-row sm:items-center"
+          className="group mt-12 flex flex-col items-start justify-between gap-6 border-y border-line py-10 sm:flex-row sm:items-center"
         >
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">
             Your story goes here next.

@@ -313,10 +313,10 @@ export const testimonials: { quote: string; name: string; role: string }[] = [];
 
 export const founders = [
   {
-    name: "Juri",
+    name: "Mj",
     fullName: "Marian Jurielle D. Raymundo",
     role: "Co-founder · Social Media & Client Strategy Lead",
-    bio: "Juri bridges strategy, creativity, and client relationships, helping brands build a stronger online presence through thoughtful social media management and content strategy. From understanding each client’s goals to shaping content direction and managing day-to-day social media, she ensures every project aligns with the brand’s vision and business objectives.",
+    bio: "Mj bridges strategy, creativity, and client relationships, helping brands build a stronger online presence through thoughtful social media management and content strategy. From understanding each client’s goals to shaping content direction and managing day-to-day social media, she ensures every project aligns with the brand’s vision and business objectives.",
     leads: [
       "Social media management",
       "Content strategy & planning",
@@ -325,6 +325,13 @@ export const founders = [
       "Business development & finance",
     ],
     photo: "/team/juri-hq.webp" as string | null,
+    // Only the ones that matter for the studio's work.
+    certifications: [
+      { name: "Social Media Marketing", issuer: "HubSpot Academy", date: "Nov 2026" },
+      { name: "Social Media Manager Playbook", issuer: "GoHighLevel Experts", date: "Nov 2026" },
+      { name: "Fundamentals of Marketing", issuer: "University of the Philippines Open University" },
+      { name: "Business Concepts, Ideation and the Business Plan", issuer: "University of the Philippines Open University" },
+    ] as { name: string; issuer: string; date?: string }[],
   },
   {
     name: "Sven",
@@ -339,6 +346,7 @@ export const founders = [
       "SOPs, systems & operations",
     ],
     photo: "/team/sven.webp" as string | null,
+    certifications: [] as { name: string; issuer: string; date?: string }[],
   },
 ];
 

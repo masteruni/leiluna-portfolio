@@ -56,7 +56,7 @@ export function MonthPlan() {
   };
 
   return (
-    <section id="month" className="relative px-5 py-24 sm:px-10 md:py-32" aria-labelledby="month-title">
+    <section id="month" className="relative px-5 py-16 sm:px-10 md:py-24" aria-labelledby="month-title">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -70,7 +70,7 @@ export function MonthPlan() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
           {/* the calendar */}
           <div>
             <p className="mb-3 text-sm text-muted">{monthPlan.name}</p>
@@ -136,7 +136,7 @@ export function MonthPlan() {
         </div>
 
         {/* what the month adds up to */}
-        <dl className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+        <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
           {monthPlan.totals.map((t) => (
             <div key={t.label} className="flex flex-col-reverse justify-end border-t border-line pt-5">
               <dt className="mt-2 text-sm text-paper/70">{t.label}</dt>
@@ -145,7 +145,7 @@ export function MonthPlan() {
           ))}
         </dl>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-6 border-t border-line pt-8 sm:flex-row sm:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-6 border-t border-line pt-8 sm:flex-row sm:items-center">
           <p className="max-w-xl text-lg text-paper/80">
             Not sure what your brand needs yet? Send us your Instagram and we&apos;ll reply with three quick fixes for your feed, free.
           </p>
