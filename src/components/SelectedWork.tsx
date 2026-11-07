@@ -67,7 +67,7 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{ background: `radial-gradient(40rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, ${a} 20%, transparent), transparent 60%)` }}
         />
-        <Link href={`/work/${p.slug}`} data-cursor="View" className="relative grid h-full gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-14">
+        <Link href={`/work/${p.slug}`} className="relative grid h-full gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-14">
           <div className="flex flex-col justify-between gap-10">
             <div>
               <p className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] text-paper/60">
@@ -154,7 +154,6 @@ export function SelectedWork() {
         <Link
           href="/#contact"
           onClick={anchor}
-          data-cursor="Let's go"
           className="group mt-12 flex flex-col items-start justify-between gap-6 border-y border-line py-10 sm:flex-row sm:items-center"
         >
           <span className="font-display text-[clamp(2.2rem,4.5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.04em]">

@@ -68,7 +68,6 @@ export function HeroPhone({ play }: { play: boolean }) {
           type="button"
           onClick={() => setI((n) => (n + 1) % reels.length)}
           aria-label={`Next reel. Now showing ${reel.style}, ${industriesOf(reel).join(", ")}`}
-          data-cursor="Next"
           className="relative block size-full overflow-hidden rounded-[2.1rem] bg-ink-2 text-left"
         >
           <AnimatePresence initial={false}>
@@ -143,7 +142,6 @@ export function HeroPhone({ play }: { play: boolean }) {
           onClick={() => setStopped((s) => !s)}
           aria-label={stopped ? "Play reels" : "Pause reels"}
           aria-pressed={stopped}
-          data-cursor={stopped ? "Play" : "Pause"}
           className="absolute right-4 top-[3.25rem] z-10 grid size-8 place-items-center rounded-full bg-ink/60 text-paper backdrop-blur-md press hover:bg-ink/80 pointer-coarse:size-11 motion-reduce:hidden"
         >
           {stopped ? <Play aria-hidden className="ml-0.5 size-3.5" /> : <Pause aria-hidden className="size-3.5" />}

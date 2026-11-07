@@ -59,3 +59,55 @@ export const kindLabel: Record<DayKind | "story", string> = {
   report: "Monthly report",
   story: "Stories and replies",
 };
+
+// The production checklist behind each day, shown when a day is picked. Each step is due a set number of days
+// before the post goes out (`before`); against the sample "today" below, a step is done, in progress or still to come.
+export const today = 12;
+
+export type Task = { label: string; before: number };
+
+const lastStep = (n: number) => (n < today ? "Published" : "Scheduled to publish");
+
+export function tasksFor(kind: DayKind | "story", n: number): Task[] {
+  switch (kind) {
+    case "reel":
+      return [
+        { label: "Content ideation", before: 7 },
+        { label: "Scriptwriting", before: 6 },
+        { label: "Video editing", before: 4 },
+        { label: "Caption and hashtag preparation", before: 2 },
+        { label: "Content review and approval", before: 1 },
+        { label: lastStep(n), before: 0 },
+      ];
+    case "carousel":
+      return [
+        { label: "Content ideation", before: 7 },
+        { label: "Copywriting", before: 6 },
+        { label: "Design", before: 4 },
+        { label: "Caption and hashtag preparation", before: 2 },
+        { label: "Content review and approval", before: 1 },
+        { label: lastStep(n), before: 0 },
+      ];
+    case "plan":
+      return [
+        { label: "Review last month's results", before: 0 },
+        { label: "Agree content pillars and hooks", before: 0 },
+        { label: "Lock the posting calendar", before: 0 },
+      ];
+    case "report":
+      return [
+        { label: "Pull insights from Instagram", before: 1 },
+        { label: "Write the monthly report", before: 0 },
+        { label: "Strategy call for next month", before: 0 },
+      ];
+    case "story":
+      return [
+        { label: "Post daily stories", before: 0 },
+        { label: "Reply to comments and DMs", before: 0 },
+        { label: "Schedule the next posts", before: 0 },
+      ];
+  }
+}
+
+export type TaskState = "done" | "now" | "next";
+export const taskState = (due: number): TaskState => (due < today ? "done" : due === today ? "now" : "next");

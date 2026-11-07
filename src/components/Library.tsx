@@ -212,7 +212,7 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
           ref={ref}
           type="button"
           onClick={(e) => onOpen(e.currentTarget)}
-          data-cursor={p.kind === "video" ? "Play" : "View"}
+          data-tile
           className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
         >
           {/* The tile's own words name it ("Play Client interview edit, Multi-industry, 1:05"), so what a screen
@@ -776,7 +776,7 @@ export function Library() {
                 track("Library expanded", { pieces: list.length });
                 // Keyboard users carry on from the first newly shown piece rather than losing their place.
                 requestAnimationFrame(() =>
-                  requestAnimationFrame(() => grid.current?.querySelectorAll<HTMLButtonElement>("button[data-cursor]")[FIRST]?.focus({ preventScroll: true })),
+                  requestAnimationFrame(() => grid.current?.querySelectorAll<HTMLButtonElement>("button[data-tile]")[FIRST]?.focus({ preventScroll: true })),
                 );
               }}
               className={buttonClass("outline", "lg", "gap-3")}

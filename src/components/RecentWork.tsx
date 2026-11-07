@@ -136,7 +136,7 @@ function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
   return (
     <li className="w-[min(75vw,20rem)] shrink-0 snap-start lg:w-[22rem]">
       {p.link ? (
-        <a href={p.link} target="_blank" rel="noopener noreferrer" data-cursor="Open" className="group block">
+        <a href={p.link} target="_blank" rel="noopener noreferrer" className="group block">
           {body}
           <span className="sr-only"> (opens the post in a new tab)</span>
         </a>
@@ -144,7 +144,6 @@ function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
         <button
           type="button"
           onClick={() => openClip({ src: p.src, poster: p.poster, title: `${p.title}, for ${p.brand}`, vertical: p.vertical })}
-          data-cursor="Play"
           className="group block w-full text-left"
         >
           {body}

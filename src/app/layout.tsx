@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, JetBrains_Mono, Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { Cursor } from "@/components/Cursor";
 import { Loader } from "@/components/Loader";
 import { Protect } from "@/components/Protect";
 import { ScrollOrbit } from "@/components/ScrollOrbit";
@@ -77,7 +76,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <div aria-hidden className="stars" />
         <SmoothScroll>
           <Loader />
-          <Cursor />
           <Protect />
           {children}
           <ScrollOrbit />

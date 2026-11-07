@@ -225,7 +225,6 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           <nav aria-label="More case studies" className="mt-32 border-y border-line">
             <Link
               href={`/work/${next.slug}`}
-              data-cursor="Next"
               className="group flex items-end justify-between gap-6 py-12"
             >
               <div>

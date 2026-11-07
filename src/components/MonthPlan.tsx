@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useLenis } from "lenis/react";
 import { useReducedMotion } from "motion/react";
 import { useRef, useState } from "react";
 import { pieces } from "@/content/library";
-import { kindLabel, kindShort, monthPlan, type DayKind } from "@/content/month";
+import { kindLabel, kindShort, monthPlan, taskState, tasksFor, today, type DayKind, type TaskState } from "@/content/month";
 import { Eyebrow, MoonPhase } from "./Eyebrow";
 import { CallLink } from "./CallLink";
 import { site } from "@/content/site";
@@ -22,15 +21,15 @@ const days: Day[] = Array.from({ length: monthPlan.length }, (_, i) => {
 });
 
 // What a client actually gets in a month, as a calendar: each day shows what goes out, with the moon waxing across the
-// month (the studio's mark), and tapping a day shows a real example of that kind of post from the Library. Below it,
-// what the month adds up to.
+// month (the studio's mark) and a bar for how far that day's post has got. Picking a day shows its production
+// checklist, from ideation to publishing, against a sample "today". Below it, what the month adds up to.
 export function MonthPlan() {
-  const [sel, setSel] = useState(7);
+  const [sel, setSel] = useState(14);
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const day = days[sel - 1];
   const detail = useRef<HTMLDivElement>(null);
-  // On a phone the example sits below the calendar, so a tap brings it into view.
+  // On a phone the checklist sits below the calendar, so a tap brings it into view.
   const pick = (n: number) => {
     setSel(n);
     if (window.matchMedia("(min-width: 1024px)").matches) return;
@@ -54,14 +53,17 @@ export function MonthPlan() {
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">
-            What goes out, and when, on a sample content plan. Tap any day to see a real example of that post.
+            What goes out, and when, on a sample content plan. Pick any day to see what&apos;s being made for it and where each step stands.
           </p>
         </div>
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
           {/* the calendar */}
           <div>
-            <p className="mb-3 text-sm text-muted">{monthPlan.name}</p>
+            <p className="mb-3 flex flex-wrap justify-between gap-x-6 gap-y-1 text-sm text-muted">
+              <span>{monthPlan.name}</span>
+              <span>Today is day {today}</span>
+            </p>
             <div className="grid grid-cols-7 border-l border-t border-line" role="group" aria-label="A sample month, day by day">
               {WEEKDAYS.map((d) => (
                 <div key={d} aria-hidden className="border-b border-r border-line px-2 py-2 text-xs text-muted sm:px-3">
@@ -71,28 +73,37 @@ export function MonthPlan() {
               ))}
               {days.map((d) => {
                 const on = d.n === sel;
-                const media = d.piece?.poster ?? d.piece?.src;
+                const isToday = d.n === today;
+                const tasks = tasksFor(d.kind, d.n);
+                const done = tasks.filter((t) => taskState(d.n - t.before) === "done").length;
+                const content = d.kind === "reel" || d.kind === "carousel";
                 return (
                   <button
                     key={d.n}
                     type="button"
                     aria-pressed={on}
-                    aria-label={`Day ${d.n}: ${kindLabel[d.kind]}${d.piece ? `, ${d.piece.style}` : ""}`}
+                    aria-label={`Day ${d.n}${isToday ? " (today)" : ""}: ${kindLabel[d.kind]}${d.piece ? `, ${d.piece.style}` : ""}, ${status(tasks.length, done, d.n).toLowerCase()}`}
                     onClick={() => pick(d.n)}
-                    className={`group relative flex aspect-square flex-col justify-between border-b border-r border-line p-1.5 text-left transition-colors duration-200 sm:aspect-[4/5] sm:p-2.5 ${
+                    className={`group relative flex aspect-square flex-col justify-between border-b border-r border-line p-1.5 text-left transition-colors duration-200 sm:p-2.5 ${
                       on ? "bg-brand/10" : "hover:bg-paper/5"
                     }`}
                   >
                     {on && <span aria-hidden className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-brand" />}
                     <span className="flex items-start justify-between">
-                      <span className={`text-xs tabular-nums sm:text-sm ${on ? "text-paper" : "text-paper/60"}`}>{d.n}</span>
+                      <span
+                        className={`grid min-w-5 place-items-center rounded-full text-xs tabular-nums sm:min-w-6 sm:text-sm ${
+                          isToday ? "bg-brand px-1 font-medium text-on-brand" : on ? "text-paper" : "text-paper/60"
+                        }`}
+                      >
+                        {d.n}
+                      </span>
                       <MoonPhase lit={d.n / monthPlan.length} className="size-2.5 sm:size-3.5" />
                     </span>
-                    {media && (d.kind === "reel" || d.kind === "carousel") ? (
-                      <span className="relative mx-auto hidden aspect-[9/16] w-[46%] overflow-hidden rounded-[4px] sm:block">
-                        <Image src={media} alt={`${d.piece!.style} by Leiluna Studio: ${d.piece!.title}`} fill sizes="80px" className="object-cover" />
+                    {content && (
+                      <span aria-hidden className="block h-0.5 overflow-hidden rounded-full bg-paper/10 sm:h-1">
+                        <span className="block h-full rounded-full bg-brand" style={{ width: `${(done / tasks.length) * 100}%` }} />
                       </span>
-                    ) : null}
+                    )}
                     <span className="flex items-center gap-1.5">
                       <span
                         aria-hidden
@@ -111,6 +122,7 @@ export function MonthPlan() {
               <span className="flex items-center gap-2"><span aria-hidden className="size-1.5 rounded-full bg-paper" /> Carousel or post</span>
               <span className="flex items-center gap-2"><span aria-hidden className="size-1.5 rounded-full border border-paper/40" /> Stories and replies</span>
               <span className="flex items-center gap-2"><span aria-hidden className="size-1.5 rounded-full bg-brand-2" /> Strategy call and report</span>
+              <span className="flex items-center gap-2"><span aria-hidden className="h-1 w-4 rounded-full bg-brand" /> Production progress</span>
             </p>
           </div>
 
@@ -119,7 +131,7 @@ export function MonthPlan() {
             <p className="text-sm text-accent">
               Day {day.n}, {kindLabel[day.kind]}
             </p>
-            <DayDetail day={day} reduce={!!reduce} />
+            <DayDetail key={day.n} day={day} />
           </div>
         </div>
 
@@ -144,62 +156,83 @@ export function MonthPlan() {
   );
 }
 
-function DayDetail({ day, reduce }: { day: Day; reduce: boolean }) {
-  if (day.kind === "plan" || day.kind === "report" || day.kind === "story") {
-    const copy = {
-      plan: {
-        title: "Strategy call and calendar",
-        text: "We review last month together, agree on this month's content pillars and hooks, and lock the posting calendar.",
-      },
-      report: {
-        title: "Monthly report",
-        text: "Views, reach, saves and follower growth from your own insights, what worked, and what we'll do more of next month.",
-      },
-      story: {
-        title: "Stories and community",
-        text: "Daily stories, replies to comments and messages, and scheduling, so the page stays active between the big posts.",
-      },
-    }[day.kind];
+const status = (total: number, done: number, n: number) =>
+  done === total ? (n < today ? "Published" : "Done") : done > 0 || n === today ? "In production" : "Planned";
+
+const blurb: Record<DayKind | "story", string> = {
+  reel: "Every reel goes through the same steps, each with its own deadline, so nothing is rushed on the day it goes out.",
+  carousel: "Carousels and graphic posts follow the same steps, with design in place of the edit.",
+  plan: "We review last month together, agree on this month's content pillars and hooks, and lock the posting calendar.",
+  report: "Views, reach, saves and follower growth from your own insights, what worked, and what we'll do more of next month.",
+  story: "Daily stories, replies to comments and messages, and scheduling, so the page stays active between the big posts.",
+};
+
+const dueLabel = (due: number) => (due < 1 ? "Last month" : due === today ? "Today" : `Day ${due}`);
+
+function StateIcon({ state }: { state: TaskState }) {
+  if (state === "done")
     return (
-      <div className="mt-4">
-        <div className="relative grid aspect-[4/5] place-items-center overflow-hidden rounded-2xl border border-line bg-ink-2">
-          {day.kind === "report" ? (
-            <Image src="/work/business-resilience-mindset/top-reels.webp" alt="A real monthly results screenshot from a client's Instagram insights" fill sizes="22rem" className="object-cover object-top" />
-          ) : (
-            <MoonPhase lit={day.n / monthPlan.length} className="size-28" />
-          )}
-        </div>
-        <h3 className="mt-5 font-display text-2xl font-semibold tracking-[-0.02em]">{copy.title}</h3>
-        <p className="mt-2 leading-relaxed text-paper/70">{copy.text}</p>
-      </div>
+      <span aria-hidden className="grid size-5 shrink-0 place-items-center rounded-full bg-brand text-on-brand">
+        <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2.5 6.2 5 8.5l4.5-5" />
+        </svg>
+      </span>
     );
-  }
-  const p = day.piece;
-  if (!p) return null;
-  const video = p.kind === "video";
+  if (state === "now")
+    return (
+      <span aria-hidden className="relative grid size-5 shrink-0 place-items-center rounded-full border-2 border-brand">
+        <span className="size-2 rounded-full bg-brand motion-safe:animate-pulse" />
+      </span>
+    );
+  return <span aria-hidden className="size-5 shrink-0 rounded-full border border-paper/30" />;
+}
+
+const stateText: Record<TaskState, string> = { done: "done", now: "in progress", next: "to do" };
+
+function DayDetail({ day }: { day: Day }) {
+  const tasks = tasksFor(day.kind, day.n).map((t) => {
+    const due = day.n - t.before;
+    return { ...t, due, state: taskState(due) };
+  });
+  const done = tasks.filter((t) => t.state === "done").length;
+  const title =
+    day.kind === "reel" || day.kind === "carousel"
+      ? (day.piece?.style ?? kindLabel[day.kind])
+      : { plan: "Strategy call and calendar", report: "Monthly report", story: "Stories and community" }[day.kind];
+  const label = status(tasks.length, done, day.n);
   return (
-    <div className="mt-4">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line bg-ink-2">
-        {video ? (
-          <video
-            key={p.id}
-            src={p.preview ?? p.src}
-            poster={p.poster}
-            muted
-            loop
-            playsInline
-            autoPlay={!reduce}
-            preload="metadata"
-            className="absolute inset-0 size-full object-cover"
-          />
-        ) : (
-          <Image key={p.id} src={p.src ?? ""} alt={p.title} fill sizes="22rem" className="object-cover object-top" />
-        )}
+    <div className="mt-4 transition-opacity duration-300 ease-[var(--ease-out)] starting:opacity-0">
+      <div className="rounded-2xl border border-line bg-ink-2 p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="font-display text-2xl font-semibold leading-tight tracking-[-0.02em]">{title}</h3>
+          <span
+            className={`mt-1 shrink-0 rounded-full px-2.5 py-1 text-xs ${
+              label === "In production" ? "bg-brand/15 text-accent" : label === "Planned" ? "bg-paper/10 text-paper/70" : "bg-paper text-ink"
+            }`}
+          >
+            {label}
+          </span>
+        </div>
+        <p className="mt-2 text-sm text-paper/60">
+          {done} of {tasks.length} steps done
+        </p>
+        <div aria-hidden className="mt-3 h-1.5 overflow-hidden rounded-full bg-paper/10">
+          <div className="h-full rounded-full bg-brand transition-[width] duration-500 ease-[var(--ease-out)]" style={{ width: `${(done / tasks.length) * 100}%` }} />
+        </div>
+        <ol className="mt-5 border-t border-line" aria-label={`Checklist for day ${day.n}`}>
+          {tasks.map((t) => (
+            <li key={t.label} className="flex items-center gap-3 border-b border-line py-3 last:border-b-0">
+              <StateIcon state={t.state} />
+              <span className={`min-w-0 flex-1 ${t.state === "done" ? "text-paper/55" : "text-paper"}`}>
+                {t.label}
+                <span className="sr-only">, {stateText[t.state]}</span>
+              </span>
+              <span className={`shrink-0 text-sm tabular-nums ${t.state === "now" ? "text-accent" : "text-paper/50"}`}>{dueLabel(t.due)}</span>
+            </li>
+          ))}
+        </ol>
       </div>
-      <h3 className="mt-5 font-display text-2xl font-semibold tracking-[-0.02em]">{p.style}</h3>
-      <p className="mt-2 leading-relaxed text-paper/70">
-        {p.title}. A real example from our Library of the kind of {day.kind === "reel" ? "reel" : "post"} that goes out on a day like this.
-      </p>
+      <p className="mt-4 text-sm leading-relaxed text-paper/60">{blurb[day.kind]}</p>
     </div>
   );
 }

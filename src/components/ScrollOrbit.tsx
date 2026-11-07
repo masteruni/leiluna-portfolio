@@ -22,7 +22,6 @@ export function ScrollOrbit() {
       style={{ opacity }}
       onClick={() => (lenis ? lenis.scrollTo(0, { duration: 2 }) : window.scrollTo({ top: 0, behavior: "smooth" }))}
       aria-label="Back to top"
-      data-cursor="Top"
       className={`${overNight ? "over-night" : ""} fixed bottom-6 right-6 z-[60] hidden size-14 rounded-full bg-ink/60 backdrop-blur-md transition-transform duration-300 ease-[var(--ease-out)] hover:scale-110 active:scale-[0.97] md:block`}
     >
       <svg viewBox="0 0 56 56" className="size-full overflow-visible" aria-hidden>

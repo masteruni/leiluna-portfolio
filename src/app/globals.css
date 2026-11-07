@@ -132,7 +132,7 @@ body {
   color: var(--on-brand);
 }
 
-/* Keyboard focus is visible on the dark background (the custom cursor hides the pointer, not the focus ring) */
+/* Keyboard focus is visible on the dark background */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
@@ -213,13 +213,6 @@ html.lenis,
 html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: clip; }
-
-/* Custom cursor hides the native one only on fine pointers */
-html.has-cursor,
-html.has-cursor * { cursor: none !important; }
-/* …except text fields, where the I-beam is useful */
-html.has-cursor input,
-html.has-cursor textarea { cursor: text !important; }
 
 /* Deep-space starfield behind every section (the hero draws its own in WebGL) */
 .stars {

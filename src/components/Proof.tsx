@@ -3,6 +3,7 @@
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { moreProof, receipts, topReels } from "@/content/site";
 import { openOrbitCheck } from "@/lib/orbitCheck";
 import { track } from "@/lib/track";
@@ -72,7 +73,6 @@ function Receipts() {
             <button
               type="button"
               onClick={() => openClip({ src: r.src, title: `${r.client}: ${r.what}`, vertical: true, image: true })}
-              data-cursor="View"
               className="group block w-full text-left"
             >
               <span className="relative block aspect-[4/5] overflow-hidden rounded-[1.4rem] border border-line bg-ink-2">
@@ -166,6 +166,16 @@ export function Proof() {
               </div>
             </div>
           </div>
+
+          <p className="mt-10 text-right">
+            <Link
+              href="/work/business-resilience-mindset"
+              className="group inline-flex items-center gap-2 text-paper underline decoration-paper/30 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
+            >
+              View growth analytics
+              <span aria-hidden className="transition-transform duration-200 ease-[var(--ease-out)] group-hover:translate-x-1">→</span>
+            </Link>
+          </p>
 
           <Receipts />
 
