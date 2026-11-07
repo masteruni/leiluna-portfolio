@@ -230,7 +230,7 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
             <PieceArt p={p} playing={visible && !reduce} near={near} />
           </div>
           <div className="pointer-events-none absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-x-1.5 gap-y-1 whitespace-nowrap text-[11px] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px]">
-            <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
+            <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{p.sample ? "Sample edit" : industryLabel(p)}</span>
             <span className="sr-only">, </span>
             <span className="ml-auto shrink-0 rounded-full bg-ink/60 px-2 py-1 text-accent backdrop-blur sm:px-2.5">
               {p.kind === "video" ? (
@@ -496,6 +496,9 @@ function Lightbox({
           </p>
           <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{p.style}</h3>
           <p className="serif mt-2 text-2xl text-paper/70">{p.title}</p>
+          {p.sample && (
+            <p className="mt-4 text-sm text-paper/60">A sample edit to show the style. Not made for or with {p.sample}.</p>
+          )}
           <dl className="mt-8 space-y-3 text-sm">
             <div className="flex justify-between border-t border-line pt-3">
               <dt className="text-muted">{industriesOf(p).length > 1 && industriesOf(p).length < industries.length ? "Industries" : "Industry"}</dt>

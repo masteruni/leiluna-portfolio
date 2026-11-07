@@ -43,6 +43,7 @@ export type Piece = {
   preview?: string;
   duration?: string; // videos, e.g. "0:24"
   tools?: string[];
+  sample?: string; // a sample edit made on our own, not for the brand shown: the brand's name, e.g. "Spotify"
 };
 
 // Real pieces only. A piece without `src` shows a designed placeholder card, so only add one once its file is ready.
@@ -147,9 +148,10 @@ export const pieces: Piece[] = [
     id: "spotify-spec-ad",
     kind: "video",
     format: "reel",
-    style: "App promo ad (spec)",
+    style: "App promo ad (sample edit)",
     industry: "Tech & SaaS",
-    title: "Spotify Premium: music, uninterrupted (spec ad)",
+    title: "Spotify Premium: music, uninterrupted",
+    sample: "Spotify",
     src: "/library/spotify-spec-ad.mp4",
     preview: "/library/spotify-spec-ad-preview.mp4",
     poster: "/library/spotify-spec-ad-poster.webp",
@@ -159,9 +161,10 @@ export const pieces: Piece[] = [
     id: "capcut-ad",
     kind: "video",
     format: "reel",
-    style: "App promo ad",
+    style: "App promo ad (sample edit)",
     industry: "Tech & SaaS",
     title: "CapCut: editing, made easy",
+    sample: "CapCut",
     src: "/library/capcut-ad.mp4",
     preview: "/library/capcut-ad-preview.mp4",
     poster: "/library/capcut-ad-poster.webp",
