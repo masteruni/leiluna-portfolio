@@ -144,6 +144,18 @@ export const pieces: Piece[] = [
     duration: "0:28",
   },
   {
+    id: "spotify-spec-ad",
+    kind: "video",
+    format: "reel",
+    style: "App promo ad (spec)",
+    industry: "Tech & SaaS",
+    title: "Spotify Premium: music, uninterrupted (spec ad)",
+    src: "/library/spotify-spec-ad.mp4",
+    preview: "/library/spotify-spec-ad-preview.mp4",
+    poster: "/library/spotify-spec-ad-poster.webp",
+    duration: "0:15",
+  },
+  {
     id: "capcut-ad",
     kind: "video",
     format: "reel",
