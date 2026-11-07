@@ -6,11 +6,10 @@ import { useReducedMotion } from "motion/react";
 import { useRef, useState } from "react";
 import { pieces } from "@/content/library";
 import { kindLabel, kindShort, monthPlan, type DayKind } from "@/content/month";
-import { openBriefWith } from "@/lib/brief";
-import { track } from "@/lib/track";
 import { Eyebrow, MoonPhase } from "./Eyebrow";
+import { CallLink } from "./CallLink";
+import { site } from "@/content/site";
 import { LineReveal } from "./LineReveal";
-import { Button } from "./ui";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -24,7 +23,7 @@ const days: Day[] = Array.from({ length: monthPlan.length }, (_, i) => {
 
 // What a client actually gets in a month, as a calendar: each day shows what goes out, with the moon waxing across the
 // month (the studio's mark), and tapping a day shows a real example of that kind of post from the Library. Below it,
-// what the month adds up to, and a low-commitment next step for visitors who aren't ready to start a project.
+// what the month adds up to.
 export function MonthPlan() {
   const [sel, setSel] = useState(7);
   const reduce = useReducedMotion();
@@ -41,17 +40,6 @@ export function MonthPlan() {
       // Touch screens scroll natively (the smooth-scroll library only drives mouse and trackpad scrolling).
       if (lenis && !window.matchMedia("(pointer: coarse)").matches) lenis.scrollTo(el, { offset: -100, duration: 0.8 });
       else el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-    });
-  };
-
-  const audit = () => {
-    track("Free audit", { from: "month" });
-    openBriefWith({ message: "I'd like a free feed audit. Our Instagram is @" });
-    requestAnimationFrame(() => {
-      const t = document.querySelector<HTMLElement>("#project-brief") ?? document.querySelector<HTMLElement>("#contact");
-      if (!t) return;
-      if (lenis) lenis.scrollTo(t, { offset: -140, duration: 1.2, force: true });
-      else t.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
     });
   };
 
@@ -102,7 +90,7 @@ export function MonthPlan() {
                     </span>
                     {media && (d.kind === "reel" || d.kind === "carousel") ? (
                       <span className="relative mx-auto hidden aspect-[9/16] w-[46%] overflow-hidden rounded-[4px] sm:block">
-                        <Image src={media} alt="" fill sizes="80px" className="object-cover" />
+                        <Image src={media} alt={`${d.piece!.style} by Leiluna Studio: ${d.piece!.title}`} fill sizes="80px" className="object-cover" />
                       </span>
                     ) : null}
                     <span className="flex items-center gap-1.5">
@@ -145,14 +133,12 @@ export function MonthPlan() {
           ))}
         </dl>
 
-        <div className="mt-10 flex flex-col items-start justify-between gap-6 border-t border-line pt-8 sm:flex-row sm:items-center">
-          <p className="max-w-xl text-lg text-paper/80">
-            Not sure what your brand needs yet? Send us your Instagram and we&apos;ll reply with three quick fixes for your feed, free.
-          </p>
-          <Button variant="primary" size="lg" onClick={audit}>
-            Get a free feed audit
-          </Button>
-        </div>
+        <p className="mt-14 flex flex-col gap-2 border-t border-line pt-8 text-lg text-paper/80 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-3">
+          <span>
+            Plans start at {site.plansFrom}. Want to know what yours would look like?
+          </span>
+          <CallLink from="month">Book a free call</CallLink>
+        </p>
       </div>
     </section>
   );

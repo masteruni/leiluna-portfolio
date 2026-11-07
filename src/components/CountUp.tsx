@@ -5,7 +5,9 @@ import { useEffect, useRef } from "react";
 
 // Counts a stat like "2.6M", "5.6M+" or "680×" up from zero when it scrolls into view.
 // The number keeps its decimals; anything around it (suffixes, symbols) stays put.
-export function CountUp({ value, className }: { value: string; className?: string }) {
+// `tabular` keeps every digit the same width so the count doesn't wobble; turn it off for big left-aligned figures,
+// where the display font's tabular "1" (with a foot) looks out of place.
+export function CountUp({ value, className, tabular = true }: { value: string; className?: string; tabular?: boolean }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
   const reduce = useReducedMotion();
@@ -33,7 +35,7 @@ export function CountUp({ value, className }: { value: string; className?: strin
   return (
     <span ref={ref} className={className}>
       <span className="sr-only">{value}</span>
-      <span aria-hidden className="tabular-nums">
+      <span aria-hidden className={tabular ? "tabular-nums" : undefined}>
         {match[1]}
         <motion.span>{text}</motion.span>
         {match[3]}

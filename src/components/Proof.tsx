@@ -3,9 +3,11 @@
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { moreProof, receipts, stats, topReels } from "@/content/site";
+import { moreProof, receipts, topReels } from "@/content/site";
+import { openOrbitCheck } from "@/lib/orbitCheck";
+import { track } from "@/lib/track";
 import { openClip } from "@/lib/showreel";
-import { Tag } from "./ui";
+import { buttonClass, Tag } from "./ui";
 import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
@@ -95,7 +97,8 @@ function Receipts() {
 
 export function Proof() {
   const [held, setHeld] = useState(false); // a tap stops the ticker on touch screens (hover does it with a mouse)
-  const ticker = [...stats.map((s) => `${s.value}${s.suffix} ${s.label}`), ...moreProof.map((m) => `${m.value} ${m.label}`)];
+  // The hero already shows the headline figures (29M+, 680×, 306K), so this section uses the others.
+  const ticker = [`${topReels[0].label} views on a single client reel`, ...moreProof.map((m) => `${m.value} ${m.label}`)];
   return (
     <section id="proof" className="relative overflow-hidden py-16 md:py-24" aria-labelledby="proof-title">
       <div className="px-5 sm:px-10">
@@ -127,38 +130,23 @@ export function Proof() {
                 className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full"
                 style={{ boxShadow: "inset 2.2rem -1.4rem 0 0 rgb(234 106 142 / 0.18)" }}
               />
-              <p className="text-xs text-muted">Across our clients&apos; pinned reels</p>
+              <p className="text-xs text-muted">On a single client reel</p>
               <div className="mt-12">
                 <p className="font-display text-[clamp(5rem,13vw,11rem)] font-bold leading-[0.8] tracking-[-0.06em]">
-                  <CountUp value={`${stats[0].value}${stats[0].suffix}`} />
+                  <CountUp value={moreProof[0].value} tabular={false} />
                 </p>
-                <p className="mt-4 max-w-xs text-lg text-paper/70">{stats[0].label}</p>
+                <p className="mt-4 max-w-xs text-lg text-paper/70">
+                  {moreProof[0].label}, and {moreProof[1].value} {moreProof[1].label}
+                </p>
               </div>
             </div>
 
-            {stats.slice(1).map((s) => (
-              <div key={s.label} className={tile}>
-                <p className="font-display text-4xl font-semibold tracking-[-0.05em] text-accent sm:text-6xl">
-                  <CountUp value={`${s.value}${s.suffix}`} />
-                </p>
-                <p className="mt-3 text-sm text-paper/70">{s.label}</p>
-              </div>
-            ))}
-            {moreProof.slice(0, 2).map((m) => (
-              <div key={m.label} className={tile}>
-                <p className="font-display text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">
-                  <CountUp value={m.value} />
-                </p>
-                <p className="mt-3 text-sm text-paper/70">{m.label}</p>
-              </div>
-            ))}
-
             <ReelChart />
 
-            <div className={`${tile} col-span-2 flex items-center justify-between gap-6`}>
+            <div className={`${tile} col-span-2 lg:col-span-4 flex items-center justify-between gap-6`}>
               <div>
                 <p className="font-display text-6xl font-semibold tracking-[-0.05em] text-accent">
-                  <CountUp value={moreProof[2].value} />
+                  <CountUp value={moreProof[2].value} tabular={false} />
                 </p>
                 <p className="mt-3 text-sm text-paper/70">{moreProof[2].label}</p>
               </div>
@@ -180,6 +168,20 @@ export function Proof() {
           </div>
 
           <Receipts />
+
+          <div className="mt-14 flex flex-col items-start gap-5 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-lg text-paper/80">Want numbers like these?</p>
+            <button
+              type="button"
+              onClick={() => {
+                track("Free audit", { from: "proof" });
+                openOrbitCheck();
+              }}
+              className={buttonClass("primary", "lg")}
+            >
+              Get your free Orbit Check
+            </button>
+          </div>
         </div>
       </div>
 

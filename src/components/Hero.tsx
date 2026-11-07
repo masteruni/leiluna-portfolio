@@ -6,9 +6,10 @@ import { useLenis } from "lenis/react";
 import { useRef, type CSSProperties, type MouseEvent } from "react";
 import { site, stats } from "@/content/site";
 import { setBriefOpen } from "@/lib/brief";
-import { openShowreel } from "@/lib/showreel";
+import { openOrbitCheck } from "@/lib/orbitCheck";
 import { useReady } from "@/lib/ready";
 import { track } from "@/lib/track";
+import { CallLink } from "./CallLink";
 import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -17,7 +18,7 @@ import { RotatingText } from "./RotatingText";
 import { TrustLine } from "./TrustLine";
 
 // Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
-// two next steps (start a brief, watch the showreel) above the fold.
+// next steps (start a project, a free feed audit, or a free call) above the fold.
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const ready = useReady();
@@ -32,18 +33,28 @@ export function Hero() {
   // moment the page arrives instead of waiting for JavaScript, which takes seconds on a mid-range phone. On a first
   // visit it waits, paused, behind the intro and plays as the intro opens.
 
+  // Glides to the brief once it has opened.
+  const toBrief = () =>
+    requestAnimationFrame(() => {
+      const target = document.querySelector<HTMLElement>("#project-brief") ?? document.querySelector<HTMLElement>("#contact");
+      if (!target) return;
+      if (lenis) lenis.scrollTo(target, { offset: -140, duration: 1.6, force: true });
+      else target.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+    });
+
   // Opens the project brief and glides to it.
   const startProject = (e: MouseEvent<HTMLAnchorElement>) => {
     track("Start project", { from: "hero" });
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     setBriefOpen(true);
-    requestAnimationFrame(() => {
-      const target = document.querySelector<HTMLElement>("#project-brief") ?? document.querySelector<HTMLElement>("#contact");
-      if (!target) return;
-      if (lenis) lenis.scrollTo(target, { offset: -140, duration: 1.6, force: true });
-      else target.scrollIntoView({ behavior: "smooth" });
-    });
+    toBrief();
+  };
+
+  // The low-commitment option: a free feed audit, in a short form over the page.
+  const orbitCheck = () => {
+    track("Free audit", { from: "hero" });
+    openOrbitCheck();
   };
 
   return (
@@ -86,12 +97,12 @@ export function Hero() {
             {site.hero.intro}
           </p>
 
-          <div className="hero-in mt-9 flex flex-wrap items-center gap-3" style={{ "--d": "0.3s" } as CSSProperties}>
-            <Magnetic className="inline-block">
+          <div className="hero-in mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center" style={{ "--d": "0.3s" } as CSSProperties}>
+            <Magnetic className="block sm:inline-block">
               <Link
                 href="/#contact"
                 onClick={startProject}
-                className="group relative inline-flex items-center gap-3 overflow-hidden press rounded-full bg-brand px-7 py-4 font-medium text-ink"
+                className="group relative flex w-full items-center justify-center gap-3 sm:inline-flex sm:w-auto overflow-hidden press rounded-full bg-brand px-7 py-4 font-medium text-ink"
               >
                 <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0" />
                 <span className="relative">Start a project</span>
@@ -99,17 +110,16 @@ export function Hero() {
             </Magnetic>
             <button
               type="button"
-              onClick={openShowreel}
-              data-cursor="Play"
-              className="group inline-flex items-center gap-3 rounded-full border border-line bg-ink/40 py-2 pl-2 pr-5 text-sm backdrop-blur-md press hover:border-paper/60"
+              onClick={orbitCheck}
+              className="flex items-center justify-center rounded-full bg-ink/40 px-7 py-4 font-medium ring-1 ring-inset ring-line backdrop-blur-md transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
             >
-              <span className="relative grid size-10 place-items-center rounded-full bg-paper">
-                <span className="absolute inset-0 animate-ping rounded-full bg-paper/30 [animation-duration:2.4s]" />
-                <span className="ml-0.5 border-y-[5px] border-l-[8px] border-y-transparent border-l-ink" />
-              </span>
-              Watch the showreel
+              Free Orbit Check
             </button>
           </div>
+
+          <p className="hero-in mt-4 text-sm text-paper/70" style={{ "--d": "0.32s" } as CSSProperties}>
+            Plans from {site.plansFrom}. <CallLink from="hero">Book a free 30-min call</CallLink>
+          </p>
 
           {/* brands we've worked with, right under the buttons that ask for a decision */}
           <div className="hero-in mt-6" style={{ "--d": "0.35s" } as CSSProperties}>

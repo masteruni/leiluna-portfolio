@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useId, useState } from "react";
 import { faqs } from "@/content/site";
 import { Eyebrow } from "./Eyebrow";
+import { CallLink } from "./CallLink";
 import { LineReveal } from "./LineReveal";
 
 // Questions slide in one after another as the list scrolls into view; a pink bar glides to the open one.
@@ -76,7 +77,15 @@ export function Faq() {
                       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-8 pl-10 leading-relaxed text-paper/70 sm:text-lg">{f.a}</p>
+                      <p className="max-w-2xl pb-8 pl-10 leading-relaxed text-paper/70 sm:text-lg">
+                        {f.a}
+                        {f.link && (
+                          <>
+                            {" "}
+                            <CallLink from="faq">{f.link.label}</CallLink>
+                          </>
+                        )}
+                      </p>
                     </motion.div>
                   )}
                 </AnimatePresence>

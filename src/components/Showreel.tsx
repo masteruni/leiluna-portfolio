@@ -7,26 +7,16 @@ import { useFocusTrap } from "@/lib/focus";
 import { closeShowreel, useShowreel } from "@/lib/showreel";
 import { buttonClass } from "./ui";
 
-export const showreel = {
-  // The website promo: a tour of the studio's work and site, ending on the logo. (The earlier cut of client work,
-  // showreel-2026.mp4, is still in public/library if it's ever wanted back.)
-  src: "/library/website-promo.mp4",
-  preview: "/library/website-promo-preview.mp4",
-  poster: "/library/website-promo-poster.webp",
-  duration: "0:14",
-};
-
 const protect = {
   controlsList: "nodownload noplaybackrate noremoteplayback",
   disablePictureInPicture: true,
   disableRemotePlayback: true,
 } as const;
 
-// Full-screen player with sound. Opened from the hero button or the showreel section (the showreel), or from a
-// Recent work card (that clip).
+// Full-screen player with sound, for a clip opened from a Recent work card or a receipt in Proof.
 export function ShowreelPlayer() {
   const { open, clip: playing } = useShowreel();
-  const clip = playing === "showreel" ? { ...showreel, title: "Leiluna Studio showreel", vertical: false } : playing;
+  const clip = playing;
   const lenis = useLenis();
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDivElement>(null);
@@ -46,7 +36,7 @@ export function ShowreelPlayer() {
 
   return (
     <AnimatePresence>
-      {open && (
+      {open && clip && (
         <motion.div
           ref={dialog}
           role="dialog"

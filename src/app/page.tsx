@@ -14,6 +14,7 @@ import { RecentWork } from "@/components/RecentWork";
 import { SelectedWork } from "@/components/SelectedWork";
 import { MonthPlan } from "@/components/MonthPlan";
 import { ShowreelPlayer } from "@/components/Showreel";
+import { OrbitCheck } from "@/components/OrbitCheck";
 import { Testimonials } from "@/components/Testimonials";
 import { faqs } from "@/content/site";
 
@@ -45,6 +46,7 @@ export default function Home() {
         <Contact />
       </main>
       <ShowreelPlayer />
+      <OrbitCheck />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Footer />
     </>

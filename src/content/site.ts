@@ -10,6 +10,10 @@ export const site = {
   available: true,
   // How fast you reply to a brief. Used in the FAQ, the contact section and the brief itself.
   replyTime: "one business day",
+  // The free 30-minute intro call (Calendly). Every "Book a call" link on the site opens this, in a new tab.
+  callUrl: "https://calendly.com/leilunastudio/30min",
+  // The lowest monthly plan, shown next to the call links and in the FAQ.
+  plansFrom: "$500/month",
   // Bump this when the content changes; it's the "last modified" date search engines see in the sitemap.
   updated: "2026-10-30",
   headline: ["Your story.", "Our creative", "orbit."], // the slogan, shown small above the hero headline
@@ -261,7 +265,8 @@ export const faqs = [
   },
   {
     q: "How much does it cost?",
-    a: "It depends on the mix of services and how much content you need. We work on monthly plans and one-off projects. Pick a budget range in the brief below (or 'Not sure yet') and we'll scope the right mix with you before anything starts.",
+    a: "Plans start at $500/month. Every brand needs something different, so we'll shape the right plan with you on a free 30-minute call.",
+    link: { label: "Book a call", href: "https://calendly.com/leilunastudio/30min" },
   },
   {
     q: "What do you need from us to start?",

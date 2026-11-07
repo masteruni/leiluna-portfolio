@@ -12,6 +12,7 @@ import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { buttonClass, chipClass, SwapLabel } from "./ui";
 import { TrustLine } from "./TrustLine";
+import { CallLink } from "./CallLink";
 
 const label = "text-sm text-muted";
 const briefCopyLabels = [
@@ -504,8 +505,12 @@ export function Contact() {
           </div>
         </div>
 
+        <p className="mt-8 text-paper/70">
+          Not sure where to start? <CallLink from="contact">Book a free 30-min call</CallLink> and we&apos;ll talk it through.
+        </p>
+
         {/* brands we've worked with, right where the decision is made */}
-        <TrustLine align="center" className="mt-10" />
+        <TrustLine align="center" className="mt-8" />
 
         <div id="project-brief">
           <AnimatePresence>{brief && <Brief key={briefVersion} onDone={() => setBrief(false)} />}</AnimatePresence>

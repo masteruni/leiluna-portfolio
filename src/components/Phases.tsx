@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, type MotionValue } from "motion/react"
 import { useRef } from "react";
 import { process } from "@/content/site";
 import { Eyebrow } from "./Eyebrow";
+import { CallLink } from "./CallLink";
 
 // A moon whose lit side grows with `phase` (0 = new moon, 1 = full).
 function Moon({ phase }: { phase: MotionValue<number> }) {
@@ -80,6 +81,10 @@ export function Phases() {
             ))}
           </ol>
         </div>
+
+        <p className="mt-14 flex flex-col gap-2 border-t border-line pt-8 text-lg text-paper/80 sm:flex-row sm:items-baseline sm:gap-3">
+          Ready for Phase 1? <CallLink from="process">Book a free 30-min call</CallLink>
+        </p>
       </div>
     </section>
   );
