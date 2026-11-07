@@ -12,7 +12,7 @@ import { Phases } from "@/components/Phases";
 import { Proof } from "@/components/Proof";
 import { RecentWork } from "@/components/RecentWork";
 import { SelectedWork } from "@/components/SelectedWork";
-import { Formats } from "@/components/Formats";
+import { MonthPlan } from "@/components/MonthPlan";
 import { ShowreelPlayer } from "@/components/Showreel";
 import { Testimonials } from "@/components/Testimonials";
 import { faqs } from "@/content/site";
@@ -32,7 +32,7 @@ export default function Home() {
         <Hero />
         <HorizonLoop />
         <Manifesto />
-        <Formats />
+        <MonthPlan />
         <Orbits />
         <SelectedWork />
         <RecentWork />
