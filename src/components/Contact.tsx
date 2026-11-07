@@ -10,10 +10,19 @@ import { track } from "@/lib/track";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
-import { buttonClass, chipClass } from "./ui";
+import { buttonClass, chipClass, SwapLabel } from "./ui";
 import { TrustLine } from "./TrustLine";
 
 const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+const briefCopyLabels = [
+  ["idle", "Copy the brief"],
+  ["done", "Copied"],
+] as const;
+const emailCopyLabels = [
+  ["idle", "Copy email"],
+  ["done", "Copied"],
+] as const;
+
 const field =
   "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand";
 
@@ -229,7 +238,12 @@ function Brief({ onDone }: { onDone: () => void }) {
                       placeholder="Alex"
                     />
                     {nameError && (
-                      <p id={`${id}-name-error`} role="alert" className="mt-2 text-sm text-accent">
+                      <p
+                        id={`${id}-name-error`}
+                        role="alert"
+                        // eases in rather than popping (CSS @starting-style); reduced motion keeps only the fade
+                        className="mt-2 text-sm text-accent transition-[opacity,translate] duration-200 ease-[var(--ease-out)] starting:-translate-y-1 starting:opacity-0 motion-reduce:starting:translate-y-0"
+                      >
                         Add your name so we know who to reply to.
                       </p>
                     )}
@@ -367,7 +381,7 @@ function Brief({ onDone }: { onDone: () => void }) {
               }}
               className={buttonClass("outline", "lg")}
             >
-              {copied ? "Copied" : "Copy the brief"}
+              <SwapLabel current={copied ? "done" : "idle"} labels={briefCopyLabels} />
             </button>
             <button type="submit" onClick={spark} className={buttonClass("primary", "lg", "gap-3")}>
               Send by email
@@ -486,7 +500,7 @@ export function Contact() {
                 copy();
               }}
               className="text-sm text-muted transition-colors hover:text-paper pointer-coarse:min-h-11 pointer-coarse:px-3">
-              {copied ? "Copied" : "Copy email"}
+              <SwapLabel current={copied ? "done" : "idle"} labels={emailCopyLabels} />
             </button>
           </div>
         </div>

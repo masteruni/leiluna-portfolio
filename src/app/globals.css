@@ -275,6 +275,14 @@ html.has-cursor textarea { cursor: text !important; }
 
 /* A case-study cover morphing between the homepage card and its page (see SelectedWork + work/[slug]):
    unhurried enough to follow, with a soft blur mid-flight to hide the scaling. */
+/* Switching theme: the old and new page crossfade over a quarter second (ThemeToggle sets data-vt for the length
+   of the transition, so page navigations keep their own timing). */
+html[data-vt="theme"]::view-transition-old(root),
+html[data-vt="theme"]::view-transition-new(root) {
+  animation-duration: 250ms;
+  animation-timing-function: ease;
+}
+
 ::view-transition-group(.cover-morph) {
   animation-duration: 650ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);

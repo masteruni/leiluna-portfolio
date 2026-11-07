@@ -4,3 +4,4 @@ export { Chip, chipClass, type ChipSize, type ChipTone } from "./Chip";
 export { Tag } from "./Tag";
 export { ArrowCircle, type ArrowCircleSize } from "./ArrowCircle";
 export { IconButton } from "./IconButton";
+export { SwapLabel } from "./SwapLabel";
