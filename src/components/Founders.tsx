@@ -114,13 +114,12 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
               {f.certifications.map((c) => (
                 <li key={c.name} className="flex items-center gap-4 border-b border-line py-3">
                   {c.logo && (
-                    <Image src={c.logo} alt="" width={40} height={40} className="size-10 shrink-0 rounded-lg border border-line object-cover" />
+                    <Image src={c.logo} alt="" width={36} height={36} className="size-9 shrink-0 object-contain" />
                   )}
                   <span className="min-w-0 flex-1">
                     <span className="block text-paper/85">{c.name}</span>
                     <span className="block text-sm text-paper/55">{c.issuer}</span>
                   </span>
-                  {c.date && <span className="shrink-0 text-sm tabular-nums text-paper/55">{c.date}</span>}
                 </li>
               ))}
             </ul>

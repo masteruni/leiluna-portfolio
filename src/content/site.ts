@@ -327,11 +327,11 @@ export const founders = [
     photo: "/team/juri-hq.webp" as string | null,
     // Only the ones that matter for the studio's work.
     certifications: [
-      { name: "Social Media Marketing", issuer: "HubSpot Academy", logo: "/certs/hubspot.webp", date: "Nov 2026" },
-      { name: "Social Media Manager Playbook", issuer: "GoHighLevel Experts", logo: "/certs/gohighlevel.webp", date: "Nov 2026" },
+      { name: "Social Media Marketing", issuer: "HubSpot Academy", logo: "/certs/hubspot.webp" },
+      { name: "Social Media Manager Playbook", issuer: "GoHighLevel Experts", logo: "/certs/gohighlevel.webp" },
       { name: "Fundamentals of Marketing", issuer: "University of the Philippines Open University", logo: "/certs/up-open-university.webp" },
       { name: "Business Concepts, Ideation and the Business Plan", issuer: "University of the Philippines Open University", logo: "/certs/up-open-university.webp" },
-    ] as { name: string; issuer: string; logo?: string; date?: string }[],
+    ] as { name: string; issuer: string; logo?: string }[],
   },
   {
     name: "Sven",
@@ -346,7 +346,7 @@ export const founders = [
       "SOPs, systems & operations",
     ],
     photo: "/team/sven.webp" as string | null,
-    certifications: [] as { name: string; issuer: string; logo?: string; date?: string }[],
+    certifications: [] as { name: string; issuer: string; logo?: string }[],
   },
 ];
 
