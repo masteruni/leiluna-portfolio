@@ -349,6 +349,14 @@ html[data-vt="theme"]::view-transition-new(root) {
 }
 
 .animate-marquee { animation: marquee 45s linear infinite; }
+
+/* The horizon under the hero (HorizonLoop.tsx): the night above fades in from the hero's colour in both themes, the page
+   below rises into it like a moon, and the service words ride along the edge in moonlight. */
+.horizon-moon { fill: var(--ink); }
+.horizon-text { font-family: var(--font-outfit), sans-serif; font-weight: 800; letter-spacing: -0.03em; }
+.horizon-solid { fill: #f6f2ef; }
+.horizon-outline { fill: transparent; stroke: rgb(246 242 239 / 0.55); stroke-width: 1px; }
+.horizon-star { fill: var(--brand); font-size: 0.45em; }
 /* Hovering a band pauses it, so a number or a word can actually be read */
 .marquee-pause:hover .animate-marquee { animation-play-state: paused; }
 /* …and on touch screens a tap holds it (Proof.tsx toggles .marquee-held) */

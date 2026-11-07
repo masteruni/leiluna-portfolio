@@ -4,11 +4,11 @@ import { Footer } from "@/components/Footer";
 import { Founders } from "@/components/Founders";
 import { Hero } from "@/components/Hero";
 import { Library } from "@/components/Library";
+import { HorizonLoop } from "@/components/HorizonLoop";
 import { Manifesto } from "@/components/Manifesto";
 import { Nav } from "@/components/Nav";
 import { Orbits } from "@/components/Orbits";
 import { Phases } from "@/components/Phases";
-import { Pillars } from "@/components/Pillars";
 import { Proof } from "@/components/Proof";
 import { RecentWork } from "@/components/RecentWork";
 import { SelectedWork } from "@/components/SelectedWork";
@@ -30,7 +30,7 @@ export default function Home() {
       <Nav />
       <main id="main">
         <Hero />
-        <Pillars />
+        <HorizonLoop />
         <Manifesto />
         <Formats />
         <Orbits />
