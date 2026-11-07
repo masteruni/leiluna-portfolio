@@ -22,7 +22,7 @@ const noSubscribe = () => () => {};
 const currentYear = () => new Date().getFullYear();
 const noYear = () => null;
 
-const heading = "mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+const heading = "mb-4 text-sm text-muted";
 
 // Where the moonlight falls on the wordmark: a soft-edged circle around the --mx / --my point.
 const light = (radius: string) => `radial-gradient(circle ${radius} at var(--mx, 50%) var(--my, 50%), #000 0%, transparent 70%)`;
@@ -127,7 +127,7 @@ export function Footer() {
           </div>
         </motion.div>
       </div>
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted sm:flex-row sm:justify-between sm:gap-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 py-6 text-xs text-muted sm:flex-row sm:justify-between sm:gap-10">
         <span>© {year ? `${year} ` : ""}{site.name}. All work shown is protected and may not be downloaded or reused without permission.</span>
         <span>Your story. Our creative orbit.</span>
       </div>

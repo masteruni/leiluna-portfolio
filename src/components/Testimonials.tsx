@@ -37,7 +37,7 @@ export function Testimonials() {
       <div className="mx-auto max-w-7xl">
         <Eyebrow id="testimonials" />
         <h2 id="testimonials-title" className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-          <LineReveal inView lines={["What clients", <span key="s" className="serif font-normal text-accent">say.</span>]} />
+          <LineReveal inView lines={["What clients", "say."]} />
         </h2>
 
         <div className="relative mt-16 min-h-[14rem] md:min-h-[12rem]">
@@ -72,7 +72,7 @@ export function Testimonials() {
                 <span aria-hidden className="h-px w-10 bg-brand" />
                 <span>
                   <span className="font-medium text-paper">{t.name}</span>
-                  <span className="text-muted"> · {t.role}</span>
+                  <span className="text-muted">, {t.role}</span>
                 </span>
               </figcaption>
             </motion.figure>
@@ -91,7 +91,7 @@ export function Testimonials() {
                 className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ease-[var(--ease-out)] ${n === i ? "w-10 bg-brand" : "w-4 bg-paper/25 hover:bg-paper/60"}`}
               />
             ))}
-            <span className="ml-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted tabular-nums">
+            <span className="ml-3 text-[13px] text-muted tabular-nums">
               {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
             </span>
           </div>

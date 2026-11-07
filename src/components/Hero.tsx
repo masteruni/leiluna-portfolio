@@ -58,7 +58,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-16 lg:pt-28">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
-          <p className="hero-in mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-[11px] uppercase tracking-[0.3em] text-muted" style={{ "--d": "0.1s" } as CSSProperties}>
+          <p className="hero-in mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-[13px] text-muted" style={{ "--d": "0.1s" } as CSSProperties}>
             <span className="flex items-center gap-3">
               <span className="h-px w-10 bg-brand" />
               {site.headline.join(" ")}
@@ -95,7 +95,6 @@ export function Hero() {
               >
                 <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0" />
                 <span className="relative">Start a project</span>
-                <span className="relative transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-x-1">→</span>
               </Link>
             </Magnetic>
             <button
@@ -140,7 +139,7 @@ export function Hero() {
 
       <div
         style={{ "--d": "0.5s" } as CSSProperties}
-        className="hero-in absolute inset-x-5 bottom-6 z-10 hidden items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-muted sm:inset-x-10 lg:flex"
+        className="hero-in absolute inset-x-5 bottom-6 z-10 hidden items-center justify-between text-xs text-muted sm:inset-x-10 lg:flex"
       >
         <span className="flex items-center gap-3">
           <span className="relative h-8 w-px overflow-hidden bg-line">

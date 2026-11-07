@@ -229,7 +229,7 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
           <div className="absolute inset-0 transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.04]">
             <PieceArt p={p} playing={visible && !reduce} near={near} />
           </div>
-          <div className="pointer-events-none absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-x-1.5 gap-y-1 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.04em] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
+          <div className="pointer-events-none absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-x-1.5 gap-y-1 whitespace-nowrap text-[11px] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px]">
             <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{industryLabel(p)}</span>
             <span className="sr-only">, </span>
             <span className="ml-auto shrink-0 rounded-full bg-ink/60 px-2 py-1 text-accent backdrop-blur sm:px-2.5">
@@ -241,7 +241,7 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
               ) : (
                 <>
                   <span className="sm:hidden" aria-hidden>{p.slideLabels ? p.slideLabels.join(" / ") : p.slides ? `◼ ${p.slides.length}` : "◼"}</span>
-                  <span className="max-sm:sr-only">{p.slideLabels ? p.slideLabels.join(" / ") : p.slides ? `Carousel · ${p.slides.length}` : "Graphic"}</span>
+                  <span className="max-sm:sr-only">{p.slideLabels ? p.slideLabels.join(" / ") : p.slides ? `Carousel of ${p.slides.length}` : "Graphic"}</span>
                 </>
               )}
             </span>
@@ -483,15 +483,15 @@ function Lightbox({
           )}
         </motion.div>
         <div className="w-full max-w-sm shrink-0 lg:w-80">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent">
+          <p className="text-[13px] text-accent">
             {p.kind === "video"
-              ? `${p.format === "reel" ? "Reel" : "Video"} · ${p.duration ?? ""}`
+              ? `${p.format === "reel" ? "Reel" : "Video"}${p.duration ? `, ${p.duration}` : ""}`
               : slides
                 ? p.slideLabels
-                  ? `${p.slideLabels[slide]} · ${slide + 1} of ${slides}`
-                  : `Carousel · Slide ${slide + 1} of ${slides}`
+                  ? `${p.slideLabels[slide]}, ${slide + 1} of ${slides}`
+                  : `Carousel, slide ${slide + 1} of ${slides}`
                 : p.format === "long"
-                  ? "Graphic · Scroll to read"
+                  ? "Graphic, scroll to read"
                   : "Graphic"}
           </p>
           <h3 className="mt-3 font-display text-4xl font-semibold leading-[0.95] tracking-[-0.03em]">{p.style}</h3>
@@ -515,21 +515,21 @@ function Lightbox({
             onClick={onContact}
             className={buttonClass("primary", "md", "mt-8")}
           >
-            I want this style →
+            I want this style
           </button>
-          <div className="mt-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+          <div className="mt-8 flex items-center gap-3 text-[13px] text-muted">
             <button type="button" onClick={() => onStep(-1)} className={buttonClass("outline", "sm")} aria-label="Previous piece">
               ←
             </button>
             <span className="tabular-nums">
-              {String(index + 1).padStart(2, "0")} / {String(list.length).padStart(2, "0")}
+              {index + 1} of {list.length}
             </span>
             <button type="button" onClick={() => onStep(1)} className={buttonClass("outline", "sm")} aria-label="Next piece">
               →
             </button>
           </div>
-          <p className="mt-4 hidden font-mono text-[10px] uppercase tracking-[0.2em] text-muted/70 lg:block" aria-hidden>
-            ← → to browse · Esc to close
+          <p className="mt-4 hidden text-xs text-muted/70 lg:block" aria-hidden>
+            Arrow keys to browse, Esc to close
           </p>
         </div>
       </motion.div>
@@ -637,7 +637,7 @@ export function Library() {
             <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
               Every format.
               <br />
-              <span className="serif font-normal text-accent">Every industry.</span>
+              Every industry.
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">
@@ -664,7 +664,7 @@ export function Library() {
                   className={chipClass(kind === k.id, "paper", "md", "shrink-0 whitespace-nowrap")}
                 >
                   {k.label}
-                  <sup className="ml-1 font-mono text-[10px]">{count(k.id)}</sup>
+                  <sup className="ml-1 text-[11px] tabular-nums">{count(k.id)}</sup>
                 </button>
               ))}
             </div>
@@ -690,7 +690,7 @@ export function Library() {
                     }`}
                   >
                     {ind}
-                    {ind !== "All" && !disabled && <sup className="ml-1 font-mono text-[10px]">{perIndustry.get(ind)}</sup>}
+                    {ind !== "All" && !disabled && <sup className="ml-1 text-[11px] tabular-nums">{perIndustry.get(ind)}</sup>}
                   </button>
                 );
               })}
@@ -698,10 +698,10 @@ export function Library() {
           </div>
         </div>
 
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.25em] text-muted" aria-live="polite">
+        <p className="mt-6 text-[13px] text-muted" aria-live="polite">
           Showing {expanded ? list.length : `${shown.length} of ${list.length}`} {list.length === 1 ? "piece" : "pieces"}
-          {industry !== "All" && <span className="text-paper/60"> · {industry}</span>}
-          <span className="hidden sm:inline"> · tap any piece to open it</span>
+          {industry !== "All" && <span className="text-paper/60"> in {industry}</span>}
+          <span className="hidden sm:inline">. Tap any piece to open it.</span>
         </p>
 
         {list.length === 0 && (
@@ -734,7 +734,7 @@ export function Library() {
                 }}
                 className={buttonClass("primary", "md")}
               >
-                Ask us for one →
+                Ask us for one
               </button>
             </div>
           </div>
@@ -779,7 +779,7 @@ export function Library() {
               className={buttonClass("outline", "lg", "gap-3")}
             >
               Show all {list.length} pieces
-              <span className="rounded-full bg-paper/10 px-2 py-0.5 font-mono text-xs text-muted">+{list.length - FIRST}</span>
+              <span className="rounded-full bg-paper/10 px-2 py-0.5 text-xs tabular-nums text-muted">+{list.length - FIRST}</span>
             </button>
           </div>
         )}

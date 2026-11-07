@@ -6,7 +6,7 @@ import type { CSSProperties, ReactNode } from "react";
 export function Reveal({
   children,
   delay = 0,
-  y = 28,
+  y = 0, // fade only by default: content sliding up section after section reads as a template
   className,
   as = "div",
   css = false,

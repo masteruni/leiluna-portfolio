@@ -50,7 +50,7 @@ function BrandMark({ name, logo, size }: { name: string; logo?: string; size: 24
   if (!logo || failed) {
     const initial = Array.from(new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(name.trim()))[0]?.segment ?? "?";
     return (
-      <span aria-hidden className={`grid shrink-0 place-items-center rounded-full border border-line bg-ink-3 font-medium uppercase text-paper/80 ${box}`}>
+      <span aria-hidden className={`grid shrink-0 place-items-center rounded-full border border-line bg-ink-3 font-medium text-paper/80 ${box}`}>
         {initial}
       </span>
     );
@@ -123,7 +123,7 @@ function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
         <span className="min-w-0 truncate text-paper/60" title={p.brand}>
           {p.brand}
         </span>
-        {p.date && <span className="shrink-0 whitespace-nowrap text-paper/60">· {p.date}</span>}
+        {p.date && <span className="-ml-2 shrink-0 whitespace-nowrap text-paper/60">, {p.date}</span>}
       </div>
       <p
         title={p.title}
@@ -249,7 +249,7 @@ export function RecentWork() {
           <div>
             <Eyebrow id="recent" />
             <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Fresh off", <span key="o" className="serif font-normal text-accent">the timeline.</span>]} />
+              <LineReveal inView lines={["Fresh off", "the timeline."]} />
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">Our newest pieces for the brands we&rsquo;ve created for.</p>
@@ -257,7 +257,7 @@ export function RecentWork() {
 
         <div className="mt-12 flex flex-col gap-5 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.25em] text-paper/60">
+            <span className="flex items-center gap-2 text-[13px] text-paper/60">
               Brands we&rsquo;ve worked with
             </span>
             {brands.map((b) => {

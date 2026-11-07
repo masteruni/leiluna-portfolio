@@ -147,7 +147,7 @@ export function Formats() {
           <div>
             <Eyebrow id="formats" />
             <h2 id="formats-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Pick a format.", <span key="b" className="serif font-normal text-accent">See it work.</span>]} />
+              <LineReveal inView lines={["Pick a format.", "See it work."]} />
             </h2>
           </div>
           <div className="max-w-sm">
@@ -188,7 +188,6 @@ export function Formats() {
                     on ? "max-lg:border-brand max-lg:bg-brand max-lg:text-on-brand" : "max-lg:border-line max-lg:text-paper/75"
                   }`}
                 >
-                  <span className={`hidden font-mono text-xs lg:block ${on ? "text-accent" : "text-muted"}`}>0{n + 1}</span>
                   <span className="lg:flex-1">
                     <span className={`block whitespace-nowrap font-display font-semibold tracking-[-0.02em] lg:whitespace-normal lg:text-2xl ${on ? "lg:text-paper" : "lg:text-paper/55 lg:group-hover:text-paper/85"}`}>
                       {x.name}
@@ -203,9 +202,6 @@ export function Formats() {
                       transition={{ type: "spring", stiffness: 400, damping: 34 }}
                     />
                   )}
-                  <span aria-hidden className={`hidden text-xl transition-transform duration-300 ease-[var(--ease-out)] lg:block ${on ? "translate-x-0 text-accent" : "-translate-x-2 text-paper/20"}`}>
-                    →
-                  </span>
                 </button>
               );
             })}
@@ -240,15 +236,15 @@ export function Formats() {
                     {sound ? "Sound off" : "Sound on"}
                   </button>
                   <Tag className="absolute left-4 top-4 z-10">
-                    {industriesOf(f.p).length > 2 ? "Multi-industry" : industriesOf(f.p).join(" · ")} · {f.p.duration}
+                    {industriesOf(f.p).length > 2 ? "Multi-industry" : industriesOf(f.p).join(", ")}, {f.p.duration}
                   </Tag>
                 </FrontCard>
               </AnimatePresence>
             </div>
-            <p className={`mx-auto mt-5 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-muted ${wide ? "" : "max-w-[22rem]"}`}>
-              <span>← Swipe for more →</span>
-              <span>
-                <span className="text-accent">0{i + 1}</span> / 0{items.length}
+            <p className={`mx-auto mt-5 flex items-center justify-between text-xs text-muted ${wide ? "" : "max-w-[22rem]"}`}>
+              <span>Swipe for more</span>
+              <span className="tabular-nums">
+                <span className="text-accent">{i + 1}</span> of {items.length}
               </span>
             </p>
 
@@ -261,7 +257,7 @@ export function Formats() {
                 transition={{ duration: 0.35 }}
                 className={`mx-auto mt-8 ${wide ? "" : "max-w-[22rem] lg:max-w-none"}`}
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-accent">Best for · {f.bestFor}</p>
+                <p className="text-xs text-accent">Best for {f.bestFor.charAt(0).toLowerCase() + f.bestFor.slice(1)}</p>
                 <p className="mt-3 text-lg leading-relaxed text-paper/80">{f.pitch}</p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <button
@@ -269,7 +265,7 @@ export function Formats() {
                     onClick={want}
                     className={buttonClass("primary", "lg")}
                   >
-                    I want this →
+                    I want this
                   </button>
                   <button
                     type="button"

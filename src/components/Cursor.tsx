@@ -77,13 +77,13 @@ export function Cursor() {
         <span
           // One size (96px) that scales down for the smaller states, so changing state never re-lays out the page.
           // The border is drawn thicker when scaled down, so it always reads as about 1px.
-          className={`grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-solid font-mono text-[10px] uppercase tracking-widest transition-[scale,background-color,border-color,border-width,color] duration-300 ease-[var(--ease-out)] ${
-            label
-              ? "scale-100 border border-brand bg-brand text-on-brand"
-              : hover
-                ? "scale-[0.583] border-[1.7px] border-brand/70 bg-brand/10"
-                : "scale-[0.375] border-[2.7px] border-paper/40"
-          }`}
+          className={`grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-solid text-xs transition-[scale,background-color,border-color,border-width,color] duration-300 ease-[var(--ease-out)] ${
+ label
+ ? "scale-100 border border-brand bg-brand text-on-brand"
+ : hover
+ ? "scale-[0.583] border-[1.7px] border-brand/70 bg-brand/10"
+ : "scale-[0.375] border-[2.7px] border-paper/40"
+ }`}
         >
           {label}
         </span>

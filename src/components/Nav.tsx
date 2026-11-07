@@ -112,7 +112,7 @@ export function Nav() {
         <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3 pointer-coarse:min-h-11 pointer-coarse:min-w-11" onClick={() => setOpen(false)}>
           <Mark width={36} height={38} priority className="h-9 w-auto" />
           <span className="hidden font-display text-lg font-semibold tracking-tight sm:block">
-            leiluna<span className="ml-1.5 align-middle font-mono text-[10px] font-normal uppercase tracking-[0.3em] text-muted">studio</span>
+            leiluna<span className="ml-1.5 align-middle text-xs font-normal text-muted">studio</span>
           </span>
         </Link>
 
@@ -259,7 +259,7 @@ export function Nav() {
                   </span>
                 </button>
                 {site.available && (
-                  <span className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-paper/70">
+                  <span className="flex items-center gap-2.5 text-xs text-paper/70">
                     <span className="pulse relative size-1.5 rounded-full bg-brand" />
                     Open for new projects
                   </span>

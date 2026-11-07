@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
-  const title = `${project.title} · ${project.client}`;
+  const title = `${project.title}, ${project.client}`;
   return {
     title,
     description: project.summary,
@@ -63,7 +63,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
     {
       "@context": "https://schema.org",
       "@type": "CreativeWork",
-      name: `${project.title} · ${project.client}`,
+      name: `${project.title}, ${project.client}`,
       description: project.summary,
       url: `${site.url}/work/${project.slug}`,
       creator: { "@type": "Organization", name: site.name, url: site.url },
@@ -93,7 +93,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               <Link href="/#work" className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-paper pointer-coarse:min-h-11">
                 <ArrowLeft size={16} /> All work
               </Link>
-              <ShareButton title={`${project.title} · ${project.client}`} text={project.summary} />
+              <ShareButton title={`${project.title}, ${project.client}`} text={project.summary} />
             </div>
           </Reveal>
 
@@ -102,8 +102,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               {/* The title rises line by line on its own; the lines around it only fade in, so the words never move twice.
                   All of this runs in CSS, so it shows the moment the page arrives, not after the scripts load. */}
               <Reveal css y={0}>
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-                  <span className="text-accent">{project.client}</span> · {project.year} · {project.categories.join(" / ")}
+                <p className="text-xs text-muted">
+                  <span className="text-accent">{project.client}</span>, {project.year}
                 </p>
               </Reveal>
               <h1 className="mt-5 font-display text-[clamp(3.2rem,9vw,8rem)] font-bold leading-[0.88] tracking-[-0.045em]">
@@ -141,26 +141,25 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             <div className="space-y-16">
               <Reveal>
                 <section>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">The challenge</h2>
+                  <h2 className="text-xs text-accent">The challenge</h2>
                   <p className="serif mt-4 text-3xl leading-tight sm:text-5xl">{project.challenge}</p>
                 </section>
               </Reveal>
               <Reveal>
                 <section>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">The approach</h2>
-                  <ol className="mt-6 space-y-4">
-                    {project.approach.map((a, i) => (
-                      <li key={a} className="flex gap-5 rounded-2xl border border-line bg-ink-2 p-5">
-                        <span className="font-mono text-sm text-muted">0{i + 1}</span>
+                  <h2 className="text-xs text-accent">The approach</h2>
+                  <ul className="mt-6 space-y-6">
+                    {project.approach.map((a) => (
+                      <li key={a} className="border-t border-line pt-5">
                         <p className="text-lg leading-relaxed">{a}</p>
                       </li>
                     ))}
-                  </ol>
+                  </ul>
                 </section>
               </Reveal>
               <Reveal>
                 <section>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">The results</h2>
+                  <h2 className="text-xs text-accent">The results</h2>
                   <p className="serif mt-4 text-3xl leading-tight text-brand-2 light:text-accent sm:text-5xl">{project.results}</p>
                 </section>
               </Reveal>
@@ -169,7 +168,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             <Reveal>
               <div className="space-y-8 lg:sticky lg:top-28">
                 <div>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Deliverables</h2>
+                  <h2 className="text-xs text-muted">Deliverables</h2>
                   <ul className="mt-3 space-y-2">
                     {project.deliverables.map((d) => (
                       <li key={d} className="border-b border-line pb-2">{d}</li>
@@ -177,7 +176,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   </ul>
                 </div>
                 <div>
-                  <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Platforms</h2>
+                  <h2 className="text-xs text-muted">Platforms</h2>
                   <ul className="mt-3 flex flex-wrap gap-2">
                     {project.platforms.map((p) => (
                       <li key={p} className="rounded-full border border-line px-3 py-1.5 text-sm">{p}</li>
@@ -230,7 +229,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               className="group flex items-end justify-between gap-6 py-12"
             >
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">Next project · {next.client}</p>
+                <p className="text-xs text-muted">Next project: {next.client}</p>
                 <p className="mt-3 font-display text-5xl font-bold tracking-[-0.04em] transition-colors duration-300 group-hover:text-accent sm:text-8xl">
                   {next.title}
                 </p>
@@ -245,7 +244,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                 <span className="inline-flex items-center gap-2">
                   <ArrowLeft size={16} /> Previous: {prev.title}
                 </span>
-                <span className="font-mono text-xs uppercase tracking-[0.2em]">{prev.client}</span>
+                <span className="text-xs">{prev.client}</span>
               </Link>
             )}
           </nav>

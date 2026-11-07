@@ -13,7 +13,7 @@ import { Magnetic } from "./Magnetic";
 import { buttonClass, chipClass, SwapLabel } from "./ui";
 import { TrustLine } from "./TrustLine";
 
-const label = "font-mono text-[10px] uppercase tracking-[0.25em] text-muted";
+const label = "text-sm text-muted";
 const briefCopyLabels = [
   ["idle", "Copy the brief"],
   ["done", "Copied"],
@@ -385,7 +385,6 @@ function Brief({ onDone }: { onDone: () => void }) {
             </button>
             <button type="submit" onClick={spark} className={buttonClass("primary", "lg", "gap-3")}>
               Send by email
-              <ArrowRight aria-hidden className="size-4" />
             </button>
           </div>
         )}
@@ -474,7 +473,7 @@ export function Contact() {
         <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal
             inView
-            lines={["Let's build", <span key="b">your <span className="serif font-normal text-accent">brand.</span></span>]}
+            lines={["Let's build", <span key="b">your brand.</span>]}
           />
         </h2>
         <p className="mx-auto mt-8 max-w-md text-lg text-paper/60">

@@ -33,7 +33,7 @@ function Step({ i, total, progress }: { i: number; total: number; progress: Moti
         <Moon phase={phase} />
       </motion.div>
       <div className="md:mt-10">
-        <p className="font-mono text-xs text-accent">Phase 0{i + 1}</p>
+        <p className="text-sm font-medium text-accent">Phase {i + 1}</p>
         <motion.h3 style={{ opacity: titleOpacity }} className="mt-2 font-display text-3xl font-semibold tracking-tight">
           {p.title}
         </motion.h3>
@@ -63,7 +63,7 @@ export function Phases() {
         <Eyebrow id="process" />
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <h2 className="mt-6 max-w-4xl font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-            From new moon to <span className="serif font-normal text-accent">full orbit.</span>
+            From new moon to full orbit.
           </h2>
           <p className="max-w-sm text-lg text-paper/60">
             Five phases in order the first time, then Create, Launch and Grow on repeat every month. You always know what&apos;s being made, why, and what you get back.

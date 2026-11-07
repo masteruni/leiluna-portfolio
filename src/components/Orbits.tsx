@@ -43,13 +43,11 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
             y={labelY}
             textAnchor="middle"
             fill="var(--paper)"
-            fontSize="11"
-            fontFamily="var(--font-jetbrains), monospace"
-            letterSpacing="2"
+            fontSize="13"
+            fontFamily="var(--font-outfit), sans-serif"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.9 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            style={{ textTransform: "uppercase" }}
           >
             {label}
           </motion.text>
@@ -112,7 +110,7 @@ function MobileServices() {
   const reduce = useReducedMotion();
   return (
     <ol className="divide-y divide-line border-t border-line">
-      {services.map((s, i) => {
+      {services.map((s) => {
         const open = openId === s.id;
         return (
           <li key={s.id}>
@@ -123,7 +121,6 @@ function MobileServices() {
               onClick={() => setOpenId(open ? null : s.id)}
               className="flex w-full items-start gap-5 py-6 text-left"
             >
-              <span className="mt-2 font-mono text-xs text-accent">0{i + 1}</span>
               <span className="flex-1">
                 <span className="block font-display text-3xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-4xl">{s.title}</span>
                 <span className="mt-3 block text-sm text-paper/60 sm:text-base">{s.blurb}</span>
@@ -189,7 +186,7 @@ export function Orbits() {
           <div className="flex shrink-0 items-end justify-between">
             <Eyebrow id="services" as="h2" />
             <p className="font-display text-sm tabular-nums text-muted">
-              <span className="text-3xl font-semibold text-paper">0{active + 1}</span> / 0{services.length}
+              <span className="text-3xl font-semibold text-paper">{active + 1}</span> of {services.length}
             </p>
           </div>
 

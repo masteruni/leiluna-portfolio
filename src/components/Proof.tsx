@@ -11,7 +11,8 @@ import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { LogoLoop } from "./LogoLoop";
 
-const tile = "relative overflow-hidden rounded-[1.6rem] border border-line bg-ink-2/70 p-5 sm:p-8";
+// Each figure sits under a hairline rule, like a ledger, rather than in its own rounded card.
+const tile = "relative overflow-hidden border-t border-line pt-6 sm:pt-8";
 
 // Horizontal bars that grow to each reel's view count once the chart is on screen.
 function ReelChart() {
@@ -21,7 +22,7 @@ function ReelChart() {
   const max = Math.max(...topReels.map((r) => r.views));
   return (
     <div ref={ref} className={`${tile} col-span-2 lg:row-span-2`}>
-      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Top client reels · views</p>
+      <p className="text-xs text-muted">Views on our top client reels</p>
       <ol className="mt-8 space-y-5" aria-label="Views on the six top-performing client reels">
         {topReels.map((r, i) => (
           <li key={i}>
@@ -59,7 +60,7 @@ function Receipts() {
     <div className="mt-16">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <h3 className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
-          The receipts <span className="serif font-normal text-accent">behind the numbers.</span>
+          The receipts behind the numbers.
         </h3>
         <p className="max-w-sm text-sm text-paper/60">Unedited screenshots from our clients&apos; Instagram. Tap one to see it full size.</p>
       </div>
@@ -103,7 +104,7 @@ export function Proof() {
             <div>
               <Eyebrow id="proof" />
               <h2 id="proof-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-                <LineReveal inView lines={["Numbers that", <span key="t" className="serif font-normal text-accent">travel.</span>]} />
+                <LineReveal inView lines={["Numbers that", "travel."]} />
               </h2>
             </div>
             <p className="max-w-sm text-lg text-paper/60">
@@ -112,13 +113,13 @@ export function Proof() {
           </div>
 
           <div className="mt-14">
-            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Clients &amp; the industries we create for</p>
+            <p className="text-xs text-muted">Clients &amp; the industries we create for</p>
             <div className="mt-5">
               <LogoLoop />
             </div>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 sm:gap-x-10 lg:grid-cols-4">
             {/* lead stat */}
             <div className={`${tile} col-span-2 lg:row-span-2 flex flex-col justify-between`}>
               <div
@@ -126,7 +127,7 @@ export function Proof() {
                 className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full"
                 style={{ boxShadow: "inset 2.2rem -1.4rem 0 0 rgb(234 106 142 / 0.18)" }}
               />
-              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">Across our clients&apos; pinned reels</p>
+              <p className="text-xs text-muted">Across our clients&apos; pinned reels</p>
               <div className="mt-16">
                 <p className="font-display text-[clamp(5rem,13vw,11rem)] font-bold leading-[0.8] tracking-[-0.06em]">
                   <CountUp value={`${stats[0].value}${stats[0].suffix}`} />

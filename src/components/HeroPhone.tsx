@@ -128,8 +128,8 @@ export function HeroPhone({ play }: { play: boolean }) {
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               >
                 <p className="font-display text-base font-semibold leading-tight">{reel.style}</p>
-                <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-paper/60">
-                  {industriesOf(reel).length > 2 ? "Multi-industry" : industriesOf(reel).join(" · ")} · {reel.duration}
+                <p className="mt-1 text-[11px] text-paper/60">
+                  {industriesOf(reel).length > 2 ? "Multi-industry" : industriesOf(reel).join(", ")}, {reel.duration}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -169,13 +169,13 @@ export function HeroPhone({ play }: { play: boolean }) {
               <span className="ml-1.5 inline-block size-2 rounded-full bg-brand align-middle" />
             </p>
             <p className="mt-1 text-xs text-paper/75">{p.label}</p>
-            <p className="mt-1.5 font-mono text-[8.5px] uppercase tracking-[0.18em] text-muted">{p.source}</p>
+            <p className="mt-1.5 text-[8.5px] text-muted">{p.source}</p>
           </motion.div>
         </AnimatePresence>
       </div>
 
       {site.available && (
-        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
+        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 text-[11px] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
           <span className="pulse relative size-1.5 rounded-full bg-brand" />
           Open for projects
         </span>
