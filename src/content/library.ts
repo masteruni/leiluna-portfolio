@@ -144,6 +144,18 @@ export const pieces: Piece[] = [
     duration: "0:28",
   },
   {
+    id: "capcut-ad",
+    kind: "video",
+    format: "reel",
+    style: "App promo ad",
+    industry: "Tech & SaaS",
+    title: "CapCut: editing, made easy",
+    src: "/library/capcut-ad.mp4",
+    preview: "/library/capcut-ad-preview.mp4",
+    poster: "/library/capcut-ad-poster.webp",
+    duration: "0:15",
+  },
+  {
     id: "website-promo",
     kind: "video",
     format: "wide",

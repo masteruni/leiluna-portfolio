@@ -48,6 +48,16 @@ export const recent: RecentPiece[] = [
   {
     brand: "Kabogera Beauty",
     kind: "Video",
+    title: "Kabogera Beauty app: your everyday glow ritual",
+    src: "/recent/kabogera-glow-app-promo.mp4",
+    preview: "/recent/kabogera-glow-app-promo-preview.mp4",
+    poster: "/recent/kabogera-glow-app-promo-poster.webp",
+    vertical: true,
+    date: "Nov 2026",
+  },
+  {
+    brand: "Kabogera Beauty",
+    kind: "Video",
     title: "Perfect Bar Soap: the new look, in 3D",
     src: "/recent/kabogera-perfect-bar-3d-ad.mp4",
     preview: "/recent/kabogera-perfect-bar-3d-ad-preview.mp4",
