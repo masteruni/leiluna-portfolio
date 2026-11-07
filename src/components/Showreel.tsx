@@ -13,7 +13,7 @@ const protect = {
   disableRemotePlayback: true,
 } as const;
 
-// Full-screen player with sound, for a clip opened from a Recent work card or a receipt in Proof.
+// Full-screen player with sound, for a clip opened from a Recent work card.
 export function ShowreelPlayer() {
   const { open, clip: playing } = useShowreel();
   const clip = playing;

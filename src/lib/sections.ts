@@ -1,7 +1,7 @@
 import { recent } from "@/content/recent";
 import { testimonials } from "@/content/site";
 
-export type SectionId = "studio" | "month" | "services" | "work" | "recent" | "library" | "proof" | "process" | "founders" | "testimonials" | "faq" | "contact";
+export type SectionId = "studio" | "month" | "services" | "work" | "recent" | "library" | "process" | "founders" | "testimonials" | "faq" | "contact";
 
 // The homepage in order. Section numbers ("(03)") come from this one list, so adding or removing a section
 // never leaves the numbers out of step. Recent work and Testimonials only count once they have
@@ -13,7 +13,6 @@ export const sections: { id: SectionId; label: string }[] = [
   { id: "work", label: "Selected work" },
   ...(recent.length ? [{ id: "recent" as const, label: "Recent work" }] : []),
   { id: "library", label: "The library" },
-  { id: "proof", label: "Proof, not promises" },
   { id: "process", label: "How we work" },
   { id: "founders", label: "The founders" },
   ...(testimonials.length ? [{ id: "testimonials" as const, label: "Kind words" }] : []),

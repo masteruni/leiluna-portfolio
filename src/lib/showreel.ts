@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 
-// One shared full-screen player, so any card on the page can open its clip in it (Recent work, the receipts in Proof).
+// One shared full-screen player, so any card on the page can open its clip in it (Recent work).
 // `image` shows a still (a screenshot) instead of playing a video.
 export type Clip = { src: string; poster?: string; title: string; vertical?: boolean; image?: boolean };
 

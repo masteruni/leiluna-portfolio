@@ -6,10 +6,12 @@ import { motion, useReducedMotion, useScroll, useSpring, useTransform, type Moti
 import { useRef, ViewTransition } from "react";
 import { projects, type Project } from "@/content/projects";
 import { useAnchor } from "@/lib/anchor";
+import { openOrbitCheck } from "@/lib/orbitCheck";
+import { track } from "@/lib/track";
 import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
-import { ArrowCircle } from "./ui";
+import { ArrowCircle, buttonClass } from "./ui";
 
 const tiltSpring = { stiffness: 160, damping: 18, mass: 0.6 };
 
@@ -161,6 +163,20 @@ export function SelectedWork() {
           </span>
           <ArrowCircle size="lg" tone="outline" />
         </Link>
+
+        <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-lg text-paper/80">Want numbers like these? Start with a free look at your feed.</p>
+          <button
+            type="button"
+            onClick={() => {
+              track("Free audit", { from: "work" });
+              openOrbitCheck();
+            }}
+            className={buttonClass("outline", "lg")}
+          >
+            Get your free Orbit Check
+          </button>
+        </div>
       </div>
     </section>
   );

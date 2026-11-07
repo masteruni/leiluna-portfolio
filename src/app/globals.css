@@ -327,11 +327,6 @@ html[data-vt="theme"]::view-transition-new(root) {
   80% { background-position: 50px -15px; }
 }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
 @keyframes scrub {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
@@ -341,8 +336,6 @@ html[data-vt="theme"]::view-transition-new(root) {
   to { transform: rotate(360deg); }
 }
 
-.animate-marquee { animation: marquee 45s linear infinite; }
-
 /* The horizon under the hero (HorizonLoop.tsx): the night above fades in from the hero's colour in both themes, the page
    below rises into it like a moon, and the service words ride along the edge in moonlight. */
 .horizon-moon { fill: var(--ink); }
@@ -350,10 +343,6 @@ html[data-vt="theme"]::view-transition-new(root) {
 .horizon-solid { fill: #f6f2ef; }
 .horizon-outline { fill: transparent; stroke: rgb(246 242 239 / 0.55); stroke-width: 1px; }
 .horizon-star { fill: var(--brand); font-size: 0.45em; }
-/* Hovering a band pauses it, so a number or a word can actually be read */
-.marquee-pause:hover .animate-marquee { animation-play-state: paused; }
-/* …and on touch screens a tap holds it (Proof.tsx toggles .marquee-held) */
-.marquee-held .animate-marquee { animation-play-state: paused; }
 
 /* A streak of light crossing the hero every so often (two of them, offset, so it never looks like a loop) */
 .shooting-star {
@@ -408,7 +397,6 @@ html[data-vt="theme"]::view-transition-new(root) {
   .stars::before,
   .pulse::after,
   .shooting-star,
-  .animate-marquee,
   .animate-spin-badge,
   .animate-spin-slow { animation: none !important; }
   .shooting-star { display: none; }

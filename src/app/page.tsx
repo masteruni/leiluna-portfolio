@@ -9,7 +9,6 @@ import { Manifesto } from "@/components/Manifesto";
 import { Nav } from "@/components/Nav";
 import { Orbits } from "@/components/Orbits";
 import { Phases } from "@/components/Phases";
-import { Proof } from "@/components/Proof";
 import { RecentWork } from "@/components/RecentWork";
 import { SelectedWork } from "@/components/SelectedWork";
 import { MonthPlan } from "@/components/MonthPlan";
@@ -38,7 +37,6 @@ export default function Home() {
         <SelectedWork />
         <RecentWork />
         <Library />
-        <Proof />
         <Phases />
         <Founders />
         <Testimonials />

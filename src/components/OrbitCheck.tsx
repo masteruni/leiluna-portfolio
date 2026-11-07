@@ -13,7 +13,7 @@ const field =
   "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand focus-visible:outline-none! focus:shadow-[0_1px_0_0_var(--brand)] aria-invalid:border-brand";
 
 // The Free Orbit Check: an Instagram handle and an email, sent the same way as the project brief (it opens the
-// visitor's email app with the request written out, addressed to the studio). Opened from the hero and Proof.
+// visitor's email app with the request written out, addressed to the studio). Opened from the hero and after Selected work.
 export function OrbitCheck() {
   const open = useOrbitCheckOpen();
   return <AnimatePresence>{open && <Dialog />}</AnimatePresence>;
