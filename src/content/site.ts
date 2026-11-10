@@ -295,6 +295,9 @@ export const founders = [
       "Business development & finance",
     ],
     photo: "/team/juri-hq.webp" as string | null,
+    // Where the face is in the photo, for the small round avatar in the hero and contact section: x and y from 0
+    // (left / top) to 1 (right / bottom), and how far to zoom in. Adjust these when the photo changes.
+    face: { x: 0.4, y: 0.21, zoom: 2 },
     // Only the ones that matter for the studio's work.
     certifications: [
       { name: "Social Media Marketing", issuer: "HubSpot Academy", logo: "/certs/hubspot.webp" },
@@ -316,6 +319,7 @@ export const founders = [
       "SOPs, systems & operations",
     ],
     photo: "/team/sven.webp" as string | null,
+    face: { x: 0.47, y: 0.21, zoom: 2.1 },
     certifications: [] as { name: string; issuer: string; logo?: string }[],
   },
 ];

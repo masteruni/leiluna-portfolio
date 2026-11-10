@@ -36,10 +36,11 @@ export default function Home() {
         <MonthPlan />
         <Orbits />
         <SelectedWork />
+        {/* the people straight after the proof: "two founders, hands-on" is half the offer, so it comes early */}
+        <Founders />
         <RecentWork />
         <Library />
         <Phases />
-        <Founders />
         <Testimonials />
         <Faq />
         <Dusk tuck />

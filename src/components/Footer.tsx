@@ -13,7 +13,7 @@ const explore = [
   { href: "/#work", label: "Work" },
   { href: "/#library", label: "Library" },
   { href: "/#services", label: "Services" },
-  { href: "/#studio", label: "Studio" },
+  { href: "/#founders", label: "Studio" },
   { href: "/#contact", label: "Contact" },
 ];
 

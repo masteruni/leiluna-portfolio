@@ -5,7 +5,9 @@ import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring, u
 import { useState, type PointerEvent } from "react";
 import { cn } from "@/lib/utils";
 
-export type TooltipItem = { name: string; image: string };
+// `face` turns a full portrait into a round avatar without a second, cropped file: where the face sits in the
+// photo (x and y, from 0 to 1) and how far to zoom in (1 = the photo's full width fills the circle).
+export type TooltipItem = { name: string; image: string; face?: { x: number; y: number; zoom: number } };
 
 const lean = { stiffness: 120, damping: 14 };
 
@@ -26,6 +28,7 @@ export function AnimatedTooltip({
   size?: number;
   className?: string;
   itemClassName?: string;
+  /** Classes for the round frame of each avatar (its size, ring, backdrop). */
   imageClassName?: string;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -55,13 +58,22 @@ export function AnimatedTooltip({
           onPointerMove={follow}
           onPointerLeave={() => setHovered(null)}
         >
-          <Image
-            src={item.image}
-            alt=""
-            width={size}
-            height={size}
-            className={cn("block rounded-full object-cover transition-transform duration-300 ease-[var(--ease-out)] hover:scale-110", imageClassName)}
-          />
+          <span className={cn("relative block overflow-hidden rounded-full transition-transform duration-300 ease-[var(--ease-out)] hover:scale-110", imageClassName)}>
+            {item.face ? (
+              // The whole portrait, enlarged and slid so the face lands in the middle of the circle.
+              <Image
+                src={item.image}
+                alt=""
+                width={size * 4}
+                height={size * 6}
+                sizes={`${Math.round(size * item.face.zoom)}px`}
+                className="absolute left-1/2 top-1/2 h-auto max-w-none"
+                style={{ width: `${item.face.zoom * 100}%`, translate: `${-item.face.x * 100}% ${-item.face.y * 100}%` }}
+              />
+            ) : (
+              <Image src={item.image} alt="" width={size} height={size} className="block size-full object-cover" />
+            )}
+          </span>
           <AnimatePresence>
             {hovered === item.name && (
               <motion.span

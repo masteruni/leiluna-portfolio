@@ -12,6 +12,7 @@ import { openOrbitCheck } from "@/lib/orbitCheck";
 import { useReady } from "@/lib/ready";
 import { track } from "@/lib/track";
 import { CallLink } from "./CallLink";
+import { FoundersLine } from "./FoundersLine";
 import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
@@ -140,18 +141,19 @@ export function Hero() {
             </button>
           </div>
 
-          {/* the price and the brands we've worked with, right under the buttons that ask for a decision (one line
-              where there's room for both) */}
-          <div className="hero-in mt-4 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ "--d": "0.32s" } as CSSProperties}>
+          {/* the price, who does the work and the brands we've worked with, right under the buttons that ask for a
+              decision (they share lines where there's room) */}
+          <div className="hero-in mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 short:mt-3 short:gap-y-1.5" style={{ "--d": "0.32s" } as CSSProperties}>
             <p className="text-sm text-paper/70">
               Plans from {site.plansFrom}. <CallLink from="hero">Book a free 30-min call</CallLink>
             </p>
+            <FoundersLine />
             <TrustLine />
           </div>
 
           {/* proof bar */}
           <dl
-            className="hero-in mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8 lg:mt-[clamp(1.125rem,4svh,3rem)] lg:max-w-none lg:pt-[clamp(1rem,2.6svh,1.5rem)]"
+            className="hero-in mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8 lg:mt-[clamp(1.125rem,4svh,3rem)] short:lg:mt-[clamp(0.625rem,2svh,1rem)] lg:max-w-none lg:pt-[clamp(1rem,2.6svh,1.5rem)]"
             style={{ "--d": "0.4s" } as CSSProperties}
           >
             {stats.map((s) => {

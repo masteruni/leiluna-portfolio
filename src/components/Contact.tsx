@@ -16,6 +16,7 @@ import { Magnetic } from "./Magnetic";
 import { buttonClass, chipClass, SwapLabel } from "./ui";
 import { TrustLine } from "./TrustLine";
 import { CallLink } from "./CallLink";
+import { FoundersLine } from "./FoundersLine";
 
 const label = "text-sm text-muted";
 const briefCopyLabels = [
@@ -640,8 +641,11 @@ export function Contact() {
           Not sure where to start? <CallLink from="contact">Book a free 30-min call</CallLink> and we&apos;ll talk it through.
         </p>
 
-        {/* brands we've worked with, right where the decision is made */}
-        <TrustLine align="center" className="mt-8" />
+        {/* who you'd work with and the brands we've worked with, right where the decision is made */}
+        <div className="mt-8 flex flex-col items-center gap-x-8 gap-y-3 lg:flex-row lg:justify-center">
+          <FoundersLine align="center" />
+          <TrustLine align="center" />
+        </div>
 
         <div id="project-brief">
           <AnimatePresence>{brief && <Brief key={briefVersion} onDone={() => setBrief(false)} />}</AnimatePresence>

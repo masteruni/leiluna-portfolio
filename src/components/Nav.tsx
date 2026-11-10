@@ -22,7 +22,8 @@ const links = [
   { href: "/#work", id: "work", label: "Work" },
   { href: "/#library", id: "library", label: "Library" },
   { href: "/#services", id: "services", label: "Services" },
-  { href: "/#studio", id: "studio", label: "Studio" },
+  // "Studio" is the people: it goes to the founders (the studio statement sits right under the hero anyway)
+  { href: "/#founders", id: "founders", label: "Studio" },
   { href: "/#contact", id: "contact", label: "Contact" },
 ];
 const ids = links.map((l) => l.id);
