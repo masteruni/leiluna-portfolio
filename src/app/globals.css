@@ -135,7 +135,11 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
-  border-radius: 4px;
+}
+/* Square elements get a softly rounded focus ring. In the base layer, so an element's own radius (every pill is
+   `rounded-full`) wins: outside a layer this rule beat the utilities and squared the pills off while focused. */
+@layer base {
+  :focus-visible { border-radius: 4px; }
 }
 
 /* "Skip to content": invisible until a keyboard user tabs onto it */
@@ -287,12 +291,9 @@ html[data-vt="theme"]::view-transition-new(root) {
   ::view-transition-new(*) { animation: none !important; }
 }
 
-/* Phones: the small spaced-out labels (mono eyebrows, tags, counts) never drop below 11-12px, so they stay
-   readable on a small screen. Larger screens keep the original sizes. */
+/* Phones: the smallest labels (tile chips, the calendar's legend) step up from 11px to 12px, so they stay readable
+   on a small screen. Nothing on the site is set below 11px. */
 @media (max-width: 639px) {
-  .text-\[8\.5px\],
-  .text-\[9px\] { font-size: 11px; }
-  .text-\[10px\],
   .text-\[11px\] { font-size: 12px; }
 }
 

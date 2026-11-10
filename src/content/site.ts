@@ -134,7 +134,8 @@ export const services = [
 // Choices in the "Start a project" brief. Budget ranges are a starting point: change them to match your pricing.
 export const brief = {
   timelines: ["As soon as possible", "Within a month", "1–3 months", "Just exploring"],
-  budgets: ["Under $500 / mo", "$500–1,500 / mo", "$1,500–3,000 / mo", "$3,000+ / mo", "One-off project", "Not sure yet"],
+  // The lowest option matches `plansFrom` above: don't offer a budget below the lowest plan.
+  budgets: ["$500–1,500 / mo", "$1,500–3,000 / mo", "$3,000+ / mo", "One-off project", "Not sure yet"],
 };
 
 // "Pick a format": the formats we make, each shown with a real Library piece.

@@ -42,6 +42,10 @@ const tint: Record<Industry, [string, string]> = {
   "Finance & Trading": ["#6bd6a0", "#3d6bff"],
 };
 
+// The studio's own films (logo animation, brand intros) are tagged with every industry, because the style works
+// for any brand. They aren't work made for an industry, so they never count toward an industry's total.
+const forAnyIndustry = (p: Piece) => industriesOf(p).length === industries.length;
+
 const industryLabel = (p: Piece) => {
   const list = industriesOf(p);
   if (list.length === industries.length) return "Any industry";
@@ -231,7 +235,7 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
           <div className="absolute inset-0 transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.04]">
             <PieceArt p={p} playing={visible && !reduce} near={near} />
           </div>
-          <div className="pointer-events-none absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-x-1.5 gap-y-1 whitespace-nowrap text-[11px] sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px]">
+          <div className="pointer-events-none absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-x-1.5 gap-y-1 whitespace-nowrap text-[11px] sm:inset-x-3 sm:top-3 sm:gap-2">
             <span className="min-w-0 truncate rounded-full bg-ink/60 px-2 py-1 text-paper/80 backdrop-blur sm:px-2.5">{p.sample ? "Sample edit" : industryLabel(p)}</span>
             <span className="sr-only">, </span>
             <span className="ml-auto shrink-0 rounded-full bg-ink/60 px-2 py-1 text-accent backdrop-blur sm:px-2.5">
@@ -569,10 +573,13 @@ export function Library() {
   const lenis = useLenis();
   const cols = useColumns();
 
-  const list = useMemo(
-    () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || industriesOf(p).includes(industry))),
-    [kind, industry],
-  );
+  // An industry shows the pieces made for it first, then the ones whose style works for any brand.
+  const list = useMemo(() => {
+    const inFormat = pieces.filter((p) => kind === "all" || p.kind === kind);
+    if (industry === "All") return inFormat;
+    return [...inFormat.filter((p) => !forAnyIndustry(p) && industriesOf(p).includes(industry)), ...inFormat.filter(forAnyIndustry)];
+  }, [kind, industry]);
+  const forAny = industry === "All" ? 0 : list.filter(forAnyIndustry).length;
   const filterKey = `${kind}|${industry}`;
   const expanded = expandedFor === filterKey || list.length < FOLD_FROM;
   const shown = expanded ? list : list.slice(0, FIRST);
@@ -610,8 +617,11 @@ export function Library() {
     });
   };
 
-  // Only offer industries that have pieces in the current format.
-  const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).flatMap(industriesOf)), [kind]);
+  // Only offer industries that have pieces of their own in the current format.
+  const available = useMemo(
+    () => new Set(pieces.filter((p) => (kind === "all" || p.kind === kind) && !forAnyIndustry(p)).flatMap(industriesOf)),
+    [kind],
+  );
 
   useEffect(() => {
     if (open !== null) lenis?.stop();
@@ -624,11 +634,11 @@ export function Library() {
   }, []);
 
   const count = (k: "all" | Kind) => pieces.filter((p) => k === "all" || p.kind === k).length;
-  // How many pieces each industry chip would show, given the current format.
+  // How many pieces were made for each industry, given the current format (the number on its chip).
   const perIndustry = useMemo(() => {
     const m = new Map<string, number>();
     pieces
-      .filter((p) => kind === "all" || p.kind === kind)
+      .filter((p) => (kind === "all" || p.kind === kind) && !forAnyIndustry(p))
       .forEach((p) => industriesOf(p).forEach((ind) => m.set(ind, (m.get(ind) ?? 0) + 1)));
     return m;
   }, [kind]);
@@ -703,7 +713,11 @@ export function Library() {
 
         <p className="mt-6 text-[13px] text-muted" aria-live="polite">
           Showing {expanded ? list.length : `${shown.length} of ${list.length}`} {list.length === 1 ? "piece" : "pieces"}
-          {industry !== "All" && <span className="text-paper/60"> in {industry}</span>}
+          {industry !== "All" && (
+            <span className="text-paper/60">
+              {forAny ? `: ${list.length - forAny} in ${industry}, plus ${forAny} that ${forAny === 1 ? "works" : "work"} for any industry` : ` in ${industry}`}
+            </span>
+          )}
           <span className="hidden sm:inline">. Tap any piece to open it.</span>
         </p>
 

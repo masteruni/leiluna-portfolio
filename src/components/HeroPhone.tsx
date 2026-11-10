@@ -168,7 +168,7 @@ export function HeroPhone({ play }: { play: boolean }) {
               <span className="ml-1.5 inline-block size-2 rounded-full bg-brand align-middle" />
             </p>
             <p className="mt-1 text-xs text-paper/75">{p.label}</p>
-            <p className="mt-1.5 text-[8.5px] text-muted">{p.source}</p>
+            <p className="mt-1.5 text-[11px] text-muted">{p.source}</p>
           </motion.div>
         </AnimatePresence>
       </div>

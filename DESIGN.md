@@ -206,7 +206,7 @@ A near-monochrome night palette with one warm pink, and a day theme that swaps i
 - **Body** (400, 1.125rem, line-height 1.625): section intros and paragraphs, usually at 60 to 70% opacity of the text colour and held to about 65 characters by a max width.
 - **Label** (400, 0.75rem to 0.875rem): captions, tags and form labels.
 - **Meta** (400, 0.8125rem): the line of facts above or beside a headline, such as a client and year, or the hero's opening line.
-- **Micro** (400, 0.6875rem): chips laid over media tiles and the calendar's legend. Nothing smaller is used for real text, and on phones no label drops below 11 to 12px.
+- **Micro** (400, 0.6875rem): chips laid over media tiles and the calendar's legend. Nothing smaller is used for real text, and on phones these step up to 12px.
 - **Aside** (Instrument Serif italic, 400, 1.25rem for section markers; up to 3rem for a case study's challenge and results): section markers beside their moon, a founder's full name, the one phrase a headline leans on.
 
 ### Named Rules
@@ -287,6 +287,9 @@ Soft and tactile: fully rounded, quick to respond, and physical when pressed.
 
 ### Section marker
 Each section opens with a small moon beside its name in the italic serif. The moon's phase follows the section's place on the page, waxing from a thin crescent in the first section to full at the last, so the markers double as a sense of progress.
+
+### Questions (FAQ)
+Rows divided by hairlines, not cards. The open question is marked by a short pink bar at its left edge and a filled pink toggle; the closed ones sit at 70% with an outlined toggle. The bar is a state marker on a row. It is not a licence for coloured side stripes on cards.
 
 ### Arrow circle
 A circle holding an up-right arrow marks a whole card or row as a link. On hover it turns pink and rotates a quarter-turn.

@@ -301,7 +301,7 @@ export function RecentWork() {
         data-focus-group
         ref={rail}
         aria-label="Recent pieces"
-        className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain px-5 pb-4 [scrollbar-width:none] sm:px-10 lg:scroll-px-[max(2.5rem,calc((100vw-80rem)/2))] lg:px-[max(2.5rem,calc((100vw-80rem)/2))] [&::-webkit-scrollbar]:hidden"
+        className="mt-10 flex snap-x snap-mandatory scroll-px-5 gap-6 overflow-x-auto overscroll-x-contain px-5 pb-4 sm:scroll-px-10 [scrollbar-width:none] sm:px-10 lg:scroll-px-[max(2.5rem,calc((100vw-80rem)/2))] lg:px-[max(2.5rem,calc((100vw-80rem)/2))] [&::-webkit-scrollbar]:hidden"
       >
         {recent.map((p, i) => (
           <Card key={`${p.src}-${i}`} p={p} brands={brands} />
