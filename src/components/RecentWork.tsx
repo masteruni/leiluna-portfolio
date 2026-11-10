@@ -243,7 +243,8 @@ export function RecentWork() {
 
   return (
     <section id="recent" className="relative py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-5 sm:px-10">
+      {/* box-content: the 80rem is the content's width, padding outside it, so this lines up with the other sections */}
+      <div className="mx-auto box-content max-w-7xl px-5 sm:px-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <Eyebrow id="recent" />
@@ -255,7 +256,8 @@ export function RecentWork() {
         </div>
 
         <div className="mt-10 flex flex-col gap-5 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          {/* (a tighter gap on phones keeps the four logos on one line with the label) */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 sm:gap-x-6">
             <span className="flex items-center gap-2 text-[13px] text-paper/60">
               Brands we&rsquo;ve worked with
             </span>
@@ -298,7 +300,7 @@ export function RecentWork() {
       <ul
         ref={rail}
         aria-label="Recent pieces"
-        className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain px-5 pb-4 [scrollbar-width:none] sm:px-10 lg:scroll-px-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))] lg:px-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))] [&::-webkit-scrollbar]:hidden"
+        className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain px-5 pb-4 [scrollbar-width:none] sm:px-10 lg:scroll-px-[max(2.5rem,calc((100vw-80rem)/2))] lg:px-[max(2.5rem,calc((100vw-80rem)/2))] [&::-webkit-scrollbar]:hidden"
       >
         {recent.map((p, i) => (
           <Card key={`${p.src}-${i}`} p={p} brands={brands} />

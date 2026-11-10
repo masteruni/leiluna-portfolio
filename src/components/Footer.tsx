@@ -87,7 +87,7 @@ export function Footer() {
             </ul>
           </div>
         )}
-        <div className="space-y-2 md:text-right">
+        <div className="space-y-2 md:col-start-5 md:text-right">
           <p className={heading}>Say hello</p>
           <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "footer" })} className="block break-all text-paper/70 hover:text-accent pointer-coarse:flex pointer-coarse:min-h-11 pointer-coarse:items-center md:pointer-coarse:justify-end">
             {site.email}

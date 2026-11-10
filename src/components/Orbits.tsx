@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTime, useTransform } from "motion/react";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTime, useTransform, type Variants } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useRef, useState } from "react";
 import { services } from "@/content/site";
@@ -38,6 +38,19 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
       {active && (
         <>
           <motion.circle cx={x} cy={y} r={22} fill="var(--brand)" opacity={0.18} />
+          {/* a single ripple as this orbit lights up, so the eye lands on the planet that just took over (hidden in
+              CSS with reduced motion, rather than left out, so server and browser markup stay the same) */}
+          <motion.circle
+            cx={x}
+            cy={y}
+            fill="none"
+            stroke="var(--brand)"
+            strokeWidth={1}
+            className="motion-reduce:hidden"
+            initial={{ r: 10, opacity: 0.7 }}
+            animate={{ r: 46, opacity: 0 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          />
           <motion.text
             x={x}
             y={labelY}
@@ -74,16 +87,19 @@ function OrbitSystem({ active }: { active: number }) {
   );
 }
 
-function Detail({ i }: { i: number }) {
+// One service handing over to the next. `dir` is the way the page is being scrolled (1 down, -1 up): the new
+// service arrives from that side and the old one leaves ahead of it, quickly, so a fast scroll through all five
+// never queues up half-faded text. With reduced motion it's a plain crossfade.
+const handOver: Variants = {
+  enter: (dir: number) => ({ opacity: 0, y: 36 * dir }),
+  center: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  exit: (dir: number) => ({ opacity: 0, y: -20 * dir, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }),
+};
+
+function Detail({ i, dir }: { i: number; dir: number }) {
   const s = services[i];
   return (
-    <motion.div
-      key={s.id}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -40 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <motion.div key={s.id} custom={dir} variants={handOver} initial="enter" animate="center" exit="exit">
       <h3 className="font-display text-[clamp(2.4rem,4.6vw,4.8rem)] font-semibold leading-[0.95] tracking-[-0.04em] short:text-[clamp(1.9rem,6svh,3.4rem)]">{s.title}</h3>
       <p className="mt-6 max-w-lg text-lg leading-relaxed text-paper/70 short:mt-3 short:text-base">{s.blurb}</p>
       <ul className="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-3 text-sm text-paper/80 short:mt-4 short:gap-y-1 short:text-xs">
@@ -92,7 +108,7 @@ function Detail({ i }: { i: number }) {
             key={it}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.15 + k * 0.035 }}
+            transition={{ delay: 0.12 + k * 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="flex gap-3 border-t border-line pt-3 short:pt-1"
           >
             <span className="text-accent">✦</span>
@@ -164,10 +180,15 @@ function MobileServices() {
 
 export function Orbits() {
   const ref = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
+  // the service in view, and which way the visitor was scrolling when it took over (1 down, -1 up)
+  const [{ active, dir }, setView] = useState({ active: 0, dir: 1 });
+  const reduce = useReducedMotion();
   const lenis = useLenis();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  useMotionValueEvent(scrollYProgress, "change", (p) => setActive(Math.min(services.length - 1, Math.floor(p * services.length))));
+  useMotionValueEvent(scrollYProgress, "change", (p) => {
+    const next = Math.min(services.length - 1, Math.floor(p * services.length));
+    setView((v) => (v.active === next ? v : { active: next, dir: next > v.active ? 1 : -1 }));
+  });
   const bar = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   const jump = (i: number) => {
@@ -183,7 +204,8 @@ export function Orbits() {
       {/* Desktop: pinned orbital system */}
       <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 70 + 10}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
-          <div className="flex shrink-0 items-end justify-between">
+          {/* the head and the foot share the content's width, so the eyebrow lines up with every other section's */}
+          <div className="mx-auto flex w-full max-w-7xl shrink-0 items-end justify-between">
             <Eyebrow id="services" as="h2" />
             <p className="font-display text-sm tabular-nums text-muted">
               <span className="text-3xl font-semibold text-paper">{active + 1}</span> of {services.length}
@@ -192,8 +214,8 @@ export function Orbits() {
 
           <div className="mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-[1.1fr_1fr] items-center gap-16">
             <div className="relative min-h-[460px] short:min-h-0">
-              <AnimatePresence mode="wait">
-                <Detail key={active} i={active} />
+              <AnimatePresence mode="wait" custom={reduce ? 0 : dir} initial={false}>
+                <Detail key={active} i={active} dir={reduce ? 0 : dir} />
               </AnimatePresence>
             </div>
             {/* on short screens the orbit is sized by the height left over, not the column width */}
@@ -207,7 +229,7 @@ export function Orbits() {
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-8">
+          <div className="mx-auto flex w-full max-w-7xl shrink-0 items-center gap-8">
             <div className="flex gap-6">
               {services.map((s, i) => (
                 <button

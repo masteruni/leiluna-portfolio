@@ -22,7 +22,7 @@ Anything marked `[PLACEHOLDER]` is sample content.
 
 ## The experience, section by section
 
-1. **Intro loader:** the two crescents of the logo spin in and lock together (first visit per session).
+1. **Intro loader:** the two crescents of the logo spin in and lock together while the slogan "waxes" from hairline to full weight as the page loads; then the dark lifts like an eclipse ending (first visit per session).
 2. **Hero:** a real-time WebGL planet with the Leiluna pink atmosphere (`src/components/Planet.tsx`). The light follows the mouse and the eclipse shifts on scroll.
 3. **Manifesto:** the studio statement lights up word by word as you scroll.
 4. **Services ("five orbits"):** a pinned orbital system; each service lights up its own orbit.
@@ -30,9 +30,9 @@ Anything marked `[PLACEHOLDER]` is sample content.
 6. **The Library:** individual reels and graphics, filterable by format and industry. Videos autoplay silently when visible, and clicking opens a full-screen viewer with sound.
 7. **Numbers:** odometer-style rolling digits.
 8. **Process:** five phases of the moon, waxing as you scroll.
-9. **Founders:** Juri & Sven, framed by the logo's crescents.
+9. **Founders:** Juri & Sven, framed by the logo's crescents; beside the heading the mark's two crescents come together as you scroll.
 10. **Testimonials:** cinematic serif quotes; appears automatically once `testimonials` in `site.ts` has an entry.
-11. **Contact:** a planet rises over the horizon behind the call to action.
+11. **Contact:** the page ends in a curve (the mirror of the horizon under the hero, `src/components/Dusk.tsx`) and a planet rises over the horizon behind the call to action.
 
 Motion respects the "reduce motion" accessibility setting, and the custom cursor appears only on devices with a mouse.
 

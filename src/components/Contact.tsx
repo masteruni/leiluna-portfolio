@@ -451,9 +451,10 @@ export function Contact() {
   };
 
   return (
-    <section ref={ref} id="contact" className="night relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-32 pt-24 sm:px-10">
-      {/* rising planet */}
-      <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[62%] w-[170vw] -translate-x-1/2 md:top-[84%] md:w-[130vw]">
+    <section ref={ref} id="contact" className="night relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-36 pt-24 sm:px-10 md:pb-40 md:pt-20">
+      {/* rising planet: its rim is measured up from the foot of the section, so it stays under the last line of content
+          (the padding above keeps them apart) however tall the section gets, brief open or closed */}
+      <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[calc(100%-6.5rem)] w-[170vw] -translate-x-1/2 md:top-[calc(100%-7rem)] md:w-[150vw]">
         <motion.div
           style={{ opacity: glow }}
           className="aspect-square w-full rounded-full"
@@ -471,7 +472,7 @@ export function Contact() {
 
       <div className="relative mx-auto w-full max-w-7xl text-center">
         <Eyebrow id="contact" />
-        <h2 className="mt-8 font-display text-[clamp(3.6rem,12vw,12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
+        <h2 className="mt-8 font-display text-[clamp(3.6rem,min(12vw,16svh),12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
           <LineReveal
             inView
             lines={["Let's build", <span key="b">your brand.</span>]}

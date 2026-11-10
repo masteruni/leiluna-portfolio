@@ -6,8 +6,11 @@ import { ViewTransition } from "react";
 import { CountUp } from "@/components/CountUp";
 import { ArrowLeft } from "lucide-react";
 import { Contact } from "@/components/Contact";
+import { Dusk } from "@/components/Dusk";
 import { LineReveal } from "@/components/LineReveal";
 import { Footer } from "@/components/Footer";
+import { HoverPreview } from "@/components/HoverPreview";
+import { LitText } from "@/components/LitText";
 import { Nav } from "@/components/Nav";
 import { ProjectCover } from "@/components/ProjectCover";
 import { Reveal } from "@/components/Reveal";
@@ -142,18 +145,28 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               <Reveal>
                 <section>
                   <h2 className="text-xs text-accent">The challenge</h2>
-                  <p className="serif mt-4 text-3xl leading-tight sm:text-5xl">{project.challenge}</p>
+                  {/* lights up word by word as it's read, like the studio statement on the homepage */}
+                  <LitText text={project.challenge} className="serif mt-4 text-3xl leading-tight sm:text-5xl" />
                 </section>
               </Reveal>
               <Reveal>
                 <section>
                   <h2 className="text-xs text-accent">The approach</h2>
                   <ul className="mt-6 space-y-6">
-                    {project.approach.map((a) => (
-                      <li key={a} className="border-t border-line pt-5">
-                        <p className="text-lg leading-relaxed">{a}</p>
-                      </li>
-                    ))}
+                    {project.approach.map((a) => {
+                      // "Video editing: cut quote reels…" reads as a name and what was done: set them side by side,
+                      // so the five disciplines can be scanned down the left edge.
+                      const cut = a.indexOf(": ");
+                      const [name, done] = cut > 0 ? [a.slice(0, cut), a.slice(cut + 2)] : ["", a];
+                      return (
+                        <li key={a} className="grid gap-x-8 gap-y-1.5 border-t border-line pt-5 sm:grid-cols-[12rem_1fr]">
+                          {name && <h3 className="font-display text-lg font-medium leading-relaxed">{name}</h3>}
+                          <p className={`text-lg leading-relaxed ${name ? "text-paper/70" : "sm:col-span-2"}`}>
+                            {name ? done.charAt(0).toUpperCase() + done.slice(1) : done}
+                          </p>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </section>
               </Reveal>
@@ -223,6 +236,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           )}
 
           <nav aria-label="More case studies" className="mt-32 border-y border-line">
+            {/* with a mouse, the next project's cover trails the pointer over its title */}
+            <HoverPreview preview={<ProjectCover project={next} />}>
             <Link
               href={`/work/${next.slug}`}
               className="group flex items-end justify-between gap-6 py-12"
@@ -235,6 +250,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               </div>
               <ArrowCircle size="lg" tone="outline" />
             </Link>
+            </HoverPreview>
             {prev.slug !== next.slug && (
               <Link
                 href={`/work/${prev.slug}`}
@@ -249,6 +265,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           </nav>
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
         </article>
+        <Dusk />
         <Contact />
       </main>
       <Footer />

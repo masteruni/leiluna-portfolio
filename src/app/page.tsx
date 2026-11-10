@@ -1,4 +1,5 @@
 import { Contact } from "@/components/Contact";
+import { Dusk } from "@/components/Dusk";
 import { Faq } from "@/components/Faq";
 import { Footer } from "@/components/Footer";
 import { Founders } from "@/components/Founders";
@@ -41,6 +42,7 @@ export default function Home() {
         <Founders />
         <Testimonials />
         <Faq />
+        <Dusk tuck />
         <Contact />
       </main>
       <ShowreelPlayer />

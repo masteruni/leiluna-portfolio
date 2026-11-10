@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useMotionTemplate, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { useRef } from "react";
 import { founders } from "@/content/site";
+import { Crescent } from "./Crescent";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Tag } from "./ui";
@@ -130,18 +131,53 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
   );
 }
 
+// The heading, drawn: the mark's two crescents start apart, one for each founder, and come together as the section
+// scrolls up the screen; once they've locked, the orbit they share closes around them. Scrolling back parts them
+// again. Decorative, desktop only (it fills the empty half beside the heading). With reduced motion it's the
+// finished mark, switched in CSS rather than in the markup so the server's HTML and the browser's always match.
+function Joining() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.95", "center 0.45"] });
+  const p = useSpring(scrollYProgress, { stiffness: 140, damping: 26, mass: 0.5 });
+  const leftX = useTransform(p, [0, 0.8], [-64, 0], { clamp: true });
+  const leftTurn = useTransform(p, [0, 0.8], [-70, 0], { clamp: true });
+  const rightX = useTransform(p, [0, 0.8], [64, 0], { clamp: true });
+  const rightTurn = useTransform(p, [0, 0.8], [70, 0], { clamp: true });
+  const orbit = useTransform(p, [0.7, 1], [0, 1]);
+  const glow = useTransform(p, [0.7, 1], [0, 0.45]);
+  return (
+    <div ref={ref} aria-hidden className="relative hidden aspect-square w-64 shrink-0 lg:block xl:mr-16 xl:w-72">
+      <motion.div style={{ opacity: glow }} className="absolute inset-[22%] rounded-full bg-brand blur-3xl motion-reduce:opacity-45!" />
+      <svg viewBox="0 0 300 300" className="absolute inset-0 size-full -rotate-12 overflow-visible">
+        <ellipse cx="150" cy="150" rx="146" ry="54" fill="none" stroke="var(--line)" />
+        <motion.ellipse cx="150" cy="150" rx="146" ry="54" fill="none" stroke="var(--brand)" strokeWidth="1.5" className="motion-reduce:hidden" style={{ pathLength: orbit }} />
+        <ellipse cx="150" cy="150" rx="146" ry="54" fill="none" stroke="var(--brand)" strokeWidth="1.5" className="hidden motion-reduce:block" />
+      </svg>
+      <div className="absolute inset-[27%]">
+        <Crescent tone="paper" className="absolute inset-0 motion-reduce:transform-none!" style={{ x: leftX, rotate: leftTurn }} />
+        <Crescent tone="brand" className="absolute inset-0 motion-reduce:transform-none!" style={{ x: rightX, rotate: rightTurn }} />
+      </div>
+    </div>
+  );
+}
+
 export function Founders() {
   return (
     <section id="founders" className="px-5 py-16 sm:px-10 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <Eyebrow id="founders" />
-        <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-          <LineReveal inView lines={["Two crescents,", "one orbit."]} />
-        </h2>
-        <p className="mt-6 max-w-xl text-lg text-paper/60">
-          Like the two halves of our mark: one shapes the strategy and looks after every client, the other powers the
-          creative and the systems behind it. Together they make the full circle.
-        </p>
+        <div className="flex items-center justify-between gap-12">
+          <div>
+            <Eyebrow id="founders" />
+            <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
+              <LineReveal inView lines={["Two crescents,", "one orbit."]} />
+            </h2>
+            <p className="mt-6 max-w-xl text-lg text-paper/60">
+              Like the two halves of our mark: one shapes the strategy and looks after every client, the other powers the
+              creative and the systems behind it. Together they make the full circle.
+            </p>
+          </div>
+          <Joining />
+        </div>
         <div className="mt-12 grid gap-16 md:grid-cols-2 md:gap-16">
           {founders.map((f, i) => (
             <Founder key={f.name} f={f} i={i} />

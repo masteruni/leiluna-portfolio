@@ -55,7 +55,8 @@ export function HeroPhone({ play }: { play: boolean }) {
   const p = heroProof[proof];
 
   return (
-    <div className="relative mx-auto w-[min(62vw,17rem)] sm:w-[18rem] xl:w-[19.5rem]">
+    // On desktop the phone's size follows the screen's height (it's 19.5:9), so it never pushes the hero past the fold.
+    <div className="relative mx-auto w-[min(62vw,17rem)] sm:w-[18rem] lg:w-[clamp(13rem,calc((100svh-11rem)*0.4615),18rem)] xl:w-[clamp(13rem,calc((100svh-11rem)*0.4615),19.5rem)]">
       {/* glow behind the phone */}
       <div aria-hidden className="absolute -inset-10 rounded-full bg-brand/25 blur-3xl" />
 
@@ -173,7 +174,7 @@ export function HeroPhone({ play }: { play: boolean }) {
       </div>
 
       {site.available && (
-        <span className="absolute -right-4 top-20 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 text-[11px] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
+        <span className="absolute -right-4 top-28 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 text-[11px] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
           <span className="pulse relative size-1.5 rounded-full bg-brand" />
           Open for projects
         </span>

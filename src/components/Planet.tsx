@@ -1,7 +1,7 @@
 "use client";
 
 import type { MotionValue } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 
 const VERT = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
 
@@ -66,7 +66,17 @@ void main(){
   gl_FragColor = vec4(col, 1.);
 }`;
 
-export function Planet({ progress, className = "" }: { progress?: MotionValue<number>; className?: string }) {
+// `anchor` is the box the planet rises behind on portrait screens (the hero's phone), so its bright limb never
+// runs through the headline or the buttons, however tall the copy above it gets.
+export function Planet({
+  progress,
+  anchor,
+  className = "",
+}: {
+  progress?: MotionValue<number>;
+  anchor?: RefObject<HTMLElement | null>;
+  className?: string;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [fallback, setFallback] = useState(false);
@@ -111,12 +121,28 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
     let w = 0, h = 0, raf = 0, inView = true, tabVisible = true;
+    // the anchor's box inside the canvas: centre x, top and height, in CSS pixels
+    let box: { x: number; top: number; h: number } | null = null;
     const start = performance.now();
+
+    // Where the anchor sits in the layout (offsets, so its entrance and parallax transforms don't skew it).
+    const locate = () => {
+      const el = anchor?.current;
+      const root = canvas.offsetParent?.parentElement; // the section the canvas fills
+      if (!el || !root) return (box = null);
+      let x = 0, top = 0;
+      for (let n: HTMLElement | null = el; n && n !== root; n = n.offsetParent as HTMLElement | null) {
+        x += n.offsetLeft;
+        top += n.offsetTop;
+      }
+      box = { x: x + el.offsetWidth / 2, top, h: el.offsetHeight };
+    };
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       w = canvas.clientWidth;
       h = canvas.clientHeight;
+      locate();
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -130,12 +156,21 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
       mouse.y += (mouse.ty - mouse.y) * 0.05;
       const aspect = w / h;
       // Desktop: huge planet bleeding off the right edge, lit from the upper left.
-      // Portrait screens: the planet hangs above the headline, lit from below like an eclipse.
+      // Portrait screens: the planet rises behind the phone like a horizon, lit from above, and the copy keeps a
+      // clear night sky. (The shader works in units of the canvas height, hence the divisions by h.)
       const wide = aspect > 1;
-      const px = wide ? aspect / 2 - 0.02 + s * 0.12 : 0.22;
-      const py = wide ? -0.08 + s * 0.35 : 0.56 + s * 0.25;
-      const pr = wide ? 0.58 + s * 0.15 : 0.5;
-      gl.uniform1f(uLight, wide ? 2.45 : -2.35);
+      // (on a narrower desktop window it slides right, so the limb stays clear of the text column)
+      let px = aspect / 2 - 0.02 + Math.max(0, 0.63 - 0.4 * aspect) + s * 0.12;
+      let py = -0.08 + s * 0.35;
+      let pr = 0.58 + s * 0.15;
+      if (!wide) {
+        const r = Math.max(w * 0.8, 300); // px
+        const limb = box ? box.top + box.h * 0.3 : h * 0.62; // the top of the planet, a third of the way down the phone
+        px = ((box?.x ?? w / 2) - w / 2) / h;
+        py = (h / 2 - (limb + r)) / h + s * 0.05;
+        pr = r / h;
+      }
+      gl.uniform1f(uLight, wide ? 2.45 : 1.85);
       gl.uniform1f(uTime, reduce ? 0 : t);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
       gl.uniform3f(uPlanet, px, py, pr);
@@ -184,16 +219,22 @@ export function Planet({ progress, className = "" }: { progress?: MotionValue<nu
       document.removeEventListener("visibilitychange", onVisibility);
       canvas.removeEventListener("webglcontextlost", onLost);
       window.removeEventListener("pointermove", onMove);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // Hand the GPU context back once the canvas has really left the page. (In development React runs this effect
+      // twice on the same canvas; dropping the context straight away would leave the second run with a dead one,
+      // and the planet would fall back to the still CSS version.)
+      setTimeout(() => {
+        if (!canvas.isConnected) gl.getExtension("WEBGL_lose_context")?.loseContext();
+      }, 0);
     };
-  }, [progress]);
+  }, [progress, anchor]);
 
   if (fallback) {
     // A still version of the same scene: dark planet, pink rim light, soft atmosphere.
     return (
       <div aria-hidden className={`relative size-full overflow-hidden bg-ink ${className}`}>
         <div
-          className="absolute left-1/2 top-[-18%] aspect-square w-[150vmin] -translate-x-1/2 rounded-full bg-ink md:left-auto md:right-[-30vmin] md:top-[-30vmin] md:w-[130vmin] md:translate-x-0"
+          // phones: rising behind the phone at the foot of the hero; desktop: centred on the right edge (as in WebGL)
+          className="absolute left-1/2 top-[calc(100%-6rem-94vw)] aspect-square w-[160vw] -translate-x-1/2 rounded-full bg-ink sm:top-[calc(100%-33rem)] lg:left-full lg:top-[58%] lg:h-[116%] lg:w-auto lg:-translate-y-1/2"
           style={{
             boxShadow:
               "0 0 0 1px var(--brand-2), 0 0 60px 4px var(--brand), 0 0 220px 40px rgb(234 106 142 / 0.35), inset 0 40px 120px -40px rgb(234 106 142 / 0.5)",
