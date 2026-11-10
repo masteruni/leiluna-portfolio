@@ -223,7 +223,7 @@ function DayDetail({ day }: { day: Day }) {
           <h3 className="font-display text-2xl font-semibold leading-tight tracking-[-0.02em]">{title}</h3>
           <span
             className={`mt-1 shrink-0 rounded-full px-2.5 py-1 text-xs ${
-              label === "In production" ? "bg-brand/15 text-accent" : label === "Planned" ? "bg-paper/10 text-paper/70" : "bg-paper text-ink"
+              label === "In production" ? "bg-brand/15 text-accent light:bg-brand/20 light:text-paper" : label === "Planned" ? "bg-paper/10 text-paper/70" : "bg-paper text-ink"
             }`}
           >
             {label}
@@ -243,11 +243,11 @@ function DayDetail({ day }: { day: Day }) {
           {tasks.map((t) => (
             <li key={t.label} className="flex items-center gap-3 border-b border-line py-3 last:border-b-0">
               <StateIcon state={t.state} />
-              <span className={`min-w-0 flex-1 ${t.state === "done" ? "text-paper/55" : "text-paper"}`}>
+              <span className={`min-w-0 flex-1 ${t.state === "done" ? "text-muted" : "text-paper"}`}>
                 {t.label}
                 <span className="sr-only">, {stateText[t.state]}</span>
               </span>
-              <span className={`shrink-0 text-sm tabular-nums ${t.state === "now" ? "text-accent" : "text-paper/50"}`}>{dueLabel(t.due)}</span>
+              <span className={`shrink-0 text-sm tabular-nums ${t.state === "now" ? "text-accent" : "text-muted"}`}>{dueLabel(t.due)}</span>
             </li>
           ))}
         </ol>

@@ -46,7 +46,7 @@ export function ProjectCover({
           src={project.cover}
           alt={`${project.title} for ${project.client}`}
           fill
-          priority={priority}
+          preload={priority}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-105"
         />

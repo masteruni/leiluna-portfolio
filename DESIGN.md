@@ -51,6 +51,18 @@ typography:
     fontWeight: 400
     lineHeight: 1.35
     letterSpacing: "0em"
+  meta:
+    fontFamily: "Outfit, system-ui, sans-serif"
+    fontSize: "0.8125rem"
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: "0em"
+  micro:
+    fontFamily: "Outfit, system-ui, sans-serif"
+    fontSize: "0.6875rem"
+    fontWeight: 400
+    lineHeight: 1.35
+    letterSpacing: "0em"
   aside:
     fontFamily: "Instrument Serif, Georgia, serif"
     fontSize: "1.25rem"
@@ -175,6 +187,8 @@ A near-monochrome night palette with one warm pink, and a day theme that swaps i
 
 **The Two Pinks Rule.** Use `brand` for fills and glow, `accent` for words. Only `accent` changes between themes, which is what keeps pink text readable on day.
 
+**The Sixty Percent Rule.** Secondary text is Lunar Grey (`muted`) or the text colour at 60% opacity or more. Anything fainter fails contrast on the day theme, however fine it looks on night. Placeholders use Lunar Grey.
+
 **The Night Islands Rule.** The hero, the contact section, the footer and the 404 page stay night in the day theme. Anything laid over them (the header, a hover card) takes the night palette with them.
 
 ## Typography
@@ -190,7 +204,9 @@ A near-monochrome night palette with one warm pink, and a day theme that swaps i
 - **Headline** (700, 3rem, tracking -0.04em): names and titles inside a section, such as a founder's name.
 - **Title** (600, 1.875rem to 2.25rem, tracking -0.03em): dialog and form-step titles, and large numbers.
 - **Body** (400, 1.125rem, line-height 1.625): section intros and paragraphs, usually at 60 to 70% opacity of the text colour and held to about 65 characters by a max width.
-- **Label** (400, 0.75rem to 0.875rem): metadata, captions, tags and form labels. On phones no label drops below 11 to 12px.
+- **Label** (400, 0.75rem to 0.875rem): captions, tags and form labels.
+- **Meta** (400, 0.8125rem): the line of facts above or beside a headline, such as a client and year, or the hero's opening line.
+- **Micro** (400, 0.6875rem): chips laid over media tiles and the calendar's legend. Nothing smaller is used for real text, and on phones no label drops below 11 to 12px.
 - **Aside** (Instrument Serif italic, 400, 1.25rem for section markers; up to 3rem for a case study's challenge and results): section markers beside their moon, a founder's full name, the one phrase a headline leans on.
 
 ### Named Rules
@@ -261,7 +277,7 @@ Soft and tactile: fully rounded, quick to respond, and physical when pressed.
 - **Internal Padding:** 1.5rem on phones, 2.5rem from `sm`, up to 3.5rem on large case-study cards.
 
 ### Inputs / Fields
-- **Style:** no box. Transparent background, a hairline along the bottom, 0.75rem vertical padding, placeholder at 30% text colour. Labels sit above in small muted text.
+- **Style:** no box. Transparent background, a hairline along the bottom, 0.75rem vertical padding, placeholder in Lunar Grey. Labels sit above in small muted text.
 - **Focus:** the bottom line turns Eclipse Pink (in the Orbit Check dialog it also thickens by 1px).
 - **Error:** the line turns pink and a short message appears below in the accent colour, naming what to fix. Fields are 16px on touch screens so the page doesn't zoom.
 
@@ -286,6 +302,7 @@ One easing curve for everything that moves under CSS: `cubic-bezier(0.16, 1, 0.3
 ### Do:
 - **Do** keep pink rare: one primary action per section, states, and edges of glow.
 - **Do** use `brand` for fills and glow and `accent` for pink text, so the day theme keeps its contrast.
+- **Do** check every new piece of text in both themes; pink text on a pink tint passes on night and fails on day.
 - **Do** build every control as a full pill with the press dip (scale 0.97, 160ms).
 - **Do** set headlines in Outfit 700 on two hand-broken lines with tracking near -0.045em.
 - **Do** open a new section with the moon marker and its name in the italic serif.

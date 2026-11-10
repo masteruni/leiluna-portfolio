@@ -5,7 +5,7 @@ import Image from "next/image";
 export function Mark({ width, height, className = "", priority }: { width: number; height: number; className?: string; priority?: boolean }) {
   return (
     <>
-      <Image src="/brand/mark.png" alt="" width={width} height={height} priority={priority} className={`mark-night ${className}`} />
+      <Image src="/brand/mark.png" alt="" width={width} height={height} preload={priority} className={`mark-night ${className}`} />
       <Image src="/brand/mark-ink.png" alt="" width={width} height={height} className={`mark-day ${className}`} />
     </>
   );

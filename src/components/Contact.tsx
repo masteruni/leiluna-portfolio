@@ -25,7 +25,7 @@ const emailCopyLabels = [
 ] as const;
 
 const field =
-  "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand";
+  "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-muted focus:border-brand";
 
 // Single-choice chips; tapping the selected one again clears it. Picking one throws a little spark.
 function Choice({ legend, options, value, onChange }: { legend: string; options: string[]; value: string; onChange: (v: string) => void }) {

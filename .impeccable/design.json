@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-10T05:04:00Z",
+  "generatedAt": "2026-11-10T05:30:35Z",
   "title": "Design System: Leiluna Studio",
   "extensions": {
     "colorMeta": {
@@ -294,7 +294,15 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Metadata, captions, tags and form labels. Never below 11px on phones."
+        "purpose": "Captions, tags and form labels."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "The line of facts above or beside a headline: a client and year, the hero's opening line."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Chips over media tiles and the calendar's legend. Nothing smaller is used for real text."
       },
       "aside": {
         "displayName": "Aside",
@@ -478,6 +486,11 @@
         "section": "colors"
       },
       {
+        "name": "The Sixty Percent Rule",
+        "body": "Secondary text is Lunar Grey (`muted`) or the text colour at 60% opacity or more. Anything fainter fails contrast on the day theme, however fine it looks on night. Placeholders use Lunar Grey.",
+        "section": "colors"
+      },
+      {
         "name": "The Night Islands Rule",
         "body": "The hero, the contact section, the footer and the 404 page stay night in the day theme. Anything laid over them (the header, a hover card) takes the night palette with them.",
         "section": "colors"
@@ -511,6 +524,7 @@
     "dos": [
       "Do keep pink rare: one primary action per section, states, and edges of glow.",
       "Do use `brand` for fills and glow and `accent` for pink text, so the day theme keeps its contrast.",
+      "Do check every new piece of text in both themes; pink text on a pink tint passes on night and fails on day.",
       "Do build every control as a full pill with the press dip (scale 0.97, 160ms).",
       "Do set headlines in Outfit 700 on two hand-broken lines with tracking near -0.045em.",
       "Do open a new section with the moon marker and its name in the italic serif.",
