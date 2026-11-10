@@ -5,9 +5,12 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } fr
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
 import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBriefVersion } from "@/lib/brief";
+import { briefSubject, briefText, type BriefData } from "@/lib/message";
+import { newKey, send } from "@/lib/send";
 import { spark } from "@/lib/spark";
 import { track } from "@/lib/track";
-import { Eyebrow } from "./Eyebrow";
+import { isEmail, LIMITS } from "@/lib/validate";
+import { Eyebrow, MoonPhase } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { buttonClass, chipClass, SwapLabel } from "./ui";
@@ -19,6 +22,11 @@ const briefCopyLabels = [
   ["idle", "Copy the brief"],
   ["done", "Copied"],
 ] as const;
+const sendLabels = [
+  ["idle", "Send brief"],
+  ["sending", "Sending…"],
+  ["retry", "Try again"],
+] as const;
 const emailCopyLabels = [
   ["idle", "Copy email"],
   ["done", "Copied"],
@@ -26,6 +34,9 @@ const emailCopyLabels = [
 
 const field =
   "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-muted focus:border-brand";
+// A field's error eases in rather than popping (CSS @starting-style); reduced motion keeps only the fade.
+const fieldError =
+  "mt-2 text-sm text-accent transition-[opacity,translate] duration-200 ease-[var(--ease-out)] starting:-translate-y-1 starting:opacity-0 motion-reduce:starting:translate-y-0";
 
 // Single-choice chips; tapping the selected one again clears it. Picking one throws a little spark.
 function Choice({ legend, options, value, onChange }: { legend: string; options: string[]; value: string; onChange: (v: string) => void }) {
@@ -53,8 +64,12 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
 }
 
 const DRAFT_KEY = "leiluna:brief";
-type Draft = { name: string; brand: string; link: string; needs: string[]; timeline: string; budget: string; message: string };
-const empty: Draft = { name: "", brand: "", link: "", needs: [], timeline: "", budget: "", message: "" };
+type Draft = BriefData;
+const empty: Draft = { name: "", email: "", brand: "", link: "", needs: [], timeline: "", budget: "", message: "" };
+
+// Where a send stands. "mailed": the site has no email service set up, so the brief was handed to the visitor's
+// own email app instead (how the brief worked before the site could send).
+type Sending = "idle" | "sending" | "sent" | "failed" | "busy" | "mailed";
 
 // The brief is only mounted after a click, so it's safe to read storage during the first render.
 function loadDraft(): Draft {
@@ -74,16 +89,75 @@ function loadDraft(): Draft {
 const STEPS = ["About you", "What you need", "Timing & budget", "Your story"];
 const STEP_TITLES = ["Who are we talking to?", "What can we help with?", "When, and roughly how much?", "Tell us your story."];
 
-// A short project brief that turns into a ready-to-send email (no backend needed).
-// Whatever you type is kept for the session, so an accidental reload doesn't wipe it.
+// What the earlier steps came to, in four lines: read back before sending, and again once it has gone.
+function ReadBack({ d }: { d: Draft }) {
+  return (
+    <dl className="mt-6 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[auto_1fr]">
+      {[
+        ["From", [d.name, d.brand].filter(Boolean).join(", ") || "Not set"],
+        ["Needs", d.needs.join(", ") || "Not set"],
+        ["Timeline", d.timeline || "Not set"],
+        ["Budget", d.budget || "Not set"],
+      ].map(([k, v]) => (
+        <div key={k} className="contents">
+          <dt className="text-muted">{k}</dt>
+          {/* long names and brands wrap inside the card rather than running out of it */}
+          <dd className={`min-w-0 [overflow-wrap:anywhere] ${v === "Not set" ? "text-paper/50" : "text-paper/85"}`}>{v}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+// The brief has gone. This is the moment the whole page works toward, so it says so in the page's own terms: the
+// moon that waxes through the section markers is full. It confirms where the reply will go and what was sent, and
+// offers the one thing left to do. Focus moves to the heading so keyboard and screen-reader users hear it.
+function BriefSent({ d, onDone }: { d: Draft; onDone: () => void }) {
+  const title = useRef<HTMLHeadingElement>(null);
+  useEffect(() => title.current?.focus({ preventScroll: true }), []);
+  const first = d.name.trim().split(/\s+/)[0];
+  return (
+    <motion.div
+      role="status"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="mx-auto mt-14 w-full max-w-3xl overflow-hidden rounded-[2rem] border border-line bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
+    >
+      <MoonPhase lit={1} className="size-10 text-paper" />
+      <h3 ref={title} tabIndex={-1} className="mt-6 font-display text-3xl font-semibold tracking-[-0.03em] outline-none sm:text-4xl">
+        Brief sent.
+      </h3>
+      <p className="mt-3 max-w-xl text-lg leading-relaxed text-paper/70 [overflow-wrap:anywhere]">
+        Thanks, {first}. It&apos;s with the studio now, and we&apos;ll reply to <span className="text-paper">{d.email.trim()}</span> within {site.replyTime}.
+      </p>
+      <ReadBack d={d} />
+      <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-paper/70">
+          Want to talk sooner? <CallLink from="brief sent">Book a free 30-min call</CallLink>
+        </p>
+        <button type="button" onClick={onDone} className={buttonClass("solid", "lg")}>
+          Close
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+// A short project brief, sent to the studio by the site itself (src/app/api/send/route.ts). The visitor is told
+// plainly when it has gone, and when it hasn't: a failed send keeps everything they typed and offers another try,
+// the text to copy, and their own email app. Whatever is typed is kept for the session, so an accidental reload
+// doesn't wipe it.
 function Brief({ onDone }: { onDone: () => void }) {
   const id = useId();
   const [draft, setDraft] = useState<Draft>(loadDraft);
-  const { name, brand, link, needs, timeline, budget, message } = draft;
+  const { name, email, brand, link, needs, timeline, budget, message } = draft;
   const set = <K extends keyof Draft>(key: K) => (value: Draft[K]) => setDraft((d) => ({ ...d, [key]: value }));
-  const setName = set("name"), setBrand = set("brand"), setLink = set("link"), setTimeline = set("timeline"), setBudget = set("budget"), setMessage = set("message");
+  const setName = set("name"), setEmail = set("email"), setBrand = set("brand"), setLink = set("link"), setTimeline = set("timeline"), setBudget = set("budget"), setMessage = set("message");
   const [copied, setCopied] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState<Sending>("idle");
+  const website = useRef<HTMLInputElement>(null); // the field only bots fill in (see send.ts)
 
   useEffect(() => {
     try {
@@ -92,27 +166,10 @@ function Brief({ onDone }: { onDone: () => void }) {
   }, [draft]);
   useEffect(clearBriefPrefill, []);
 
-  const body = useMemo(
-    () =>
-      [
-        `Hi Leiluna,`,
-        ``,
-        `I'm ${name || "…"}${brand ? ` from ${brand}` : ""}.`,
-        link ? `You can find us at ${link}.` : ``,
-        ``,
-        needs.length ? `What we need: ${needs.join(", ")}` : ``,
-        timeline ? `Timeline: ${timeline}` : ``,
-        budget ? `Budget: ${budget}` : ``,
-        ``,
-        message,
-        ``,
-        `Thanks!`,
-      ]
-        .filter((l, i, all) => !(l === "" && all[i - 1] === ""))
-        .join("\n"),
-    [name, brand, link, needs, timeline, budget, message],
-  );
-  const mailto = `mailto:${site.email}?subject=${encodeURIComponent(`New project${brand ? `: ${brand}` : ""}`)}&body=${encodeURIComponent(body)}`;
+  const body = useMemo(() => briefText(draft), [draft]);
+  // Names this exact brief: sending it again unchanged (a retry) can never deliver it twice.
+  const key = useMemo(() => (body ? newKey() : ""), [body]);
+  const mailto = `mailto:${site.email}?subject=${encodeURIComponent(briefSubject(draft))}&body=${encodeURIComponent(body)}`;
 
   const toggle = (n: string) =>
     setDraft((d) => ({ ...d, needs: d.needs.includes(n) ? d.needs.filter((x) => x !== n) : [...d.needs, n] }));
@@ -126,22 +183,27 @@ function Brief({ onDone }: { onDone: () => void }) {
     } catch {}
   };
 
-  // Four short steps instead of one long form. The name is the only required field, checked when leaving step 1
-  // and again on send; every other step can be skipped.
+  // Four short steps instead of one long form. Only a name and an email are required (the email is how the studio
+  // replies), checked when leaving step 1 and again on send; every other step can be skipped.
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState(1);
   const [nameError, setNameError] = useState(false);
+  const [emailError, setEmailError] = useState<"" | "missing" | "invalid">("");
+  // Marks what's missing on step 1, puts the cursor in the first field that needs fixing, and says if all is well.
+  const aboutYouOk = () => {
+    const noName = !name.trim();
+    const badEmail = !email.trim() ? "missing" : !isEmail(email) ? "invalid" : "";
+    setNameError(noName);
+    setEmailError(badEmail);
+    if (noName || badEmail) requestAnimationFrame(() => document.getElementById(noName ? `${id}-name` : `${id}-email`)?.focus());
+    return !noName && !badEmail;
+  };
   const moved = useRef(false); // only move focus after the visitor changes step, not when the brief first opens
   const reduce = useReducedMotion();
   const last = STEPS.length - 1;
 
   const goTo = (n: number) => {
-    if (n > 0 && step === 0 && !name.trim()) {
-      setNameError(true);
-      document.getElementById(`${id}-name`)?.focus();
-      return;
-    }
-    setNameError(false);
+    if (n > 0 && step === 0 && !aboutYouOk()) return;
     setDir(n > step ? 1 : -1);
     moved.current = true;
     setStep(n);
@@ -156,6 +218,8 @@ function Brief({ onDone }: { onDone: () => void }) {
     }
   };
 
+  if (sending === "sent") return <BriefSent d={draft} onDone={onDone} />;
+
   return (
     <motion.form
       initial={{ opacity: 0, y: 24 }}
@@ -166,15 +230,33 @@ function Brief({ onDone }: { onDone: () => void }) {
         e.preventDefault();
         // Enter in a field moves on to the next step; only the last step sends.
         if (step < last) return goTo(step + 1);
-        if (!name.trim()) {
-          setNameError(true);
+        if (sending === "sending") return;
+        if (!name.trim() || !isEmail(email)) {
           setDir(-1);
-          moved.current = true;
-          return setStep(0);
+          setStep(0);
+          aboutYouOk();
+          return;
         }
-        track("Brief sent", { services: needs.length, timeline: timeline || "not set", budget: budget || "not set" });
-        setSent(true);
-        window.location.assign(mailto);
+        setSending("sending");
+        send({ kind: "brief", ...draft }, key, website.current?.value).then((result) => {
+          if (result === "sent" || result === "unavailable") {
+            track("Brief sent", { services: needs.length, timeline: timeline || "not set", budget: budget || "not set" });
+          } else {
+            track("Send failed", { form: "brief", why: result });
+          }
+          if (result === "sent") {
+            // It has gone, so the saved draft goes too: opening the brief again starts a new one.
+            try {
+              sessionStorage.removeItem(DRAFT_KEY);
+            } catch {}
+            setSending("sent");
+          } else if (result === "unavailable") {
+            setSending("mailed");
+            window.location.assign(mailto);
+          } else {
+            setSending(result);
+          }
+        });
       }}
       className="mx-auto mt-14 w-full max-w-3xl overflow-hidden rounded-[2rem] border border-line bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
       aria-label="Project brief"
@@ -232,6 +314,7 @@ function Brief({ onDone }: { onDone: () => void }) {
                         if (e.target.value.trim()) setNameError(false);
                       }}
                       autoComplete="name"
+                      maxLength={LIMITS.name}
                       aria-required="true"
                       aria-invalid={nameError || undefined}
                       aria-describedby={nameError ? `${id}-name-error` : undefined}
@@ -239,37 +322,72 @@ function Brief({ onDone }: { onDone: () => void }) {
                       placeholder="Alex"
                     />
                     {nameError && (
-                      <p
-                        id={`${id}-name-error`}
-                        role="alert"
-                        // eases in rather than popping (CSS @starting-style); reduced motion keeps only the fade
-                        className="mt-2 text-sm text-accent transition-[opacity,translate] duration-200 ease-[var(--ease-out)] starting:-translate-y-1 starting:opacity-0 motion-reduce:starting:translate-y-0"
-                      >
-                        Add your name so we know who to reply to.
+                      <p id={`${id}-name-error`} role="alert" className={fieldError}>
+                        Add your name so we know who we&apos;re talking to.
                       </p>
                     )}
                   </div>
                   <div>
+                    <label htmlFor={`${id}-email`} className={label}>
+                      Your email
+                    </label>
+                    <input
+                      id={`${id}-email`}
+                      type="email"
+                      inputMode="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (emailError) setEmailError("");
+                      }}
+                      autoComplete="email"
+                      autoCapitalize="none"
+                      spellCheck={false}
+                      maxLength={LIMITS.email}
+                      aria-required="true"
+                      aria-invalid={!!emailError || undefined}
+                      aria-describedby={emailError ? `${id}-email-error` : undefined}
+                      className={`${field} ${emailError ? "border-brand" : ""}`}
+                      placeholder="you@yourbrand.com"
+                    />
+                    {emailError && (
+                      <p id={`${id}-email-error`} role="alert" className={fieldError}>
+                        {emailError === "missing" ? "Add your email so we can reply to you." : "Check your email address, it looks incomplete."}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="grid gap-8 sm:grid-cols-2">
+                  <div>
                     <label htmlFor={`${id}-brand`} className={label}>
                       Brand or company
                     </label>
-                    <input id={`${id}-brand`} value={brand} onChange={(e) => setBrand(e.target.value)} autoComplete="organization" className={field} placeholder="Your brand" />
+                    <input
+                      id={`${id}-brand`}
+                      value={brand}
+                      onChange={(e) => setBrand(e.target.value)}
+                      autoComplete="organization"
+                      maxLength={LIMITS.brand}
+                      className={field}
+                      placeholder="Your brand"
+                    />
                   </div>
-                </div>
-                <div>
-                  <label htmlFor={`${id}-link`} className={label}>
-                    Where can we see your brand? <span className="normal-case tracking-normal text-paper/50">(optional)</span>
-                  </label>
-                  <input
-                    id={`${id}-link`}
-                    value={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    autoComplete="url"
-                    inputMode="url"
-                    autoCapitalize="none"
-                    className={field}
-                    placeholder="@yourbrand or yourbrand.com"
-                  />
+                  <div>
+                    <label htmlFor={`${id}-link`} className={label}>
+                      Where can we see it? <span className="text-paper/50">(optional)</span>
+                    </label>
+                    <input
+                      id={`${id}-link`}
+                      value={link}
+                      onChange={(e) => setLink(e.target.value)}
+                      autoComplete="url"
+                      inputMode="url"
+                      autoCapitalize="none"
+                      maxLength={LIMITS.link}
+                      className={field}
+                      placeholder="@yourbrand or yourbrand.com"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -316,28 +434,32 @@ function Brief({ onDone }: { onDone: () => void }) {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
+                  maxLength={LIMITS.message}
                   className={`${field} resize-y`}
                   placeholder="Where you are now, where you want to be, and anything we should know."
                 />
                 {/* a quick read-back of the earlier steps before sending */}
-                <dl className="mt-6 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[auto_1fr]">
-                  {[
-                    ["From", [name, brand].filter(Boolean).join(", ") || "Not set"],
-                    ["Needs", needs.join(", ") || "Not set"],
-                    ["Timeline", timeline || "Not set"],
-                    ["Budget", budget || "Not set"],
-                  ].map(([k, v]) => (
-                    <div key={k} className="contents">
-                      <dt className="text-muted">{k}</dt>
-                      <dd className={v === "Not set" ? "text-paper/50" : "text-paper/85"}>{v}</dd>
-                    </div>
-                  ))}
-                </dl>
+                <ReadBack d={draft} />
               </div>
             )}
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* A send that didn't go through: said plainly, next to the buttons that fix it. Nothing typed is lost. */}
+      {step === last && (sending === "failed" || sending === "busy") && (
+        <div role="alert" className="mt-8 text-sm leading-relaxed transition-opacity duration-200 ease-[var(--ease-out)] starting:opacity-0">
+          <p className="font-medium text-accent">{sending === "busy" ? "That's a lot of tries in a row." : "We couldn't send your brief."}</p>
+          <p className="mt-1 max-w-xl text-paper/70">
+            {sending === "busy" ? "Give it a few minutes, then try again. " : "Nothing is lost: everything you wrote is still here. Try again, "}
+            {sending === "busy" ? "Or copy" : "or copy"} the brief and send it to {site.email} yourself, or{" "}
+            <a href={mailto} className="text-paper underline decoration-paper/30 underline-offset-4 hover:text-accent hover:decoration-accent">
+              open it in your email app
+            </a>
+            .
+          </p>
+        </div>
+      )}
 
       <div className="mt-10 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex gap-6 text-sm text-muted">
@@ -350,8 +472,9 @@ function Brief({ onDone }: { onDone: () => void }) {
             type="button"
             onClick={() => {
               setDraft(empty);
-              setSent(false);
+              setSending("idle");
               setNameError(false);
+              setEmailError("");
               setDir(-1);
               setStep(0);
             }}
@@ -384,19 +507,26 @@ function Brief({ onDone }: { onDone: () => void }) {
             >
               <SwapLabel current={copied ? "done" : "idle"} labels={briefCopyLabels} />
             </button>
-            <button type="submit" onClick={spark} className={buttonClass("primary", "lg", "gap-3")}>
-              Send by email
+            <button
+              type="submit"
+              onClick={(e) => sending !== "sending" && spark(e)}
+              aria-disabled={sending === "sending" || undefined}
+              className={buttonClass("primary", "lg", `gap-3 ${sending === "sending" ? "cursor-progress opacity-70" : ""}`)}
+            >
+              <SwapLabel current={sending === "sending" ? "sending" : sending === "failed" || sending === "busy" ? "retry" : "idle"} labels={sendLabels} />
             </button>
           </div>
         )}
       </div>
-      {step === last && (
+      {step === last && sending !== "failed" && sending !== "busy" && (
         <p className="mt-6 text-xs text-muted" aria-live="polite">
-          {sent
+          {sending === "mailed"
             ? `Your mail app should have opened with the brief filled in. If it didn't, copy the brief and send it to ${site.email}. We reply within ${site.replyTime}.`
-            : `Opens in your mail app, or copy the text and send it from anywhere. We reply within ${site.replyTime}.`}
+            : `Goes straight to the studio. We reply within ${site.replyTime}.`}
         </p>
       )}
+      {/* never shown to people; a bot that fills it in gives itself away (see src/lib/send.ts) */}
+      <input ref={website} type="text" name="lu_extra" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
     </motion.form>
   );
 }

@@ -38,13 +38,14 @@ AI workflows and having every discipline under one roof are true of the studio a
 - Plans start at $500/month; the exact plan is shaped on the free call.
 - A project runs in five phases: Discover, Plan, Create, Launch, Grow. Create, Launch and Grow repeat monthly.
 - The studio replies to a brief within one business day.
-- Ways in, all on the site: the project brief (four short steps), the free 30-minute call (Calendly), the Free Orbit Check (an Instagram handle and an email, for three fixes in 48 hours), and email.
+- Ways in, all on the site: the project brief (four short steps), the free 30-minute call (Calendly), the Free Orbit Check (an Instagram handle and an email, for three fixes in 48 hours), and email. Briefs and Orbit Check requests arrive as emails in the studio's inbox, with the visitor's address as the reply-to.
 - The site's content is edited by the studio itself in `src/content/` (`site.ts`, `projects.ts`, `library.ts`, `recent.ts`, `month.ts`), without design knowledge. The README says where each thing lives.
 
 ## Capabilities and Constraints
 
 - Next.js on Vercel. Pushes to `main` update the live site at leilunastudio.com; other branches get preview URLs.
-- No backend. The brief and the Orbit Check open the visitor's email app with the request written out, and offer a copy button if it doesn't open.
+- The brief and the Orbit Check are sent to the studio's inbox by the site itself, through Resend (one small server route, `src/app/api/send/route.ts`; there is no database). The visitor gets a real confirmation, and a failed send keeps what they typed. If no Resend key is set, both fall back to opening the visitor's own email app with the request written out.
+- The brief asks for a name and an email (how the studio replies); everything else in it is optional.
 - Pages: the homepage and one case-study page per project (`/work/<slug>`).
 - Light and dark themes. The hero, the contact section, the footer and the 404 page stay dark in both.
 - Sections that depend on content hide themselves until that content exists (Testimonials, Recent work).

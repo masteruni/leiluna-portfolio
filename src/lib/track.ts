@@ -10,6 +10,8 @@ type Events = {
   "Brief step": { step: string };
   "Free audit": { from: string };
   "Orbit Check sent": Record<string, never>;
+  // the visitor pressed send and saw it fail (they can try again, copy the text or use their own email)
+  "Send failed": { form: "brief" | "orbit check"; why: "busy" | "failed" };
   "Call booked": { from: string };
   "Email copied": { from: string };
   "Email clicked": { from: string };

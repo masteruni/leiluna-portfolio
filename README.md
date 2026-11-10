@@ -61,6 +61,26 @@ npm install
 npm run dev   # http://localhost:3000
 ```
 
+## Sending the forms
+
+The project brief and the Free Orbit Check are sent to the studio's inbox by the site, through [Resend](https://resend.com). Each one arrives as a plain email with the visitor's address as the reply-to, so answering the email answers them.
+
+Set up once:
+
+1. Create a Resend account **with the address the messages should arrive at** (the one in `src/content/site.ts`).
+2. Create an API key in Resend (API Keys → Create).
+3. In Vercel: Project → Settings → Environment Variables, add `RESEND_API_KEY` with that key, then redeploy.
+
+That is enough to start receiving. To send from your own domain (better for staying out of spam), verify the domain in Resend (Domains → Add, then add the DNS records it shows) and set `RESEND_FROM`, for example `Leiluna Studio <hello@leilunastudio.com>`. To deliver somewhere other than the site's email, set `BRIEF_TO`; this needs a verified domain. All three are listed in `.env.example`.
+
+What visitors see:
+
+- **Sent:** a confirmation saying where the reply will go.
+- **Not sent** (offline, the email service down, a wrong key): a plain message beside the button. Everything they typed stays, and they can try again, copy the text, or open it in their own email app.
+- **No key set:** the forms open the visitor's own email app with the message written out, as they did before the site could send. Nothing breaks if the key is missing.
+
+If messages stop arriving, the reason is in Vercel → Logs, on lines starting `[send]`.
+
 ## Deploy
 
 Pushing to GitHub triggers a Vercel deploy automatically:

@@ -27,14 +27,5 @@ export function useOrbitCheckOpen() {
   );
 }
 
-// Turns "@brand", "brand" or a profile link (instagram.com/brand/?hl=en) into "brand". Returns null when what's
-// left isn't a possible Instagram username (letters, numbers, dots and underscores, up to 30).
-export function normalizeHandle(input: string): string | null {
-  let s = input.trim();
-  const url = s.match(/instagram\.com\/([^/?#\s]+)/i);
-  if (url) s = url[1];
-  s = s.replace(/^@+/, "").replace(/\/+$/, "");
-  return /^[A-Za-z0-9._]{1,30}$/.test(s) ? s.toLowerCase() : null;
-}
-
-export const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim());
+// The handle and email checks live in ./validate (shared with the server); re-exported here for the form.
+export { isEmail, normalizeHandle } from "./validate";
