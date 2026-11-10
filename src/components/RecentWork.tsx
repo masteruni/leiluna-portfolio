@@ -134,7 +134,7 @@ function Card({ p, brands }: { p: RecentPiece; brands: Brand[] }) {
     </>
   );
   return (
-    <li className="w-[min(75vw,20rem)] shrink-0 snap-start lg:w-[22rem]">
+    <li data-focus className="w-[min(75vw,20rem)] shrink-0 snap-start lg:w-[22rem]">
       {p.link ? (
         <a href={p.link} target="_blank" rel="noopener noreferrer" className="group block">
           {body}
@@ -298,6 +298,7 @@ export function RecentWork() {
 
       {/* The row runs to the screen's edge but its first card lines up with the heading above. */}
       <ul
+        data-focus-group
         ref={rail}
         aria-label="Recent pieces"
         className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain px-5 pb-4 [scrollbar-width:none] sm:px-10 lg:scroll-px-[max(2.5rem,calc((100vw-80rem)/2))] lg:px-[max(2.5rem,calc((100vw-80rem)/2))] [&::-webkit-scrollbar]:hidden"

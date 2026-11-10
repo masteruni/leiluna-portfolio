@@ -214,6 +214,7 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
           type="button"
           onClick={(e) => onOpen(e.currentTarget)}
           data-tile
+          data-focus
           className={`group relative block w-full overflow-hidden rounded-2xl bg-ink-2 text-left ${aspect[p.format]}`}
         >
           {/* The tile's own words name it ("Play Client interview edit, Multi-industry, 1:05"), so what a screen
@@ -742,7 +743,7 @@ export function Library() {
           </div>
         )}
 
-        <div ref={grid} className="@container relative mt-6">
+        <div ref={grid} data-focus-group className="@container relative mt-6">
           {/* holds the height: container units only resolve inside the container, not on it */}
           <div aria-hidden className="motion-safe:transition-[height] motion-safe:duration-[350ms] motion-safe:ease-[var(--ease-out)]" style={{ height: masonry.height }} />
           <AnimatePresence>

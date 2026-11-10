@@ -51,6 +51,8 @@ They land in `src/components/ui/` (lower-case file names, next to the site's own
 - `lens.tsx`: a magnifying glass over the screenshots in a case study's gallery, so their small numbers can be read.
 - `animated-tooltip.tsx`: each logo in the "Trusted by" line names its brand on hover.
 - `moving-border.tsx`: the light orbiting the rim of the "Orbit Check" buttons.
+- `link-preview.tsx`: the hero's numbers link to the case study they come from and preview the client's page on hover. Set which case studies with `proof` on each entry of `stats` in `src/content/site.ts`.
+- Focus cards, as a few lines of CSS in `globals.css`: in the Library and Recent work, the piece under the mouse stays lit and the others dim. Add `data-focus-group` to a list and `data-focus` to its cards to use it elsewhere.
 
 ## Run locally
 

@@ -4,7 +4,9 @@ import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useRef, type CSSProperties, type MouseEvent } from "react";
+import { projects } from "@/content/projects";
 import { site, stats } from "@/content/site";
+import { useAnchor } from "@/lib/anchor";
 import { setBriefOpen } from "@/lib/brief";
 import { openOrbitCheck } from "@/lib/orbitCheck";
 import { useReady } from "@/lib/ready";
@@ -16,6 +18,7 @@ import { Magnetic } from "./Magnetic";
 import { Planet } from "./Planet";
 import { RotatingText } from "./RotatingText";
 import { TrustLine } from "./TrustLine";
+import { LinkPreview } from "./ui/link-preview";
 import { MovingBorder } from "./ui/moving-border";
 
 // Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
@@ -26,6 +29,7 @@ export function Hero() {
   const ready = useReady();
   const reduce = useReducedMotion();
   const lenis = useLenis();
+  const anchor = useAnchor();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-25%"]);
   const phoneY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-12%"]);
@@ -150,15 +154,49 @@ export function Hero() {
             className="hero-in mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8 lg:mt-[clamp(1.125rem,4svh,3rem)] lg:max-w-none lg:pt-[clamp(1rem,2.6svh,1.5rem)]"
             style={{ "--d": "0.4s" } as CSSProperties}
           >
-            {stats.map((s) => (
-              <div key={s.label} className="flex flex-col-reverse justify-end">
-                <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
-                <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
+            {stats.map((s) => {
+              // Each number can be checked: it links to the case study it comes from (or to the Work section when
+              // it spans several), and with a mouse previews the client's own page. The link's hit area covers the
+              // number and its label.
+              const sources = projects.filter((p) => p.cover && s.proof?.includes(p.slug));
+              const number = (
+                <>
                   {s.value}
                   <span className="text-accent">{s.suffix}</span>
-                </dd>
-              </div>
-            ))}
+                </>
+              );
+              return (
+                <div key={s.label} className="group relative flex flex-col-reverse justify-end">
+                  <dt
+                    className={`mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm ${
+                      sources.length ? "underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:text-paper group-hover:decoration-paper/40" : ""
+                    }`}
+                  >
+                    {s.label}
+                  </dt>
+                  <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                    {sources.length ? (
+                      <LinkPreview
+                        href={sources.length === 1 ? `/work/${sources[0].slug}` : "/#work"}
+                        onClick={sources.length === 1 ? undefined : anchor}
+                        images={sources.map((p) => ({ src: p.cover!, alt: `${p.client} on Instagram` }))}
+                        caption={
+                          <>
+                            <span className="block text-paper">{sources.map((p) => p.client).join(" and ")}</span>
+                            {sources.length === 1 ? "Open the case study" : "See both in Selected work"}
+                          </>
+                        }
+                        className="rounded-sm after:absolute after:inset-0"
+                      >
+                        {number}
+                      </LinkPreview>
+                    ) : (
+                      number
+                    )}
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
         </motion.div>
 

@@ -296,6 +296,15 @@ html[data-vt="theme"]::view-transition-new(root) {
   .text-\[11px\] { font-size: 12px; }
 }
 
+/* Focus cards (after Aceternity UI's Focus Cards, as plain CSS so it works on the site's own grids): with a mouse,
+   the card under the pointer stays lit and the rest of its group dims, so one piece holds the eye in a wall of
+   moving video. Put data-focus-group on the list and data-focus on each card. Keyboard focus does the same. */
+[data-focus] { transition: opacity 0.3s ease; }
+@media (hover: hover) and (pointer: fine) {
+  [data-focus-group]:has([data-focus]:hover) [data-focus]:not(:hover) { opacity: 0.5; }
+}
+[data-focus-group]:has(:focus-visible) [data-focus]:not(:focus-visible, :has(:focus-visible)) { opacity: 0.5; }
+
 /* Sticky bars (the Library filters) sit just below the fixed header while it's showing, and slide up to the
    top of the screen when it hides, so the two never overlap. Nav.tsx sets --header-h and data-header. */
 .sticky-below-header {
