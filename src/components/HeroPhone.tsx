@@ -5,7 +5,7 @@ import { Pause, Play } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { industriesOf, pieces, type Piece } from "@/content/library";
-import { site } from "@/content/site";
+import { heroProof, site } from "@/content/site";
 
 const SLIDE_MS = 6000;
 const reels = site.hero.reels
@@ -25,6 +25,7 @@ export function HeroPhone({ play }: { play: boolean }) {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false); // mouse over the phone
   const [stopped, setStopped] = useState(false); // the pause button
+  const [proof, setProof] = useState(0);
   const video = useRef<HTMLVideoElement>(null);
   const reel = reels[i];
   const running = play && !paused && !stopped && !reduce;
@@ -36,6 +37,13 @@ export function HeroPhone({ play }: { play: boolean }) {
     return () => clearTimeout(id);
   }, [i, running]);
 
+  // rotate the proof card
+  useEffect(() => {
+    if (!play || reduce || stopped) return;
+    const id = setInterval(() => setProof((n) => (n + 1) % heroProof.length), 3800);
+    return () => clearInterval(id);
+  }, [play, reduce, stopped]);
+
   useEffect(() => {
     const v = video.current;
     if (!v) return;
@@ -44,10 +52,14 @@ export function HeroPhone({ play }: { play: boolean }) {
   }, [running, i]);
 
   if (!reel) return null;
+  const p = heroProof[proof];
 
   return (
     // On desktop the phone's size follows the screen's height (it's 19.5:9), so it never pushes the hero past the fold.
     <div className="relative mx-auto w-[min(62vw,17rem)] sm:w-[18rem] lg:w-[clamp(13rem,calc((100svh-11rem)*0.4615),18rem)] xl:w-[clamp(13rem,calc((100svh-11rem)*0.4615),19.5rem)]">
+      {/* glow behind the phone */}
+      <div aria-hidden className="absolute -inset-10 rounded-full bg-brand/25 blur-3xl" />
+
       <div
         className="relative aspect-[9/19.5] overflow-hidden rounded-[2.6rem] border border-paper/15 bg-ink p-2 shadow-[0_50px_120px_-30px_rgb(0_0_0/0.9)]"
         onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
@@ -140,6 +152,33 @@ export function HeroPhone({ play }: { play: boolean }) {
         <span aria-hidden className="absolute left-1/2 top-4 h-5 w-20 -translate-x-1/2 rounded-full bg-ink" />
       </div>
 
+      {/* real result, rotating */}
+      <div className="absolute -left-10 bottom-16 hidden w-48 sm:block xl:-left-24" aria-live="polite">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={p.value}
+            initial={{ opacity: 0, y: 12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="rounded-2xl border border-line bg-ink/75 px-4 py-3.5 shadow-[0_20px_60px_-20px_rgb(0_0_0/0.9)] backdrop-blur-md"
+          >
+            <p className="font-display text-3xl font-semibold tracking-[-0.04em]">
+              {p.value}
+              <span className="ml-1.5 inline-block size-2 rounded-full bg-brand align-middle" />
+            </p>
+            <p className="mt-1 text-xs text-paper/75">{p.label}</p>
+            <p className="mt-1.5 text-[8.5px] text-muted">{p.source}</p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {site.available && (
+        <span className="absolute -right-4 top-28 hidden items-center gap-2 rounded-full border border-line bg-ink/75 px-3 py-1.5 text-[11px] text-paper/80 backdrop-blur-md sm:flex xl:-right-10">
+          <span className="pulse relative size-1.5 rounded-full bg-brand" />
+          Open for projects
+        </span>
+      )}
     </div>
   );
 }

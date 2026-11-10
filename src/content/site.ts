@@ -6,6 +6,7 @@ export const site = {
   short: "Leiluna",
   url: "https://leilunastudio.com",
   email: "leilunastudio@gmail.com",
+  location: "Working worldwide",
   available: true,
   // How fast you reply to a brief. Used in the FAQ, the contact section and the brief itself.
   replyTime: "one business day",
@@ -15,10 +16,12 @@ export const site = {
   plansFrom: "$500/month",
   // Bump this when the content changes; it's the "last modified" date search engines see in the sitemap.
   updated: "2026-10-30",
-  headline: ["Your story.", "Our creative", "orbit."], // the slogan: shown in the intro, the footer and share cards
-  // The hero says plainly what the studio does.
+  headline: ["Your story.", "Our creative", "orbit."], // the slogan, shown small above the hero headline
+  // The hero says plainly what the studio does; the slogan sits above it.
   hero: {
-    title: ["Social media that", "people stop for."], // one line of the headline per entry
+    title: ["Social media that", "people stop for."],
+    // The first words of the headline cycle through these. Keep "Social media" first: it's what search engines read.
+    rotating: ["Social media", "Reels", "Content", "Campaigns", "Ads"],
     intro:
       "We plan, film, edit and post content for brands on Instagram, TikTok and YouTube, with strategy, design and AI workflows under one roof.",
     // Library reels that play in the hero phone, in order.
@@ -181,7 +184,14 @@ export const formats = [
   },
 ];
 
-// The three numbers under the hero. Verified from client screenshots (see the two case studies).
+// Floating proof in the hero. All from client screenshots.
+export const heroProof = [
+  { value: "9M", label: "views on a single reel", source: "Business Resilience Mindset" },
+  { value: "306K", label: "followers and growing", source: "Business Resilience Mindset" },
+  { value: "2.6M", label: "views on a 3.8K-follower page", source: "The AI Edge Daily" },
+];
+
+// Verified from client screenshots (see the two case studies).
 export const stats = [
   { value: 29, suffix: "M+", label: "views on our clients' six pinned reels" },
   { value: 680, suffix: "×", label: "top reel reach vs. the page's followers" },

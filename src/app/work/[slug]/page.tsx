@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
+import { CountUp } from "@/components/CountUp";
 import { ArrowLeft } from "lucide-react";
 import { Contact } from "@/components/Contact";
 import { Dusk } from "@/components/Dusk";
@@ -120,7 +121,9 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   {project.metrics.map((m) => (
                     <div key={m.label} className="flex flex-col-reverse justify-end">
                       <dt className="mt-2 text-xs text-muted sm:text-sm">{m.label}</dt>
-                      <dd className="font-display text-3xl font-semibold tracking-tight sm:text-5xl">{m.value}</dd>
+                      <dd className="font-display text-3xl font-semibold tracking-tight text-accent sm:text-5xl">
+                        <CountUp value={m.value} />
+                      </dd>
                     </div>
                   ))}
                 </dl>

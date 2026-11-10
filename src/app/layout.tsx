@@ -3,6 +3,7 @@ import { Instrument_Serif, Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Loader } from "@/components/Loader";
 import { Protect } from "@/components/Protect";
+import { ScrollOrbit } from "@/components/ScrollOrbit";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { founders, profileLinks, site } from "@/content/site";
 import { themeScript } from "@/lib/theme-script";
@@ -63,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-dvh overflow-x-clip">
+      <body className="grain min-h-dvh overflow-x-clip">
         {/* Without JavaScript the intro curtain would never lift, so hide it and show the page. */}
         <noscript>
           <style>{`[data-loader]{display:none!important}`}</style>
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Loader />
           <Protect />
           {children}
+          <ScrollOrbit />
         </SmoothScroll>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
         <Analytics />

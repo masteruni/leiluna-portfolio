@@ -2,9 +2,9 @@
 
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTime, useTransform, type Variants } from "motion/react";
 import { useLenis } from "lenis/react";
-import { Plus } from "lucide-react";
 import { useRef, useState } from "react";
 import { services } from "@/content/site";
+import { Eyebrow } from "./Eyebrow";
 import { Mark } from "./Mark";
 
 const CX = 300;
@@ -13,7 +13,7 @@ const CY = 300;
 function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: string }) {
   const time = useTime();
   const reduce = useReducedMotion();
-  const rx = 112 + i * 40; // the innermost orbit clears the mark in the middle
+  const rx = 80 + i * 48;
   const ry = rx * 0.36;
   const speed = 0.00022 / (1 + i * 0.35);
   const phase = i * 1.7;
@@ -37,6 +37,7 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
       <motion.circle cx={x} cy={y} r={active ? 9 : 4} fill={active ? "var(--brand)" : "var(--paper)"} className="transition-[r] duration-500" />
       {active && (
         <>
+          <motion.circle cx={x} cy={y} r={22} fill="var(--brand)" opacity={0.18} />
           {/* a single ripple as this orbit lights up, so the eye lands on the planet that just took over (hidden in
               CSS with reduced motion, rather than left out, so server and browser markup stay the same) */}
           <motion.circle
@@ -72,6 +73,13 @@ function OrbitPlanet({ i, active, label }: { i: number; active: boolean; label: 
 function OrbitSystem({ active }: { active: number }) {
   return (
     <svg viewBox="0 0 600 600" className="h-auto w-full -rotate-12 scale-125 overflow-visible" aria-hidden>
+      <defs>
+        <radialGradient id="core">
+          <stop offset="0%" stopColor="var(--brand)" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="var(--brand)" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx={CX} cy={CY} r="90" fill="url(#core)" />
       {services.map((s, i) => (
         <OrbitPlanet key={s.id} i={i} active={i === active} label={s.short} />
       ))}
@@ -92,14 +100,20 @@ function Detail({ i, dir }: { i: number; dir: number }) {
   const s = services[i];
   return (
     <motion.div key={s.id} custom={dir} variants={handOver} initial="enter" animate="center" exit="exit">
-      <h3 className="font-display text-[clamp(2.2rem,4.2vw,4.25rem)] font-semibold leading-[0.98] tracking-[-0.04em] short:text-[clamp(1.9rem,6svh,3.4rem)]">{s.title}</h3>
+      <h3 className="font-display text-[clamp(2.4rem,4.6vw,4.8rem)] font-semibold leading-[0.95] tracking-[-0.04em] short:text-[clamp(1.9rem,6svh,3.4rem)]">{s.title}</h3>
       <p className="mt-6 max-w-lg text-lg leading-relaxed text-paper/70 short:mt-3 short:text-base">{s.blurb}</p>
-      {/* what's included, as a plain ruled list: the whole block arrives together */}
-      <ul className="mt-10 grid max-w-xl grid-cols-2 gap-x-8 text-sm text-paper/80 short:mt-4 short:text-xs">
-        {s.items.map((it) => (
-          <li key={it} className="border-t border-line py-2.5 short:py-1">
+      <ul className="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-3 text-sm text-paper/80 short:mt-4 short:gap-y-1 short:text-xs">
+        {s.items.map((it, k) => (
+          <motion.li
+            key={it}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.12 + k * 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="flex gap-3 border-t border-line pt-3 short:pt-1"
+          >
+            <span className="text-accent">✦</span>
             {it}
-          </li>
+          </motion.li>
         ))}
       </ul>
     </motion.div>
@@ -127,11 +141,14 @@ function MobileServices() {
                 <span className="block font-display text-3xl font-semibold leading-[0.95] tracking-[-0.03em] sm:text-4xl">{s.title}</span>
                 <span className="mt-3 block text-sm text-paper/60 sm:text-base">{s.blurb}</span>
               </span>
-              <Plus
+              <span
                 aria-hidden
-                strokeWidth={1.5}
-                className={`mt-1 size-6 shrink-0 transition-[rotate,color] duration-300 ease-[var(--ease-out)] ${open ? "rotate-45 text-accent" : "text-paper/60"}`}
-              />
+                className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-lg transition-[rotate,background-color,border-color,color] duration-300 ease-[var(--ease-out)] ${
+                  open ? "rotate-45 border-brand bg-brand text-on-brand" : "text-paper/70"
+                }`}
+              >
+                +
+              </span>
             </button>
             <AnimatePresence initial={false}>
               {open && (
@@ -144,9 +161,9 @@ function MobileServices() {
                   transition={{ duration: reduce ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden"
                 >
-                  <ul className="grid gap-x-8 pb-8 pr-11 text-sm text-paper/80 sm:grid-cols-2">
+                  <ul className="flex flex-wrap gap-2 pb-8 pl-9">
                     {s.items.map((it) => (
-                      <li key={it} className="border-t border-line py-2.5">
+                      <li key={it} className="rounded-full border border-line px-3 py-1.5 text-xs text-paper/80">
                         {it}
                       </li>
                     ))}
@@ -189,9 +206,9 @@ export function Orbits() {
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
           {/* the head and the foot share the content's width, so the eyebrow lines up with every other section's */}
           <div className="mx-auto flex w-full max-w-7xl shrink-0 items-end justify-between">
-            <h2 className="font-display text-xl font-medium tracking-[-0.01em]">Services</h2>
-            <p className="text-sm tabular-nums text-muted">
-              {active + 1} of {services.length}
+            <Eyebrow id="services" as="h2" />
+            <p className="font-display text-sm tabular-nums text-muted">
+              <span className="text-3xl font-semibold text-paper">{active + 1}</span> of {services.length}
             </p>
           </div>
 
@@ -207,7 +224,7 @@ export function Orbits() {
               <Mark
                 width={92}
                 height={96}
-                className="absolute left-1/2 top-1/2 h-16 w-auto -translate-x-1/2 -translate-y-1/2"
+                className="absolute left-1/2 top-1/2 h-24 w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_30px_rgba(234,106,142,0.6)]"
               />
             </div>
           </div>
@@ -234,7 +251,7 @@ export function Orbits() {
 
       {/* Mobile / tablet: stacked */}
       <div className="px-5 py-16 md:py-24 sm:px-10 lg:hidden">
-        <h2 className="heading-section mb-8">Services</h2>
+        <Eyebrow id="services" as="h2" className="mb-10" />
         <MobileServices />
       </div>
     </section>

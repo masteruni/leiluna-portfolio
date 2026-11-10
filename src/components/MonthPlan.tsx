@@ -5,9 +5,10 @@ import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef, useState } from "react";
 import { pieces } from "@/content/library";
 import { kindLabel, kindShort, monthPlan, taskState, tasksFor, today, type DayKind, type TaskState } from "@/content/month";
+import { Eyebrow, MoonPhase } from "./Eyebrow";
 import { CallLink } from "./CallLink";
 import { site } from "@/content/site";
-import { SectionHead } from "./SectionHead";
+import { LineReveal } from "./LineReveal";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -19,9 +20,9 @@ const days: Day[] = Array.from({ length: monthPlan.length }, (_, i) => {
   return { n, kind: d?.kind ?? "story", piece: d?.piece ? pieces.find((p) => p.id === d.piece) : undefined };
 });
 
-// What a client actually gets in a month, as a calendar: each day shows what goes out and a bar for how far that
-// day's post has got. Picking a day shows its production checklist, from ideation to publishing, against a sample
-// "today". Below it, what the month adds up to.
+// What a client actually gets in a month, as a calendar: each day shows what goes out, with the moon waxing across the
+// month (the studio's mark) and a bar for how far that day's post has got. Picking a day shows its production
+// checklist, from ideation to publishing, against a sample "today". Below it, what the month adds up to.
 export function MonthPlan() {
   const [sel, setSel] = useState(14);
   const reduce = useReducedMotion();
@@ -47,9 +48,17 @@ export function MonthPlan() {
   return (
     <section id="month" className="relative px-5 py-16 sm:px-10 md:py-24" aria-labelledby="month-title">
       <div className="mx-auto max-w-7xl">
-        <SectionHead id="month-title" title="A month with us, day by day.">
-          What goes out, and when, on a sample content plan. Pick any day to see what&apos;s being made for it and where each step stands.
-        </SectionHead>
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <Eyebrow id="month" />
+            <h2 id="month-title" className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+              <LineReveal inView lines={["A month with us,", "day by day."]} />
+            </h2>
+          </div>
+          <p className="max-w-sm text-lg text-paper/60">
+            What goes out, and when, on a sample content plan. Pick any day to see what&apos;s being made for it and where each step stands.
+          </p>
+        </div>
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
           {/* the calendar */}
@@ -91,12 +100,15 @@ export function MonthPlan() {
                         className="pointer-events-none absolute inset-0 z-10 ring-1 ring-inset ring-brand"
                       />
                     )}
-                    <span
-                      className={`grid min-w-5 place-items-center self-start rounded-full text-xs tabular-nums sm:min-w-6 sm:text-sm ${
-                        isToday ? "bg-brand px-1 font-medium text-on-brand" : on ? "text-paper" : "text-paper/60"
-                      }`}
-                    >
-                      {d.n}
+                    <span className="flex items-start justify-between">
+                      <span
+                        className={`grid min-w-5 place-items-center rounded-full text-xs tabular-nums sm:min-w-6 sm:text-sm ${
+                          isToday ? "bg-brand px-1 font-medium text-on-brand" : on ? "text-paper" : "text-paper/60"
+                        }`}
+                      >
+                        {d.n}
+                      </span>
+                      <MoonPhase lit={d.n / monthPlan.length} className="size-2.5 sm:size-3.5" />
                     </span>
                     {content && (
                       <span aria-hidden className="block h-0.5 overflow-hidden rounded-full bg-paper/10 sm:h-1">
@@ -132,6 +144,9 @@ export function MonthPlan() {
 
           {/* the selected day */}
           <div ref={detail} className="lg:sticky lg:top-28 lg:self-start" aria-live="polite">
+            <p className="text-sm text-accent">
+              Day {day.n}, {kindLabel[day.kind]}
+            </p>
             <DayDetail key={day.n} day={day} />
           </div>
         </div>
@@ -182,7 +197,7 @@ function StateIcon({ state }: { state: TaskState }) {
   if (state === "now")
     return (
       <span aria-hidden className="relative grid size-5 shrink-0 place-items-center rounded-full border-2 border-brand">
-        <span className="size-2 rounded-full bg-brand" />
+        <span className="size-2 rounded-full bg-brand motion-safe:animate-pulse" />
       </span>
     );
   return <span aria-hidden className="size-5 shrink-0 rounded-full border border-paper/30" />;
@@ -202,37 +217,41 @@ function DayDetail({ day }: { day: Day }) {
       : { plan: "Strategy call and calendar", report: "Monthly report", story: "Stories and community" }[day.kind];
   const label = status(tasks.length, done, day.n);
   return (
-    // No box around it: the checklist is ruled like the calendar it belongs to.
-    <div className="transition-opacity duration-300 ease-[var(--ease-out)] starting:opacity-0">
-      <p className="flex flex-wrap justify-between gap-x-6 gap-y-1 text-sm text-muted">
-        <span>
-          Day {day.n}, {kindLabel[day.kind]}
-        </span>
-        <span className={label === "In production" ? "text-accent" : ""}>{label}</span>
-      </p>
-      <h3 className="mt-3 border-t border-line pt-5 font-display text-3xl font-semibold leading-tight tracking-[-0.03em]">{title}</h3>
-      <p className="mt-2 text-sm text-paper/60">
-        {done} of {tasks.length} steps done
-      </p>
-      <div aria-hidden className="mt-3 h-1 overflow-hidden rounded-full bg-paper/10">
-        {/* grows from empty each time a day is picked (the panel is remounted per day) */}
-        <div
-          className="h-full rounded-full bg-brand motion-safe:transition-[width] motion-safe:delay-100 motion-safe:duration-700 motion-safe:ease-[var(--ease-out)] motion-safe:starting:w-0!"
-          style={{ width: `${(done / tasks.length) * 100}%` }}
-        />
+    <div className="mt-4 transition-opacity duration-300 ease-[var(--ease-out)] starting:opacity-0">
+      <div className="rounded-2xl border border-line bg-ink-2 p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="font-display text-2xl font-semibold leading-tight tracking-[-0.02em]">{title}</h3>
+          <span
+            className={`mt-1 shrink-0 rounded-full px-2.5 py-1 text-xs ${
+              label === "In production" ? "bg-brand/15 text-accent" : label === "Planned" ? "bg-paper/10 text-paper/70" : "bg-paper text-ink"
+            }`}
+          >
+            {label}
+          </span>
+        </div>
+        <p className="mt-2 text-sm text-paper/60">
+          {done} of {tasks.length} steps done
+        </p>
+        <div aria-hidden className="mt-3 h-1.5 overflow-hidden rounded-full bg-paper/10">
+          {/* grows from empty each time a day is picked (the panel is remounted per day) */}
+          <div
+            className="h-full rounded-full bg-brand motion-safe:transition-[width] motion-safe:delay-100 motion-safe:duration-700 motion-safe:ease-[var(--ease-out)] motion-safe:starting:w-0!"
+            style={{ width: `${(done / tasks.length) * 100}%` }}
+          />
+        </div>
+        <ol className="mt-5 border-t border-line" aria-label={`Checklist for day ${day.n}`}>
+          {tasks.map((t) => (
+            <li key={t.label} className="flex items-center gap-3 border-b border-line py-3 last:border-b-0">
+              <StateIcon state={t.state} />
+              <span className={`min-w-0 flex-1 ${t.state === "done" ? "text-paper/55" : "text-paper"}`}>
+                {t.label}
+                <span className="sr-only">, {stateText[t.state]}</span>
+              </span>
+              <span className={`shrink-0 text-sm tabular-nums ${t.state === "now" ? "text-accent" : "text-paper/50"}`}>{dueLabel(t.due)}</span>
+            </li>
+          ))}
+        </ol>
       </div>
-      <ol className="mt-5 border-t border-line" aria-label={`Checklist for day ${day.n}`}>
-        {tasks.map((t) => (
-          <li key={t.label} className="flex items-center gap-3 border-b border-line py-3">
-            <StateIcon state={t.state} />
-            <span className={`min-w-0 flex-1 ${t.state === "done" ? "text-paper/55" : "text-paper"}`}>
-              {t.label}
-              <span className="sr-only">, {stateText[t.state]}</span>
-            </span>
-            <span className={`shrink-0 text-sm tabular-nums ${t.state === "now" ? "text-accent" : "text-paper/50"}`}>{dueLabel(t.due)}</span>
-          </li>
-        ))}
-      </ol>
       <p className="mt-4 text-sm leading-relaxed text-paper/60">{blurb[day.kind]}</p>
     </div>
   );

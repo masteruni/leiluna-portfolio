@@ -12,9 +12,10 @@ import { track } from "@/lib/track";
 import { CallLink } from "./CallLink";
 import { HeroPhone } from "./HeroPhone";
 import { LineReveal } from "./LineReveal";
+import { Magnetic } from "./Magnetic";
 import { Planet } from "./Planet";
+import { RotatingText } from "./RotatingText";
 import { TrustLine } from "./TrustLine";
-import { buttonClass } from "./ui";
 
 // Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
 // next steps (start a project, a free feed audit, or a free call) above the fold.
@@ -62,14 +63,44 @@ export function Hero() {
       <div className="absolute inset-0">
         <Planet progress={scrollYProgress} anchor={phone} />
       </div>
+      <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
+        <span className="shooting-star left-[72%] top-[12%]" />
+        <span className="shooting-star left-[38%] top-[6%] [animation-delay:6.5s] [animation-duration:14s]" />
+      </div>
 
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}
       <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
-          {/* One voice, no accent word: the headline is the pitch, and the reels playing beside it are the proof. */}
-          <h1 className="font-display text-[clamp(2.4rem,11.5vw,5.5rem)] font-bold leading-[0.92] tracking-[-0.045em] lg:text-[clamp(3rem,min(7.4vw,12.5svh),8rem)]">
-            <LineReveal css delay={0.1} lines={site.hero.title} />
+          <p
+            className="hero-in mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-[13px] text-muted lg:mb-[clamp(0.875rem,3svh,1.75rem)]"
+            style={{ "--d": "0.1s" } as CSSProperties}
+          >
+            <span className="flex items-center gap-3">
+              <span className="h-px w-10 bg-brand" />
+              {site.headline.join(" ")}
+            </span>
+            <span className="hidden items-center gap-5 lg:flex">
+              <span aria-hidden className="size-1 rounded-full bg-paper/30" />
+              {site.location}
+            </span>
+          </p>
+
+          <h1 className="font-display text-[clamp(2.1rem,11vw,5.5rem)] font-bold leading-[0.9] tracking-[-0.045em] lg:text-[clamp(3rem,min(7.4vw,12svh),8rem)]">
+            <LineReveal
+              css
+              delay={0.1}
+              lines={[
+                <span key="a">
+                  <RotatingText words={site.hero.rotating} play={ready} />
+                  {site.hero.title[0].replace(site.hero.rotating[0], "")}
+                </span>,
+                <span key="b">
+                  {site.hero.title[1].replace("stop for.", "")}
+                  <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-accent">stop for.</span>
+                </span>,
+              ]}
+            />
           </h1>
 
           <p
@@ -83,10 +114,21 @@ export function Hero() {
             className="hero-in mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:mt-[clamp(1.125rem,3.6svh,2.25rem)]"
             style={{ "--d": "0.3s" } as CSSProperties}
           >
-            <Link href="/#contact" onClick={startProject} className={buttonClass("primary", "lg", "px-7 py-4 text-base")}>
-              Start a project
-            </Link>
-            <button type="button" onClick={orbitCheck} className={buttonClass("outline", "lg", "px-7 py-4 text-base text-paper")}>
+            <Magnetic className="block sm:inline-block">
+              <Link
+                href="/#contact"
+                onClick={startProject}
+                className="group relative flex w-full items-center justify-center gap-3 sm:inline-flex sm:w-auto overflow-hidden press rounded-full bg-brand px-7 py-4 font-medium text-ink"
+              >
+                <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0" />
+                <span className="relative">Start a project</span>
+              </Link>
+            </Magnetic>
+            <button
+              type="button"
+              onClick={orbitCheck}
+              className="flex items-center justify-center rounded-full bg-ink/40 px-7 py-4 font-medium ring-1 ring-inset ring-line backdrop-blur-md transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
+            >
               Free Orbit Check
             </button>
           </div>
@@ -110,7 +152,7 @@ export function Hero() {
                 <dt className="mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm">{s.label}</dt>
                 <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
                   {s.value}
-                  {s.suffix}
+                  <span className="text-accent">{s.suffix}</span>
                 </dd>
               </div>
             ))}

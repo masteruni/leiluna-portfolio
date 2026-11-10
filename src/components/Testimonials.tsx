@@ -1,11 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { testimonials } from "@/content/site";
-import { SectionHead } from "./SectionHead";
+import { Eyebrow } from "./Eyebrow";
+import { LineReveal } from "./LineReveal";
 
-// Client quotes, one at a time, in the serif the site keeps for quoted words.
+// Client quotes, one at a time, in the same cinematic serif as the case studies.
 // Renders nothing until `testimonials` in src/content/site.ts has at least one entry.
 export function Testimonials() {
   const [i, setI] = useState(0);
@@ -34,7 +35,10 @@ export function Testimonials() {
       onBlurCapture={() => setPaused(false)}
     >
       <div className="mx-auto max-w-7xl">
-        <SectionHead id="testimonials-title" title="What clients say." />
+        <Eyebrow id="testimonials" />
+        <h2 id="testimonials-title" className="mt-6 font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
+          <LineReveal inView lines={["What clients", "say."]} />
+        </h2>
 
         <div className="relative mt-12 min-h-[14rem] md:min-h-[12rem]">
           <AnimatePresence mode="wait" initial={false}>
@@ -47,11 +51,29 @@ export function Testimonials() {
               className="max-w-4xl"
             >
               <blockquote className="serif text-[clamp(1.8rem,4vw,3.6rem)] leading-[1.15] text-paper">
-                “{t.quote}”
+                <span aria-hidden className="text-accent">“</span>
+                {/* the quote comes into focus word by word */}
+                {t.quote.split(" ").map((w, k) => (
+                  <Fragment key={k}>
+                    {k > 0 && " "}
+                    <motion.span
+                      className="inline-block"
+                      initial={reduce ? false : { opacity: 0, filter: "blur(4px)", y: 6 }}
+                      animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.05 + Math.min(k, 30) * 0.025 }}
+                    >
+                      {w}
+                    </motion.span>
+                  </Fragment>
+                ))}
+                <span aria-hidden className="text-accent">”</span>
               </blockquote>
-              <figcaption className="mt-8 text-sm">
-                <span className="font-medium text-paper">{t.name}</span>
-                <span className="text-muted">, {t.role}</span>
+              <figcaption className="mt-8 flex items-center gap-4 text-sm">
+                <span aria-hidden className="h-px w-10 bg-brand" />
+                <span>
+                  <span className="font-medium text-paper">{t.name}</span>
+                  <span className="text-muted">, {t.role}</span>
+                </span>
               </figcaption>
             </motion.figure>
           </AnimatePresence>
@@ -70,7 +92,7 @@ export function Testimonials() {
               />
             ))}
             <span className="ml-3 text-[13px] text-muted tabular-nums">
-              {i + 1} of {total}
+              {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
             </span>
           </div>
         )}

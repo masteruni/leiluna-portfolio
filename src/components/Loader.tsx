@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
 import { markReady } from "@/lib/ready";
 import { Crescent } from "./Crescent";
-import { MoonPhase } from "./MoonPhase";
+import { MoonPhase } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 
 const KEY = "leiluna:intro";
@@ -179,7 +179,7 @@ export function Loader() {
         transition={{ duration: 0.3, ease: [0.4, 0, 1, 1] }}
       >
         {/* The slogan, waxing: each line rises in as a hairline and the letters fill out to full weight as the page
-            loads. (Outfit is a variable font, so the weight moves smoothly.) */}
+            loads. (Outfit is a variable font, so the weight moves smoothly; the serif word keeps its one weight.) */}
         <p
           className="font-display text-[clamp(2.4rem,7.2vw,6.5rem)] leading-[0.94] tracking-[-0.04em] text-paper"
           style={{ fontWeight: Math.round(100 + 700 * lit) }}
@@ -187,11 +187,16 @@ export function Loader() {
           <LineReveal
             play={typeIn}
             stagger={0.1}
-            lines={[site.headline[0], site.headline.slice(1).join(" ")]}
+            lines={[
+              site.headline[0],
+              <span key="b">
+                {site.headline[1]} <span className="serif pr-[0.06em] text-[1.08em] tracking-[-0.02em] text-accent">{site.headline[2]}</span>
+              </span>,
+            ]}
           />
         </p>
         {/* the name, with a moon that fills in step */}
-        <span className="hidden shrink-0 items-center gap-3 pb-2 text-lg text-paper/80 md:flex">
+        <span className="hidden shrink-0 items-center gap-3 pb-2 font-serif text-2xl italic text-paper/80 md:flex">
           <MoonPhase lit={lit} className="size-[0.9em] text-paper/60" />
           {site.name}
         </span>
