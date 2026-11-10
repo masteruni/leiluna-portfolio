@@ -10,6 +10,7 @@ import { openBriefWith } from "@/lib/brief";
 import { spark } from "@/lib/spark";
 import { track } from "@/lib/track";
 import { Eyebrow } from "./Eyebrow";
+import { LineReveal } from "./LineReveal";
 import { buttonClass, chipClass } from "./ui";
 
 // Height ÷ width of each shape, so the masonry can be laid out before anything has loaded.
@@ -638,9 +639,7 @@ export function Library() {
           <div>
             <Eyebrow id="library" />
             <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              Every format.
-              <br />
-              Every industry.
+              <LineReveal inView lines={["Every format.", "Every industry."]} />
             </h2>
           </div>
           <p className="max-w-sm text-lg text-paper/60">

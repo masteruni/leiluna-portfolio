@@ -32,7 +32,7 @@ Anything marked `[PLACEHOLDER]` is sample content.
 8. **Process:** five phases of the moon, waxing as you scroll.
 9. **Founders:** Juri & Sven, framed by the logo's crescents.
 10. **Testimonials:** cinematic serif quotes; appears automatically once `testimonials` in `site.ts` has an entry.
-11. **Contact:** a planet rises over the horizon behind the call to action.
+11. **Contact:** the page ends in a curve (the mirror of the horizon under the hero, `src/components/Dusk.tsx`) and a planet rises over the horizon behind the call to action.
 
 Motion respects the "reduce motion" accessibility setting, and the custom cursor appears only on devices with a mouse.
 

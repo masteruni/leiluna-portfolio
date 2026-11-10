@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { process } from "@/content/site";
 import { Eyebrow } from "./Eyebrow";
 import { CallLink } from "./CallLink";
+import { LineReveal } from "./LineReveal";
 
 // A moon whose lit side grows with `phase` (0 = new moon, 1 = full).
 function Moon({ phase }: { phase: MotionValue<number> }) {
@@ -64,7 +65,7 @@ export function Phases() {
         <Eyebrow id="process" />
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <h2 className="mt-6 max-w-4xl font-display text-[clamp(2.8rem,6vw,6rem)] font-bold leading-[0.9] tracking-[-0.045em]">
-            From new moon to full orbit.
+            <LineReveal inView lines={["From new moon", "to full orbit."]} />
           </h2>
           <p className="max-w-sm text-lg text-paper/60">
             Five phases in order the first time, then Create, Launch and Grow on repeat every month. You always know what&apos;s being made, why, and what you get back.

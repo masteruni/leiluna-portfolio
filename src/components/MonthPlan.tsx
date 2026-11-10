@@ -1,7 +1,7 @@
 "use client";
 
 import { useLenis } from "lenis/react";
-import { useReducedMotion } from "motion/react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef, useState } from "react";
 import { pieces } from "@/content/library";
 import { kindLabel, kindShort, monthPlan, taskState, tasksFor, today, type DayKind, type TaskState } from "@/content/month";
@@ -29,6 +29,9 @@ export function MonthPlan() {
   const lenis = useLenis();
   const day = days[sel - 1];
   const detail = useRef<HTMLDivElement>(null);
+  // The production bars fill in, day after day, the first time the calendar scrolls into view.
+  const calendar = useRef<HTMLDivElement>(null);
+  const arrived = useInView(calendar, { once: true, margin: "0px 0px -20% 0px" });
   // On a phone the checklist sits below the calendar, so a tap brings it into view.
   const pick = (n: number) => {
     setSel(n);
@@ -64,7 +67,7 @@ export function MonthPlan() {
               <span>{monthPlan.name}</span>
               <span>Today is day {today}</span>
             </p>
-            <div className="grid grid-cols-7 border-l border-t border-line" role="group" aria-label="A sample month, day by day">
+            <div ref={calendar} className="grid grid-cols-7 border-l border-t border-line" role="group" aria-label="A sample month, day by day">
               {WEEKDAYS.map((d) => (
                 <div key={d} aria-hidden className="border-b border-r border-line px-2 py-2 text-xs text-muted sm:px-3">
                   <span className="sm:hidden">{d[0]}</span>
@@ -88,7 +91,15 @@ export function MonthPlan() {
                       on ? "bg-brand/10" : "hover:bg-paper/5"
                     }`}
                   >
-                    {on && <span aria-hidden className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-brand" />}
+                    {/* the selection is one frame that glides from the last day picked to this one */}
+                    {on && (
+                      <motion.span
+                        aria-hidden
+                        layoutId="month-selected"
+                        transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 42 }}
+                        className="pointer-events-none absolute inset-0 z-10 ring-1 ring-inset ring-brand"
+                      />
+                    )}
                     <span className="flex items-start justify-between">
                       <span
                         className={`grid min-w-5 place-items-center rounded-full text-xs tabular-nums sm:min-w-6 sm:text-sm ${
@@ -101,7 +112,12 @@ export function MonthPlan() {
                     </span>
                     {content && (
                       <span aria-hidden className="block h-0.5 overflow-hidden rounded-full bg-paper/10 sm:h-1">
-                        <span className="block h-full rounded-full bg-brand" style={{ width: `${(done / tasks.length) * 100}%` }} />
+                        <span
+                          className={`block h-full origin-left rounded-full bg-brand motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[var(--ease-out)] ${
+                            arrived ? "" : "motion-safe:scale-x-0"
+                          }`}
+                          style={{ width: `${(done / tasks.length) * 100}%`, transitionDelay: `${d.n * 28}ms` }}
+                        />
                       </span>
                     )}
                     <span className="flex items-center gap-1.5">
@@ -217,7 +233,11 @@ function DayDetail({ day }: { day: Day }) {
           {done} of {tasks.length} steps done
         </p>
         <div aria-hidden className="mt-3 h-1.5 overflow-hidden rounded-full bg-paper/10">
-          <div className="h-full rounded-full bg-brand transition-[width] duration-500 ease-[var(--ease-out)]" style={{ width: `${(done / tasks.length) * 100}%` }} />
+          {/* grows from empty each time a day is picked (the panel is remounted per day) */}
+          <div
+            className="h-full rounded-full bg-brand motion-safe:transition-[width] motion-safe:delay-100 motion-safe:duration-700 motion-safe:ease-[var(--ease-out)] motion-safe:starting:w-0!"
+            style={{ width: `${(done / tasks.length) * 100}%` }}
+          />
         </div>
         <ol className="mt-5 border-t border-line" aria-label={`Checklist for day ${day.n}`}>
           {tasks.map((t) => (

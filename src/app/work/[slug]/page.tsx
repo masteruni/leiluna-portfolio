@@ -6,6 +6,7 @@ import { ViewTransition } from "react";
 import { CountUp } from "@/components/CountUp";
 import { ArrowLeft } from "lucide-react";
 import { Contact } from "@/components/Contact";
+import { Dusk } from "@/components/Dusk";
 import { LineReveal } from "@/components/LineReveal";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
@@ -249,6 +250,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           </nav>
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
         </article>
+        <Dusk />
         <Contact />
       </main>
       <Footer />
