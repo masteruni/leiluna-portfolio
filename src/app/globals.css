@@ -163,6 +163,23 @@ body {
 h1, h2, h3 { text-wrap: balance; }
 p, blockquote { text-wrap: pretty; }
 
+/* The type scale. Only the hero and the closing call to action are set at display size; every section in between
+   opens with the same, quieter heading, so the page has one loud start, one loud finish and a steady middle. */
+@utility heading-section {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(2.25rem, 4.6vw, 4.25rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+/* The sentence that follows a section heading. */
+@utility lede {
+  max-width: 34rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: color-mix(in oklab, var(--paper) 65%, transparent);
+}
+
 /* Pressable controls dip slightly while held, so a click or tap is felt the moment it lands. Colours still ease
    on hover; the dip is quick on the way down and back. (Use `press` in place of `transition-colors`.) */
 @utility press {
@@ -243,21 +260,6 @@ html.lenis body { height: auto; }
   to { transform: translate3d(-900px, 450px, 0); }
 }
 
-/* Pulsing "open for projects" dot */
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(3); opacity: 0; }
-}
-.pulse::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background: var(--brand);
-  animation: pulse-ring 2.2s var(--ease-out) infinite;
-}
-
-/* Film grain */
 /* The mark's white crescent becomes ink on light backgrounds (see components/Mark.tsx) */
 .mark-day { display: none; }
 [data-theme="light"] .mark-day { display: revert-layer; }
@@ -307,70 +309,12 @@ html[data-vt="theme"]::view-transition-new(root) {
 /* The starry backdrop belongs to the night: hidden in light mode (the night islands bring their own space) */
 [data-theme="light"] .stars { display: none; }
 
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 8s steps(10) infinite;
-}
-
-@keyframes grain {
-  0%, 100% { background-position: 0 0; }
-  20% { background-position: -40px 25px; }
-  40% { background-position: 30px -50px; }
-  60% { background-position: -25px 40px; }
-  80% { background-position: 50px -15px; }
-}
-
-@keyframes scrub {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
-}
-
 /* The horizon under the hero (HorizonLoop.tsx): the night above fades in from the hero's colour in both themes, the page
    below rises into it like a moon, and the service words ride along the edge in moonlight. */
 .horizon-moon { fill: var(--ink); }
 .horizon-text { font-family: var(--font-outfit), sans-serif; font-weight: 800; letter-spacing: -0.03em; }
-.horizon-solid { fill: #f6f2ef; }
-.horizon-outline { fill: transparent; stroke: rgb(246 242 239 / 0.55); stroke-width: 1px; }
-.horizon-star { fill: var(--brand); font-size: 0.45em; }
-
-/* A streak of light crossing the hero every so often (two of them, offset, so it never looks like a loop) */
-.shooting-star {
-  position: absolute;
-  width: 160px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--paper), transparent);
-  opacity: 0;
-  transform: rotate(-32deg);
-  transform-origin: left center;
-  animation: shoot 11s ease-out infinite;
-}
-.shooting-star::before {
-  content: "";
-  position: absolute;
-  left: -2px;
-  top: -1.5px;
-  width: 4px;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--paper);
-  box-shadow: 0 0 10px 2px rgb(246 242 239 / 0.7);
-}
-@keyframes shoot {
-  0% { opacity: 0; transform: translate(0, 0) rotate(-32deg); }
-  2% { opacity: 0.9; }
-  9% { opacity: 0; transform: translate(-380px, 237px) rotate(-32deg); }
-  100% { opacity: 0; transform: translate(-380px, 237px) rotate(-32deg); }
-}
+.horizon-word { fill: #f6f2ef; }
+.horizon-dot { fill: var(--brand); }
 
 /* The thin progress line under the header: distance scrolled through the page */
 .scroll-progress {
@@ -380,23 +324,11 @@ html[data-vt="theme"]::view-transition-new(root) {
   background: linear-gradient(90deg, var(--brand-3), var(--brand), var(--brand-2));
   transform-origin: left center;
 }
-.animate-spin-slow { animation: spin-slow 40s linear infinite; }
 
-.text-outline {
-  color: transparent;
-  -webkit-text-stroke: 1px color-mix(in oklab, var(--paper) 55%, transparent);
-}
-
+/* The second typeface. It has one job: words someone else said or a statement being quoted (client quotes, a case
+   study's challenge and results, the title on a generated cover). Headlines stay in one voice. */
 .serif { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; }
 
-.animate-spin-badge { animation: spin-slow 18s linear infinite; }
-
 @media (prefers-reduced-motion: reduce) {
-  .grain::after,
-  .stars::before,
-  .pulse::after,
-  .shooting-star,
-  .animate-spin-badge,
-  .animate-spin-slow { animation: none !important; }
-  .shooting-star { display: none; }
+  .stars::before { animation: none !important; }
 }

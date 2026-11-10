@@ -84,11 +84,12 @@ export function HorizonLoop() {
   const run = (k: number) =>
     words.map((word, i) => (
       <tspan key={`${k}-${i}`}>
-        <tspan className={(i + k) % 2 ? "horizon-outline" : "horizon-solid"}>{word}</tspan>
-        <tspan className="horizon-star" dx={font * 0.45}>
-          ✦
+        <tspan className="horizon-word">{word}</tspan>
+        {/* a small pink moon between the words */}
+        <tspan className="horizon-dot" dx={font * 0.4}>
+          •
         </tspan>
-        <tspan dx={font * 0.45}> </tspan>
+        <tspan dx={font * 0.4}> </tspan>
       </tspan>
     ));
 

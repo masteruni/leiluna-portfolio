@@ -7,10 +7,8 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, use
 import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
 import { openBriefWith } from "@/lib/brief";
-import { spark } from "@/lib/spark";
 import { track } from "@/lib/track";
-import { Eyebrow } from "./Eyebrow";
-import { LineReveal } from "./LineReveal";
+import { SectionHead } from "./SectionHead";
 import { buttonClass, chipClass } from "./ui";
 
 // Height ÷ width of each shape, so the masonry can be laid out before anything has loaded.
@@ -635,18 +633,10 @@ export function Library() {
   return (
     <section id="library" className="relative px-5 py-16 sm:px-10 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <Eyebrow id="library" />
-            <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Every format.", "Every industry."]} />
-            </h2>
-          </div>
-          <p className="max-w-sm text-lg text-paper/60">
-            Not case studies, just the craft. Single reels, edits and graphics across industries, so you can find your style
-            before we ever talk.
-          </p>
-        </div>
+        <SectionHead title="Every format. Every industry.">
+          Not case studies, just the craft. Single reels, edits and graphics across industries, so you can find your style
+          before we ever talk.
+        </SectionHead>
 
         {/* filters */}
         <div className="sticky-below-header sticky z-20 -mx-5 mt-10 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
@@ -657,8 +647,7 @@ export function Library() {
                   key={k.id}
                   type="button"
                   aria-pressed={kind === k.id}
-                  onClick={(e) => {
-                    if (kind !== k.id) spark(e);
+                  onClick={() => {
                     setKind(k.id);
                     setIndustry("All");
                     setOpen(null);
@@ -683,10 +672,7 @@ export function Library() {
                     type="button"
                     disabled={disabled}
                     aria-pressed={industry === ind}
-                    onClick={(e) => {
-                      if (industry !== ind) spark(e);
-                      setIndustry(ind);
-                    }}
+                    onClick={() => setIndustry(ind)}
                     className={`shrink-0 rounded-full px-3 py-1.5 text-xs press disabled:opacity-25 pointer-coarse:min-h-11 pointer-coarse:min-w-11 ${
                       industry === ind ? "bg-brand text-on-brand" : "text-paper/60 hover:text-paper"
                     }`}

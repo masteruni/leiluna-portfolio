@@ -4,8 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { brands as demoBrands, recent as demoRecent, type Brand, type RecentPiece } from "@/content/recent";
 import { openClip } from "@/lib/showreel";
-import { Eyebrow } from "./Eyebrow";
-import { LineReveal } from "./LineReveal";
+import { SectionHead } from "./SectionHead";
 import { ArrowCircle, IconButton, Tag } from "./ui";
 
 const isVideo = (src: string) => src.endsWith(".mp4");
@@ -245,15 +244,7 @@ export function RecentWork() {
     <section id="recent" className="relative py-16 md:py-24">
       {/* box-content: the 80rem is the content's width, padding outside it, so this lines up with the other sections */}
       <div className="mx-auto box-content max-w-7xl px-5 sm:px-10">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <Eyebrow id="recent" />
-            <h2 className="mt-6 font-display text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.88] tracking-[-0.045em]">
-              <LineReveal inView lines={["Fresh off", "the timeline."]} />
-            </h2>
-          </div>
-          <p className="max-w-sm text-lg text-paper/60">Our newest pieces for the brands we&rsquo;ve created for.</p>
-        </div>
+        <SectionHead title="Fresh off the timeline.">Our newest pieces for the brands we&rsquo;ve created for.</SectionHead>
 
         <div className="mt-10 flex flex-col gap-5 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
           {/* (a tighter gap on phones keeps the four logos on one line with the label) */}

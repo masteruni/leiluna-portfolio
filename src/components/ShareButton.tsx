@@ -1,22 +1,20 @@
 "use client";
 
-import { useState, type MouseEvent } from "react";
-import { spark } from "@/lib/spark";
+import { useState } from "react";
 import { track } from "@/lib/track";
 import { SwapLabel, buttonClass } from "./ui";
 
 const labels = [
   ["idle", "Share this case study"],
-  ["copied", "Link copied ✦"],
-  ["shared", "Shared ✦"],
+  ["copied", "Link copied"],
+  ["shared", "Shared"],
 ] as const;
 
 // Share the current page: the native share sheet on phones, "copy link" everywhere else.
 export function ShareButton({ title, text, className = "" }: { title: string; text?: string; className?: string }) {
   const [state, setState] = useState<"idle" | "copied" | "shared">("idle");
 
-  const share = async (e: MouseEvent<HTMLButtonElement>) => {
-    spark(e);
+  const share = async () => {
     const url = window.location.href;
     try {
       if (typeof navigator.share === "function" && navigator.canShare?.({ url })) {

@@ -97,7 +97,7 @@ export function Footer() {
             onClick={() => (lenis ? lenis.scrollTo(0, { duration: 2 }) : window.scrollTo({ top: 0 }))}
             className="text-paper/70 hover:text-accent pointer-coarse:min-h-11"
           >
-            Back to orbit ↑
+            Back to top ↑
           </button>
         </div>
       </div>

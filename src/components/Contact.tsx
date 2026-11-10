@@ -5,11 +5,7 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } fr
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { brief as briefOptions, services, site } from "@/content/site";
 import { clearBriefPrefill, peekBriefPrefill, setBriefOpen, useBriefOpen, useBriefVersion } from "@/lib/brief";
-import { spark } from "@/lib/spark";
 import { track } from "@/lib/track";
-import { Eyebrow } from "./Eyebrow";
-import { LineReveal } from "./LineReveal";
-import { Magnetic } from "./Magnetic";
 import { buttonClass, chipClass, SwapLabel } from "./ui";
 import { TrustLine } from "./TrustLine";
 import { CallLink } from "./CallLink";
@@ -27,7 +23,7 @@ const emailCopyLabels = [
 const field =
   "w-full border-b border-line bg-transparent py-3 text-paper outline-none transition-colors placeholder:text-paper/30 focus:border-brand";
 
-// Single-choice chips; tapping the selected one again clears it. Picking one throws a little spark.
+// Single-choice chips; tapping the selected one again clears it.
 function Choice({ legend, options, value, onChange }: { legend: string; options: string[]; value: string; onChange: (v: string) => void }) {
   return (
     <fieldset>
@@ -38,10 +34,7 @@ function Choice({ legend, options, value, onChange }: { legend: string; options:
             key={o}
             type="button"
             aria-pressed={value === o}
-            onClick={(e) => {
-              if (value !== o) spark(e);
-              onChange(value === o ? "" : o);
-            }}
+            onClick={() => onChange(value === o ? "" : o)}
             className={chipClass(value === o, "paper", "sm")}
           >
             {o}
@@ -176,7 +169,7 @@ function Brief({ onDone }: { onDone: () => void }) {
         setSent(true);
         window.location.assign(mailto);
       }}
-      className="mx-auto mt-14 w-full max-w-3xl overflow-hidden rounded-[2rem] border border-line bg-ink-2/70 p-6 text-left backdrop-blur-xl sm:p-10"
+      className="mx-auto mt-14 w-full max-w-3xl overflow-hidden rounded-3xl border border-line bg-ink-2 p-6 text-left sm:p-10"
       aria-label="Project brief"
     >
       {/* progress: one segment per step; reached steps can be revisited */}
@@ -285,10 +278,7 @@ function Brief({ onDone }: { onDone: () => void }) {
                         key={s.id}
                         type="button"
                         aria-pressed={on}
-                        onClick={(e) => {
-                          if (!on) spark(e);
-                          toggle(s.title);
-                        }}
+                        onClick={() => toggle(s.title)}
                         className={chipClass(on, "brand", "md")}
                       >
                         {s.title}
@@ -374,17 +364,10 @@ function Brief({ onDone }: { onDone: () => void }) {
           </button>
         ) : (
           <div className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={(e) => {
-                spark(e);
-                copy();
-              }}
-              className={buttonClass("outline", "lg")}
-            >
+            <button type="button" onClick={copy} className={buttonClass("outline", "lg")}>
               <SwapLabel current={copied ? "done" : "idle"} labels={briefCopyLabels} />
             </button>
-            <button type="submit" onClick={spark} className={buttonClass("primary", "lg", "gap-3")}>
+            <button type="submit" className={buttonClass("primary", "lg", "gap-3")}>
               Send by email
             </button>
           </div>
@@ -401,29 +384,20 @@ function Brief({ onDone }: { onDone: () => void }) {
   );
 }
 
-// The main call to action, the same pink pill as the hero's "Start a project" at a larger size, so the page's one
-// action looks the same wherever it appears. On hover a light fill rises through it and the arrow moves forward.
+// The main call to action: the same pink pill as the hero's "Start a project", at a larger size, so the page's one
+// action looks the same wherever it appears.
 function StartButton({ open, onClick }: { open: boolean; onClick: () => void }) {
   return (
-    <Magnetic strength={0.2} className="inline-block">
-      <button
-        type="button"
-        onClick={onClick}
-        aria-expanded={open}
-        aria-controls="project-brief"
-        className="press group relative inline-flex h-16 items-center gap-6 overflow-hidden rounded-full bg-brand pl-8 pr-2 text-lg font-medium text-on-brand sm:h-[4.5rem] sm:pl-9 sm:text-xl"
-      >
-        <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0 group-focus-visible:translate-y-0" />
-        <span className="relative">{open ? "Close the brief" : "Start a project"}</span>
-        <span className="relative grid size-12 place-items-center rounded-full bg-ink text-paper sm:size-14">
-          {open ? (
-            <X aria-hidden className="size-5" />
-          ) : (
-            <ArrowRight aria-hidden className="size-5 transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-x-0.5" />
-          )}
-        </span>
-      </button>
-    </Magnetic>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-expanded={open}
+      aria-controls="project-brief"
+      className={buttonClass("primary", "lg", "h-16 gap-3 px-9 text-lg sm:h-[4.5rem] sm:px-10 sm:text-xl")}
+    >
+      {open ? "Close the brief" : "Start a project"}
+      {open ? <X aria-hidden className="size-5" /> : <ArrowRight aria-hidden className="size-5" />}
+    </button>
   );
 }
 
@@ -471,12 +445,10 @@ export function Contact() {
       </motion.div>
 
       <div className="relative mx-auto w-full max-w-7xl text-center">
-        <Eyebrow id="contact" />
-        <h2 className="mt-8 font-display text-[clamp(3.6rem,min(12vw,16svh),12rem)] font-bold leading-[0.85] tracking-[-0.05em]">
-          <LineReveal
-            inView
-            lines={["Let's build", <span key="b">your brand.</span>]}
-          />
+        <h2 className="font-display text-[clamp(3.6rem,min(12vw,16svh),12rem)] font-bold leading-[0.88] tracking-[-0.05em]">
+          Let&apos;s build
+          <br />
+          your brand.
         </h2>
         <p className="mx-auto mt-8 max-w-md text-lg text-paper/60">
           Tell us about your story. We&apos;ll reply within {site.replyTime} with ideas, not a sales script.
@@ -494,13 +466,7 @@ export function Contact() {
             <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "contact" })} className="font-display text-2xl font-medium transition-colors pointer-coarse:inline-flex pointer-coarse:min-h-11 pointer-coarse:items-center hover:text-accent sm:text-3xl">
               {site.email}
             </a>
-            <button
-              type="button"
-              onClick={(e) => {
-                spark(e);
-                copy();
-              }}
-              className="text-sm text-muted transition-colors hover:text-paper pointer-coarse:min-h-11 pointer-coarse:px-3">
+            <button type="button" onClick={copy} className="text-sm text-muted transition-colors hover:text-paper pointer-coarse:min-h-11 pointer-coarse:px-3">
               <SwapLabel current={copied ? "done" : "idle"} labels={emailCopyLabels} />
             </button>
           </div>

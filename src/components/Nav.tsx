@@ -13,10 +13,9 @@ import { useTheme } from "@/lib/theme";
 import { useActiveSection } from "@/lib/useActiveSection";
 import { useOverNight } from "@/lib/useOverNight";
 import { track } from "@/lib/track";
-import { MoonPhase } from "./Eyebrow";
-import { Magnetic } from "./Magnetic";
 import { Mark } from "./Mark";
 import { ThemeToggle } from "./ThemeToggle";
+import { buttonClass } from "./ui";
 
 const links = [
   { href: "/#work", id: "work", label: "Work" },
@@ -91,6 +90,14 @@ export function Nav() {
     return () => ro.disconnect();
   }, []);
 
+  // The menu belongs to phone and tablet widths: if the window grows to desktop while it's open, close it.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const close = () => mq.matches && setOpen(false);
+    mq.addEventListener("change", close);
+    return () => mq.removeEventListener("change", close);
+  }, []);
+
   useEffect(() => {
     if (open) lenis?.stop();
     else lenis?.start();
@@ -158,30 +165,28 @@ export function Nav() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Magnetic className="hidden sm:block">
-            <Link
-              href="/#contact"
-              onClick={anchor}
-              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md press duration-300 hover:border-brand hover:bg-brand hover:text-on-brand"
-            >
-              Let&apos;s talk
-            </Link>
-          </Magnetic>
-          <Magnetic>
-            <button
-              type="button"
-              onClick={() => setOpen((o) => !o)}
-              aria-expanded={open}
-              aria-controls="menu"
-              className="flex items-center gap-3 press rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink pointer-coarse:min-h-11"
-            >
-              <span>{open ? "Close" : "Menu"}</span>
-              <span className="relative block h-2.5 w-4">
-                <span className={`absolute left-0 top-1 block h-px w-4 bg-ink transition-[translate,rotate] duration-300 ease-[var(--ease-out)] ${open ? "rotate-45" : "-translate-y-1"}`} />
-                <span className={`absolute left-0 top-1 block h-px w-4 bg-ink transition-[translate,rotate] duration-300 ease-[var(--ease-out)] ${open ? "-rotate-45" : "translate-y-1"}`} />
-              </span>
-            </button>
-          </Magnetic>
+          <Link
+            href="/#contact"
+            onClick={anchor}
+            className="hidden rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md press duration-300 hover:border-brand hover:bg-brand hover:text-on-brand sm:block lg:bg-brand lg:font-medium lg:text-on-brand lg:hover:border-paper lg:hover:bg-paper lg:hover:text-ink lg:border-brand"
+          >
+            Let&apos;s talk
+          </Link>
+          {/* Below desktop width the links live in the menu; on desktop they're already in the header, so there's
+              no second way in. */}
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="menu"
+            className="flex items-center gap-3 press rounded-full bg-paper py-2.5 pl-5 pr-4 text-sm font-medium text-ink pointer-coarse:min-h-11 lg:hidden"
+          >
+            <span>{open ? "Close" : "Menu"}</span>
+            <span className="relative block h-2.5 w-4">
+              <span className={`absolute left-0 top-1 block h-px w-4 bg-ink transition-[translate,rotate] duration-300 ease-[var(--ease-out)] ${open ? "rotate-45" : "-translate-y-1"}`} />
+              <span className={`absolute left-0 top-1 block h-px w-4 bg-ink transition-[translate,rotate] duration-300 ease-[var(--ease-out)] ${open ? "-rotate-45" : "translate-y-1"}`} />
+            </span>
+          </button>
         </div>
         <motion.span aria-hidden className="scroll-progress" style={{ scaleX: progress }} />
       </header>
@@ -201,14 +206,6 @@ export function Nav() {
             exit={{ y: "-100%", transition: { duration: 0.35, ease: [0.77, 0, 0.175, 1], delay: 0.08 } }}
             transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
           >
-            {/* orbit decoration */}
-            <svg aria-hidden viewBox="0 0 600 600" className="animate-spin-slow pointer-events-none absolute -right-40 top-1/2 size-[110vmin] -translate-y-1/2 opacity-40">
-              <circle cx="300" cy="300" r="290" fill="none" stroke="var(--line)" />
-              <circle cx="300" cy="300" r="200" fill="none" stroke="var(--line)" />
-              <circle cx="300" cy="10" r="6" fill="var(--brand)" />
-              <circle cx="100" cy="300" r="4" fill="var(--paper)" />
-            </svg>
-
             <ul className="relative">
               {links.map((l, i) => (
                 <li key={l.href} className="overflow-hidden">
@@ -225,16 +222,9 @@ export function Nav() {
                         setOpen(false);
                         anchor(e);
                       }}
-                      className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
+                      className={`block py-1 font-display text-[clamp(2rem,min(11vw,calc((100svh-19rem)/4.8)),9rem)] font-semibold leading-[0.95] tracking-[-0.04em] transition-colors duration-300 hover:text-accent ${active === l.id ? "text-accent" : ""}`}
                     >
-                      {/* the moon fills down the list, full at Contact, like the section labels on the page */}
-                      <MoonPhase lit={(i + 1) / links.length} className="size-[0.4em] self-center text-muted" />
-                      <span className={`transition-[translate,color] duration-300 ease-[var(--ease-out)] group-hover:translate-x-4 group-hover:text-accent ${active === l.id ? "text-accent" : ""}`}>
-                        {l.label}
-                      </span>
-                      <span className="serif text-[0.5em] text-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                        ✦
-                      </span>
+                      {l.label}
                     </Link>
                   </motion.div>
                 </li>
@@ -248,21 +238,12 @@ export function Nav() {
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
             >
               <div className="flex flex-col gap-3">
-                <button
-                  type="button"
-                  onClick={startProject}
-                  className="group inline-flex min-h-12 items-center justify-between gap-6 self-start rounded-full bg-brand py-2 pl-6 pr-2 font-medium text-on-brand press hover:bg-paper hover:text-ink"
-                >
+                <button type="button" onClick={startProject} className={buttonClass("primary", "lg", "min-h-12 gap-3 self-start px-7 text-base")}>
                   Start a project
-                  <span className="grid size-9 place-items-center rounded-full bg-ink text-paper">
-                    <ArrowRight aria-hidden className="size-4 -rotate-45 transition-transform duration-300 ease-[var(--ease-out)] group-hover:rotate-0" />
-                  </span>
+                  <ArrowRight aria-hidden className="size-4" />
                 </button>
                 {site.available && (
-                  <span className="flex items-center gap-2.5 text-xs text-paper/70">
-                    <span className="pulse relative size-1.5 rounded-full bg-brand" />
-                    Open for new projects
-                  </span>
+                  <span className="text-xs text-paper/70">Open for new projects</span>
                 )}
                 <a href={`mailto:${site.email}`} onClick={() => track("Email clicked", { from: "menu" })} className="text-paper hover:text-accent">
                   {site.email}
