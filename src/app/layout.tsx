@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, JetBrains_Mono, Outfit } from "next/font/google";
+import { Instrument_Serif, Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Loader } from "@/components/Loader";
 import { Protect } from "@/components/Protect";
@@ -11,7 +11,6 @@ import "./globals.css";
 
 const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], display: "swap" });
 const instrument = Instrument_Serif({ variable: "--font-instrument", subsets: ["latin"], weight: "400", style: "italic", display: "swap" });
-const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -61,7 +60,7 @@ const organization = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // The theme attribute is set by the script below before React loads, hence suppressHydrationWarning.
-    <html lang="en" suppressHydrationWarning className={`${outfit.variable} ${instrument.variable} ${jetbrains.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${outfit.variable} ${instrument.variable} antialiased`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
