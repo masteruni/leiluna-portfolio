@@ -38,6 +38,20 @@ Motion respects the "reduce motion" accessibility setting, and the custom cursor
 
 Also built in: a scroll-progress line and active-section underline in the header, smooth in-page anchor scrolling, focus-trapped dialogs (menu, library viewer, showreel), a project brief that keeps its draft for the session, Share buttons and previous/next links on case studies, an on-brand error page, a web-app manifest, and long-lived CDN caching for videos and images.
 
+## Components from shadcn and Aceternity UI
+
+`components.json` lets the shadcn CLI add components from the shadcn and [Aceternity UI](https://ui.aceternity.com) registries:
+
+```bash
+npx shadcn@latest add @aceternity/<component>
+```
+
+They land in `src/components/ui/` (lower-case file names, next to the site's own pieces) and are then restyled with the brand colours in `globals.css`. Don't run `shadcn init`: it would overwrite the palette. In use so far:
+
+- `lens.tsx`: a magnifying glass over the screenshots in a case study's gallery, so their small numbers can be read.
+- `animated-tooltip.tsx`: each logo in the "Trusted by" line names its brand on hover.
+- `moving-border.tsx`: the light orbiting the rim of the "Orbit Check" buttons.
+
 ## Run locally
 
 ```bash

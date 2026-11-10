@@ -18,6 +18,7 @@ import { ShareButton } from "@/components/ShareButton";
 import { getProject, projects } from "@/content/projects";
 import { site } from "@/content/site";
 import { ArrowCircle } from "@/components/ui";
+import { Lens } from "@/components/ui/lens";
 
 // Break a title into two lines: at a comma if it has one, otherwise in the middle.
 function titleLines(title: string) {
@@ -208,14 +209,23 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                   {/\.(mp4|webm|mov)$/i.test(src) ? (
                     <video controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback src={src} autoPlay muted loop playsInline preload="metadata" className="block h-auto w-full" />
                   ) : (
-                    <Image
-                      src={src}
-                      alt={`${project.title}, image ${i + 1}`}
-                      width={1200}
-                      height={1500}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="block h-auto w-full"
-                    />
+                    // These are the client's own screenshots, and the proof is in their small print (likes, reposts,
+                    // view counts): with a mouse, a magnifying glass follows the pointer so it can be read. The
+                    // glass shows a sharper copy, fetched the first time it's used.
+                    <Lens
+                      magnified={
+                        <Image src={src} alt="" width={1200} height={1500} sizes="(min-width: 1024px) 66vw, 100vw" className="block h-auto w-full" />
+                      }
+                    >
+                      <Image
+                        src={src}
+                        alt={`${project.title}, image ${i + 1}`}
+                        width={1200}
+                        height={1500}
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="block h-auto w-full"
+                      />
+                    </Lens>
                   )}
                 </Reveal>
               ))}

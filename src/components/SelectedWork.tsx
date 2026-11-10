@@ -12,6 +12,7 @@ import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
 import { ArrowCircle, buttonClass } from "./ui";
+import { MovingBorder } from "./ui/moving-border";
 
 const tiltSpring = { stiffness: 160, damping: 18, mass: 0.6 };
 
@@ -172,8 +173,10 @@ export function SelectedWork() {
               track("Free audit", { from: "work" });
               openOrbitCheck();
             }}
-            className={buttonClass("outline", "lg")}
+            className={buttonClass("outline", "lg", "relative")}
           >
+            {/* over the button's own hairline border, hence the 1px outset */}
+            <MovingBorder className="-inset-px" />
             Get your free Orbit Check
           </button>
         </div>

@@ -16,6 +16,7 @@ import { Magnetic } from "./Magnetic";
 import { Planet } from "./Planet";
 import { RotatingText } from "./RotatingText";
 import { TrustLine } from "./TrustLine";
+import { MovingBorder } from "./ui/moving-border";
 
 // Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
 // next steps (start a project, a free feed audit, or a free call) above the fold.
@@ -127,8 +128,10 @@ export function Hero() {
             <button
               type="button"
               onClick={orbitCheck}
-              className="flex items-center justify-center rounded-full bg-ink/40 px-7 py-4 font-medium ring-1 ring-inset ring-line backdrop-blur-md transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
+              className="relative flex items-center justify-center rounded-full bg-ink/40 px-7 py-4 font-medium ring-1 ring-inset ring-line backdrop-blur-md transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
             >
+              {/* a light orbits the rim: the mark of the Orbit Check wherever it's offered */}
+              <MovingBorder />
               Free Orbit Check
             </button>
           </div>
