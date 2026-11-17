@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { motion, useMotionTemplate, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useId, useRef, useState } from "react";
 import { founders } from "@/content/site";
+import { track } from "@/lib/track";
 import { Crescent } from "./Crescent";
 import { Eyebrow } from "./Eyebrow";
 import { LineReveal } from "./LineReveal";
@@ -16,6 +17,8 @@ const tiltSpring = { stiffness: 150, damping: 18, mass: 0.6 };
 function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const [more, setMore] = useState(false); // responsibilities and certifications, opened
+  const panel = useId();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
   const rotate = useTransform(scrollYProgress, [0, 1], i ? [20, -20] : [-20, 20]);
@@ -96,36 +99,69 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
           {role[1] && <span className="block text-accent">{role[1]}</span>}
         </p>
         <p className="mt-6 max-w-lg text-[1.05rem] leading-relaxed text-paper/70">{f.bio}</p>
-        <p className="mt-10 text-xs text-muted">Leads</p>
-        <ul className="mt-3 max-w-lg border-t border-line">
-          {f.leads.map((l) => (
-            <li
-              key={l}
-              className="flex items-baseline gap-4 border-b border-line py-3"
-            >
-              <span aria-hidden className="size-1.5 shrink-0 translate-y-[-2px] rounded-full bg-brand" />
-              <span className="text-paper/85">{l}</span>
-            </li>
-          ))}
-        </ul>
-        {f.certifications.length > 0 && (
-          <>
-            <p className="mt-8 text-xs text-muted">Certified in</p>
+
+        {/* What each founder leads, and their certifications, wait behind one tap: the section reads as two people
+            first, and the detail is there for whoever wants it. It stays in the page while closed (folded to no
+            height and inert), so search engines still read it. */}
+        <button
+          type="button"
+          aria-expanded={more}
+          aria-controls={panel}
+          onClick={() => {
+            if (!more) track("Founder details opened", { founder: f.name });
+            setMore(!more);
+          }}
+          className="group/more mt-7 flex items-center gap-4 text-left press pointer-coarse:min-h-11"
+        >
+          <span
+            aria-hidden
+            className={`grid size-9 shrink-0 place-items-center rounded-full border text-lg transition-[rotate,background-color,border-color,color] duration-300 ease-[var(--ease-out)] ${
+              more ? "rotate-45 border-brand bg-brand text-on-brand" : "border-line text-paper/70 group-hover/more:border-brand group-hover/more:text-paper"
+            }`}
+          >
+            +
+          </span>
+          <span>
+            <span className="block text-paper/90">{more ? `Less about ${f.name}` : `More about ${f.name}`}</span>
+            <span className="block text-[13px] text-muted">{f.certifications.length ? "Responsibilities and certifications" : "Responsibilities"}</span>
+          </span>
+        </button>
+        <div id={panel} inert={!more}>
+          <motion.div
+            initial={false}
+            animate={{ height: more ? "auto" : 0, opacity: more ? 1 : 0 }}
+            transition={{ duration: reduce ? 0 : more ? 0.4 : 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
+          >
+            <p className="pt-8 text-xs text-muted">Leads</p>
             <ul className="mt-3 max-w-lg border-t border-line">
-              {f.certifications.map((c) => (
-                <li key={c.name} className="flex items-center gap-4 border-b border-line py-3">
-                  {c.logo && (
-                    <Image src={c.logo} alt="" width={36} height={36} className="size-9 shrink-0 object-contain" />
-                  )}
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-paper/85">{c.name}</span>
-                    <span className="block text-sm text-muted">{c.issuer}</span>
-                  </span>
+              {f.leads.map((l) => (
+                <li key={l} className="flex items-baseline gap-4 border-b border-line py-3">
+                  <span aria-hidden className="size-1.5 shrink-0 translate-y-[-2px] rounded-full bg-brand" />
+                  <span className="text-paper/85">{l}</span>
                 </li>
               ))}
             </ul>
-          </>
-        )}
+            {f.certifications.length > 0 && (
+              <>
+                <p className="mt-8 text-xs text-muted">Certified in</p>
+                <ul className="mt-3 max-w-lg border-t border-line">
+                  {f.certifications.map((c) => (
+                    <li key={c.name} className="flex items-center gap-4 border-b border-line py-3">
+                      {c.logo && (
+                        <Image src={c.logo} alt="" width={36} height={36} className="size-9 shrink-0 object-contain" />
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-paper/85">{c.name}</span>
+                        <span className="block text-sm text-muted">{c.issuer}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </motion.div>
+        </div>
       </div>
     </article>
   );

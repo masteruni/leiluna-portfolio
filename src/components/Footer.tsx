@@ -34,8 +34,10 @@ export function Footer() {
   const floor = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: floor, offset: ["start end", "end end"] });
-  const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["55%", "0%"]);
-  const glow = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [0.15, 1]);
+  // With reduced motion the wordmark neither rises nor fades in: that's switched off in CSS (below), so the server's
+  // HTML and the browser's always match.
+  const rise = useTransform(scrollYProgress, [0, 1], ["55%", "0%"]);
+  const glow = useTransform(scrollYProgress, [0, 1], [0.15, 1]);
 
   // Moonlight over the wordmark: it follows the mouse, and drifts across on its own when there's no pointer.
   const mark = useRef<HTMLDivElement>(null);
@@ -107,7 +109,7 @@ export function Footer() {
         <motion.div
           ref={mark}
           style={{ y: rise, opacity: glow }}
-          className="relative"
+          className="relative motion-reduce:opacity-100! motion-reduce:transform-none!"
           onPointerMove={(e) => {
             if (e.pointerType !== "mouse") return;
             const r = e.currentTarget.getBoundingClientRect();

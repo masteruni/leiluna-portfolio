@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { useRef, type CSSProperties, type ReactNode } from "react";
 
 // Each line rises out of a mask — the classic editorial headline reveal.
@@ -25,7 +25,6 @@ export function LineReveal({
   inView?: boolean;
   css?: boolean;
 }) {
-  const reduce = useReducedMotion();
   // Observe the wrapper: the lines themselves start clipped by their masks, so they never "intersect".
   const ref = useRef<HTMLSpanElement>(null);
   const seen = useInView(ref, { once: true, margin: "0px 0px -15% 0px" });
@@ -40,9 +39,11 @@ export function LineReveal({
               {line}
             </span>
           ) : (
+          // With reduced motion the line is simply there: the start position is switched off in CSS rather than
+          // left out of the markup, so the server's HTML and the browser's always match.
           <motion.span
-            className="block origin-top-left"
-            initial={reduce ? false : { y: "110%", rotate: 4 }}
+            className="block origin-top-left motion-reduce:transform-none!"
+            initial={{ y: "110%", rotate: 4 }}
             animate={shown ? { y: "0%", rotate: 0 } : undefined}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: delay + i * stagger }}
           >

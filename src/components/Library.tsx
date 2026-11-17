@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion/react";
 import { useLenis } from "lenis/react";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
-import { industries, industriesOf, pieces, type Industry, type Kind, type Piece, type PieceFormat } from "@/content/library";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type RefObject } from "react";
+import { industries, industriesOf, pieces, type Industry, type Piece, type PieceFormat } from "@/content/library";
 import { useFocusTrap } from "@/lib/focus";
 import { openBriefWith } from "@/lib/brief";
 import { spark } from "@/lib/spark";
@@ -60,11 +60,30 @@ function useColumns() {
   return useSyncExternalStore(subscribeColumns, getColumns, () => 4);
 }
 
-const kinds: { id: "all" | Kind; label: string }[] = [
-  { id: "all", label: "Everything" },
-  { id: "video", label: "Reels & video" },
-  { id: "graphic", label: "Graphics" },
+// The Library's shelves: vertical reels, every other video, graphics, and sample edits. A sample edit (a piece with
+// `sample` in library.ts) was made on our own initiative, so it goes on its own shelf whatever its format and never
+// sits among the work made for clients.
+type Shelf = "reel" | "video" | "graphic" | "sample";
+const shelfOf = (p: Piece): Shelf => (p.sample ? "sample" : p.kind === "graphic" ? "graphic" : p.format === "reel" ? "reel" : "video");
+const shelves: { id: Shelf; label: string; one: string; many: string; note?: string }[] = [
+  { id: "reel", label: "Reels", one: "reel", many: "reels" },
+  { id: "video", label: "Videos", one: "video", many: "videos" },
+  { id: "graphic", label: "Graphics", one: "graphic", many: "graphics" },
+  {
+    id: "sample",
+    label: "Sample edits",
+    one: "sample edit",
+    many: "sample edits",
+    note: "Made on our own to show a style. Not made for or with the brands shown.",
+  },
 ];
+
+// How closely a piece belongs to an industry it's listed under: made for that industry alone, shared with a few
+// others, or a style that works for any brand. Used to put the closest pieces first when an industry is picked.
+const closeness = (p: Piece) => {
+  const n = industriesOf(p).length;
+  return n === 1 ? 0 : n < industries.length ? 1 : 2;
+};
 
 // Placeholder artwork until a real file is added, or the real image/video.
 function PieceArt({
@@ -202,8 +221,11 @@ function Tile({ p, onOpen, index, spot }: { p: Piece; onOpen: (opener: HTMLButto
   // The outer box glides to the tile's new spot when the filters change; the inner one fades it in and out.
   return (
     <div className="absolute left-0 top-0 motion-safe:transition-transform motion-safe:duration-[350ms] motion-safe:ease-[var(--ease-out)]" style={spot}>
+      {/* With reduced motion the tile is simply there: the entrance is switched off in CSS rather than left out of
+          the markup, so the server's HTML and the browser's always match. */}
       <motion.div
-        initial={reduce ? false : { opacity: 0, y: 24, filter: "blur(4px)" }}
+        className="motion-reduce:opacity-100! motion-reduce:filter-none! motion-reduce:transform-none!"
+        initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         // Leaving is quicker than arriving, and never waits for the stagger.
         exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.15, delay: 0 } }}
@@ -550,34 +572,28 @@ function Lightbox({
   );
 }
 
-// How many pieces show before "Show all": two rows on desktop, four on phones. A filter with only a few more
-// than that simply shows everything; a button hiding one or two pieces isn't worth the extra tap.
+// How many pieces one shelf shows before "Show all": two rows on desktop, four on phones. A filter with only a few
+// more than that simply shows everything; a button hiding one or two pieces isn't worth the extra tap.
 const FIRST = 8;
 const FOLD_FROM = FIRST + 5;
 
-export function Library() {
-  const [kind, setKind] = useState<"all" | Kind>("all");
-  const [industry, setIndustry] = useState<"All" | Industry>("All");
-  // Which filter combination was expanded, so changing a filter folds the grid back to its first pieces.
-  const [expandedFor, setExpandedFor] = useState<string | null>(null);
-  const grid = useRef<HTMLDivElement>(null);
-  const showAll = useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = useState<number | null>(null);
-  const [openedFrom, setOpenedFrom] = useState<DOMRect | null>(null); // the tile it opened out of
-  // The tile that opened the viewer, so focus goes back there when it closes.
-  const opener = useRef<HTMLButtonElement | null>(null);
-  const lenis = useLenis();
-  const cols = useColumns();
-
-  const list = useMemo(
-    () => pieces.filter((p) => (kind === "all" || p.kind === kind) && (industry === "All" || industriesOf(p).includes(industry))),
-    [kind, industry],
-  );
-  const filterKey = `${kind}|${industry}`;
-  const expanded = expandedFor === filterKey || list.length < FOLD_FROM;
-  const shown = expanded ? list : list.slice(0, FIRST);
-  // Masonry: each piece drops into whichever column is shortest so far, so the columns end level (the first
-  // row still reads left to right). Spots are in container-query units, so they're right on the first paint.
+// The grid. Each piece drops into whichever column is shortest so far, so the columns end level (the first row
+// still reads left to right). Spots are in container-query units, so they're right on the first paint.
+function Masonry({
+  shown,
+  cols,
+  folded = false,
+  gridRef,
+  onOpen,
+  className = "",
+}: {
+  shown: Piece[];
+  cols: number;
+  folded?: boolean; // more pieces are waiting behind "Show all": the grid fades out at the bottom
+  gridRef?: RefObject<HTMLDivElement | null>;
+  onOpen: (p: Piece, opener: HTMLButtonElement) => void;
+  className?: string;
+}) {
   const masonry = useMemo(() => {
     const colW = `((100cqw - ${(cols - 1) * GAP}px) / ${cols})`;
     const units = Array<number>(cols).fill(0); // summed height ÷ width of the tiles in each column
@@ -597,6 +613,82 @@ export function Library() {
     const columns = units.flatMap((u, c) => (count[c] ? [`${u} * ${colW} + ${(count[c] - 1) * GAP}px`] : []));
     return { spots, height: columns.length ? `max(${columns.join(", ")})` : "0px" };
   }, [shown, cols]);
+
+  return (
+    <div ref={gridRef} data-focus-group className={`@container relative ${className}`}>
+      {/* holds the height: container units only resolve inside the container, not on it */}
+      <div aria-hidden className="motion-safe:transition-[height] motion-safe:duration-[350ms] motion-safe:ease-[var(--ease-out)]" style={{ height: masonry.height }} />
+      <AnimatePresence>
+        {shown.map((p, i) => (
+          <Tile key={p.id} p={p} index={i} spot={masonry.spots[i]} onOpen={(el) => onOpen(p, el)} />
+        ))}
+      </AnimatePresence>
+      {/* the folded grid fades out at the bottom, so it reads as "there's more" */}
+      {folded && <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ink to-transparent" />}
+    </div>
+  );
+}
+
+// A night island (dark in both themes), so the work plays against black like it does on a phone.
+// Two ways to narrow it down: a format (the bar that stays in reach while the grid scrolls) and an industry (every
+// one in view, no sideways scrolling on a computer). With every format showing, the pieces sit on labelled shelves,
+// a row each, with the sample edits on a shelf of their own; picking a shelf opens it in full.
+export function Library() {
+  const [shelf, setShelf] = useState<"all" | Shelf>("all");
+  const [industry, setIndustry] = useState<"All" | Industry>("All");
+  // Which filter combination was expanded, so changing a filter folds the grid back to its first pieces.
+  const [expandedFor, setExpandedFor] = useState<string | null>(null);
+  const top = useRef<HTMLDivElement>(null);
+  const grid = useRef<HTMLDivElement>(null);
+  const showAll = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState<number | null>(null);
+  const [openedFrom, setOpenedFrom] = useState<DOMRect | null>(null); // the tile it opened out of
+  // The tile that opened the viewer, so focus goes back there when it closes.
+  const opener = useRef<HTMLButtonElement | null>(null);
+  const lenis = useLenis();
+  const cols = useColumns();
+
+  // Everything for the chosen industry: pieces made for it first, then ones it shares, then styles for any brand.
+  const inIndustry = useMemo(
+    () => (industry === "All" ? pieces : pieces.filter((p) => industriesOf(p).includes(industry)).sort((a, b) => closeness(a) - closeness(b))),
+    [industry],
+  );
+  // ...in the chosen format. With every format showing they run shelf by shelf, which is also the order the viewer
+  // steps through them.
+  const list = useMemo(
+    () => (shelf === "all" ? shelves.flatMap((s) => inIndustry.filter((p) => shelfOf(p) === s.id)) : inIndustry.filter((p) => shelfOf(p) === shelf)),
+    [inIndustry, shelf],
+  );
+  const on = (s: Shelf) => inIndustry.filter((p) => shelfOf(p) === s);
+  // How many pieces each industry chip would show, given the current format. An industry with none isn't offered.
+  const perIndustry = useMemo(() => {
+    const m = new Map<Industry, number>();
+    pieces
+      .filter((p) => shelf === "all" || shelfOf(p) === shelf)
+      .forEach((p) => industriesOf(p).forEach((ind) => m.set(ind, (m.get(ind) ?? 0) + 1)));
+    return m;
+  }, [shelf]);
+
+  // Every format: one row per shelf (two for reels and graphics on phones, where a row is only two tiles), and
+  // "See all" for the rest.
+  // The sample edits are a side shelf: a single row of smaller tiles, so they don't take the room the client work has.
+  const colsOn = (s: Shelf) => (s === "sample" ? (cols === 4 ? 6 : cols === 3 ? 4 : 2) : cols);
+  const row = (s: Shelf) => (cols === 2 ? (s === "reel" || s === "graphic" ? 4 : 2) : colsOn(s));
+  const rows =
+    shelf === "all"
+      ? shelves.flatMap((s) => {
+          const items = on(s.id);
+          // one piece over a full row still shows (a button hiding one piece isn't worth the tap), except on the
+          // side shelf, where that piece would start a second row
+          const spare = s.id === "sample" ? 0 : 1;
+          return items.length ? [{ ...s, items, cols: colsOn(s.id), shown: items.length > row(s.id) + spare ? items.slice(0, row(s.id)) : items }] : [];
+        })
+      : [];
+  // One format: its first pieces, then "Show all".
+  const filterKey = `${shelf}|${industry}`;
+  const expanded = expandedFor === filterKey || list.length < FOLD_FROM;
+  const shown = expanded ? list : list.slice(0, FIRST);
+
   // Open the project brief with a note about what the visitor wants, then glide to it (the viewer, if open,
   // closes first). Same flow as "I want this" in Pick a format.
   const askFor = (message: string) => {
@@ -610,8 +702,14 @@ export function Library() {
     });
   };
 
-  // Only offer industries that have pieces in the current format.
-  const available = useMemo(() => new Set(pieces.filter((p) => kind === "all" || p.kind === kind).flatMap(industriesOf)), [kind]);
+  // Back to the top of the filters, so a visitor who changed the grid from far down isn't left below it.
+  const toTop = () =>
+    requestAnimationFrame(() => {
+      const t = top.current;
+      if (!t) return;
+      if (lenis) lenis.scrollTo(t, { offset: -96, duration: 1 });
+      else t.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 
   useEffect(() => {
     if (open !== null) lenis?.stop();
@@ -621,20 +719,20 @@ export function Library() {
   const close = useCallback(() => {
     setOpen(null);
     opener.current?.focus();
-  }, []);
+  }, [setOpen]);
 
-  const count = (k: "all" | Kind) => pieces.filter((p) => k === "all" || p.kind === k).length;
-  // How many pieces each industry chip would show, given the current format.
-  const perIndustry = useMemo(() => {
-    const m = new Map<string, number>();
-    pieces
-      .filter((p) => kind === "all" || p.kind === kind)
-      .forEach((p) => industriesOf(p).forEach((ind) => m.set(ind, (m.get(ind) ?? 0) + 1)));
-    return m;
-  }, [kind]);
+  const openPiece =(p: Piece, el: HTMLButtonElement) => {
+    opener.current = el;
+    setOpenedFrom(el.getBoundingClientRect());
+    track("Library piece opened", { piece: p.id, kind: p.kind });
+    setOpen(list.indexOf(p));
+  };
+
+  const current = shelves.find((s) => s.id === shelf);
+  const noun = list.length === 1 ? (current?.one ?? "piece") : (current?.many ?? "pieces");
 
   return (
-    <section id="library" className="relative px-5 py-16 sm:px-10 md:py-24">
+    <section id="library" className="night relative rounded-[2rem] px-5 py-16 sm:rounded-[3rem] sm:px-10 md:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -649,124 +747,125 @@ export function Library() {
           </p>
         </div>
 
-        {/* filters */}
-        <div className="sticky-below-header sticky z-20 -mx-5 mt-10 border-y border-line bg-ink/80 px-5 py-4 backdrop-blur-xl sm:-mx-10 sm:px-10">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div role="group" aria-label="Filter by format" className="-mx-5 flex shrink-0 gap-2 overflow-x-auto overscroll-x-contain px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
-              {kinds.map((k) => (
-                <button
-                  key={k.id}
-                  type="button"
-                  aria-pressed={kind === k.id}
-                  onClick={(e) => {
-                    if (kind !== k.id) spark(e);
-                    setKind(k.id);
-                    setIndustry("All");
-                    setOpen(null);
-                  }}
-                  className={chipClass(kind === k.id, "paper", "md", "shrink-0 whitespace-nowrap")}
-                >
-                  {k.label}
-                  <sup className="ml-1 text-[11px] tabular-nums">{count(k.id)}</sup>
-                </button>
-              ))}
-            </div>
-            <div
-              role="group"
-              aria-label="Filter by industry"
-              className="-mx-5 flex min-w-0 gap-1 overflow-x-auto overscroll-x-contain px-5 [mask-image:linear-gradient(to_right,black_92%,transparent)] [scrollbar-width:none] sm:mx-0 sm:px-0 lg:pr-10"
-            >
-              {(["All", ...industries] as const).map((ind) => {
-                const disabled = ind !== "All" && !available.has(ind);
+        <div ref={top} className="mt-10" />
+        {/* format: stays in reach while the grid scrolls, with the chosen industry beside it */}
+        <div className="sticky-below-header sticky z-20 -mx-5 border-y border-line bg-ink/80 px-5 py-3 backdrop-blur-xl sm:-mx-10 sm:px-10">
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+            <div role="group" aria-label="Filter by format" className="-mx-5 flex gap-2 overflow-x-auto overscroll-x-contain px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
+              {([{ id: "all", label: "Everything" }, ...shelves] as const).map((s) => {
+                const n = s.id === "all" ? inIndustry.length : on(s.id).length;
                 return (
                   <button
-                    key={ind}
+                    key={s.id}
                     type="button"
-                    disabled={disabled}
-                    aria-pressed={industry === ind}
+                    disabled={!n}
+                    aria-pressed={shelf === s.id}
                     onClick={(e) => {
-                      if (industry !== ind) spark(e);
-                      setIndustry(ind);
+                      if (shelf !== s.id) spark(e);
+                      setShelf(s.id);
+                      setOpen(null);
                     }}
-                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs press disabled:opacity-25 pointer-coarse:min-h-11 pointer-coarse:min-w-11 ${
-                      industry === ind ? "bg-brand text-on-brand" : "text-paper/60 hover:text-paper"
-                    }`}
+                    className={chipClass(shelf === s.id, "paper", "md", "shrink-0 whitespace-nowrap disabled:pointer-events-none disabled:opacity-30")}
                   >
-                    {ind}
-                    {ind !== "All" && !disabled && <sup className="ml-1 text-[11px] tabular-nums">{perIndustry.get(ind)}</sup>}
+                    {s.label}
+                    <sup className="ml-1 text-[11px] tabular-nums">{n}</sup>
                   </button>
                 );
               })}
             </div>
+            {industry !== "All" && (
+              <button
+                type="button"
+                onClick={() => setIndustry("All")}
+                className="flex items-center gap-2 rounded-full border border-brand/60 px-3.5 py-2 text-xs text-paper press hover:border-brand pointer-coarse:min-h-11"
+              >
+                <span className="sr-only">Clear the industry filter: </span>
+                {industry}
+                <span aria-hidden>✕</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* industry: all of them in view on a computer; on a phone the row scrolls sideways */}
+        <div className="mt-4 flex items-start gap-4">
+          <p aria-hidden className="hidden shrink-0 pt-2 text-[13px] text-muted sm:block">
+            Industry
+          </p>
+          <div
+            role="group"
+            aria-label="Filter by industry"
+            className="-mx-5 flex min-w-0 items-center gap-1.5 overflow-x-auto overscroll-x-contain px-5 [mask-image:linear-gradient(to_right,black_92%,transparent)] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:[mask-image:none]"
+          >
+            {(["All", ...industries] as const)
+              .filter((ind) => ind === "All" || perIndustry.get(ind))
+              .map((ind) => (
+                <button
+                  key={ind}
+                  type="button"
+                  aria-pressed={industry === ind}
+                  onClick={(e) => {
+                    if (industry !== ind) spark(e);
+                    setIndustry(ind);
+                  }}
+                  className={chipClass(industry === ind, "brand", "sm", "shrink-0 whitespace-nowrap")}
+                >
+                  {ind}
+                  {ind !== "All" && <sup className="ml-1 text-[11px] tabular-nums">{perIndustry.get(ind)}</sup>}
+                </button>
+              ))}
+            <button
+              type="button"
+              onClick={() => {
+                track("Style requested", { piece: "another industry" });
+                askFor("We'd like to see what you'd make for our industry: ");
+              }}
+              className="shrink-0 whitespace-nowrap px-2 py-2 text-xs text-paper/60 underline decoration-paper/30 underline-offset-4 transition-colors hover:text-paper pointer-coarse:min-h-11"
+            >
+              Don&apos;t see yours? Ask us
+            </button>
           </div>
         </div>
 
         <p className="mt-6 text-[13px] text-muted" aria-live="polite">
-          Showing {expanded ? list.length : `${shown.length} of ${list.length}`} {list.length === 1 ? "piece" : "pieces"}
-          {industry !== "All" && <span className="text-paper/60"> in {industry}</span>}
+          {shelf === "all" || expanded ? list.length : `Showing ${shown.length} of ${list.length}`} {noun}
+          {industry !== "All" && <span className="text-paper/60"> for {industry}</span>}
           <span className="hidden sm:inline">. Tap any piece to open it.</span>
         </p>
+        {current?.note && <p className="mt-2 text-[13px] text-paper/70">{current.note}</p>}
 
-        {list.length === 0 && (
-          <div className="mt-10 flex flex-col items-center gap-6 rounded-[2rem] border border-dashed border-line px-6 py-20 text-center">
-            {/* an empty orbit */}
-            <svg viewBox="0 0 120 120" className="size-24" aria-hidden>
-              <ellipse cx="60" cy="60" rx="52" ry="20" fill="none" stroke="var(--line)" transform="rotate(-18 60 60)" />
-              <circle cx="60" cy="60" r="14" fill="var(--ink-2)" />
-              <circle cx="60" cy="60" r="14" fill="none" stroke="var(--brand)" strokeOpacity="0.7" />
-              <circle cx="104" cy="44" r="3" fill="var(--brand)" />
-            </svg>
-            <p className="font-display text-2xl font-semibold">Nothing in this orbit yet.</p>
-            <p className="max-w-xs text-sm text-muted">We haven&apos;t published a {kind === "all" ? "piece" : kind === "video" ? "video" : "graphic"} for {industry} yet, but it&apos;s exactly the kind of thing we make.</p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  setKind("all");
-                  setIndustry("All");
-                }}
-                className={buttonClass("outline", "md")}
-              >
-                Show everything
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  track("Style requested", { piece: `${kind}/${industry}` });
-                  askFor(`We'd like a ${kind === "graphic" ? "graphic" : kind === "video" ? "video" : "piece"} for ${industry}.`);
-                }}
-                className={buttonClass("primary", "md")}
-              >
-                Ask us for one
-              </button>
+        {shelf === "all" ? (
+          rows.map((r) => (
+            <div key={r.id} className="mt-10 first-of-type:mt-6">
+              <div className="flex items-baseline justify-between gap-4 border-b border-line pb-3">
+                <h3 className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
+                  {r.label}
+                  <sup className="ml-1.5 text-xs font-normal tabular-nums text-muted">{r.items.length}</sup>
+                </h3>
+                {r.shown.length < r.items.length && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShelf(r.id);
+                      setExpandedFor(`${r.id}|${industry}`); // they asked for all of them: no second "Show all"
+                      track("Library expanded", { pieces: r.items.length });
+                      toTop();
+                    }}
+                    className="shrink-0 text-sm text-paper/80 underline decoration-paper/30 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent pointer-coarse:min-h-11"
+                  >
+                    See all {r.items.length} {r.many} <span aria-hidden>→</span>
+                  </button>
+                )}
+              </div>
+              {r.note && <p className="mt-3 text-[13px] text-paper/70">{r.note}</p>}
+              <Masonry shown={r.shown} cols={r.cols} onOpen={openPiece} className="mt-5" />
             </div>
-          </div>
+          ))
+        ) : (
+          <Masonry shown={shown} cols={cols} folded={!expanded} gridRef={grid} onOpen={openPiece} className="mt-6" />
         )}
 
-        <div ref={grid} data-focus-group className="@container relative mt-6">
-          {/* holds the height: container units only resolve inside the container, not on it */}
-          <div aria-hidden className="motion-safe:transition-[height] motion-safe:duration-[350ms] motion-safe:ease-[var(--ease-out)]" style={{ height: masonry.height }} />
-          <AnimatePresence>
-            {shown.map((p, i) => (
-              <Tile
-                key={p.id}
-                p={p}
-                index={i}
-                spot={masonry.spots[i]}
-                onOpen={(el) => {
-                  opener.current = el;
-                  setOpenedFrom(el.getBoundingClientRect());
-                  track("Library piece opened", { piece: p.id, kind: p.kind });
-                  setOpen(i);
-                }}
-              />
-            ))}
-          </AnimatePresence>
-          {/* the folded grid fades out at the bottom, so it reads as "there's more" */}
-          {!expanded && <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ink to-transparent" />}
-        </div>
-
-        {!expanded && (
+        {shelf !== "all" && !expanded && (
           <div className="mt-8 flex justify-center">
             <button
               ref={showAll}
@@ -781,27 +880,21 @@ export function Library() {
               }}
               className={buttonClass("outline", "lg", "gap-3")}
             >
-              Show all {list.length} pieces
+              Show all {list.length} {noun}
               <span className="rounded-full bg-paper/10 px-2 py-0.5 text-xs tabular-nums text-muted">+{list.length - FIRST}</span>
             </button>
           </div>
         )}
-        {expanded && list.length >= FOLD_FROM && (
+        {shelf !== "all" && expanded && list.length >= FOLD_FROM && (
           <div className="mt-8 flex justify-center">
             <button
               type="button"
               onClick={() => {
                 setExpandedFor(null);
-                // Fold back, then return to the top of the grid so the visitor isn't left far below it, with
+                // Fold back, then return to the top of the Library so the visitor isn't left far below it, with
                 // keyboard focus on the "Show all" button that takes this one's place.
-                requestAnimationFrame(() => {
-                  const g = grid.current;
-                  if (g) {
-                    if (lenis) lenis.scrollTo(g, { offset: -220, duration: 1 });
-                    else g.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }
-                  requestAnimationFrame(() => showAll.current?.focus({ preventScroll: true }));
-                });
+                toTop();
+                requestAnimationFrame(() => requestAnimationFrame(() => showAll.current?.focus({ preventScroll: true })));
               }}
               className={buttonClass("outline", "lg", "gap-3")}
             >

@@ -33,6 +33,12 @@ export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
+// A case study is one finished, pre-built page per project, so opening one waits for that whole page rather than
+// showing an empty frame first. That's deliberate: the cover has to be there the moment the page changes, to morph
+// out of its card on the homepage, and an address that isn't a project gets a real 404. The links to a case study
+// fetch it ahead of the click (`prefetch` on each), so the wait is already over by then.
+export const instant = false;
+
 export async function generateMetadata({ params }: PageProps<"/work/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const project = getProject(slug);
@@ -250,6 +256,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             <HoverPreview preview={<ProjectCover project={next} />}>
             <Link
               href={`/work/${next.slug}`}
+              prefetch
               className="group flex items-end justify-between gap-6 py-12"
             >
               <div>
@@ -264,6 +271,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             {prev.slug !== next.slug && (
               <Link
                 href={`/work/${prev.slug}`}
+                prefetch
                 className="group flex items-center justify-between gap-6 border-t border-line py-6 text-sm text-muted transition-colors hover:text-paper"
               >
                 <span className="inline-flex items-center gap-2">

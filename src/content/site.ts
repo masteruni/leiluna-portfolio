@@ -24,8 +24,11 @@ export const site = {
     rotating: ["Social media", "Reels", "Content", "Campaigns", "Ads"],
     intro:
       "We plan, film, edit and post content for brands on Instagram, TikTok and YouTube, with strategy, design and AI workflows under one roof.",
-    // Library reels that play in the hero phone, in order.
+    // Library reels that play in the hero phone, in order, while "All" is picked.
     reels: ["muse-beauty-edit", "promotion-reel", "lot-to-home", "ramen-ad", "lipstick-ad", "masterclass-reel", "outfit-details", "kinetic-typography"],
+    // The industries a visitor can pick above the phone: it then plays the Library's reels for that industry.
+    // Spell each one as in `industries` in library.ts; one without a reel there is left out.
+    industries: ["Beauty & Wellness", "Food & Beverage", "Real Estate", "Education", "Fashion", "Fitness"],
   },
   tagline: "Let's build your brand.",
   description:
@@ -182,13 +185,6 @@ export const formats = [
     pitch: "Words that move to the beat, for messages people should feel, not just read.",
     need: "Content Creation & Production",
   },
-];
-
-// Floating proof in the hero. All from client screenshots.
-export const heroProof = [
-  { value: "9M", label: "views on a single reel", source: "Business Resilience Mindset" },
-  { value: "306K", label: "followers and growing", source: "Business Resilience Mindset" },
-  { value: "2.6M", label: "views on a 3.8K-follower page", source: "The AI Edge Daily" },
 ];
 
 // Verified from client screenshots (see the two case studies).

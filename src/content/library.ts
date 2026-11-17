@@ -44,6 +44,7 @@ export type Piece = {
   duration?: string; // videos, e.g. "0:24"
   tools?: string[];
   sample?: string; // a sample edit made on our own, not for the brand shown: the brand's name, e.g. "Spotify"
+  by?: string[]; // who made it, shown on the hero phone: founders' first names as in site.ts, e.g. ["Sven"]. Left out = both
 };
 
 // Real pieces only. A piece without `src` shows a designed placeholder card, so only add one once its file is ready.

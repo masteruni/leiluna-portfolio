@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import type { CSSProperties, ReactNode } from "react";
 
 export function Reveal({
@@ -20,7 +20,6 @@ export function Reveal({
    *  above the fold, which should show the moment the page arrives. */
   css?: boolean;
 }) {
-  const reduce = useReducedMotion();
   if (css) {
     const Plain = as;
     return (
@@ -31,9 +30,11 @@ export function Reveal({
   }
   const Tag = as === "li" ? motion.li : motion.div;
   return (
+    // With reduced motion the content is simply there: the hidden start is switched off in CSS rather than left out
+    // of the markup, so the server's HTML and the browser's always match.
     <Tag
-      className={className}
-      initial={reduce ? false : { opacity: 0, y }}
+      className={`motion-reduce:opacity-100! motion-reduce:transform-none! ${className ?? ""}`}
+      initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}

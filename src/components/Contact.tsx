@@ -561,13 +561,13 @@ function StartButton({ open, onClick }: { open: boolean; onClick: () => void }) 
 // The finale: a planet rises over the horizon while the call to action lands.
 export function Contact() {
   const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
   const brief = useBriefOpen();
   const briefVersion = useBriefVersion();
   const setBrief = setBriefOpen;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
-  const rise = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["35%", "0%"]);
+  // With reduced motion the planet doesn't rise: that's switched off in CSS (below), so server and browser agree.
+  const rise = useTransform(scrollYProgress, [0, 1], ["35%", "0%"]);
   const glow = useTransform(scrollYProgress, [0.3, 1], [0.2, 1]);
 
   const copy = async () => {
@@ -585,7 +585,7 @@ export function Contact() {
     <section ref={ref} id="contact" className="night relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-36 pt-24 sm:px-10 md:pb-40 md:pt-20">
       {/* rising planet: its rim is measured up from the foot of the section, so it stays under the last line of content
           (the padding above keeps them apart) however tall the section gets, brief open or closed */}
-      <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[calc(100%-6.5rem)] w-[170vw] -translate-x-1/2 md:top-[calc(100%-7rem)] md:w-[150vw]">
+      <motion.div aria-hidden style={{ y: rise }} className="pointer-events-none absolute left-1/2 top-[calc(100%-6.5rem)] w-[170vw] -translate-x-1/2 motion-reduce:transform-none! md:top-[calc(100%-7rem)] md:w-[150vw]">
         <motion.div
           style={{ opacity: glow }}
           className="aspect-square w-full rounded-full"

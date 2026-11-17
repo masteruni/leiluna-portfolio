@@ -8,10 +8,10 @@ export type SectionId = "studio" | "month" | "services" | "work" | "recent" | "l
 // something to show.
 export const sections: { id: SectionId; label: string }[] = [
   { id: "studio", label: "The studio" },
-  { id: "month", label: "A month with us" },
-  { id: "services", label: "Services, five orbits" },
   { id: "work", label: "Selected work" },
   { id: "founders", label: "The founders" },
+  { id: "month", label: "A month with us" },
+  { id: "services", label: "Services, five orbits" },
   ...(recent.length ? [{ id: "recent" as const, label: "Recent work" }] : []),
   { id: "library", label: "The library" },
   { id: "process", label: "How we work" },

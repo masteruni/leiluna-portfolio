@@ -137,15 +137,18 @@ export function Hero() {
             >
               {/* a light orbits the rim: the mark of the Orbit Check wherever it's offered */}
               <MovingBorder />
-              Free Orbit Check
+              Free audit
             </button>
           </div>
 
           {/* the price, who does the work and the brands we've worked with, right under the buttons that ask for a
               decision (they share lines where there's room) */}
           <div className="hero-in mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 short:mt-3 short:gap-y-1.5" style={{ "--d": "0.32s" } as CSSProperties}>
-            <p className="text-sm text-paper/70">
-              Plans from {site.plansFrom}. <CallLink from="hero">Book a free 30-min call</CallLink>
+            <p className="basis-full text-base text-paper sm:text-lg short:basis-auto short:text-base">
+              Plans from <span className="font-semibold">{site.plansFrom}</span>.{" "}
+              <CallLink from="hero" className="font-semibold decoration-accent! decoration-2">
+                Book a free 30-min call
+              </CallLink>
             </p>
             <FoundersLine />
             <TrustLine />

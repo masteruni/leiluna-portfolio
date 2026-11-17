@@ -70,7 +70,8 @@ function Showcase({ p, i, total, progress }: { p: Project; i: number; total: num
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{ background: `radial-gradient(40rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, ${a} 20%, transparent), transparent 60%)` }}
         />
-        <Link href={`/work/${p.slug}`} className="relative grid h-full gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-14">
+        {/* `prefetch`: the whole case study is fetched while its card is on screen, so it opens at once */}
+        <Link href={`/work/${p.slug}`} prefetch className="relative grid h-full gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:p-14">
           <div className="flex flex-col justify-between gap-10">
             <div>
               <p className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] text-paper/60">
@@ -177,7 +178,7 @@ export function SelectedWork() {
           >
             {/* over the button's own hairline border, hence the 1px outset */}
             <MovingBorder className="-inset-px" />
-            Get your free Orbit Check
+            Get your free audit
           </button>
         </div>
       </div>

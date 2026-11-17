@@ -141,12 +141,12 @@ function Dialog() {
           onClick={closeOrbitCheck}
           className={buttonClass("outline", "sm", "absolute right-5 top-5")}
         >
-          Close<span className="sr-only"> the Orbit Check</span>
+          Close<span className="sr-only"> the free audit</span>
         </button>
 
-        <p className="text-sm text-accent">Free feed audit</p>
+        <p className="text-sm text-accent">For your Instagram feed</p>
         <h2 id={`${id}-title`} className="mt-2 font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
-          Free Orbit Check
+          Free audit
         </h2>
 
         <div aria-live="polite">

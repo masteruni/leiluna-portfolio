@@ -47,7 +47,7 @@ AI workflows and having every discipline under one roof are true of the studio a
 - The brief and the Orbit Check are sent to the studio's inbox by the site itself, through Resend (one small server route, `src/app/api/send/route.ts`; there is no database). The visitor gets a real confirmation, and a failed send keeps what they typed. If no Resend key is set, both fall back to opening the visitor's own email app with the request written out.
 - The brief asks for a name and an email (how the studio replies); everything else in it is optional.
 - Pages: the homepage and one case-study page per project (`/work/<slug>`).
-- Light and dark themes. The hero, the contact section, the footer and the 404 page stay dark in both.
+- Light and dark themes. The hero, the Library, the contact section, the footer and the 404 page stay dark in both.
 - Sections that depend on content hide themselves until that content exists (Testimonials, Recent work).
 - Existing behaviour the site already holds to: motion respects the reduced-motion setting, dialogs trap focus, keyboard focus is visible, and client media is protected from drag-to-save and long-press saving.
 - Terms with fixed meanings on the site: **Orbit Check** (the free feed audit), **the Library** (single pieces by format and industry, as opposed to case studies), **Selected work** (case studies), **Recent work** (the newest pieces for current brands), **sample edit** (a piece made on the studio's own initiative, not for the brand shown).
@@ -65,7 +65,7 @@ AI workflows and having every discipline under one roof are true of the studio a
 - **Case studies** (`src/content/projects.ts`, media in `public/work/`): Business Resilience Mindset (306K followers, 9M top reel, eleven reels over 3M views) and The AI Edge Daily (2.6M-view top reel on a 3.8K-follower account, about 680 times its follower count). Every number comes from the client's own screenshots, which are shown in each case study's gallery.
 - **Headline numbers** (`stats` in `src/content/site.ts`): 29M+ views across the two clients' six pinned reels, 680×, 306K. Each names the case study it comes from.
 - **Clients** (`clients` in `src/content/site.ts`, logos in `public/clients/`): Kabogera Beauty, MD Raymundo Consulting Services, Business Resilience Mindset, The AI Edge Daily.
-- **The Library** (`src/content/library.ts`, files in `public/library/`): 38 reels and graphics across industries. Some are sample edits and are labelled as such.
+- **The Library** (`src/content/library.ts`, files in `public/library/`): 38 reels and graphics across industries. Some are sample edits: they are labelled as such and kept on a shelf of their own, apart from the work made for clients.
 - **Founders** (`founders` in `src/content/site.ts`, photos in `public/team/`, certification marks in `public/certs/`): Mj (Marian Jurielle D. Raymundo), Social Media & Client Strategy Lead, and Sven M. Laureno, AI Creative & Operations Lead.
 
 Not available, and not to be invented:

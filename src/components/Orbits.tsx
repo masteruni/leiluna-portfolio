@@ -202,7 +202,9 @@ export function Orbits() {
   return (
     <section id="services" className="relative">
       {/* Desktop: pinned orbital system */}
-      <div ref={ref} className="hidden lg:block" style={{ height: `${services.length * 70 + 10}vh` }}>
+      {/* One screen for the pinned view itself, then 28% of a screen of scrolling per service: long enough to read
+          each one on the way past, short enough that five of them don't hold the page for three screens. */}
+      <div ref={ref} className="hidden lg:block" style={{ height: `${100 + services.length * 28}vh` }}>
         <div className="sticky top-0 flex h-svh flex-col overflow-hidden px-10 pb-10 pt-28 short:pb-5 short:pt-20">
           {/* the head and the foot share the content's width, so the eyebrow lines up with every other section's */}
           <div className="mx-auto flex w-full max-w-7xl shrink-0 items-end justify-between">

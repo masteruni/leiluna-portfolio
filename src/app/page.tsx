@@ -33,11 +33,12 @@ export default function Home() {
         <Hero />
         <HorizonLoop />
         <Manifesto />
-        <MonthPlan />
-        <Orbits />
+        {/* the proof first: a visitor sees real client results before anything about how the studio works */}
         <SelectedWork />
         {/* the people straight after the proof: "two founders, hands-on" is half the offer, so it comes early */}
         <Founders />
+        <MonthPlan />
+        <Orbits />
         <RecentWork />
         <Library />
         <Phases />

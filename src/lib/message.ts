@@ -26,13 +26,13 @@ export function briefText(b: BriefData) {
     .join("\n");
 }
 
-export const orbitSubject = (handle: string) => `Free Orbit Check: @${handle}`;
+export const orbitSubject = (handle: string) => `Free audit: @${handle}`;
 
 export function orbitText(handle: string, email: string) {
   return [
     `Hi Leiluna,`,
     ``,
-    `I'd like a free Orbit Check (3 fixes for our feed).`,
+    `I'd like a free audit (3 fixes for our feed).`,
     ``,
     `Instagram: @${handle} (https://instagram.com/${handle})`,
     `Reply to: ${email}`,

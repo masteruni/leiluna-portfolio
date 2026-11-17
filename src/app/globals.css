@@ -67,7 +67,7 @@
   [data-loader] { display: none; }
 }
 
-/* Night islands: the hero, the contact finale, the footer and the 404 stay in deep space in light mode too.
+/* Night islands: the hero, the Library, the contact finale, the footer and the 404 stay in deep space in light mode too.
    (.over-night only switches the colours, for the header while it floats over one of them.) */
 .night {
   background-color: var(--ink);

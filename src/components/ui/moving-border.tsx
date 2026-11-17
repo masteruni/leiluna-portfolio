@@ -61,8 +61,15 @@ export function MovingBorder({
     progress.set(((time % duration) / duration) * length.current);
   });
 
-  const x = useTransform(progress, (v) => (length.current ? (path.current?.getPointAtLength(v).x ?? 0) : 0));
-  const y = useTransform(progress, (v) => (length.current ? (path.current?.getPointAtLength(v).y ?? 0) : 0));
+  // Where the light is on the track. The track can lose its size after it has been measured (its button is hidden
+  // at this screen width, or reduced motion is switched on while the page is open), and asking an empty outline
+  // for a point throws: then the light simply rests at the corner.
+  const at = (v: number) => {
+    const el = path.current;
+    return el && length.current && el.getTotalLength() ? el.getPointAtLength(v) : { x: 0, y: 0 };
+  };
+  const x = useTransform(progress, (v) => at(v).x);
+  const y = useTransform(progress, (v) => at(v).y);
   const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) translateX(-50%) translateY(-50%)`;
 
   return (
