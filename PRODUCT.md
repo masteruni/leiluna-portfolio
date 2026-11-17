@@ -35,7 +35,7 @@ AI workflows and having every discipline under one roof are true of the studio a
 
 - The studio works on Instagram, TikTok, YouTube and Facebook, for clients anywhere ("Working worldwide").
 - Five services: social media management, content creation and production, AI-powered content generation, AI automation and workflows, content strategy and growth.
-- Plans start at $500/month; the exact plan is shaped on the free call.
+- Plans start at $750/month; the exact plan is shaped on the free call.
 - A project runs in five phases: Discover, Plan, Create, Launch, Grow. Create, Launch and Grow repeat monthly.
 - The studio replies to a brief within one business day.
 - Ways in, all on the site: the project brief (four short steps), the free 30-minute call (Calendly), the Free Orbit Check (an Instagram handle and an email, for three fixes in 48 hours), and email. Briefs and Orbit Check requests arrive as emails in the studio's inbox, with the visitor's address as the reply-to.

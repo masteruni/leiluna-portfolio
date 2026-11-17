@@ -12,10 +12,11 @@ export const site = {
   replyTime: "one business day",
   // The free 30-minute intro call (Calendly). Every "Book a call" link on the site opens this, in a new tab.
   callUrl: "https://calendly.com/leilunastudio/30min",
-  // The lowest monthly plan, shown next to the call links and in the FAQ.
-  plansFrom: "$500/month",
+  // The lowest monthly plan, shown in the hero, under "A month with us" and in the FAQ. Change it here and all
+  // three follow; the budget choices in the brief (`brief.budgets`, below) are separate.
+  plansFrom: "$750/month",
   // Bump this when the content changes; it's the "last modified" date search engines see in the sitemap.
-  updated: "2026-10-30",
+  updated: "2026-11-18",
   headline: ["Your story.", "Our creative", "orbit."], // the slogan, shown small above the hero headline
   // The hero says plainly what the studio does; the slogan sits above it.
   hero: {
@@ -137,7 +138,7 @@ export const services = [
 // Choices in the "Start a project" brief. Budget ranges are a starting point: change them to match your pricing.
 export const brief = {
   timelines: ["As soon as possible", "Within a month", "1–3 months", "Just exploring"],
-  budgets: ["Under $500 / mo", "$500–1,500 / mo", "$1,500–3,000 / mo", "$3,000+ / mo", "One-off project", "Not sure yet"],
+  budgets: ["Under $750 / mo", "$750–1,500 / mo", "$1,500–3,000 / mo", "$3,000+ / mo", "One-off project", "Not sure yet"],
 };
 
 // "Pick a format": the formats we make, each shown with a real Library piece.
@@ -226,7 +227,7 @@ export const faqs = [
   },
   {
     q: "How much does it cost?",
-    a: "Plans start at $500/month. Every brand needs something different, so we'll shape the right plan with you on a free 30-minute call.",
+    a: `Plans start at ${site.plansFrom}. Every brand needs something different, so we'll shape the right plan with you on a free 30-minute call.`,
     link: { label: "Book a call", href: "https://calendly.com/leilunastudio/30min" },
   },
   {
