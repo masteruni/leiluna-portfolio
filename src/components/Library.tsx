@@ -40,6 +40,7 @@ const tint: Record<Industry, [string, string]> = {
   Automotive: ["#b8c4d6", "#ea6a8e"],
   "Home & Living": ["#d9c2a7", "#a8436a"],
   "Finance & Trading": ["#6bd6a0", "#3d6bff"],
+  "Gaming & Creators": ["#b46bff", "#ff4fa3"],
 };
 
 const industryLabel = (p: Piece) => {
