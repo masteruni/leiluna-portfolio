@@ -62,6 +62,18 @@ export const pieces: Piece[] = [
     duration: "1:05",
   },
   {
+    id: "relationship-story-reel",
+    kind: "video",
+    format: "reel",
+    style: "Talking head + B-roll story",
+    industry: "Education",
+    title: "He worked day and night for her. So why did she leave?",
+    src: "/library/relationship-story-reel.mp4",
+    preview: "/library/relationship-story-reel-preview.mp4",
+    poster: "/library/relationship-story-reel-poster.webp",
+    duration: "0:16",
+  },
+  {
     id: "promotion-reel",
     kind: "video",
     format: "reel",
