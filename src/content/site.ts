@@ -301,7 +301,7 @@ export const founders = [
       { name: "Social Media Manager Playbook", issuer: "GoHighLevel Experts", logo: "/certs/gohighlevel.webp" },
       { name: "Fundamentals of Marketing", issuer: "University of the Philippines Open University", logo: "/certs/up-open-university.webp" },
       { name: "Business Concepts, Ideation and the Business Plan", issuer: "University of the Philippines Open University", logo: "/certs/up-open-university.webp" },
-    ] as { name: string; issuer: string; logo?: string }[],
+    ] as { name: string; issuer: string; logo?: string; logoLight?: string }[],
   },
   {
     name: "Sven",
@@ -317,7 +317,14 @@ export const founders = [
     ],
     photo: "/team/sven.webp" as string | null,
     face: { x: 0.47, y: 0.21, zoom: 2.1 },
-    certifications: [] as { name: string; issuer: string; logo?: string }[],
+    // Only the ones that matter for the studio's work. `logoLight` is the issuer mark for the light theme, when its
+    // usual mark is white.
+    certifications: [
+      { name: "Certified User: The Editor's Guide to DaVinci Resolve 20", issuer: "Blackmagic Design", logo: "/certs/blackmagic.webp", logoLight: "/certs/blackmagic-ink.webp" },
+      { name: "The Beginner's Guide to DaVinci Resolve 20", issuer: "Blackmagic Design", logo: "/certs/blackmagic.webp", logoLight: "/certs/blackmagic-ink.webp" },
+      { name: "Social Media Marketing Crash Course", issuer: "Semrush", logo: "/certs/semrush.webp" },
+      { name: "Google Ads Apps Certification", issuer: "Google", logo: "/certs/google.webp" },
+    ] as { name: string; issuer: string; logo?: string; logoLight?: string }[],
   },
 ];
 

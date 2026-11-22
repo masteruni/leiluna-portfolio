@@ -149,7 +149,10 @@ function Founder({ f, i }: { f: (typeof founders)[number]; i: number }) {
                   {f.certifications.map((c) => (
                     <li key={c.name} className="flex items-center gap-4 border-b border-line py-3">
                       {c.logo && (
-                        <Image src={c.logo} alt="" width={36} height={36} className="size-9 shrink-0 object-contain" />
+                        <Image src={c.logo} alt="" width={36} height={36} className={`size-9 shrink-0 object-contain ${c.logoLight ? "light:hidden" : ""}`} />
+                      )}
+                      {c.logoLight && (
+                        <Image src={c.logoLight} alt="" width={36} height={36} className="hidden size-9 shrink-0 object-contain light:block" />
                       )}
                       <span className="min-w-0 flex-1">
                         <span className="block text-paper/85">{c.name}</span>
