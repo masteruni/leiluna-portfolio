@@ -82,7 +82,7 @@ export function Hero() {
               delay={0.1}
               lines={[
                 <span key="a">
-                  <RotatingText words={site.hero.rotating} play={ready} boxed />
+                  <RotatingText words={site.hero.rotating} play={ready} />
                   {site.hero.title[0].replace(site.hero.rotating[0], "")}
                 </span>,
                 <span key="b">
