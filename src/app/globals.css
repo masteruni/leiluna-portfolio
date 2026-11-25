@@ -461,3 +461,12 @@ html[data-vt="theme"]::view-transition-new(root) {
 }
 /* (The hero's aurora glow, a huge soft layer that took about two-thirds of the redraw time on each zoom step, is
    left out on touch screens with pointer-coarse:hidden in Hero.tsx.) */
+/* "Trusted by" rows that drift sideways (TrustedBy.tsx): each row holds its set twice, so moving it by half loops
+   without a seam. Faded at both edges; still while pinch-zoomed and with reduced motion. */
+.trust-drift { animation: trust-drift 40s linear infinite; }
+.trust-drift-reverse { animation-direction: reverse; }
+.trust-mask:hover .trust-drift { animation-play-state: paused; }
+@keyframes trust-drift { to { transform: translate3d(-50%, 0, 0); } }
+.trust-mask { mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+[data-zoomed] .trust-drift { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .trust-drift { animation: none; } }
