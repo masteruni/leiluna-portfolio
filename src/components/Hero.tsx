@@ -90,7 +90,7 @@ export function Hero() {
     <section ref={ref} className="night relative min-h-[100svh] overflow-hidden">
       <HeroWall />
       {/* a soft pink-and-violet glow drifting behind the headline */}
-      <div aria-hidden className="hero-aurora pointer-events-none absolute left-1/2 top-[44%] h-[60%] w-[min(90rem,110%)] -translate-x-1/2 -translate-y-1/2" />
+      <div aria-hidden className="hero-aurora pointer-events-none absolute pointer-coarse:hidden left-1/2 top-[44%] h-[60%] w-[min(90rem,110%)] -translate-x-1/2 -translate-y-1/2" />
 
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}

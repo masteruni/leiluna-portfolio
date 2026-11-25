@@ -108,7 +108,7 @@ export function Nav() {
         onFocusCapture={() => setHidden(false)}
         className={`fixed inset-x-0 top-0 z-[80] flex items-center justify-between border-b px-5 py-5 text-paper transition-[transform,background-color,border-color] duration-400 ease-[var(--ease-out)] sm:px-10 ${
           hidden && !open ? "-translate-y-full" : ""
-        } ${overNight && !open ? "over-night" : ""} ${scrolled && !open ? "border-line bg-ink/75 backdrop-blur-xl" : "border-transparent"}`}
+        } ${overNight && !open ? "over-night" : ""} ${scrolled && !open ? "border-line bg-ink/75 backdrop-blur-xl pointer-coarse:bg-ink/95 pointer-coarse:backdrop-blur-none" : "border-transparent"}`}
       >
         <Link href="/" aria-label={`${site.name} home`} className="flex items-center gap-3 pointer-coarse:min-h-11 pointer-coarse:min-w-11" onClick={() => setOpen(false)}>
           <Mark width={36} height={38} priority className="h-9 w-auto" />

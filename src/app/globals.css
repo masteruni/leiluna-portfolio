@@ -408,7 +408,7 @@ html[data-vt="theme"]::view-transition-new(root) {
 /* The reel wall behind the hero (HeroWall.tsx): each column holds its tiles twice and drifts by half its height, so
    the loop has no seam; alternate columns drift the other way. Still with reduced motion. */
 @keyframes wall-drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -50%, 0); } }
-.hero-wall-col { animation: wall-drift 80s linear infinite; backface-visibility: hidden; }
+.hero-wall-col { animation: wall-drift 80s linear infinite; }
 .hero-wall-down { animation-direction: reverse; }
 @media (prefers-reduced-motion: reduce) { .hero-wall-col { animation: none; } }
 
@@ -452,3 +452,12 @@ html[data-vt="theme"]::view-transition-new(root) {
   .hero-wall-col, .hero-aurora, .shiny-text { animation: none; }
   .shiny-text { background: none; color: var(--brand); }
 }
+/* Touch screens: the page-wide film grain and the drifting starfield are fixed, full-screen layers that Chrome on
+   Android redraws at every step of a pinch-zoom and while scrolling, which showed as flicker across the whole site.
+   On touch, the grain is left out (it's barely visible on a phone) and the stars hold still. */
+@media (pointer: coarse) {
+  .grain::after { display: none; }
+  .stars::before { animation: none; will-change: auto; }
+}
+/* (The hero's aurora glow, a huge soft layer that took about two-thirds of the redraw time on each zoom step, is
+   left out on touch screens with pointer-coarse:hidden in Hero.tsx.) */
