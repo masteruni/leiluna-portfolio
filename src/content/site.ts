@@ -25,11 +25,8 @@ export const site = {
     rotating: ["Social media", "Reels", "Content", "Campaigns", "Ads"],
     intro:
       "We plan, film, edit and post content for brands on Instagram, TikTok and YouTube, with strategy, design and AI workflows under one roof.",
-    // Library reels that play in the hero phone, in order, while "All" is picked.
+    // Library reels fanned in the hero, in order (vertical reels with a preview clip).
     reels: ["muse-beauty-edit", "promotion-reel", "lot-to-home", "ramen-ad", "lipstick-ad", "masterclass-reel", "outfit-details", "kinetic-typography"],
-    // The industries a visitor can pick above the phone: it then plays the Library's reels for that industry.
-    // Spell each one as in `industries` in library.ts; one without a reel there is left out.
-    industries: ["Beauty & Wellness", "Food & Beverage", "Real Estate", "Education", "Fashion", "Fitness"],
   },
   tagline: "Let's build your brand.",
   description:

@@ -15,7 +15,6 @@ type Events = {
   "Call booked": { from: string };
   "Email copied": { from: string };
   "Email clicked": { from: string };
-  "Hero industry picked": { industry: string };
   "Founder details opened": { founder: string };
   "Library piece opened": { piece: string; kind: string };
   "Library expanded": { pieces: number };

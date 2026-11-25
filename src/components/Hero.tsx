@@ -13,7 +13,7 @@ import { useReady } from "@/lib/ready";
 import { track } from "@/lib/track";
 import { CallLink } from "./CallLink";
 import { FoundersLine } from "./FoundersLine";
-import { HeroPhone } from "./HeroPhone";
+import { HeroReels } from "./HeroReels";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { Planet } from "./Planet";
@@ -22,7 +22,7 @@ import { TrustLine } from "./TrustLine";
 import { LinkPreview } from "./ui/link-preview";
 import { MovingBorder } from "./ui/moving-border";
 
-// Says plainly what the studio does, shows real work playing in a phone, and puts the proof and the
+// Says plainly what the studio does, shows real reels fanned like cards in orbit, and puts the proof and the
 // next steps (start a project, a free feed audit, or a free call) above the fold.
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -208,7 +208,7 @@ export function Hero() {
         <motion.div style={{ y: phoneY, opacity: fadeOut }}>
           {/* (the planet lines itself up with this box on phones: see Planet.tsx) */}
           <div ref={phone} className="hero-phone-in" style={{ "--d": "0.5s" } as CSSProperties}>
-            <HeroPhone play={ready} />
+            <HeroReels play={ready} />
           </div>
         </motion.div>
       </div>
