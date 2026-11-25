@@ -16,7 +16,6 @@ import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { HeroWall } from "./HeroWall";
 import { RotatingText } from "./RotatingText";
-import { ClientRow } from "./ClientRow";
 import { LinkPreview } from "./ui/link-preview";
 
 // Says plainly what the studio does, centred over a wall of real reels, and puts the proof and the
@@ -222,7 +221,6 @@ export function Hero() {
                 );
               })}
             </dl>
-            <ClientRow />
           </div>
         </div>
       </div>

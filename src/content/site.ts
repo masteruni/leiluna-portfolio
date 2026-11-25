@@ -39,9 +39,6 @@ export const site = {
   ],
 };
 
-export const manifesto =
-  "Every brand has a story worth orbiting. We plan it, shoot it, cut it, design it and automate the busywork around it, so you show up every day with something people actually stop for.";
-
 // From the Leiluna Studio service sheet.
 export const services = [
   {
