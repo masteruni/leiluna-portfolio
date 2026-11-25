@@ -438,12 +438,8 @@ html[data-vt="theme"]::view-transition-new(root) {
   animation: aurora 18s ease-in-out infinite alternate;
 }
 @keyframes aurora { to { transform: translate(4%, -4%) rotate(6deg) scale(1.08); } }
-/* the client strip: loops slowly, pauses under the mouse */
-.client-loop-track { animation: client-loop 28s linear infinite; }
-.client-loop:hover .client-loop-track { animation-play-state: paused; }
-@keyframes client-loop { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
-  .shiny-text, .hero-aurora, .client-loop-track { animation: none; }
+  .shiny-text, .hero-aurora { animation: none; }
   .shiny-text { color: var(--brand); background: none; }
   .glow-button-glare { display: none; }
 }

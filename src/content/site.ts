@@ -187,10 +187,10 @@ export const formats = [
 // `proof` lists the case studies (their `slug` in projects.ts) a number comes from. In the hero each number links
 // there, and with a mouse shows the client's own page as a preview: one slug opens that case study, several open
 // the Work section. Leave `proof` out for a number with no case study behind it; it then shows as plain text.
-export const stats: { value: number; suffix: string; label: string; proof?: string[] }[] = [
-  { value: 29, suffix: "M+", label: "views on our clients' six pinned reels", proof: ["business-resilience-mindset", "the-ai-edge-daily"] },
-  { value: 680, suffix: "×", label: "top reel reach vs. the page's followers", proof: ["the-ai-edge-daily"] },
-  { value: 306, suffix: "K", label: "followers on a page we grew and managed", proof: ["business-resilience-mindset"] },
+export const stats: { value: number; suffix: string; label: string; short: string; proof?: string[] }[] = [
+  { value: 29, suffix: "M+", label: "views on our clients' six pinned reels", short: "views on pinned reels", proof: ["business-resilience-mindset", "the-ai-edge-daily"] },
+  { value: 680, suffix: "×", label: "top reel reach vs. the page's followers", short: "reach vs. followers", proof: ["the-ai-edge-daily"] },
+  { value: 306, suffix: "K", label: "followers on a page we grew and managed", short: "followers grown", proof: ["business-resilience-mindset"] },
 ];
 
 // Clients, for the "Trusted by" line in the hero and the contact section. Add one by putting a square logo in

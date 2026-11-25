@@ -16,7 +16,7 @@ import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { HeroWall } from "./HeroWall";
 import { RotatingText } from "./RotatingText";
-import { ClientLoop } from "./ClientLoop";
+import { ClientRow } from "./ClientRow";
 import { LinkPreview } from "./ui/link-preview";
 
 // Says plainly what the studio does, centred over a wall of real reels, and puts the proof and the
@@ -141,59 +141,61 @@ export function Hero() {
             </button>
           </p>
 
-          {/* proof bar */}
-          <div
-            className="hero-in mx-auto mt-12 flex w-full max-w-3xl flex-col items-stretch overflow-hidden rounded-[1.75rem] bg-ink/70 ring-1 ring-inset ring-line backdrop-blur-xl lg:mt-[clamp(1.5rem,5svh,3.5rem)] lg:w-[min(58rem,100%)] lg:max-w-none"
-            style={{ "--d": "0.4s" } as CSSProperties}
-          >
-          <dl className="grid flex-1 grid-cols-3 divide-x divide-line">
-            {stats.map((s) => {
-              // Each number can be checked: it links to the case study it comes from (or to the Work section when
-              // it spans several), and with a mouse previews the client's own page. The link's hit area covers the
-              // number and its label.
-              const sources = projects.filter((p) => p.cover && s.proof?.includes(p.slug));
-              const number = (
-                <>
-                  {s.value}
-                  <span className="text-accent">{s.suffix}</span>
-                </>
-              );
-              return (
-                <div key={s.label} className="group relative flex flex-col-reverse items-center justify-end px-2 py-4 sm:px-4 lg:px-7 lg:py-3.5">
-                  <dt
-                    className={`mt-1 text-[11px] leading-snug text-paper/60 sm:text-xs lg:whitespace-nowrap ${
-                      sources.length ? "underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:text-paper group-hover:decoration-paper/40" : ""
+          {/* proof: the three numbers on one line, then the brands we've worked with */}
+          <div className="hero-in mt-12 flex w-full flex-col items-center gap-7 lg:mt-[clamp(1.5rem,5svh,3.5rem)]" style={{ "--d": "0.4s" } as CSSProperties}>
+            <dl className="grid w-full max-w-md grid-cols-3 gap-3 sm:flex sm:w-auto sm:max-w-none sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-5 sm:gap-y-3">
+              {stats.map((s, k) => {
+                // Each number can be checked: it links to the case study it comes from (or to the Work section when
+                // it spans several), and with a mouse previews the client's own page. The hit area covers the
+                // number and its label.
+                const sources = projects.filter((p) => p.cover && s.proof?.includes(p.slug));
+                const number = (
+                  <>
+                    {s.value}
+                    <span className="text-accent">{s.suffix}</span>
+                  </>
+                );
+                return (
+                  <div
+                    key={s.label}
+                    // a pink dot before every number after the first (on one line only)
+                    className={`group relative flex flex-col-reverse items-center sm:flex-row-reverse sm:items-baseline sm:gap-2.5 ${
+                      k > 0 ? "sm:after:mr-2.5 sm:after:size-1.5 sm:after:shrink-0 sm:after:self-center sm:after:rounded-full sm:after:bg-brand sm:after:content-['']" : ""
                     }`}
                   >
-                    {s.label}
-                  </dt>
-                  <dd className="font-display text-xl font-semibold tracking-[-0.03em] sm:text-2xl">
-                    {sources.length ? (
-                      <LinkPreview
-                        href={sources.length === 1 ? `/work/${sources[0].slug}` : "/#work"}
-                        onClick={sources.length === 1 ? undefined : anchor}
-                        images={sources.map((p) => ({ src: p.cover!, alt: `${p.client} on Instagram` }))}
-                        caption={
-                          <>
-                            <span className="block text-paper">{sources.map((p) => p.client).join(" and ")}</span>
-                            {sources.length === 1 ? "Open the case study" : "See both in Selected work"}
-                          </>
-                        }
-                        className="rounded-sm after:absolute after:inset-0"
+                      <dt
+                        className={`mt-1 text-xs leading-snug text-paper/60 sm:mt-0 sm:text-[15px] ${
+                          sources.length ? "underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:text-paper group-hover:decoration-paper/40" : ""
+                        }`}
                       >
-                        {number}
-                      </LinkPreview>
-                    ) : (
-                      number
-                    )}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
-          <div className="flex items-center border-t border-line px-5 py-3.5 sm:px-7">
-            <ClientLoop />
-          </div>
+                        {s.short}
+                        <span className="sr-only"> ({s.label})</span>
+                      </dt>
+                      <dd className="font-display text-2xl font-semibold tracking-[-0.04em] sm:text-[2.1rem]">
+                        {sources.length ? (
+                          <LinkPreview
+                            href={sources.length === 1 ? `/work/${sources[0].slug}` : "/#work"}
+                            onClick={sources.length === 1 ? undefined : anchor}
+                            images={sources.map((p) => ({ src: p.cover!, alt: `${p.client} on Instagram` }))}
+                            caption={
+                              <>
+                                <span className="block text-paper">{sources.map((p) => p.client).join(" and ")}</span>
+                                {sources.length === 1 ? "Open the case study" : "See both in Selected work"}
+                              </>
+                            }
+                            className="rounded-sm after:absolute after:inset-0"
+                          >
+                            {number}
+                          </LinkPreview>
+                        ) : (
+                          number
+                        )}
+                      </dd>
+                  </div>
+                );
+              })}
+            </dl>
+            <ClientRow />
           </div>
         </motion.div>
       </div>
