@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useEffect, useRef, type CSSProperties, type MouseEvent } from "react";
 import { projects } from "@/content/projects";
@@ -27,9 +27,6 @@ export function Hero() {
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const anchor = useAnchor();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-25%"]);
-  const fadeOut = useTransform(scrollYProgress, [0.45, 0.95], [1, 0]);
 
   // While the page is pinch-zoomed (or a two-finger pinch is under way), everything that moves on its own in the hero
   // holds still: phones redraw each moving layer at every zoom step, and with the reel wall drifting that shows as
@@ -97,8 +94,8 @@ export function Hero() {
 
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl [transform:translateZ(0)] flex-col items-center justify-center px-5 pb-24 pt-32 text-center sm:px-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
-        <motion.div style={{ y: textY, opacity: fadeOut }} className="hero-parallax flex w-full min-w-0 flex-col items-center">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-5 pb-24 pt-32 text-center sm:px-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
+        <div className="flex w-full min-w-0 flex-col items-center">
           <p
             className="hero-in mb-6 text-[11px] uppercase tracking-[0.34em] text-brand-2 sm:text-xs lg:mb-[clamp(0.75rem,2.6svh,1.5rem)]"
             style={{ "--d": "0.1s" } as CSSProperties}
@@ -227,7 +224,7 @@ export function Hero() {
             </dl>
             <ClientRow />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

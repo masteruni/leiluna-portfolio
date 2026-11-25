@@ -446,3 +446,9 @@ html[data-vt="theme"]::view-transition-new(root) {
 /* While pinch-zoomed (Hero.tsx sets data-zoomed) the hero's moving parts hold still. Only their motion pauses: their
    layers stay as they are, since rebuilding layers in the middle of a pinch is what made tiles flash over the text. */
 [data-zoomed] :is(.hero-wall-col, .hero-aurora, .shiny-text) { animation-play-state: paused; }
+/* Touch screens (phones, tablets): the hero holds still. Chrome on Android redraws every moving layer at each step of
+   a pinch-zoom, which showed as flicker, text dropping out and tiles flashing; a still wall zooms cleanly. */
+@media (pointer: coarse) {
+  .hero-wall-col, .hero-aurora, .shiny-text { animation: none; }
+  .shiny-text { background: none; color: var(--brand); }
+}
