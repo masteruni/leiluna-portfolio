@@ -10,7 +10,7 @@ const reels = pieces
 // A few tiles carry the piece's style as a tag, so the wall reads as real work rather than decoration.
 const TAGGED = new Set([5, 10, 17, 30, 34]);
 const COLS = 9;
-const PER_COL = 4;
+const PER_COL = 6;
 // how far each column starts shifted up, so the wall looks staggered (in % of one tile)
 const OFFSETS = [10, 62, 30, 78, 4, 55, 22, 70, 40];
 

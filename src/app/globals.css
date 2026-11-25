@@ -444,3 +444,7 @@ html[data-vt="theme"]::view-transition-new(root) {
   .shiny-text { color: var(--brand); background: none; }
   .glow-button-glare { display: none; }
 }
+/* While pinch-zoomed (Hero.tsx sets data-zoomed): the hero's moving parts hold still and drop their own layers, and
+   the copy stops following the scroll, so zooming doesn't redraw moving layers on every step (it flickered on phones). */
+[data-zoomed] :is(.hero-wall-col, .hero-aurora, .shiny-text) { animation-play-state: paused; will-change: auto; }
+[data-zoomed] .hero-parallax { transform: none !important; opacity: 1 !important; }

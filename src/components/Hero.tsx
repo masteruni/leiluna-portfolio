@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
-import { useRef, type CSSProperties, type MouseEvent } from "react";
+import { useEffect, useRef, type CSSProperties, type MouseEvent } from "react";
 import { projects } from "@/content/projects";
 import { site, stats } from "@/content/site";
 import { useAnchor } from "@/lib/anchor";
@@ -30,6 +30,36 @@ export function Hero() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-25%"]);
   const fadeOut = useTransform(scrollYProgress, [0.45, 0.95], [1, 0]);
+
+  // While the page is pinch-zoomed (or a two-finger pinch is under way), everything that moves on its own in the hero
+  // holds still: phones redraw each moving layer at every zoom step, and with the reel wall drifting that shows as
+  // flicker. (See [data-zoomed] in globals.css.)
+  useEffect(() => {
+    const root = document.documentElement;
+    const vv = window.visualViewport;
+    let pinching = false;
+    const sync = () => {
+      const zoomed = pinching || (vv ? vv.scale > 1.01 : false);
+      if (zoomed) root.dataset.zoomed = "";
+      else delete root.dataset.zoomed;
+    };
+    const onTouch = (e: TouchEvent) => {
+      pinching = e.touches.length > 1;
+      sync();
+    };
+    vv?.addEventListener("resize", sync);
+    window.addEventListener("touchstart", onTouch, { passive: true });
+    window.addEventListener("touchend", onTouch, { passive: true });
+    window.addEventListener("touchcancel", onTouch, { passive: true });
+    sync();
+    return () => {
+      vv?.removeEventListener("resize", sync);
+      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("touchend", onTouch);
+      window.removeEventListener("touchcancel", onTouch);
+      delete root.dataset.zoomed;
+    };
+  }, []);
 
   // The entrance runs in CSS (`hero-in` / `line-in` in globals.css, each with a --d delay), so the text shows the
   // moment the page arrives instead of waiting for JavaScript, which takes seconds on a mid-range phone. On a first
@@ -68,7 +98,7 @@ export function Hero() {
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-5 pb-24 pt-32 text-center sm:px-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
-        <motion.div style={{ y: textY, opacity: fadeOut }} className="flex w-full min-w-0 flex-col items-center">
+        <motion.div style={{ y: textY, opacity: fadeOut }} className="hero-parallax flex w-full min-w-0 flex-col items-center">
           <p
             className="hero-in mb-6 text-[11px] uppercase tracking-[0.34em] text-brand-2 sm:text-xs lg:mb-[clamp(0.75rem,2.6svh,1.5rem)]"
             style={{ "--d": "0.1s" } as CSSProperties}
@@ -143,7 +173,7 @@ export function Hero() {
 
           {/* proof: the three numbers on one line, then the brands we've worked with */}
           <div className="hero-in mt-12 flex w-full flex-col items-center gap-7 lg:mt-[clamp(1.5rem,5svh,3.5rem)]" style={{ "--d": "0.4s" } as CSSProperties}>
-            <dl className="grid w-full max-w-md grid-cols-3 gap-3 sm:flex sm:w-auto sm:max-w-none sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-5 sm:gap-y-3">
+            <dl className="grid w-full max-w-xl grid-cols-3 gap-3 lg:flex lg:w-auto lg:max-w-none lg:flex-wrap lg:items-center lg:justify-center lg:gap-x-5 lg:gap-y-3">
               {stats.map((s, k) => {
                 // Each number can be checked: it links to the case study it comes from (or to the Work section when
                 // it spans several), and with a mouse previews the client's own page. The hit area covers the
@@ -159,19 +189,19 @@ export function Hero() {
                   <div
                     key={s.label}
                     // a pink dot before every number after the first (on one line only)
-                    className={`group relative flex flex-col-reverse items-center sm:flex-row-reverse sm:items-baseline sm:gap-2.5 ${
-                      k > 0 ? "sm:after:mr-2.5 sm:after:size-1.5 sm:after:shrink-0 sm:after:self-center sm:after:rounded-full sm:after:bg-brand sm:after:content-['']" : ""
+                    className={`group relative flex flex-col-reverse items-center lg:flex-row-reverse lg:items-baseline lg:gap-2.5 ${
+                      k > 0 ? "lg:after:mr-2.5 lg:after:size-1.5 lg:after:shrink-0 lg:after:self-center lg:after:rounded-full lg:after:bg-brand lg:after:content-['']" : ""
                     }`}
                   >
                       <dt
-                        className={`mt-1 text-xs leading-snug text-paper/60 sm:mt-0 sm:text-[15px] ${
+                        className={`mt-1 text-xs leading-snug text-paper/60 sm:text-sm lg:mt-0 lg:text-[15px] ${
                           sources.length ? "underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:text-paper group-hover:decoration-paper/40" : ""
                         }`}
                       >
                         {s.short}
                         <span className="sr-only"> ({s.label})</span>
                       </dt>
-                      <dd className="font-display text-2xl font-semibold tracking-[-0.04em] sm:text-[2.1rem]">
+                      <dd className="font-display text-2xl font-semibold tracking-[-0.04em] sm:text-3xl lg:text-[2.1rem]">
                         {sources.length ? (
                           <LinkPreview
                             href={sources.length === 1 ? `/work/${sources[0].slug}` : "/#work"}
