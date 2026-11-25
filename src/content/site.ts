@@ -25,8 +25,6 @@ export const site = {
     rotating: ["Social media", "Reels", "Content", "Campaigns", "Ads"],
     intro:
       "We plan, film, edit and post content for brands on Instagram, TikTok and YouTube, with strategy, design and AI workflows under one roof.",
-    // Library reels fanned in the hero, in order (vertical reels with a preview clip).
-    reels: ["muse-beauty-edit", "promotion-reel", "lot-to-home", "ramen-ad", "lipstick-ad", "masterclass-reel", "outfit-details", "kinetic-typography"],
   },
   tagline: "Let's build your brand.",
   description:

@@ -155,22 +155,16 @@ export function Planet({
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
       const aspect = w / h;
-      // Desktop: huge planet bleeding off the right edge, lit from the upper left.
-      // Portrait screens: the planet rises behind the phone like a horizon, lit from above, and the copy keeps a
-      // clear night sky. (The shader works in units of the canvas height, hence the divisions by h.)
+      // The planet rises from the foot of the hero like a horizon, centred under the copy and lit from above, so the
+      // headline keeps a clear night sky on every screen. (The shader works in units of the canvas height, hence the
+      // divisions by h.) With an anchor, it rises behind that box instead.
       const wide = aspect > 1;
-      // (on a narrower desktop window it slides right, so the limb stays clear of the text column)
-      let px = aspect / 2 - 0.02 + Math.max(0, 0.63 - 0.4 * aspect) + s * 0.12;
-      let py = -0.08 + s * 0.35;
-      let pr = 0.58 + s * 0.15;
-      if (!wide) {
-        const r = Math.max(w * 0.8, 300); // px
-        const limb = box ? box.top + box.h * 0.3 : h * 0.62; // the top of the planet, a third of the way down the phone
-        px = ((box?.x ?? w / 2) - w / 2) / h;
-        py = (h / 2 - (limb + r)) / h + s * 0.05;
-        pr = r / h;
-      }
-      gl.uniform1f(uLight, wide ? 2.45 : 1.85);
+      const r = wide ? Math.max(w * 0.62, h * 1.1) : Math.max(w * 0.8, 300); // px
+      const limb = box ? box.top + box.h * 0.3 : (wide ? h * 0.9 : h - 64); // the top of the planet, just under the stats
+      const px = ((box?.x ?? w / 2) - w / 2) / h;
+      const py = (h / 2 - (limb + r)) / h + s * 0.05;
+      const pr = r / h;
+      gl.uniform1f(uLight, 1.85);
       gl.uniform1f(uTime, reduce ? 0 : t);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
       gl.uniform3f(uPlanet, px, py, pr);
@@ -233,8 +227,8 @@ export function Planet({
     return (
       <div aria-hidden className={`relative size-full overflow-hidden bg-ink ${className}`}>
         <div
-          // phones: rising behind the phone at the foot of the hero; desktop: centred on the right edge (as in WebGL)
-          className="absolute left-1/2 top-[calc(100%-6rem-94vw)] aspect-square w-[160vw] -translate-x-1/2 rounded-full bg-ink sm:top-[calc(100%-33rem)] lg:left-full lg:top-[58%] lg:h-[116%] lg:w-auto lg:-translate-y-1/2"
+          // rising from the foot of the hero, centred under the copy (as in WebGL)
+          className="absolute left-1/2 top-[calc(100%-4rem)] aspect-square lg:top-[88%] w-[160vw] -translate-x-1/2 rounded-full bg-ink lg:w-[124vw]"
           style={{
             boxShadow:
               "0 0 0 1px var(--brand-2), 0 0 60px 4px var(--brand), 0 0 220px 40px rgb(234 106 142 / 0.35), inset 0 40px 120px -40px rgb(234 106 142 / 0.5)",

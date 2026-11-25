@@ -13,7 +13,6 @@ import { useReady } from "@/lib/ready";
 import { track } from "@/lib/track";
 import { CallLink } from "./CallLink";
 import { FoundersLine } from "./FoundersLine";
-import { HeroReels } from "./HeroReels";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { Planet } from "./Planet";
@@ -22,18 +21,16 @@ import { TrustLine } from "./TrustLine";
 import { LinkPreview } from "./ui/link-preview";
 import { MovingBorder } from "./ui/moving-border";
 
-// Says plainly what the studio does, shows real reels fanned like cards in orbit, and puts the proof and the
+// Says plainly what the studio does, centred under the planet, and puts the proof and the
 // next steps (start a project, a free feed audit, or a free call) above the fold.
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const phone = useRef<HTMLDivElement>(null);
   const ready = useReady();
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const anchor = useAnchor();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-25%"]);
-  const phoneY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "-12%"]);
   const fadeOut = useTransform(scrollYProgress, [0.45, 0.95], [1, 0]);
 
   // The entrance runs in CSS (`hero-in` / `line-in` in globals.css, each with a --d delay), so the text shows the
@@ -67,7 +64,7 @@ export function Hero() {
   return (
     <section ref={ref} className="night relative min-h-[100svh] overflow-hidden">
       <div className="absolute inset-0">
-        <Planet progress={scrollYProgress} anchor={phone} />
+        <Planet progress={scrollYProgress} />
       </div>
       <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
         <span className="shooting-star left-[72%] top-[12%]" />
@@ -76,10 +73,10 @@ export function Hero() {
 
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}
-      <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[90rem] items-center gap-14 px-5 pb-24 pt-32 sm:px-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
-        <motion.div style={{ y: textY, opacity: fadeOut }} className="min-w-0">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-5 pb-24 pt-32 text-center sm:px-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
+        <motion.div style={{ y: textY, opacity: fadeOut }} className="flex w-full min-w-0 flex-col items-center">
           <p
-            className="hero-in mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-[13px] text-muted lg:mb-[clamp(0.875rem,3svh,1.75rem)]"
+            className="hero-in mb-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[13px] text-muted lg:mb-[clamp(0.875rem,3svh,1.75rem)]"
             style={{ "--d": "0.1s" } as CSSProperties}
           >
             <span className="flex items-center gap-3">
@@ -110,14 +107,14 @@ export function Hero() {
           </h1>
 
           <p
-            className="hero-in mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl lg:mt-[clamp(0.875rem,3svh,1.75rem)] xl:max-w-2xl short:lg:text-lg"
+            className="hero-in mx-auto mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl lg:mt-[clamp(0.875rem,3svh,1.75rem)] xl:max-w-2xl short:lg:text-lg"
             style={{ "--d": "0.2s" } as CSSProperties}
           >
             {site.hero.intro}
           </p>
 
           <div
-            className="hero-in mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:mt-[clamp(1.125rem,3.6svh,2.25rem)]"
+            className="hero-in mt-9 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:mt-[clamp(1.125rem,3.6svh,2.25rem)]"
             style={{ "--d": "0.3s" } as CSSProperties}
           >
             <Magnetic className="block sm:inline-block">
@@ -143,20 +140,20 @@ export function Hero() {
 
           {/* the price, who does the work and the brands we've worked with, right under the buttons that ask for a
               decision (they share lines where there's room) */}
-          <div className="hero-in mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 short:mt-3 short:gap-y-1.5" style={{ "--d": "0.32s" } as CSSProperties}>
+          <div className="hero-in mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 short:mt-3 short:gap-y-1.5" style={{ "--d": "0.32s" } as CSSProperties}>
             <p className="basis-full text-base text-paper sm:text-lg short:basis-auto short:text-base">
               Plans from <span className="font-semibold">{site.plansFrom}</span>.{" "}
               <CallLink from="hero" className="font-semibold decoration-accent! decoration-2">
                 Book a free 30-min call
               </CallLink>
             </p>
-            <FoundersLine />
-            <TrustLine />
+            <FoundersLine align="center" />
+            <TrustLine align="center" />
           </div>
 
           {/* proof bar */}
           <dl
-            className="hero-in mt-12 grid max-w-2xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8 lg:mt-[clamp(1.125rem,4svh,3rem)] short:lg:mt-[clamp(0.625rem,2svh,1rem)] lg:max-w-none lg:pt-[clamp(1rem,2.6svh,1.5rem)]"
+            className="hero-in mx-auto mt-12 grid w-full max-w-3xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8 lg:mt-[clamp(1.125rem,4svh,3rem)] short:lg:mt-[clamp(0.625rem,2svh,1rem)] lg:pt-[clamp(1rem,2.6svh,1.5rem)]"
             style={{ "--d": "0.4s" } as CSSProperties}
           >
             {stats.map((s) => {
@@ -171,7 +168,7 @@ export function Hero() {
                 </>
               );
               return (
-                <div key={s.label} className="group relative flex flex-col-reverse justify-end">
+                <div key={s.label} className="group relative flex flex-col-reverse items-center justify-end">
                   <dt
                     className={`mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm ${
                       sources.length ? "underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:text-paper group-hover:decoration-paper/40" : ""
@@ -203,13 +200,6 @@ export function Hero() {
               );
             })}
           </dl>
-        </motion.div>
-
-        <motion.div style={{ y: phoneY, opacity: fadeOut }}>
-          {/* (the planet lines itself up with this box on phones: see Planet.tsx) */}
-          <div ref={phone} className="hero-phone-in" style={{ "--d": "0.5s" } as CSSProperties}>
-            <HeroReels play={ready} />
-          </div>
         </motion.div>
       </div>
     </section>
