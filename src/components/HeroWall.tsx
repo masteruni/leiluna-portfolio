@@ -46,7 +46,7 @@ export function HeroWall() {
                       loading={copy ? "lazy" : "eager"}
                     />
                     {TAGGED.has(k) && copy === 0 && (
-                      <span className="absolute bottom-2.5 left-2.5 hidden items-center gap-1.5 rounded-full bg-ink/70 px-2.5 py-1.5 text-[11px] text-paper/85 backdrop-blur-md lg:flex">
+                      <span className="absolute bottom-2.5 left-2.5 hidden items-center gap-1.5 rounded-full bg-ink/85 px-2.5 py-1.5 text-[11px] text-paper/85 lg:flex">
                         <span className="size-1.5 rounded-full bg-brand" />
                         {p.style.replace(" (sample edit)", "")}
                       </span>

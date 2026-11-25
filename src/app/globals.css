@@ -407,8 +407,8 @@ html[data-vt="theme"]::view-transition-new(root) {
 
 /* The reel wall behind the hero (HeroWall.tsx): each column holds its tiles twice and drifts by half its height, so
    the loop has no seam; alternate columns drift the other way. Still with reduced motion. */
-@keyframes wall-drift { to { transform: translateY(-50%); } }
-.hero-wall-col { animation: wall-drift 80s linear infinite; }
+@keyframes wall-drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -50%, 0); } }
+.hero-wall-col { animation: wall-drift 80s linear infinite; will-change: transform; backface-visibility: hidden; }
 .hero-wall-down { animation-direction: reverse; }
 @media (prefers-reduced-motion: reduce) { .hero-wall-col { animation: none; } }
 
@@ -428,14 +428,15 @@ html[data-vt="theme"]::view-transition-new(root) {
 .glow-button-glare { background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.55) 48%, transparent 62%); transform: translateX(-120%); transition: transform 0.7s var(--ease-out); }
 .glow-button:hover .glow-button-glare { transform: translateX(120%); }
 /* a soft aurora behind the headline */
+/* (soft gradients rather than a blur filter: a large blurred layer is redrawn on every zoom step and flickers) */
 .hero-aurora {
-  filter: blur(70px);
-  opacity: 0.6;
+  opacity: 0.55;
   background:
-    radial-gradient(ellipse 30% 42% at 30% 50%, rgb(234 106 142 / 0.55), transparent 70%),
-    radial-gradient(ellipse 30% 40% at 70% 45%, rgb(140 80 200 / 0.45), transparent 70%),
-    radial-gradient(ellipse 40% 30% at 50% 72%, rgb(246 166 189 / 0.32), transparent 70%);
+    radial-gradient(ellipse 38% 50% at 30% 50%, rgb(234 106 142 / 0.45), rgb(234 106 142 / 0.12) 45%, transparent 75%),
+    radial-gradient(ellipse 38% 48% at 70% 45%, rgb(140 80 200 / 0.38), rgb(140 80 200 / 0.1) 45%, transparent 75%),
+    radial-gradient(ellipse 48% 38% at 50% 72%, rgb(246 166 189 / 0.26), transparent 75%);
   animation: aurora 18s ease-in-out infinite alternate;
+  will-change: transform;
 }
 @keyframes aurora { to { transform: translate(4%, -4%) rotate(6deg) scale(1.08); } }
 @media (prefers-reduced-motion: reduce) {

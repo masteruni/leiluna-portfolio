@@ -122,7 +122,7 @@ export function Nav() {
         <nav
           aria-label="Sections"
           onMouseLeave={() => setHovered(null)}
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-line bg-ink/50 p-1.5 backdrop-blur-md lg:flex"
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-line bg-ink/80 p-1.5 lg:flex"
         >
           {links.map((l) => {
             const current = active === l.id;
@@ -163,7 +163,7 @@ export function Nav() {
             <Link
               href="/#contact"
               onClick={anchor}
-              className="block rounded-full border border-line bg-ink/50 px-5 py-2.5 text-sm backdrop-blur-md press duration-300 hover:border-brand hover:bg-brand hover:text-on-brand"
+              className="block rounded-full border border-line bg-ink/80 px-5 py-2.5 text-sm press duration-300 hover:border-brand hover:bg-brand hover:text-on-brand"
             >
               Let&apos;s talk
             </Link>

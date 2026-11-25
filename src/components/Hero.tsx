@@ -119,7 +119,7 @@ export function Hero() {
             <Link
               href="/#library"
               onClick={anchor}
-              className="flex items-center justify-center rounded-full bg-ink/50 px-7 py-4 font-medium ring-1 ring-inset ring-paper/25 backdrop-blur-md transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
+              className="flex items-center justify-center rounded-full bg-ink/80 px-7 py-4 font-medium ring-1 ring-inset ring-paper/25 transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
             >
               Browse the Library
             </Link>
