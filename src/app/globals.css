@@ -404,3 +404,10 @@ html[data-vt="theme"]::view-transition-new(root) {
   .animate-spin-slow { animation: none !important; }
   .shooting-star { display: none; }
 }
+
+/* The reel wall behind the hero (HeroWall.tsx): each column holds its tiles twice and drifts by half its height, so
+   the loop has no seam; alternate columns drift the other way. Still with reduced motion. */
+@keyframes wall-drift { to { transform: translateY(-50%); } }
+.hero-wall-col { animation: wall-drift 80s linear infinite; }
+.hero-wall-down { animation-direction: reverse; }
+@media (prefers-reduced-motion: reduce) { .hero-wall-col { animation: none; } }

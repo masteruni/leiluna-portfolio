@@ -12,16 +12,14 @@ import { openOrbitCheck } from "@/lib/orbitCheck";
 import { useReady } from "@/lib/ready";
 import { track } from "@/lib/track";
 import { CallLink } from "./CallLink";
-import { FoundersLine } from "./FoundersLine";
 import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
-import { Planet } from "./Planet";
+import { HeroWall } from "./HeroWall";
 import { RotatingText } from "./RotatingText";
 import { TrustLine } from "./TrustLine";
 import { LinkPreview } from "./ui/link-preview";
-import { MovingBorder } from "./ui/moving-border";
 
-// Says plainly what the studio does, centred under the planet, and puts the proof and the
+// Says plainly what the studio does, centred over a wall of real reels, and puts the proof and the
 // next steps (start a project, a free feed audit, or a free call) above the fold.
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -63,33 +61,20 @@ export function Hero() {
 
   return (
     <section ref={ref} className="night relative min-h-[100svh] overflow-hidden">
-      <div className="absolute inset-0">
-        <Planet progress={scrollYProgress} />
-      </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
-        <span className="shooting-star left-[72%] top-[12%]" />
-        <span className="shooting-star left-[38%] top-[6%] [animation-delay:6.5s] [animation-duration:14s]" />
-      </div>
+      <HeroWall />
 
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-5 pb-24 pt-32 text-center sm:px-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="flex w-full min-w-0 flex-col items-center">
           <p
-            className="hero-in mb-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[13px] text-muted lg:mb-[clamp(0.875rem,3svh,1.75rem)]"
+            className="hero-in mb-6 text-[11px] uppercase tracking-[0.34em] text-brand-2 sm:text-xs lg:mb-[clamp(0.75rem,2.6svh,1.5rem)]"
             style={{ "--d": "0.1s" } as CSSProperties}
           >
-            <span className="flex items-center gap-3">
-              <span className="h-px w-10 bg-brand" />
-              {site.headline.join(" ")}
-            </span>
-            <span className="hidden items-center gap-5 lg:flex">
-              <span aria-hidden className="size-1 rounded-full bg-paper/30" />
-              {site.location}
-            </span>
+            Social media &amp; content studio
           </p>
 
-          <h1 className="font-display text-[clamp(2.1rem,11vw,5.5rem)] font-bold leading-[0.9] tracking-[-0.045em] lg:text-[clamp(3rem,min(7.4vw,12svh),8rem)]">
+          <h1 className="font-display text-[clamp(2.6rem,12.5vw,6rem)] font-bold leading-[0.86] tracking-[-0.055em] lg:text-[clamp(3.4rem,min(8.2vw,13.5svh),8.5rem)]">
             <LineReveal
               css
               delay={0.1}
@@ -100,14 +85,14 @@ export function Hero() {
                 </span>,
                 <span key="b">
                   {site.hero.title[1].replace("stop for.", "")}
-                  <span className="serif pr-[0.06em] text-[1.08em] font-normal tracking-[-0.02em] text-accent">stop for.</span>
+                  <span className="serif pr-[0.06em] text-[1.12em] font-normal tracking-[-0.025em] text-accent">stop for.</span>
                 </span>,
               ]}
             />
           </h1>
 
           <p
-            className="hero-in mx-auto mt-7 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl lg:mt-[clamp(0.875rem,3svh,1.75rem)] xl:max-w-2xl short:lg:text-lg"
+            className="hero-in mx-auto mt-7 max-w-xl text-lg leading-relaxed text-paper/75 sm:text-xl lg:mt-[clamp(0.875rem,3svh,1.75rem)] xl:max-w-2xl short:lg:text-lg"
             style={{ "--d": "0.2s" } as CSSProperties}
           >
             {site.hero.intro}
@@ -127,35 +112,37 @@ export function Hero() {
                 <span className="relative">Start a project</span>
               </Link>
             </Magnetic>
-            <button
-              type="button"
-              onClick={orbitCheck}
-              className="relative flex items-center justify-center rounded-full bg-ink/40 px-7 py-4 font-medium ring-1 ring-inset ring-line backdrop-blur-md transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
+            <Link
+              href="/#library"
+              onClick={anchor}
+              className="flex items-center justify-center rounded-full bg-ink/50 px-7 py-4 font-medium ring-1 ring-inset ring-paper/25 backdrop-blur-md transition-shadow duration-200 press hover:ring-paper/60 sm:inline-flex"
             >
-              {/* a light orbits the rim: the mark of the Orbit Check wherever it's offered */}
-              <MovingBorder />
-              Free audit
-            </button>
+              Browse the Library
+            </Link>
           </div>
 
-          {/* the price, who does the work and the brands we've worked with, right under the buttons that ask for a
-              decision (they share lines where there's room) */}
-          <div className="hero-in mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 short:mt-3 short:gap-y-1.5" style={{ "--d": "0.32s" } as CSSProperties}>
-            <p className="basis-full text-base text-paper sm:text-lg short:basis-auto short:text-base">
-              Plans from <span className="font-semibold">{site.plansFrom}</span>.{" "}
-              <CallLink from="hero" className="font-semibold decoration-accent! decoration-2">
-                Book a free 30-min call
-              </CallLink>
-            </p>
-            <FoundersLine align="center" />
-            <TrustLine align="center" />
-          </div>
+          {/* the price and the two low-commitment ways in, right under the buttons that ask for a decision */}
+          <p
+            className="hero-in mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-paper/70 sm:text-base"
+            style={{ "--d": "0.32s" } as CSSProperties}
+          >
+            <span>
+              Plans from <span className="font-semibold text-paper">{site.plansFrom}</span>
+            </span>
+            <span aria-hidden className="text-paper/30">&middot;</span>
+            <CallLink from="hero">Book a free 30-min call</CallLink>
+            <span aria-hidden className="text-paper/30">&middot;</span>
+            <button type="button" onClick={orbitCheck} className="text-paper underline decoration-paper/30 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent">
+              Get a free audit
+            </button>
+          </p>
 
           {/* proof bar */}
-          <dl
-            className="hero-in mx-auto mt-12 grid w-full max-w-3xl grid-cols-3 gap-4 border-t border-line pt-6 sm:gap-8 lg:mt-[clamp(1.125rem,4svh,3rem)] short:lg:mt-[clamp(0.625rem,2svh,1rem)] lg:pt-[clamp(1rem,2.6svh,1.5rem)]"
+          <div
+            className="hero-in mx-auto mt-12 flex w-full max-w-3xl flex-col items-stretch overflow-hidden rounded-[1.75rem] bg-ink/70 ring-1 ring-inset ring-line backdrop-blur-xl lg:mt-[clamp(1.5rem,5svh,3.5rem)] lg:w-auto lg:max-w-none"
             style={{ "--d": "0.4s" } as CSSProperties}
           >
+          <dl className="grid flex-1 grid-cols-3 divide-x divide-line">
             {stats.map((s) => {
               // Each number can be checked: it links to the case study it comes from (or to the Work section when
               // it spans several), and with a mouse previews the client's own page. The link's hit area covers the
@@ -168,15 +155,15 @@ export function Hero() {
                 </>
               );
               return (
-                <div key={s.label} className="group relative flex flex-col-reverse items-center justify-end">
+                <div key={s.label} className="group relative flex flex-col-reverse items-center justify-end px-2 py-4 sm:px-4 lg:px-7 lg:py-3.5">
                   <dt
-                    className={`mt-1.5 text-xs leading-snug text-paper/60 sm:text-sm ${
+                    className={`mt-1 text-[11px] leading-snug text-paper/60 sm:text-xs lg:whitespace-nowrap ${
                       sources.length ? "underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:text-paper group-hover:decoration-paper/40" : ""
                     }`}
                   >
                     {s.label}
                   </dt>
-                  <dd className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                  <dd className="font-display text-xl font-semibold tracking-[-0.03em] sm:text-2xl">
                     {sources.length ? (
                       <LinkPreview
                         href={sources.length === 1 ? `/work/${sources[0].slug}` : "/#work"}
@@ -200,6 +187,10 @@ export function Hero() {
               );
             })}
           </dl>
+          <div className="flex items-center justify-center border-t border-line px-5 py-3.5">
+            <TrustLine className="text-xs sm:text-sm" />
+          </div>
+          </div>
         </motion.div>
       </div>
     </section>
