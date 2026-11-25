@@ -191,12 +191,13 @@ export const stats: { value: number; suffix: string; label: string; short: strin
 ];
 
 // Clients, for the "Trusted by" line in the hero and the contact section. Add one by putting a square logo in
-// /public/clients/ and adding { name, logo } here (newest first). `short` is an optional shorter name for tight spots.
+// /public/clients/ and adding { name, logo } here (newest first); `mark` is an optional one-colour version of the
+// logo (white on transparent PNG), used where logos sit together in one colour. `short` is an optional shorter name for tight spots.
 export const clients = [
-  { name: "Kabogera Beauty", logo: "/clients/kabogera-beauty.webp" },
-  { name: "MD Raymundo Consulting Services", short: "MD Raymundo", logo: "/clients/md-raymundo.webp" },
-  { name: "Business Resilience Mindset", logo: "/clients/business-resilience-mindset.webp" },
-  { name: "The AI Edge Daily", logo: "/clients/the-ai-edge-daily.webp" },
+  { name: "Kabogera Beauty", logo: "/clients/kabogera-beauty.webp", mark: "/clients/marks/kabogera-beauty.png" },
+  { name: "MD Raymundo Consulting Services", short: "MD Raymundo", logo: "/clients/md-raymundo.webp", mark: "/clients/marks/md-raymundo.png" },
+  { name: "Business Resilience Mindset", logo: "/clients/business-resilience-mindset.webp", mark: "/clients/marks/business-resilience-mindset.png" },
+  { name: "The AI Edge Daily", logo: "/clients/the-ai-edge-daily.webp", mark: "/clients/marks/the-ai-edge-daily.png" },
 ];
 
 // Questions people ask before booking. Answers only use what the studio already states on this site.
