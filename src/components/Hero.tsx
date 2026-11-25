@@ -97,7 +97,7 @@ export function Hero() {
 
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-5 pb-24 pt-32 text-center sm:px-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl [transform:translateZ(0)] flex-col items-center justify-center px-5 pb-24 pt-32 text-center sm:px-10 lg:pb-[clamp(4.5rem,9svh,5.5rem)] lg:pt-[clamp(5.5rem,12svh,7rem)]">
         <motion.div style={{ y: textY, opacity: fadeOut }} className="hero-parallax flex w-full min-w-0 flex-col items-center">
           <p
             className="hero-in mb-6 text-[11px] uppercase tracking-[0.34em] text-brand-2 sm:text-xs lg:mb-[clamp(0.75rem,2.6svh,1.5rem)]"

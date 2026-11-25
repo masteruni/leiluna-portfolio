@@ -408,7 +408,7 @@ html[data-vt="theme"]::view-transition-new(root) {
 /* The reel wall behind the hero (HeroWall.tsx): each column holds its tiles twice and drifts by half its height, so
    the loop has no seam; alternate columns drift the other way. Still with reduced motion. */
 @keyframes wall-drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -50%, 0); } }
-.hero-wall-col { animation: wall-drift 80s linear infinite; will-change: transform; backface-visibility: hidden; }
+.hero-wall-col { animation: wall-drift 80s linear infinite; backface-visibility: hidden; }
 .hero-wall-down { animation-direction: reverse; }
 @media (prefers-reduced-motion: reduce) { .hero-wall-col { animation: none; } }
 
@@ -436,7 +436,6 @@ html[data-vt="theme"]::view-transition-new(root) {
     radial-gradient(ellipse 38% 48% at 70% 45%, rgb(140 80 200 / 0.38), rgb(140 80 200 / 0.1) 45%, transparent 75%),
     radial-gradient(ellipse 48% 38% at 50% 72%, rgb(246 166 189 / 0.26), transparent 75%);
   animation: aurora 18s ease-in-out infinite alternate;
-  will-change: transform;
 }
 @keyframes aurora { to { transform: translate(4%, -4%) rotate(6deg) scale(1.08); } }
 @media (prefers-reduced-motion: reduce) {
@@ -444,7 +443,6 @@ html[data-vt="theme"]::view-transition-new(root) {
   .shiny-text { color: var(--brand); background: none; }
   .glow-button-glare { display: none; }
 }
-/* While pinch-zoomed (Hero.tsx sets data-zoomed): the hero's moving parts hold still and drop their own layers, and
-   the copy stops following the scroll, so zooming doesn't redraw moving layers on every step (it flickered on phones). */
-[data-zoomed] :is(.hero-wall-col, .hero-aurora, .shiny-text) { animation-play-state: paused; will-change: auto; }
-[data-zoomed] .hero-parallax { transform: none !important; opacity: 1 !important; }
+/* While pinch-zoomed (Hero.tsx sets data-zoomed) the hero's moving parts hold still. Only their motion pauses: their
+   layers stay as they are, since rebuilding layers in the middle of a pinch is what made tiles flash over the text. */
+[data-zoomed] :is(.hero-wall-col, .hero-aurora, .shiny-text) { animation-play-state: paused; }

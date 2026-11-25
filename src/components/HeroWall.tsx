@@ -20,7 +20,9 @@ const OFFSETS = [10, 62, 30, 78, 4, 55, 22, 70, 40];
 export function HeroWall() {
   if (reels.length < 8) return null;
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    // (Its own stacking context and layer, under the copy: on a phone's pinch-zoom the browser otherwise reshuffles the
+    // moving columns and can flash a tile above the headline.)
+    <div aria-hidden className="pointer-events-none absolute inset-0 isolate z-0 overflow-hidden [transform:translateZ(0)]">
       <div className="absolute -inset-x-6 -top-[10%] bottom-0 flex gap-2.5 sm:gap-3.5">
         {Array.from({ length: COLS }, (_, c) => {
           const tiles = Array.from({ length: PER_COL }, (_, r) => {
