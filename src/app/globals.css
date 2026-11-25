@@ -344,13 +344,8 @@ html[data-vt="theme"]::view-transition-new(root) {
   to { transform: rotate(360deg); }
 }
 
-/* The horizon under the hero (HorizonLoop.tsx): the night above fades in from the hero's colour in both themes, the page
-   below rises into it like a moon, and the service words ride along the edge in moonlight. */
+/* The seam under the hero (HorizonLoop.tsx): the page below rises into the night like the edge of a moon. */
 .horizon-moon { fill: var(--ink); }
-.horizon-text { font-family: var(--font-outfit), sans-serif; font-weight: 800; letter-spacing: -0.03em; }
-.horizon-solid { fill: #f6f2ef; }
-.horizon-outline { fill: transparent; stroke: rgb(246 242 239 / 0.55); stroke-width: 1px; }
-.horizon-star { fill: var(--brand); font-size: 0.45em; }
 
 /* A streak of light crossing the hero every so often (two of them, offset, so it never looks like a loop) */
 .shooting-star {
