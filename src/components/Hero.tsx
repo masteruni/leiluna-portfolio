@@ -16,7 +16,7 @@ import { LineReveal } from "./LineReveal";
 import { Magnetic } from "./Magnetic";
 import { HeroWall } from "./HeroWall";
 import { RotatingText } from "./RotatingText";
-import { TrustLine } from "./TrustLine";
+import { ClientLoop } from "./ClientLoop";
 import { LinkPreview } from "./ui/link-preview";
 
 // Says plainly what the studio does, centred over a wall of real reels, and puts the proof and the
@@ -62,6 +62,8 @@ export function Hero() {
   return (
     <section ref={ref} className="night relative min-h-[100svh] overflow-hidden">
       <HeroWall />
+      {/* a soft pink-and-violet glow drifting behind the headline */}
+      <div aria-hidden className="hero-aurora pointer-events-none absolute left-1/2 top-[44%] h-[60%] w-[min(90rem,110%)] -translate-x-1/2 -translate-y-1/2" />
 
       {/* On desktop the spacing and the type follow the screen's height as well as its width, so the whole pitch, from
           headline to proof, sits above the fold on a laptop (and clear of the horizon that overlaps the bottom edge). */}
@@ -80,12 +82,12 @@ export function Hero() {
               delay={0.1}
               lines={[
                 <span key="a">
-                  <RotatingText words={site.hero.rotating} play={ready} />
+                  <RotatingText words={site.hero.rotating} play={ready} boxed />
                   {site.hero.title[0].replace(site.hero.rotating[0], "")}
                 </span>,
                 <span key="b">
                   {site.hero.title[1].replace("stop for.", "")}
-                  <span className="serif pr-[0.06em] text-[1.12em] font-normal tracking-[-0.025em] text-accent">stop for.</span>
+                  <span className="shiny-text serif pr-[0.06em] text-[1.12em] font-normal tracking-[-0.025em] text-accent">stop for.</span>
                 </span>,
               ]}
             />
@@ -106,10 +108,12 @@ export function Hero() {
               <Link
                 href="/#contact"
                 onClick={startProject}
-                className="group relative flex w-full items-center justify-center gap-3 sm:inline-flex sm:w-auto overflow-hidden press rounded-full bg-brand px-7 py-4 font-medium text-ink"
+                className="glow-button group relative flex w-full items-center justify-center gap-2.5 overflow-hidden press rounded-full bg-brand px-7 py-4 font-medium text-ink sm:inline-flex sm:w-auto"
               >
-                <span className="absolute inset-0 translate-y-full rounded-full bg-paper transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-y-0" />
+                {/* a glint sweeps across on hover */}
+                <span aria-hidden className="glow-button-glare pointer-events-none absolute inset-0" />
                 <span className="relative">Start a project</span>
+                <span aria-hidden className="relative transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-x-1">&rarr;</span>
               </Link>
             </Magnetic>
             <Link
@@ -139,7 +143,7 @@ export function Hero() {
 
           {/* proof bar */}
           <div
-            className="hero-in mx-auto mt-12 flex w-full max-w-3xl flex-col items-stretch overflow-hidden rounded-[1.75rem] bg-ink/70 ring-1 ring-inset ring-line backdrop-blur-xl lg:mt-[clamp(1.5rem,5svh,3.5rem)] lg:w-auto lg:max-w-none"
+            className="hero-in mx-auto mt-12 flex w-full max-w-3xl flex-col items-stretch overflow-hidden rounded-[1.75rem] bg-ink/70 ring-1 ring-inset ring-line backdrop-blur-xl lg:mt-[clamp(1.5rem,5svh,3.5rem)] lg:w-[min(58rem,100%)] lg:max-w-none"
             style={{ "--d": "0.4s" } as CSSProperties}
           >
           <dl className="grid flex-1 grid-cols-3 divide-x divide-line">
@@ -187,8 +191,8 @@ export function Hero() {
               );
             })}
           </dl>
-          <div className="flex items-center justify-center border-t border-line px-5 py-3.5">
-            <TrustLine className="text-xs sm:text-sm" />
+          <div className="flex items-center border-t border-line px-5 py-3.5 sm:px-7">
+            <ClientLoop />
           </div>
           </div>
         </motion.div>

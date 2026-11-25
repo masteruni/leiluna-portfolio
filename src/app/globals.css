@@ -411,3 +411,39 @@ html[data-vt="theme"]::view-transition-new(root) {
 .hero-wall-col { animation: wall-drift 80s linear infinite; }
 .hero-wall-down { animation-direction: reverse; }
 @media (prefers-reduced-motion: reduce) { .hero-wall-col { animation: none; } }
+
+/* Hero details (Hero.tsx) */
+/* "stop for.": a slow glint sweeps across the pink every few seconds */
+.shiny-text {
+  background: linear-gradient(100deg, var(--brand) 40%, #fff 50%, var(--brand-2) 56%, var(--brand) 66%) 0 0 / 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s ease-in-out 1.5s infinite;
+}
+@keyframes shine { 0% { background-position: 100% 0; } 35%, 100% { background-position: 0 0; } }
+/* the main button: a soft pink glow, and a glint across it on hover */
+.glow-button { box-shadow: 0 0 0 1px rgb(246 166 189 / 0.7), 0 0 28px 2px rgb(234 106 142 / 0.45), 0 0 80px 6px rgb(234 106 142 / 0.2); transition: box-shadow 0.3s var(--ease-out); }
+.glow-button:hover { box-shadow: 0 0 0 1px rgb(246 166 189 / 0.9), 0 0 36px 4px rgb(234 106 142 / 0.6), 0 0 100px 10px rgb(234 106 142 / 0.28); }
+.glow-button-glare { background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.55) 48%, transparent 62%); transform: translateX(-120%); transition: transform 0.7s var(--ease-out); }
+.glow-button:hover .glow-button-glare { transform: translateX(120%); }
+/* a soft aurora behind the headline */
+.hero-aurora {
+  filter: blur(70px);
+  opacity: 0.6;
+  background:
+    radial-gradient(ellipse 30% 42% at 30% 50%, rgb(234 106 142 / 0.55), transparent 70%),
+    radial-gradient(ellipse 30% 40% at 70% 45%, rgb(140 80 200 / 0.45), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 72%, rgb(246 166 189 / 0.32), transparent 70%);
+  animation: aurora 18s ease-in-out infinite alternate;
+}
+@keyframes aurora { to { transform: translate(4%, -4%) rotate(6deg) scale(1.08); } }
+/* the client strip: loops slowly, pauses under the mouse */
+.client-loop-track { animation: client-loop 28s linear infinite; }
+.client-loop:hover .client-loop-track { animation-play-state: paused; }
+@keyframes client-loop { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .shiny-text, .hero-aurora, .client-loop-track { animation: none; }
+  .shiny-text { color: var(--brand); background: none; }
+  .glow-button-glare { display: none; }
+}

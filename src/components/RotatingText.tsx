@@ -9,7 +9,18 @@ const rise = { type: "spring", stiffness: 380, damping: 32 } as const;
 // away, and the space eases to the new word's width so the text after it slides along.
 // The page loads with the first word as plain text, so search engines and screen readers read the headline
 // as written; once it starts cycling, they keep getting that first word.
-export function RotatingText({ words, play = true, interval = 2600 }: { words: string[]; play?: boolean; interval?: number }) {
+// `boxed` sets the word on a tilted pink label, like a sticker, that tips as each new word arrives.
+export function RotatingText({
+  words,
+  play = true,
+  interval = 2600,
+  boxed = false,
+}: {
+  words: string[];
+  play?: boolean;
+  interval?: number;
+  boxed?: boolean;
+}) {
   const [i, setI] = useState(0);
   const [cycled, setCycled] = useState(false);
   const [widths, setWidths] = useState<number[]>([]);
@@ -44,7 +55,14 @@ export function RotatingText({ words, play = true, interval = 2600 }: { words: s
   }, [play, reduce, onScreen, words.length, interval]);
 
   return (
-    <span ref={ref} className="inline-block align-bottom">
+    <motion.span
+      ref={ref}
+      className={`inline-block align-bottom ${boxed ? "mr-[0.06em] rounded-[0.16em] bg-brand px-[0.14em] text-ink" : ""}`}
+      initial={false}
+      // each new word tips the label the other way, with a little spring
+      animate={boxed ? { rotate: reduce ? -2 : i % 2 ? 1.5 : -2.5 } : undefined}
+      transition={{ type: "spring", stiffness: 260, damping: 12 }}
+    >
       {cycled && <span className="sr-only">{words[0]}</span>}
       <motion.span
         aria-hidden={cycled || undefined}
@@ -75,6 +93,6 @@ export function RotatingText({ words, play = true, interval = 2600 }: { words: s
           )}
         </AnimatePresence>
       </motion.span>
-    </span>
+    </motion.span>
   );
 }
